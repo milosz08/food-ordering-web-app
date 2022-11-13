@@ -1,0 +1,4 @@
+.env
+vendor/
+public/static/bootstrap/*
+!public/static/bootstrap/.gitkeep

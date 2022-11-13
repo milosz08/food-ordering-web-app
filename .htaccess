@@ -1,0 +1,16 @@
+# uruchomienie możliwości manipulowania adresem URL serwera Apache
+RewriteEngine On
+
+# zablokowanie możliwości przeglądania katalogów projektu z poziomu przeglądarki
+Options -Indexes
+
+# ustawienie domyślnego katalogu aplikacji (domyślnego katalogu w którym mają obowiązywać reguły przepisywania adresu URL)
+RewriteBase /restaurant-project-php-si/ 
+
+# pobierz request tylko z plików /public/dowolnyinnyplik, flaga NC oznacza brak sprawdzania wielkości znaków
+RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
+# zgodnie z regułą zdefiniowaną poniżej przekieruj ruch z danymi (L), bez znaku ucieczki (NE) oraz wykonaj przekierowanie (R)
+# z kodem końcowym odpowiedzi HTTP 302
+RewriteRule ^ %1 [L,NE,R=302]
+# dopasuj przekierowanie do wszystkich plików znajdujących się w katalogu /public
+RewriteRule ^((?!public/).*)$ public/$1 [L,NC]

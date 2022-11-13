@@ -1,0 +1,23 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * Copyright (c) 2022 by multiple authors                      *
+ * Politechnika Śląska | Silesian University of Technology     *
+ *                                                             *
+ * Nazwa pliku: _variables.fragment.scss                       *
+ * Projekt: restaurant-project-php-si                          *
+ * Data utworzenia: 2022-11-10, 18:43:40                       *
+ * Autor: Milosz08                                             *
+ *                                                             *
+ * Ostatnia modyfikacja: 2022-11-11 19:50:17                   *
+ * Modyfikowany przez: Milosz08                                *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * W tym pliku należy umieszczać wszystkie zmienne CSS w głównym pseudoselektorze :root. Dzięki temu zmiennych będzie można używać w     *
+ * w innych plikach fragmentowych SCSS. Poniżej przykład zmiennej definiującej kolor tekstu.                                             *
+ * Konwencja nazewnictwa zmiennych CSS: --nazwa-nazwa-nazwa, gdzie parametr nazwa to poszczególne człony nazwy zmiennej                  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+:root {
+    --testing-color-variable: #0000ff;
+}

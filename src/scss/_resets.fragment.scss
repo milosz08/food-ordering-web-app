@@ -1,0 +1,29 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * Copyright (c) 2022 by multiple authors                      *
+ * Politechnika Śląska | Silesian University of Technology     *
+ *                                                             *
+ * Nazwa pliku: _resets.fragment.scss                          *
+ * Projekt: restaurant-project-php-si                          *
+ * Data utworzenia: 2022-11-11, 04:36:12                       *
+ * Autor: Milosz08                                             *
+ *                                                             *
+ * Ostatnia modyfikacja: 2022-11-11 04:38:23                   *
+ * Modyfikowany przez: Milosz08                                *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * W tym pliku należy umieszczać wszystkie selektory zawierające style normalizujące domyślne zachowanie przeglądarki (usuwanie          *
+ * domyślnych marginesów, normalizacja czcionki itp.)                                                                                    *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+}

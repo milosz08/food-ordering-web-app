@@ -1,0 +1,23 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * Copyright (c) 2022 by multiple authors                      *
+ * Politechnika Śląska | Silesian University of Technology     *
+ *                                                             *
+ * Nazwa pliku: _common.fragment.scss                          *
+ * Projekt: restaurant-project-php-si                          *
+ * Data utworzenia: 2022-11-10, 18:44:02                       *
+ * Autor: Milosz08                                             *
+ *                                                             *
+ * Ostatnia modyfikacja: 2022-11-10 23:09:23                   *
+ * Modyfikowany przez: Milosz08                                *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * W tym pliku należy umieszczać wszystkie klasy oraz inne style SCSS wspólne dla wszystkich podstron. W miarę rozwoju aplikacji można   *
+ * stworzyć oddzielne pliki fragment.scss zawierające klasy używane tylko przez dane strony w celu zwiększenia czytelności kodu.         *
+ * Konwencja nazewnictwa klas: .nazwa1-nazwa2-nazwa3, gdzie parametr nazwa to poszczególne człony (rozdzielone znakiem myślnika).        *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.testing-class {
+    color: var(--testing-color-variable); // wykorzystanie przykładowej zmiennej odnoszącej się do koloru z pliku _varialbes.fragment.scss
+}

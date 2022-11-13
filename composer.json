@@ -1,0 +1,30 @@
+{
+    "name": "polsl/restaurant-project-php-si",
+    "description": "Projekt bazujacy na PHP 7.4 i bazie danych MySQL imitujacy aplikacje internetowa do zamawiania jedzenia online.",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Polsl\\RestaurantProjectPhpSi\\": "src/"
+        }
+    },
+    "authors": [
+        { "name": "MD" },
+        { "name": "MG" },
+        { "name": "PG" },
+        { "name": "FH" },
+        { "name": "ŁK" },
+        { "name": "BK" }
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"copy('vendor/twbs/bootstrap/dist/js/bootstrap.min.js', 'public/static/bootstrap/bootstrap.min.js');\"",
+            "php -r \"copy('vendor/twbs/bootstrap/dist/css/bootstrap.min.css', 'public/static/bootstrap/bootstrap.min.css');\""
+        ]
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "mustache/mustache": "^2.14",
+        "twbs/bootstrap": "^5.2",
+        "vlucas/phpdotenv": "^5.5"
+    }
+}

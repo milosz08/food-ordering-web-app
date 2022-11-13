@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ embed_page_title }} {{ suffix_page_title }}</title>
+    <link rel="icon" type="image/png" href="static/images/favicon.png">
+
+    {{! Zaimportowane czcionki z GoogleFonts }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    {{! Zaimportowane style z biblioteki Bootstrap oraz własne, przetwrzone z plików SCSS }}
+    <link rel="stylesheet" href="static/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/styles.min.css">
+
+    {{! Zaimportowane skrypty JavaScript z biblioteki Bootstrap oraz własne, z flagą defer która ładuje je dopiero }}
+    {{! po całkowitym załadowaniu drzewa komponentów DOM }}
+    <script defer src="static/bootstrap/bootstrap.min.js"></script>
+    <script defer src="static/js/scripts.js"></script>
+</head>
+<body>
+    {{{ embed_rendering_content }}}
+</body>
