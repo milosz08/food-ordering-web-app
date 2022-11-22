@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-22 19:13:38                   *
- * Modyfikowany przez: Patryk Górniak                          *
+ * Ostatnia modyfikacja: 2022-11-22 20:18:28                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -36,6 +36,13 @@ class AuthorizationController extends MvcController
     public function registration()
     {
         $this->renderer->render('authorization/registration-view', array());
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public function login()
+    {
+        $this->renderer->render('authorization/login-view', array());
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

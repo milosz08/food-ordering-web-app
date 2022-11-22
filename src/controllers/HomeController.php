@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 20:24:57                   *
- * Modyfikowany przez: Patryk Górniak                          *
+ * Ostatnia modyfikacja: 2022-11-22 20:12:47                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -32,7 +32,7 @@ use App\Services\HomeService;
  * (gdzie z jasnych powodów ograniczono implementację do minimum) klasa taka będzie reprezentowa na przez adres:                         *
  *      index.php?action=example/show                                                                                                    *
  *                                                                                                                                       *
- * gdzie example to część nazwy klasy kontrolera (bez nazwy Controller) a show to nazwa wywoływanej metody. Metoda taka musi kończyć się  *
+ * gdzie example to część nazwy klasy kontrolera (bez nazwy Controller) a show to nazwa wywoływanej metody. Metoda taka musi kończyć się *
  * wywołaniem renderowania szablonu (patrz przykład niżej). W przypadku metody nazywającej się show_data(), np:                          *
  *                                                                                                                                       *
  * class ExampleController                                                                                                               *
