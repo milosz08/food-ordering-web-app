@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-22 20:18:28                   *
+ * Ostatnia modyfikacja: 2022-11-22 22:36:12                   *
  * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -31,7 +31,8 @@ class AuthorizationController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=authorization/registration. Metoda na końcu renderuje dany widok.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=authorization/registration. 
+     * Metoda na końcu renderuje dany widok.
      */
     public function registration()
     {

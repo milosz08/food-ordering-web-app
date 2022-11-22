@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-22, 19:19:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-22 19:55:34                   *
+ * Ostatnia modyfikacja: 2022-11-22 22:02:22                   *
  * Modyfikowany przez: Patryk Górniak                          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -18,6 +18,16 @@
 .registration-box {
     max-width: 1000px;
 }
+
 .registration-heading {
     color: grey;
+}
+
+.registration-button {
+    background-color: grey;
+    border-color: grey;
+}
+
+.registration-form-select {
+    padding: 6px;
 }
