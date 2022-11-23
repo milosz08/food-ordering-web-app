@@ -4,12 +4,12 @@
  * Copyright (c) 2022 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
- * Nazwa pliku: AuthorizationController.php                    *
+ * Nazwa pliku: AuthController.php                             *
  * Projekt: restaurant-project-php-si                          *
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-23 09:44:07                   *
+ * Ostatnia modyfikacja: 2022-11-23 18:30:39                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -38,7 +38,7 @@ class AuthController extends MvcController
     public function register()
     {
         $this->renderer->render('auth/registration-view', array(
-            'page_title' => 'Logowanie',
+            'page_title' => 'Rejestracja',
         ));
     }
 
@@ -50,7 +50,7 @@ class AuthController extends MvcController
     public function login()
     {
         $this->renderer->render('auth/login-view', array(
-            'page_title' => 'Rejestracja',
+            'page_title' => 'Logowanie',
         ));
     }
 
