@@ -9,16 +9,18 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-22 22:36:12                   *
- * Modyfikowany przez: Desi                                    *
+ * Ostatnia modyfikacja: 2022-11-23 09:44:07                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
 use App\Core\MvcController;
 
-    // Kontroler odpowiadający za podstawowe wyrenderowywanie widoku panelu rejestracji.
-class AuthorizationController extends MvcController
+/**
+ * Kontroler odpowiadający za obsługę logowania, rejestracji oraz innych usług autentykacji i autoryzacji użytkowników.
+ */
+class AuthController extends MvcController
 {
     //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -31,19 +33,25 @@ class AuthorizationController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=authorization/registration. 
-     * Metoda na końcu renderuje dany widok.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/registration. 
      */
-    public function registration()
+    public function register()
     {
-        $this->renderer->render('authorization/registration-view', array());
+        $this->renderer->render('auth/registration-view', array(
+            'page_title' => 'Logowanie',
+        ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/login. 
+     */
     public function login()
     {
-        $this->renderer->render('authorization/login-view', array());
+        $this->renderer->render('auth/login-view', array(
+            'page_title' => 'Rejestracja',
+        ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -57,6 +65,6 @@ class AuthorizationController extends MvcController
      */
     public function index()
     {
-        header('Location:index.php?action=authorization/registration');
+        header('Location:index.php?action=auth/login');
     }
 }
