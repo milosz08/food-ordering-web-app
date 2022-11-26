@@ -4,7 +4,7 @@
     <div class="container py-5 h-100 registration-box">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12">
-                <form class="row g-3">
+                <form class="row g-3" action="" method="post" novalidate>
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
                         <div class="card-body p-0">
                             <div class="row g-0">
@@ -14,14 +14,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="validationServer01" class="form-label">Imie</label>
-                                                <input type="text" class="form-control is-valid" id="validationServer01"
+                                                <input type="text" name="registration-name" class="form-control {{validationName}}" id="validationServer01" value="{{name}}"
                                                     required>
                                                 <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
 
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="validationServer01" class="form-label">Nazwisko</label>
-                                                <input type="text" class="form-control is-valid" id="validationServer01"
+                                                <input type="text" name="registration-surname" class="form-control {{validationSurname}}" id="validationServer01" value="{{surname}}"
                                                     required>
                                                 <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
@@ -29,15 +29,15 @@
 
                                         <div class="col-md-12 mb-2 ">
                                             <label for="validationServer03" class="form-label">Login</label>
-                                            <input type="text" class="form-control is-invalid" id="validationServer03"
-                                                aria-describedby="validationServer03Feedback" required>
+                                            <input type="text" name="registration-login" class="form-control {{validationLogin}}" id="validationServer03"
+                                                aria-describedby="validationServer03Feedback" value="{{login}}" required>
                                             <div id="validationServer03Feedback" class="invalid-feedback">Podaj login!
                                             </div>
                                         </div>
 
                                         <div class="col-md-12 mb-2 ">
                                             <label for="validationServer03" class="form-label">Hasło</label>
-                                            <input type="text" class="form-control is-invalid" id="validationServer03"
+                                            <input type="password" name="registration-password" class="form-control {{validationPassword}}" id="validationServer03"
                                                 aria-describedby="validationServer03Feedback" required>
                                             <div id="validationServer03Feedback" class="invalid-feedback">Podaj hasło!
                                             </div>
@@ -45,8 +45,8 @@
 
                                         <div class="col-md-12">
                                             <label for="validationServer03" class="form-label">Adres E-mail</label>
-                                            <input type="text" class="form-control is-invalid" id="validationServer03"
-                                                aria-describedby="validationServer03Feedback" required>
+                                            <input type="text" name="registration-email" class="form-control {{validationEmail}}" id="validationServer03"
+                                                aria-describedby="validationServer03Feedback" value="{{email}}" required>
                                             <div id="validationServer03Feedback" class="invalid-feedback">Podaj adres
                                                 E-mail!</div>
                                         </div>
@@ -58,7 +58,7 @@
                                         <div class="mb-4">
                                             <label for="validationServer03" class="form-label">Wybierz typ konta</label>
                                             <select class="form-select registration-form-select"
-                                                aria-label="Default select example">
+                                                aria-label="Default select example" name="registration-role">
                                                 <option value="1">Klient</option>
                                                 <option value="2">Restaurator</option>
                                             </select>
@@ -67,8 +67,8 @@
                                         <div class="col-md-12">
                                             <label for="validationServer03"
                                                 class="form-label">NrBudynku/NrLokalu</label>
-                                            <input type="text" class="form-control is-invalid" id="validationServer03"
-                                                aria-describedby="validationServer03Feedback" required>
+                                            <input type="text" name="registration-local-number" class="form-control {{validationLN}}" id="validationServer03"
+                                                aria-describedby="validationServer03Feedback" value="{{local-number}}" required>
                                             <div id="validationServer03Feedback" class="invalid-feedback">Podaj adres!
                                             </div>
                                         </div>
@@ -76,8 +76,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="validationServer01" class="form-label">Kod pocztowy</label>
-                                                <input type="text" class="form-control is-invalid"
-                                                    id="validationServer01" required>
+                                                <input type="text" name="registration-post-code" class="form-control {{validationPC}}"
+                                                    id="validationServer01" value="{{post-code}}" required>
                                                 <div id="validationServer03Feedback" class="invalid-feedback">Podaj kod
                                                     pocztowy!
                                                 </div>
@@ -85,8 +85,8 @@
 
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="validationServer01" class="form-label">Miasto</label>
-                                                <input type="text" class="form-control is-invalid"
-                                                    id="validationServer01" required>
+                                                <input type="text" name="registration-city" class="form-control {{validationCity}}"
+                                                    id="validationServer01" value="{{city}}" required>
                                                 <div id="validationServer03Feedback" class="invalid-feedback">Podaj
                                                     miasto!
                                                 </div>
@@ -95,8 +95,8 @@
 
                                         <div class="col-md-12 mb-5 ">
                                             <label for="validationServer03" class="form-label">Ulica</label>
-                                            <input type="text" class="form-control is-invalid" id="validationServer03"
-                                                aria-describedby="validationServer03Feedback" required>
+                                            <input type="text" name="registration-street" class="form-control {{validationStreet}}" id="validationServer03"
+                                                aria-describedby="validationServer03Feedback" value="{{street}}" required>
                                             <div id="validationServer03Feedback" class="invalid-feedback">Podaj ulice!
                                             </div>
                                         </div>
@@ -109,7 +109,7 @@
                                             </label>
                                         </div>
 
-                                        <button type="button" class="btn btn-dark btn-lg registration-button"
+                                        <button type="submit" name="registration-button" class="btn btn-dark btn-lg registration-button"
                                             data-mdb-ripple-color="dark">Zarejestruj</button>
                                     </div>
                                 </div>

@@ -9,25 +9,28 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-23 18:30:39                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-11-26 20:02:04                   *
+ * Modyfikowany przez: Blazej Kubicius                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
 use App\Core\MvcController;
+use App\Services\RegistrationService;
 
 /**
  * Kontroler odpowiadający za obsługę logowania, rejestracji oraz innych usług autentykacji i autoryzacji użytkowników.
  */
 class AuthController extends MvcController
 {
+    private $_service;
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     public function __construct()
     {
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
+        $this->_service = RegistrationService::get_instance(RegistrationService::class); // pobranie instancji klasy RegistrationService
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -37,8 +40,21 @@ class AuthController extends MvcController
      */
     public function register()
     {
+        $registraion_name = $this->_service->registration();
+
+        if (isset($registraion_name) == NULL) {
+            for ($i=0; $i < 17; $i++) { 
+                $registraion_name[$i] = "";
+            }
+        }
+
         $this->renderer->render('auth/registration-view', array(
-            'page_title' => 'Rejestracja',
+            'page_title' => 'Rejestracja', 'name'=>$registraion_name[0], 'surname'=>$registraion_name[1], 'login'=>$registraion_name[2],
+            'email'=>$registraion_name[3], 'local-number'=>$registraion_name[4], 'post-code'=>$registraion_name[5], 'city'=>$registraion_name[6],
+            'street'=>$registraion_name[7], 'validationName'=>$registraion_name[8], 'validationSurname'=>$registraion_name[9],
+            'validationLogin'=>$registraion_name[10], 'validationPassword'=>$registraion_name[11], 'validationEmail'=>$registraion_name[12],
+            'validationLN'=>$registraion_name[13], 'validationPC'=>$registraion_name[14], 'validationCity'=>$registraion_name[15],
+            'validationStreet'=>$registraion_name[16]
         ));
     }
 
