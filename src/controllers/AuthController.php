@@ -9,15 +9,14 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-26 22:11:29                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-11-26 23:36:18                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
 use App\Core\MvcController;
 use App\Services\AuthService;
-
 
 /**
  * Kontroler odpowiadający za obsługę logowania, rejestracji oraz innych usług autentykacji i autoryzacji użytkowników.
@@ -42,21 +41,10 @@ class AuthController extends MvcController
      */
     public function register()
     {
-        $registraion_name = $this->_service->registration();
-
-        if (isset($registraion_name) == NULL) {
-            for ($i=0; $i < 17; $i++) { 
-                $registraion_name[$i] = "";
-            }
-        }
-
+        $registraion_form_data = $this->_service->register();
         $this->renderer->render('auth/registration-view', array(
-            'page_title' => 'Rejestracja', 'name'=>$registraion_name[0], 'surname'=>$registraion_name[1], 'login'=>$registraion_name[2],
-            'email'=>$registraion_name[3], 'local-number'=>$registraion_name[4], 'post-code'=>$registraion_name[5], 'city'=>$registraion_name[6],
-            'street'=>$registraion_name[7], 'validationName'=>$registraion_name[8], 'validationSurname'=>$registraion_name[9],
-            'validationLogin'=>$registraion_name[10], 'validationPassword'=>$registraion_name[11], 'validationEmail'=>$registraion_name[12],
-            'validationLN'=>$registraion_name[13], 'validationPC'=>$registraion_name[14], 'validationCity'=>$registraion_name[15],
-            'validationStreet'=>$registraion_name[16]
+            'page_title' => 'Rejestracja', 
+            'form' => $registraion_form_data,
         ));
     }
 
