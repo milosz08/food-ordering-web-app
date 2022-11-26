@@ -4,20 +4,20 @@
  * Copyright (c) 2022 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
- * Nazwa pliku: RegistrationService.php                        *
+ * Nazwa pliku: AuthService.php                                *
  * Projekt: restaurant-project-php-si                          *
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-26 20:03:59                   *
- * Modyfikowany przez: Blazej Kubicius                         *
+ * Ostatnia modyfikacja: 2022-11-26 22:09:26                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
 
 use App\Core\MvcService;
 
-class RegistrationService extends MvcService
+class AuthService extends MvcService
 {
     protected function __construct()
     {
@@ -183,15 +183,41 @@ class RegistrationService extends MvcService
             }
         }
     }
-    
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Prosty przykład metody serwisu dodającej do siebie dwa stringi i zwracającej połączony ciąg znaków.
+     * Funkcja odpowiadający za pobieranie danych użytkownika i ich sprawdzanie z istniejąca baza danych.
+     * Jeśli użytkownik istnieje następuje (tymczasowo) przekierowanie do strony głównej.
      */
-    public function concat($value_first, $value_second)
+    public function login_user()
     {
-        return $value_first . ' ' . $value_second;
+        if (isset($_POST['form-login'])) {
+            $login = $_POST['login'];
+            $password = $_POST['pass'];
+            $temp = $password;
+            $password = sha1($temp);
+
+            /* zapytanie pobierające użytkownika na podstawie loginu oraz zahaszowanego hasła */
+            $query = "
+            SELECT users.id FROM users INNER JOIN roles ON users.role_id=roles.id 
+            WHERE (login = '$login' OR email = '$login') AND password = '$password'";
+            
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();
+            $countUsers = $statement->fetchAll();
+            $numberOfUsers = count($countUsers);
+
+            if ($numberOfUsers <= 0) {
+                $loginError = "is-invalid";
+                $passError = "is-invalid";
+            } else {
+                header('Location:index.php?action=home/welcome');
+            }
+            return array($loginError, $passError);
+        }
     }
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
 }

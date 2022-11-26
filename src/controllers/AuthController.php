@@ -9,14 +9,15 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-26 20:02:04                   *
- * Modyfikowany przez: Blazej Kubicius                         *
+ * Ostatnia modyfikacja: 2022-11-26 22:11:29                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
 use App\Core\MvcController;
-use App\Services\RegistrationService;
+use App\Services\AuthService;
+
 
 /**
  * Kontroler odpowiadający za obsługę logowania, rejestracji oraz innych usług autentykacji i autoryzacji użytkowników.
@@ -24,15 +25,16 @@ use App\Services\RegistrationService;
 class AuthController extends MvcController
 {
     private $_service;
+    
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     public function __construct()
     {
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
-        $this->_service = RegistrationService::get_instance(RegistrationService::class); // pobranie instancji klasy RegistrationService
+        $this->_service = AuthService::get_instance(AuthService::class); // pobranie instancji klasy RegistrationService
     }
-
+    
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -65,9 +67,20 @@ class AuthController extends MvcController
      */
     public function login()
     {
+        $login_variables = $this->_service->login_user();
+
+        if (isset($login_variables) == NULL) {
+            for ($i = 0; $i < 2; $i++) { 
+                $login_variables[$i] = "";
+            }
+        }
+
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
-        ));
+            'loginError' => $login_variables[0],
+            'passError' => $login_variables[1]
+        )
+        );
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
