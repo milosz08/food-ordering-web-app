@@ -6,6 +6,11 @@
             <div class="col-12">
                 <form class="row g-3" action="" method="post" novalidate>
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        {{#form.error}}
+                        <div class="alert alert-danger danger-class" role="alert">
+                            Konto o podanym loginie lub e-mail'u już istnieje!
+                        </div>
+                        {{/form.error}}
                         <div class="card-body p-0">
                             <div class="row g-0">
                                 <div class="col-lg-6">
@@ -54,8 +59,8 @@
                                         <div class="mb-4 extra-bottom-margin">
                                             <label for="form-role" class="form-label">Wybierz typ konta</label>
                                             <select id="form-role" class="form-select registration-form-select" name="registration-role">
-                                                <option value="klient">Klient</option>
-                                                <option value="restaurator">Restaurator</option>
+                                                <option value="1">Klient</option>
+                                                <option value="2">Restaurator</option>
                                             </select>
                                         </div>
 
