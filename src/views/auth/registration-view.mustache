@@ -6,7 +6,7 @@
             <div class="col-12">
                 <form class="row g-3" action="" method="post" novalidate>
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        {{#form.error}}
+                        {{#is_error}}
                         <div class="alert alert-danger danger-class" role="alert">
                             Konto o podanym loginie lub e-mail'u już istnieje!
                         </div>
@@ -101,7 +101,8 @@
 
                                         <div class="col-md-12 mb-5">
                                             <label for="form-street" class="form-label">Ulica</label>
-                                            <input type="text" name="registration-street" class="form-control {{form.v_street.bts_class}}"   id="form-street" value="{{form.v_street.value}}" required>
+                                            <input type="text" name="registration-street" class="form-control {{form.v_street.bts_class}}"
+                                                id="form-street" value="{{form.v_street.value}}" required>
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             <div class="valid-feedback">Wygląda dobrze!</div>
                                         </div>

@@ -12,24 +12,20 @@
                                     <h3 class="fw-normal mb-5 registration-heading">Logowanie</h3>
                                     
                                     <div class="col-md-12 mb-4">
-                                        <label for="validationServer03" class="form-label">Login</label>
-                                        <input type="text" name="login" placeholder="Podaj login lub adres e-mail"
-                                            class="form-control {{loginError}}" id="validationServer03"
-                                            aria-describedby="validationServer03Feedback" required>
-                                        <div id="validationServer03Feedback" class="invalid-feedback">Podaj poprawne
-                                            dane!</div>
+                                        <label for="form-login" class="form-label">Login</label>
+                                        <input type="text" name="login" value="{{form.v_login.value}}" placeholder="Podaj login lub adres e-mail"
+                                            class="form-control {{form.v_login.bts_class}}" id="form-login" required>
+                                        <div class="invalid-feedback">Podaj prawidłową wartość!</div>
                                     </div>
 
                                     <div class="col-md-12 mb-4">
-                                        <label for="validationCustom02" class="form-label">Hasło</label>
+                                        <label for="form-pass" class="form-label">Hasło</label>
                                         <input type="password" name="pass" placeholder="Podaj hasło"
-                                            class="form-control {{passError}}" id="validationServer02" required>
-                                        <div class="invalid-feedback">Podaj poprawne dane!</div>
+                                            class="form-control {{form.v_password.bts_class}}" id="form-pass" required>
+                                        <div class="invalid-feedback">Podaj prawidłową wartość!</div>
                                     </div>
 
-                                    <button type="submit" name="form-login"
-                                        class="btn btn-dark btn-lg registration-button"
-                                        data-mdb-ripple-color="dark">Zaloguj</button>
+                                    <button type="submit" name="form-login" class="btn btn-dark btn-lg registration-button">Zaloguj</button>
                                 </div>
                             </div>
                         </div>
