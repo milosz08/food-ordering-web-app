@@ -6,6 +6,11 @@
             <div class="col-6">
                 <form class="row g-3" action="" method="post" novalidate>
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        {{#is_error}}
+                        <div class="alert alert-danger danger-class" role="alert">
+                            {{form.error}}
+                        </div>
+                        {{/is_error}}
                         <div class="card-body p-0">
                             <div class="row g-0">
                                 <div class="p-5">

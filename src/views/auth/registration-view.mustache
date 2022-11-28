@@ -8,9 +8,9 @@
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
                         {{#is_error}}
                         <div class="alert alert-danger danger-class" role="alert">
-                            Konto o podanym loginie lub e-mail'u już istnieje!
+                            {{form.error}}
                         </div>
-                        {{/form.error}}
+                        {{/is_error}}
                         <div class="card-body p-0">
                             <div class="row g-0">
                                 <div class="col-lg-6">
