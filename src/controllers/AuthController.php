@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-26 23:36:18                   *
+ * Ostatnia modyfikacja: 2022-11-28 21:24:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,7 +24,7 @@ use App\Services\AuthService;
 class AuthController extends MvcController
 {
     private $_service;
-    
+
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     public function __construct()
@@ -45,6 +45,7 @@ class AuthController extends MvcController
         $this->renderer->render('auth/registration-view', array(
             'page_title' => 'Rejestracja', 
             'form' => $registraion_form_data,
+            'is_error' => !empty($registraion_form_data['error']),
         ));
     }
 
@@ -55,20 +56,12 @@ class AuthController extends MvcController
      */
     public function login()
     {
-        $login_variables = $this->_service->login_user();
-
-        if (isset($login_variables) == NULL) {
-            for ($i = 0; $i < 2; $i++) { 
-                $login_variables[$i] = "";
-            }
-        }
-
+        $login_form_data = $this->_service->login_user();
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
-            'loginError' => $login_variables[0],
-            'passError' => $login_variables[1]
-        )
-        );
+            'form' => $login_form_data,
+            'is_error' => !empty($login_form_data['error']),
+        ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
