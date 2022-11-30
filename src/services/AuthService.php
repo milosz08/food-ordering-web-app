@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-28 21:22:32                   *
+ * Ostatnia modyfikacja: 2022-11-30 14:48:02                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -50,7 +50,7 @@ class AuthService extends MvcService
                 if (!empty($_POST['registration-local-number']))
                     $v_locale_no = Utils::validate_field_regex('registration-local-number', '/^([0-9]+(?:[a-z]{0,1})){1,5}$/');
                 else
-                    $v_locale_no = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => 'is-valid');
+                    $v_locale_no = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => '');
                 $v_post_code = Utils::validate_field_regex('registration-post-code', '/^[0-9]{2}-[0-9]{3}$/');
                 $v_city = Utils::validate_field_regex('registration-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,60}$/');
                 $v_street = Utils::validate_field_regex('registration-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,100}$/');

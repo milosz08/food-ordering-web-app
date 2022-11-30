@@ -16,30 +16,27 @@
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <h3 class="fw-normal mb-5 registration-heading">Rejestracja</h3>
-                                        <div class="row extra-bottom-margin">
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <label for="form-name" class="form-label">Imię</label>
                                                 <input type="text" name="registration-name" class="form-control {{form.v_name.bts_class}}" id="form-name" value="{{form.v_name.value}}">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                                <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
 
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="form-surname" class="form-label">Nazwisko</label>
                                                 <input type="text" name="registration-surname" class="form-control {{form.v_surname.bts_class}}" id="form-surname" value="{{form.v_surname.value}}">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                                <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 mb-2 extra-bottom-margin">
+                                        <div class="col-md-12 mb-3">
                                             <label for="form-login" class="form-label">Login</label>
                                             <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}" id="form-login" value="{{form.v_login.value}}">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                            <div class="valid-feedback">Wygląda dobrze!</div>
                                         </div>
 
-                                        <div class="col-md-12 mb-2 extra-bottom-margin">
+                                        <div class="col-md-12 mb-3">
                                             <label for="form-password" class="form-label">Hasło</label>
                                             <input type="password" name="registration-password" class="form-control {{form.v_password.bts_class}}" id="form-password">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
@@ -49,14 +46,13 @@
                                             <label for="form-email" class="form-label">Adres E-mail</label>
                                             <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}" id="form-email" value="{{form.v_email.value}}">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                            <div class="valid-feedback">Wygląda dobrze!</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="p-5">
-                                        <div class="mb-4 extra-bottom-margin">
+                                        <div class="mb-4">
                                             <label for="form-role" class="form-label">Wybierz typ konta</label>
                                             <select id="form-role" class="form-select registration-form-select" name="registration-role">
                                                 <option value="1">Klient</option>
@@ -64,30 +60,27 @@
                                             </select>
                                         </div>
 
-                                        <div class="row extra-bottom-margin">
+                                        <div class="row mb-2">
                                             <div class="col-md-6">
                                                 <label for="form-building" class="form-label">Nr budynku</label>
                                                 <input type="text" name="registration-building-number" class="form-control {{form.v_building_no.bts_class}}"
                                                     id="form-building" value="{{form.v_building_no.value}}">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                                <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="form-locale" class="form-label">Nr mieszkania</label>
                                                 <input type="text" name="registration-local-number" class="form-control {{form.v_locale_no.bts_class}}"
                                                     id="form-locale" value="{{form.v_locale_no.value}}">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                                <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
                                         </div>
 
-                                        <div class="row extra-bottom-margin">
+                                        <div class="row mb-2">
                                             <div class="col-md-6">
                                                 <label for="form-post-code" class="form-label">Kod pocztowy</label>
                                                 <input type="text" name="registration-post-code" class="form-control {{form.v_post_code.bts_class}}"
                                                     id="form-post-code" value="{{form.v_post_code.value}}">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                                <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
 
                                             <div class="col-md-6 mb-2 pb-2">
@@ -95,19 +88,17 @@
                                                 <input type="text" name="registration-city" class="form-control {{form.v_city.bts_class}}"
                                                     id="form-city" value="{{form.v_city.value}}">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                                <div class="valid-feedback">Wygląda dobrze!</div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 mb-5">
+                                        <div class="col-md-12 mb-4">
                                             <label for="form-street" class="form-label">Ulica</label>
                                             <input type="text" name="registration-street" class="form-control {{form.v_street.bts_class}}"
                                                 id="form-street" value="{{form.v_street.value}}" required>
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                            <div class="valid-feedback">Wygląda dobrze!</div>
                                         </div>
     
-                                        <button type="submit" name="registration-button" class="btn btn-dark btn-lg registration-button">
+                                        <button type="submit" name="registration-button" class="btn btn-dark btn-md">
                                             Zarejestruj
                                         </button>
                                     </div>

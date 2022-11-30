@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-28 21:08:34                   *
+ * Ostatnia modyfikacja: 2022-11-30 14:47:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,7 +24,7 @@ class Utils
         {
             return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid');
         }
-        return array('value' => $without_blanks, 'invl' => false, 'bts_class' => 'is-valid');
+        return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '');
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -36,6 +36,6 @@ class Utils
         {
             return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid');
         }
-        return array('value' => $without_blanks, 'invl' => false, 'bts_class' => 'is-valid');
+        return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '');
     }
 }
