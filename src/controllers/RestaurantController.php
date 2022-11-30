@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-27 20:47:32                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2022-11-30 14:39:33                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -40,11 +40,13 @@ class RestaurantController extends MvcController
     /**
      * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/add-restaurant. 
      */
-    public function add_restaurant()
+    public function add()
     {
         $add_restaurant_form_data = $this->_service->add_restaurant();
-        $this->renderer->render('restaurant/add-restaurant-view', array(
-            'page_title' => 'Dodaj restauracje', 
+        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+            'page_title' => 'Dodaj restaurację',
+            'add_edit_text' => 'Dodaj',
+            'is_error' => !empty($add_restaurant_form_data['error']),
             'form' => $add_restaurant_form_data,
         ));
     }
@@ -52,13 +54,15 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/edit-restaurant. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/edit-restaurant.
      */
-    public function edit_restaurant()
+    public function edit()
     {
         $edit_restaurant_form_data = $this->_service->edit_restaurant();
-        $this->renderer->render('restaurant/edit-restaurant-view', array(
-            'page_title' => 'Edytuj restauracje', 
+        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+            'page_title' => 'Edytuj restaurację',
+            'add_edit_text' => 'Edytuj',
+            'is_error' => !empty($edit_restaurant_form_data['error']),
             'form' => $edit_restaurant_form_data,
         ));
     }
@@ -74,7 +78,7 @@ class RestaurantController extends MvcController
      */
     public function index()
     {
-        header('Location:index.php?action=home/welcome');
+        header('Location:index.php?action=restaurant/add');
     }
 }
 
