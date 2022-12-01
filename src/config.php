@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-23 09:42:40                   *
+ * Ostatnia modyfikacja: 2022-12-01 16:30:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -42,5 +42,10 @@ Config::set('__DB_DSN__', $_ENV['DB_DSN']); // data source name do bazy danych
 Config::set('__DB_USERNAME__', $_ENV['DB_USERNAME']); // nazwa użytkownika bazy danych
 Config::set('__DB_PASSWORD__', $_ENV['DB_PASSWORD']); // hasło użytkownika bazy danych
 Config::set('__DB_INIT_COMMANDS__', array(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "UTF8"')); // wymuszenie kodowania znaków UTF-8
+
+Config::set('__SMTP_HOST__', $_ENV['SMTP_HOST']); // adres domenowy serwera SMTP
+Config::set('__SMTP_USERNAME__', $_ENV['SMTP_USERNAME']); // nazwa użytkownika (adres email) z którego serwer będzie wysyłał wiadomości
+Config::set('__SMTP_PASSWORD__', $_ENV['SMTP_PASSWORD']); // hasło do konta z którego serwer będzie wysyłał wiadomości
+Config::set('__SMTP_AUTO_REPLY__', 'info@restaurant.miloszgilga.pl'); // email alternatywny, używany do odpowiadania na wiadomości serwera
 
 Config::set('__SHA_SALT__', $_ENV['SHA_SALT']); // sól do algorytmu haszującego hasła
