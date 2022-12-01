@@ -1,0 +1,47 @@
+{{> partials/header-view.partial }}
+
+<section class="h-100 h-custom gradient-custom-2">
+    <div class="container py-5 h-100 registration-box">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-6">
+                <form class="row g-3" action="" method="post" novalidate>
+                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        {{#is_error}}
+                        <div class="alert alert-danger danger-class" role="alert">
+                            {{form.error}}
+                        </div>
+                        {{/is_error}}
+                        <div class="card-body p-0">
+                            <div class="row g-0">
+                                <div class="p-5">
+                                    <h3 class="fw-normal mb-5 registration-heading">Logowanie</h3>
+                                    
+                                    <div class="col-md-12 mb-4">
+                                        <label for="form-login" class="form-label">Login</label>
+                                        <input type="text" name="login" value="{{form.v_login.value}}" placeholder="Podaj login lub adres e-mail"
+                                            class="form-control {{form.v_login.bts_class}}" id="form-login" required>
+                                        <div class="invalid-feedback">Podaj prawidłową wartość!</div>
+                                    </div>
+
+                                    <div class="col-md-12 mb-4">
+                                        <label for="form-pass" class="form-label">Hasło</label>
+                                        <input type="password" name="pass" placeholder="Podaj hasło"
+                                            class="form-control {{form.v_password.bts_class}}" id="form-pass" required>
+                                        <div class="invalid-feedback">Podaj prawidłową wartość!</div>
+                                    </div>
+
+                                    <button type="submit" name="form-login" class="btn btn-dark btn-md">Zaloguj</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </form>
+    </div>
+    </div>
+</section>
+
+{{> partials/footer-view.partial }}

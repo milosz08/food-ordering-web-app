@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 22:46:32                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 05:50:07                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2022-12-01 15:36:59                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
@@ -25,6 +25,7 @@ abstract class MvcService
     private static $_singleton_instance;
     protected $pdo; // instancja klasy PdoDbContext w celu wykonywania operacji na bazie danych
     protected $dbh; // handler do bazy danych w celu wykonywania operacji (przede wszystkim zapytania SQL)
+    protected $smpt_client; // instancja klasy SmtpMail umożliwiającej wysyłanie wiadomości email na wskazany adres
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ abstract class MvcService
     {
         $this->pdo = PdoDbContext::get_instance(); // pobranie instancji klasy PdoDbContext i przypisanie jej do pola
         $this->dbh = $this->pdo->get_handler(); // pobranie uchwytu do bazy danych z obiekty klasy PdoDbContext
+        $this->smpt_client = SmtpMail::get_instance(); // pobranie instancji klasy SmtpMail i przypisanie jej do pola
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

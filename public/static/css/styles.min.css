@@ -1,1 +1,1 @@
-:root{--testing-color-variable: #0000ff}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Inter",sans-serif;font-weight:500;font-size:16px}.testing-class{color:var(--testing-color-variable)}
+:root{--testing-color-variable: #0000ff}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Inter",sans-serif;font-weight:500;font-size:16px}.testing-class{color:var(--testing-color-variable)}.danger-class{margin-top:9px;margin-bottom:0}.registration-box{max-width:1000px}.registration-heading{color:gray}.registration-form-select{padding:6px}
