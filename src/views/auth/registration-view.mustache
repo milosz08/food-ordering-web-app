@@ -19,20 +19,20 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="form-name" class="form-label">Imię</label>
-                                                <input type="text" name="registration-name" class="form-control {{form.v_name.bts_class}}" id="form-name" value="{{form.v_name.value}}">
+                                                <input type="text" name="registration-name" class="form-control {{form.v_name.bts_class}}" id="form-name" value="{{form.v_name.value}}" placeholder="np. Jan">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             </div>
 
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="form-surname" class="form-label">Nazwisko</label>
-                                                <input type="text" name="registration-surname" class="form-control {{form.v_surname.bts_class}}" id="form-surname" value="{{form.v_surname.value}}">
+                                                <input type="text" name="registration-surname" class="form-control {{form.v_surname.bts_class}}" id="form-surname" value="{{form.v_surname.value}}" placeholder="np. Kowalski">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             </div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label for="form-login" class="form-label">Login</label>
-                                            <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}" id="form-login" value="{{form.v_login.value}}">
+                                            <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}" id="form-login" value="{{form.v_login.value}}" placeholder="np. jankowalski123">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
 
@@ -44,7 +44,7 @@
 
                                         <div class="col-md-12">
                                             <label for="form-email" class="form-label">Adres E-mail</label>
-                                            <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}" id="form-email" value="{{form.v_email.value}}">
+                                            <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}" id="form-email" value="{{form.v_email.value}}" placeholder="np. jankowalski@email.pl">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
                                     </div>
@@ -63,14 +63,14 @@
                                         <div class="row mb-2">
                                             <div class="col-md-6">
                                                 <label for="form-building" class="form-label">Nr budynku</label>
-                                                <input type="text" name="registration-building-number" class="form-control {{form.v_building_no.bts_class}}"
-                                                    id="form-building" value="{{form.v_building_no.value}}">
+                                                <input type="text" name="registration-building-number" class="form-control {{form.v_building_no bts_class}}"
+                                                    id="form-building" value="{{form.v_building_no.value}}" placeholder="np. 65">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             </div>
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="form-locale" class="form-label">Nr mieszkania</label>
                                                 <input type="text" name="registration-local-number" class="form-control {{form.v_locale_no.bts_class}}"
-                                                    id="form-locale" value="{{form.v_locale_no.value}}">
+                                                    id="form-locale" value="{{form.v_locale_no.value}}" placeholder="np. 12c">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             </div>
                                         </div>
@@ -79,14 +79,14 @@
                                             <div class="col-md-6">
                                                 <label for="form-post-code" class="form-label">Kod pocztowy</label>
                                                 <input type="text" name="registration-post-code" class="form-control {{form.v_post_code.bts_class}}"
-                                                    id="form-post-code" value="{{form.v_post_code.value}}">
+                                                    id="form-post-code" value="{{form.v_post_code.value}}" placeholder="np. 43-100">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             </div>
 
                                             <div class="col-md-6 mb-2 pb-2">
                                                 <label for="form-city" class="form-label">Miasto</label>
                                                 <input type="text" name="registration-city" class="form-control {{form.v_city.bts_class}}"
-                                                    id="form-city" value="{{form.v_city.value}}">
+                                                    id="form-city" value="{{form.v_city.value}}" placeholder="np. Gliwice">
                                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                             </div>
                                         </div>
@@ -94,7 +94,7 @@
                                         <div class="col-md-12 mb-4">
                                             <label for="form-street" class="form-label">Ulica</label>
                                             <input type="text" name="registration-street" class="form-control {{form.v_street.bts_class}}"
-                                                id="form-street" value="{{form.v_street.value}}" required>
+                                                id="form-street" value="{{form.v_street.value}}" placeholder="np. Długa">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
     
