@@ -1,23 +1,23 @@
 {{> partials/header-view.partial }}
 
-<section class="h-100 h-custom gradient-custom-2">
+<section class="h-100 h-custom">
     <div class="container py-5 h-100 registration-box">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-6">
                 <form class="row g-3" action="" method="post" novalidate>
-                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        {{#is_error}}
-                        <div class="alert alert-danger danger-class" role="alert">
-                            {{form.error}}
+                    {{#show_banner}}
+                        <div class="alert alert-danger {{banner_class}} mb-0" role="alert">
+                            {{{form.banner_message}}}
                         </div>
-                        {{/is_error}}
+                    {{/show_banner}}
+                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
                         <div class="card-body p-0">
                             <div class="row g-0">
                                 <div class="p-5">
                                     <h3 class="fw-normal mb-5 registration-heading">Logowanie</h3>
                                     
                                     <div class="col-md-12 mb-4">
-                                        <label for="form-login" class="form-label">Login</label>
+                                        <label for="form-login" class="form-label">Login lub adres email</label>
                                         <input type="text" name="login" value="{{form.v_login.value}}" placeholder="Podaj login lub adres e-mail"
                                             class="form-control {{form.v_login.bts_class}}" id="form-login" required>
                                         <div class="invalid-feedback">Podaj prawidłową wartość!</div>

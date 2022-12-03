@@ -5,12 +5,12 @@
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12">
                 <form class="row g-3" action="" method="post" novalidate>
-                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        {{#is_error}}
-                        <div class="alert alert-danger danger-class" role="alert">
-                            {{form.error}}
+                    {{#show_banner}}
+                        <div class="alert alert-danger {{banner_class}} mb-0" role="alert">
+                            {{{form.banner_message}}}
                         </div>
-                        {{/is_error}}
+                    {{/show_banner}}
+                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
                         <div class="card-body p-0">
                             <div class="row g-0">
                                 <div class="col-lg-6">
