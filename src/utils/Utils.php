@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 17:31:44                   *
+ * Ostatnia modyfikacja: 2022-12-03 19:29:15                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -49,7 +49,7 @@ class Utils
         $without_blanks = trim(htmlspecialchars($imgValue));
         
         if (empty($path)) {
-            return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid');
+            return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);;
         }
 
         $image_info = getimagesize($path);
@@ -59,7 +59,9 @@ class Utils
             if (($image_info[1]/$image_info[0]) >= 0.47 || ($image_info[1]/$image_info[0]) <= 0.42  || $image_size > 5000000) { 
                 return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);
             }
-        }elseif ($value == 'restaurant-profile') {
+        }
+        
+        if ($value == 'restaurant-profile') {
             if ($image_info[0] != $image_info[1]  || $image_size > 5000000) {
                 return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);
             }
