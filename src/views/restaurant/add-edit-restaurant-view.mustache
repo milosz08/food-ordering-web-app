@@ -4,7 +4,7 @@
     <div class="container py-5 h-100 registration-box">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12">
-                <form class="row g-3" action="" method="post" novalidate>
+                <form class="row g-3" action="" method="post" enctype="multipart/form-data" novalidate>
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
                         {{#is_error}}
                         <div class="alert alert-danger danger-class" role="alert">
@@ -19,27 +19,39 @@
 
                                         <div class="col-md-12 mb-3">
                                             <label for="form-add-restaurant" class="form-label">Nazwa restauracji</label>
+<<<<<<< HEAD
+                                            <input type="text" name="restaurant-name" class="form-control {{form.v_name.bts_class}}" 
+                                                placeholder="np. Bar Bistro" value="{{form.v_name.value}}">
+=======
                                             <input type="text" name="restaurant-name" class="form-control {{form.v_name_restaurant.bts_class}}" 
                                                 placeholder="np. Bar Bistro" value="{{form.v_name_restaurant.value}}">
+>>>>>>> 87ffcd5189aefe53e6b6983d354577273240bbd0
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label for="form-price-for-delivery" class="form-label">Cena za dostawę (w zł)</label>
+<<<<<<< HEAD
+                                            <input type="text" name="restaurant-delivery-price" class="form-control {{form.v_price.bts_class}}"
+                                                placeholder="np. 8.00" value="{{form.v_price.value}}">
+=======
                                             <input type="text" name="restaurant-delivery-price" class="form-control {{form.v_delivery_price.bts_class}}"
                                                 placeholder="np. 8,00" value="{{form.v_delivery_price.value}}">
+>>>>>>> 87ffcd5189aefe53e6b6983d354577273240bbd0
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label for="file-banner" class="form-label">{{add_edit_text}} baner restauracji</label>
-                                            <input id="file-banner" class="form-control" type="file" name="restaurant-banner"/>
+                                            <input id="file-banner" class="form-control {{form.v_banner.bts_class}}" type="file" 
+                                            name="restaurant-banner" accept="image/png, image/jpeg"/>
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label for="file-profile" class="form-label">{{add_edit_text}} zdjęcie główne restauracji</label>
-                                            <input id="file-profile" class="form-control" type="file" name="restaurant-profile"/>
+                                            <input id="file-profile" class="form-control {{form.v_profile.bts_class}}" type="file" 
+                                            name="restaurant-profile" accept="image/png, image/jpeg"/>
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
                                     </div>
