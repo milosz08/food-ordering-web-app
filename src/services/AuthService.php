@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 13:36:02                   *
+ * Ostatnia modyfikacja: 2022-12-03 13:42:01                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -127,7 +127,7 @@ class AuthService extends MvcService
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Funkcja odpowiadający za pobieranie danych użytkownika i ich sprawdzanie z istniejącą bazą danych.
+     * Funkcja odpowiadająca za pobieranie danych użytkownika i ich sprawdzanie z istniejącą bazą danych.
      * Jeśli użytkownik istnieje następuje (tymczasowo) przekierowanie do strony głównej.
      */
     public function login_user()

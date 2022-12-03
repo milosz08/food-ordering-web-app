@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 13:36:16                   *
+ * Ostatnia modyfikacja: 2022-12-03 16:34:04                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -35,7 +35,7 @@ class RestaurantService extends MvcService
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Funkcja odpowiadający za dodawanie danych nowej restauracji oraz sprawdzanie ich z istniejącą bazą danych.
+     * Funkcja odpowiadająca za dodawanie danych nowej restauracji oraz sprawdzanie ich z istniejącą bazą danych.
      * Jeśli restauracja została pomyślnie dodana następuje (tymczasowo) przekierowanie do strony głównej.
      */
     public function add_restaurant()
@@ -44,12 +44,13 @@ class RestaurantService extends MvcService
         {
             try
             {
-                $v_name_restaurant = Utils::validate_field_regex('restaurant-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
-                $v_delivery_price = Utils::validate_field_regex('restaurant-delivery-price', '/^([1-9][0-9]*|0)(\.[0-9]{1,2})?$/');
+                $v_name_restaurant = Utils::validate_field_regex('restaurant-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ" "1234567890]{2,50}$/');
+                $v_delivery_price = Utils::validate_field_regex('restaurant-delivery-price', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
                 $v_locale_no = Utils::validate_field_regex('restaurant-building-no', '/^([0-9]+(?:[a-z]{0,1})){1,5}$/');
                 $v_post_code = Utils::validate_field_regex('restaurant-post-code', '/^[0-9]{2}-[0-9]{3}$/');
-                $v_city = Utils::validate_field_regex('restaurant-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,60}$/');
-                $v_street= Utils::validate_field_regex('restaurant-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,100}$/');
+                $v_city = Utils::validate_field_regex('restaurant-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ" "]{2,60}$/');
+                $v_street= Utils::validate_field_regex('restaurant-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ1234567890" "]{2,100}$/');
+                
 
                 $this->dbh->beginTransaction();
 
@@ -68,8 +69,9 @@ class RestaurantService extends MvcService
                     
                     if ($statement->fetchColumn() > 0)
                     throw new Exception('Podana restauracja istnieje już w tym miejscu. Podaj inne dane adresowe.');
-
+     
                     // Sekcja zapytań dodająca wprowadzone dane do tabeli restaurants
+                    $v_delivery_price = str_replace(',', '.', $v_delivery_price);
                     $query = "INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city) VALUES (?,?,?,?,?,?)";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
