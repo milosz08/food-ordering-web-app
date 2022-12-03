@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 18:26:56                   *
+ * Ostatnia modyfikacja: 2022-12-03 18:31:53                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -59,7 +59,7 @@ class AuthService extends MvcService
                     $v_locale_no = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => '');
                 $v_post_code = Utils::validate_field_regex('registration-post-code', '/^[0-9]{2}-[0-9]{3}$/');
                 $v_city = Utils::validate_field_regex('registration-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,60}$/');
-                $v_street = Utils::validate_field_regex('registration-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,100}$/');
+                $v_street = Utils::validate_field_regex('registration-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{2,100}$/');
 
                 $this->dbh->beginTransaction();
 
@@ -132,7 +132,11 @@ class AuthService extends MvcService
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+<<<<<<< HEAD
      * Metoda odpowiadający za pobieranie danych użytkownika i ich sprawdzanie z istniejącą bazą danych.
+=======
+     * Funkcja odpowiadająca za pobieranie danych użytkownika i ich sprawdzanie z istniejącą bazą danych.
+>>>>>>> 03f0ba4708f5bac11009151c902144061a964cd8
      * Jeśli użytkownik istnieje następuje (tymczasowo) przekierowanie do strony głównej.
      */
     public function login_user()
