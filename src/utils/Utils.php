@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 16:39:40                   *
+ * Ostatnia modyfikacja: 2022-12-03 17:31:44                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,6 +45,7 @@ class Utils
     {
         $path = $_FILES[$value]['tmp_name'];
         $imgValue = $_FILES[$value]['name'];
+        $ext = pathinfo($imgValue, PATHINFO_EXTENSION);
         $without_blanks = trim(htmlspecialchars($imgValue));
         
         if (empty($path)) {
@@ -56,14 +57,14 @@ class Utils
 
         if ($value == 'restaurant-banner') {
             if (($image_info[1]/$image_info[0]) >= 0.47 || ($image_info[1]/$image_info[0]) <= 0.42  || $image_size > 5000000) { 
-                return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path);
+                return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);
             }
         }elseif ($value == 'restaurant-profile') {
             if ($image_info[0] != $image_info[1]  || $image_size > 5000000) {
-                return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path);
+                return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);
             }
         }
-        return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '', 'path' => $path);
+        return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '', 'path' => $path, 'ext' => $ext);
     }
 
 }

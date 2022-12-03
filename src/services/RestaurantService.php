@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 17:09:42                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-03 17:37:20                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -110,6 +110,7 @@ class RestaurantService extends MvcService
 
     public function edit_restaurant()
     {
+        $id_test = 9;
         if (isset($_POST['restaurant-button'])) {
             try {
                 $v_name = Utils::validate_field_regex('restaurant-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
@@ -123,8 +124,8 @@ class RestaurantService extends MvcService
 
                 if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] || $v_street['invl'] ||
                     $v_building_no['invl'] || $v_post_code['invl'] || $v_city['invl'])) {
-                    move_uploaded_file($v_banner['path'], 'publicUploads/restaurantsUploads/'.$v_banner['value']);
-                    move_uploaded_file($v_profile['path'], 'publicUploads/restaurantsUploads/'.$v_profile['value']);
+                    move_uploaded_file($v_banner['path'], 'publicUploads/restaurantsUploads/'.$id_test.'_banner.'.$v_banner['ext']);
+                    move_uploaded_file($v_profile['path'], 'publicUploads/restaurantsUploads/'.$id_test.'_profile.'.$v_profile['ext']);
                 }
                 
             } catch (Exception $e) {
