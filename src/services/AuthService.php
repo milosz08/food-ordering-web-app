@@ -9,8 +9,13 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
+<<<<<<< HEAD
  * Ostatnia modyfikacja: 2022-12-02 19:52:26                   *
  * Modyfikowany przez: BubbleWaffle                            *
+=======
+ * Ostatnia modyfikacja: 2022-12-03 13:36:02                   *
+ * Modyfikowany przez: patrick012016                           *
+>>>>>>> 87ffcd5189aefe53e6b6983d354577273240bbd0
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -34,6 +39,9 @@ class AuthService extends MvcService
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Funkcja odpowiadająca za dodawanie nowych danych użytkownika i ich sprawdzanie z istniejącą bazą danych.
+     */
     public function register()
     {
         if(isset($_POST['registration-button']))
@@ -124,7 +132,7 @@ class AuthService extends MvcService
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Funkcja odpowiadający za pobieranie danych użytkownika i ich sprawdzanie z istniejąca baza danych.
+     * Funkcja odpowiadający za pobieranie danych użytkownika i ich sprawdzanie z istniejącą bazą danych.
      * Jeśli użytkownik istnieje następuje (tymczasowo) przekierowanie do strony głównej.
      */
     public function login_user()

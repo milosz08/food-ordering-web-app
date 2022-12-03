@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-30 14:39:33                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-02 20:08:12                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -19,9 +19,8 @@ use App\Core\MvcController;
 use App\Services\RestaurantService;
 
 /**
- * Kontroler odpowiadający za obsługę logowania, rejestracji oraz innych usług autentykacji i autoryzacji użytkowników.
+ * Kontroler odpowiadający za obsługę dodawania oraz edytowania restauracji.
  */
-
 class RestaurantController extends MvcController
 {
     private $_service; // instancja serwisu
@@ -32,13 +31,13 @@ class RestaurantController extends MvcController
     {
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
-        $this->_service = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RegistrationService
+        $this->_service = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RestaurantService
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/add-restaurant. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/add. 
      */
     public function add()
     {
@@ -54,7 +53,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/edit-restaurant.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/edit.
      */
     public function edit()
     {
@@ -71,9 +70,9 @@ class RestaurantController extends MvcController
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=home
+     *      index.php?action=restaurant
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=home/welcome
+     *      index.php?action=restaurant/add
      * renderując widok z metody welcode() powyższej klasy.
      */
     public function index()
@@ -81,5 +80,3 @@ class RestaurantController extends MvcController
         header('Location:index.php?action=restaurant/add');
     }
 }
-
- 
