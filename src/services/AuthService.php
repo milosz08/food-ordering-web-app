@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-01 16:50:29                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-02 19:52:26                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -53,7 +53,7 @@ class AuthService extends MvcService
                     $v_locale_no = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => '');
                 $v_post_code = Utils::validate_field_regex('registration-post-code', '/^[0-9]{2}-[0-9]{3}$/');
                 $v_city = Utils::validate_field_regex('registration-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,60}$/');
-                $v_street = Utils::validate_field_regex('registration-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,100}$/');
+                $v_street = Utils::validate_field_regex('registration-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{2,100}$/');
 
                 $this->dbh->beginTransaction();
 
