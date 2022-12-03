@@ -27,27 +27,31 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="form-price-for-delivery" class="form-label">Cena za dostawę (w zł)</label>
                                             <input type="text" name="restaurant-delivery-price" class="form-control {{form.v_price.bts_class}}"
-                                                placeholder="np. 8.00" value="{{form.v_price.value}}">
+                                                placeholder="np. 8.00 lub 8,00" value="{{form.v_price.value}}">
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label for="file-banner" class="form-label">{{add_edit_text}} baner restauracji</label>
                                             <input id="file-banner" class="form-control {{form.v_banner.bts_class}}" type="file" 
-                                            name="restaurant-banner" accept="image/png, image/jpeg"/>
+                                            name="restaurant-banner" accept="image/png, image/jpeg, image/jpg"/>
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label for="file-profile" class="form-label">{{add_edit_text}} zdjęcie główne restauracji</label>
                                             <input id="file-profile" class="form-control {{form.v_profile.bts_class}}" type="file" 
-                                            name="restaurant-profile" accept="image/png, image/jpeg"/>
+                                            name="restaurant-profile" accept="image/png, image/jpeg, image/jpg"/>
                                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
                                 <div class="col-lg-6">
+
+                                    <div class = "mb-4"></div>
+                                    <br><br>
+
                                     <div class="p-5">
                                         <div class="col-md-12 mb-3">
                                             <label for="form-street" class="form-label">Ulica</label>
