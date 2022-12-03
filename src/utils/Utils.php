@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 19:29:15                   *
+ * Ostatnia modyfikacja: 2022-12-03 19:42:22                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,6 +17,22 @@ namespace App\Utils;
 
 class Utils
 {
+    private const SEQ_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function generate_random_seq($seq_count = 10)
+    {
+        $random_seq = '';
+        for ($i = 0; $i < $seq_count; $i++)
+        {
+            $random_seq .= self::SEQ_CHARS[rand(0, strlen(self::SEQ_CHARS) - 1)];
+        }
+        return $random_seq;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
     public static function validate_field_regex($value, $pattern)
     {
         $without_blanks = trim(htmlspecialchars($_POST[$value]));
