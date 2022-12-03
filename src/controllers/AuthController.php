@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-28 21:24:32                   *
+ * Ostatnia modyfikacja: 2022-12-03 18:06:29                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -41,11 +41,12 @@ class AuthController extends MvcController
      */
     public function register()
     {
-        $registraion_form_data = $this->_service->register();
+        $form_data = $this->_service->register();
         $this->renderer->render('auth/registration-view', array(
             'page_title' => 'Rejestracja', 
-            'form' => $registraion_form_data,
-            'is_error' => !empty($registraion_form_data['error']),
+            'form' => $form_data,
+            'show_banner' => !empty($form_data['banner_message']),
+            'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
         ));
     }
 
@@ -56,11 +57,44 @@ class AuthController extends MvcController
      */
     public function login()
     {
-        $login_form_data = $this->_service->login_user();
+        $form_data = $this->_service->login_user();
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
-            'form' => $login_form_data,
-            'is_error' => !empty($login_form_data['error']),
+            'form' => $form_data,
+            'show_banner' => !empty($form_data['banner_message']),
+            'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/password/renew/request. 
+     */
+    public function password_renew_request()
+    {
+        $form_data = $this->_service->attempt_renew_password();
+        $this->renderer->render('auth/renew-password-email-view', array(
+            'page_title' => 'Resetuj hasło',
+            'form' => $form_data,
+            'show_banner' => !empty($form_data['banner_message']),
+            'banner_class' => $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/password/renew/change. 
+     */
+    public function password_renew_change()
+    {
+        $form_data = $this->_service->renew_change_password();
+        $this->renderer->render('auth/renew-password-change-view', array(
+            'page_title' => 'Zmień hasło',
+            'form' => $form_data,
+            'show_banner' => !empty($form_data['banner_message']),
+            'banner_class' => $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
         ));
     }
 
