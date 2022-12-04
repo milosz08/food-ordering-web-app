@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 17:20:17                   *
+ * Ostatnia modyfikacja: 2022-12-04 20:05:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -50,3 +50,13 @@ Config::set('__SMTP_AUTO_REPLY__', 'info@restaurant.miloszgilga.pl'); // email a
 
 Config::set('__SHA_SALT__', $_ENV['SHA_SALT']); // sól do algorytmu haszującego hasła
 Config::set('__DEF_APP_HOST__', 'http://localhost:5545' . $_SERVER['PHP_SELF']); // domyślny host serwera
+
+// regexy do walidacji pól formularzy
+Config::set('__REGEX_CITY__', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ- ]{2,60}$/');
+Config::set('__REGEX_STREET__', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ- ]{2,100}$/');
+Config::set('__REGEX_POSTCODE__', '/^[0-9]{2}-[0-9]{3}$/');
+Config::set('__REGEX_BUILDING_NO__', '/^([0-9]+(?:[a-z]{0,1})){1,5}$/');
+Config::set('__REGEX_PASSWORD__', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
+Config::set('__REGEX_LOGIN__', '/^[a-zA-Z0-9]{5,30}$/');
+Config::set('__REGEX_LOGINEMAIL__', '/^[a-zA-Z0-9@.]{5,100}$/');
+Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');

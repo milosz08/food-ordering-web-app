@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 02:34:35                   *
+ * Ostatnia modyfikacja: 2022-12-04 20:16:53                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,6 +19,7 @@ use PDO;
 use Exception;
 
 use App\Utils\Utils;
+use App\Core\Config;
 use App\Core\MvcService;
 
 class RestaurantService extends MvcService
@@ -42,13 +43,14 @@ class RestaurantService extends MvcService
     {
         if (isset($_POST['restaurant-button']))
         {
-            try {
-                $v_name = Utils::validate_field_regex('restaurant-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ" "1234567890]{2,50}$/');
-                $v_price = Utils::validate_field_regex('restaurant-delivery-price', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
-                $v_building_no = Utils::validate_field_regex('restaurant-building-no', '/^([0-9]+(?:[a-z]{0,1})){1,5}$/');
-                $v_post_code = Utils::validate_field_regex('restaurant-post-code', '/^[0-9]{2}-[0-9]{3}$/');
-                $v_city = Utils::validate_field_regex('restaurant-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ" "]{2,60}$/');
-                $v_street = Utils::validate_field_regex('restaurant-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ1234567890" "]{2,100}$/');
+            try
+            {
+                $v_name = Utils::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ-\/%@$: ]{2,50}$/');
+                $v_price = Utils::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
+                $v_building_no = Utils::validate_field_regex('restaurant-building-no', Config::get('__REGEX_BUILDING_NO__'));
+                $v_post_code = Utils::validate_field_regex('restaurant-post-code', '');
+                $v_city = Utils::validate_field_regex('restaurant-city', Config::get('__REGEX_CITY__'));
+                $v_street = Utils::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
                 $v_banner = Utils::validate_image_regex('restaurant-banner');
                 $v_profile = Utils::validate_image_regex('restaurant-profile');
                 

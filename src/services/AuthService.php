@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 03:27:01                   *
+ * Ostatnia modyfikacja: 2022-12-04 20:04:36                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -47,20 +47,20 @@ class AuthService extends MvcService
             try
             {
                 $v_name = Utils::validate_field_regex('registration-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
-                $v_surname = Utils::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
-                $v_login = Utils::validate_field_regex('registration-login', '/^[a-zA-Z0-9]{5,30}$/');
-                $v_password = Utils::validate_field_regex('registration-password', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
+                $v_surname = Utils::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ- ]{2,50}$/');
+                $v_login = Utils::validate_field_regex('registration-login', Config::get('__REGEX_LOGIN__'));
+                $v_password = Utils::validate_field_regex('registration-password', Config::get('__REGEX_PASSWORD__'));
                 $v_password_rep = Utils::validate_exact_fields($v_password, 'registration-password-rep');
                 $v_email = Utils::validate_email_field('registration-email');
                 $account_type = $_POST['registration-role'];
-                $v_building_no = Utils::validate_field_regex('registration-building-number', '/^[0-9]{1,5}$/');
+                $v_building_no = Utils::validate_field_regex('registration-building-number', Config::get('__REGEX_BUILDING_NO__'));
                 if (!empty($_POST['registration-local-number']))
-                    $v_locale_no = Utils::validate_field_regex('registration-local-number', '/^([0-9]+(?:[a-z]{0,1})){1,5}$/');
+                    $v_locale_no = Utils::validate_field_regex('registration-local-number', Config::get('__REGEX_BUILDING_NO__'));
                 else
                     $v_locale_no = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => '');
-                $v_post_code = Utils::validate_field_regex('registration-post-code', '/^[0-9]{2}-[0-9]{3}$/');
-                $v_city = Utils::validate_field_regex('registration-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,60}$/');
-                $v_street = Utils::validate_field_regex('registration-street', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{2,100}$/');
+                $v_post_code = Utils::validate_field_regex('registration-post-code', Config::get('__REGEX_POSTCODE__'));
+                $v_city = Utils::validate_field_regex('registration-city', Config::get('__REGEX_CITY__'));
+                $v_street = Utils::validate_field_regex('registration-street', Config::get('__REGEX_STREET__'));
 
                 $this->dbh->beginTransaction();
 
@@ -139,8 +139,8 @@ class AuthService extends MvcService
     {
         if (isset($_POST['form-login']))
         {
-            $login = Utils::validate_field_regex('login', '/^[a-zA-Z0-9@.]{5,100}$/');
-            $password = Utils::validate_field_regex('pass', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
+            $login_email = Utils::validate_field_regex('login_email', Config::get('__REGEX_LOGINEMAIL__'));
+            $password = Utils::validate_field_regex('pass', Config::get('__REGEX_PASSWORD__'));
             try
             {
                 // zapytanie pobierające użytkownika na podstawie loginu oraz zahaszowanego hasła
@@ -185,7 +185,7 @@ class AuthService extends MvcService
         }
         if (isset($_POST['form-send-request-change-pass']))
         {
-            $login_email = Utils::validate_field_regex('login_email', '/^[a-zA-Z0-9@.]{5,100}$/');
+            $login_email = Utils::validate_field_regex('login_email', Config::get('__REGEX_LOGINEMAIL__'));
             if ($login_email['invl']) return array(
                 'v_login_email' => $login_email,
                 'banner_message' => $this->_banner_message,
@@ -275,7 +275,7 @@ class AuthService extends MvcService
             }
             if (isset($_POST['form-send-change-pass']))
             {
-                $v_password = Utils::validate_field_regex('change-password', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
+                $v_password = Utils::validate_field_regex('change-password', Config::get('__REGEX_PASSWORD__'));
                 if ($v_password['value'] != $_POST['change-password-rep'])
                     $v_password_rep = array('value' => $_POST['change-password-rep'], 'invl' => true, 'bts_class' => 'is-invalid');
 
