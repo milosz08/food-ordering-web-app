@@ -7,8 +7,8 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 01:46:29                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2022-12-04 03:02:33                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -20,11 +20,30 @@
  * załaduje się jeszcze przed załadowaniem obrazka i nie znajdzie zasobu na którym ma wykonać akcję.                                     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-console.log('Hello Web! - bezpośrednio po wysłaniu rządania http');
-
 window.addEventListener('load', function() {
-    
-    // Tutaj umieszczać skrypty uruchamiające się dopiero po załadowaniu całego drzewa DOM (wszystkich selektorów i zasobów HTML)
-    
-    console.log('Hello DOM Tree! - po załadowaniu drzewa DOM');
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Skrypt umoliwiający pokazywanie/chowanie hasła w polu input na przycisk
+     */
+    const passwordVisibilityToggleButton = document.querySelectorAll('.password-input-toggler');
+    if (passwordVisibilityToggleButton !== null) {  
+        passwordVisibilityToggleButton.forEach(el => {
+            const inputChild = el.parentNode.firstElementChild;
+            const buttonIcon = el.parentNode.children[1].firstElementChild;
+            el.addEventListener('click', function() {
+                if (inputChild.value.length !== 0) {
+                    inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
+                    buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
+                }
+            });
+            inputChild.addEventListener('input', function() {
+                if (this.value === '') {
+                    inputChild.type = 'password';
+                    buttonIcon.innerText = 'visibility';
+                }
+            });
+        });
+    }
 });

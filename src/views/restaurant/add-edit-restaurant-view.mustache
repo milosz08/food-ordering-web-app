@@ -1,100 +1,76 @@
 {{> partials/header-view.partial }}
-
-<section class="h-100 h-custom gradient-custom-2">
-    <div class="container py-5 h-100 registration-box">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12">
-                <form class="row g-3" action="" method="post" enctype="multipart/form-data" novalidate>
-                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        {{#is_error}}
-                        <div class="alert alert-danger danger-class" role="alert">
-                            {{form.error}}
-                        </div>
-                        {{/is_error}}
-                        <div class="card-body p-0">
-                            <div class="row g-0">
-                                <div class="col-lg-6">
-                                    <div class="p-5">
-                                        <h3 class="fw-normal mb-5 registration-heading">{{add_edit_text}} restaurację</h3>
-
-                                        <div class="col-md-12 mb-3">
-                                            <label for="form-add-restaurant" class="form-label">Nazwa restauracji</label>
-                                            <input type="text" name="restaurant-name" class="form-control {{form.v_name.bts_class}}" 
-                                                placeholder="np. Bar Bistro" value="{{form.v_name.value}}">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-3">
-                                            <label for="form-price-for-delivery" class="form-label">Cena za dostawę (w zł)</label>
-                                            <input type="text" name="restaurant-delivery-price" class="form-control {{form.v_price.bts_class}}"
-                                                placeholder="np. 8.00 lub 8,00" value="{{form.v_price.value}}">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-3">
-                                            <label for="file-banner" class="form-label">{{add_edit_text}} baner restauracji</label>
-                                            <input id="file-banner" class="form-control {{form.v_banner.bts_class}}" type="file" 
-                                            name="restaurant-banner" accept="image/png, image/jpeg, image/jpg"/>
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-3">
-                                            <label for="file-profile" class="form-label">{{add_edit_text}} zdjęcie główne restauracji</label>
-                                            <input id="file-profile" class="form-control {{form.v_profile.bts_class}}" type="file" 
-                                            name="restaurant-profile" accept="image/png, image/jpeg, image/jpg"/>
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="col-lg-6">
-
-                                    <div class = "mb-4"></div>
-                                    <br><br>
-
-                                    <div class="p-5">
-                                        <div class="col-md-12 mb-3">
-                                            <label for="form-street" class="form-label">Ulica</label>
-                                            <input type="text" name="restaurant-street" class="form-control {{form.v_street.bts_class}}"   
-                                                value="{{form.v_street.value}}" placeholder="np. Długa">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-
-                                        <div class="row mb-2">
-                                            <div class="col-md-6">
-                                                <label for="form-building-no" class="form-label">Nr budynku</label>
-                                                <input id="form-building-no" type="text" name="restaurant-building-no" placeholder="np. 65" 
-                                                class="form-control {{form.v_building_no.bts_class}}" value="{{form.v_building_no.value}}">
-                                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-2">
-                                                <label for="form-post-code" class="form-label">Kod pocztowy</label>
-                                                <input id="form-post-code" type="text" name="restaurant-post-code" placeholder="np. 43-100"
-                                                    class="form-control {{form.v_post_code.bts_class}}" value="{{form.v_post_code.value}}">
-                                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-4">
-                                            <label for="form-city" class="form-label">Miasto</label>
-                                            <input id="form-city" type="text" name="restaurant-city" placeholder="np. Gliwice"
-                                                class="form-control {{form.v_city.bts_class}}" value="{{form.v_city.value}}">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-    
-                                        <button type="submit" name="restaurant-button" class="btn btn-dark btn-md">
-                                            {{add_edit_text}} restaurację
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+<div class="d-flex flex-column justify-content-center container flex-grow-1">
+    <div class="row d-flex justify-content-center align-items-center media-large-form-size-box mx-auto">
+        {{#is_error}}
+        <div class="alert alert-danger mb-0" role="alert">
+            {{{form.error}}}
+        </div>
+        {{/is_error}}
+        <div class="card rounded-3 custom-card-padding">
+            <form class="row" action="" method="post" novalidate>
+                <h3 class="fw-normal mb-5 text-secondary">{{add_edit_text}} restaurację</h3>
+                <div class="col-lg-6 px-4">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-add-restaurant" class="form-label">Nazwa restauracji</label>
+                        <input type="text" name="restaurant-name" class="form-control {{form.v_name.bts_class}}" 
+                            placeholder="np. Bar Bistro" value="{{form.v_name.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-price-for-delivery" class="form-label">Cena za dostawę</label>
+                        <div class="input-group has-validation">
+                            <input type="text" name="restaurant-delivery-price" class="form-control {{form.v_price.bts_class}}"
+                            placeholder="np. 8.00 lub 8,00" value="{{form.v_price.value}}">
+                            <span class="input-group-text">zł</span>
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="file-banner" class="form-label">{{add_edit_text}} baner restauracji</label>
+                        <input id="file-banner" class="form-control {{form.v_banner.bts_class}}" type="file" 
+                        name="restaurant-banner" accept="image/png,image/jpeg,image/jpg"/>
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="file-profile" class="form-label">{{add_edit_text}} zdjęcie główne restauracji</label>
+                        <input id="file-profile" class="form-control {{form.v_profile.bts_class}}" type="file" 
+                        name="restaurant-profile" accept="image/png,image/jpeg,image/jpg"/>
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                </div>
+                <div class="col-lg-6 px-4">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-street" class="form-label">Ulica</label>
+                        <input type="text" name="restaurant-street" class="form-control {{form.v_street.bts_class}}"   
+                            value="{{form.v_street.value}}" placeholder="np. Długa">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label for="form-building-no" class="form-label">Nr budynku</label>
+                            <input id="form-building-no" type="text" name="restaurant-building-no" placeholder="np. 65" 
+                            class="form-control {{form.v_building_no.bts_class}}" value="{{form.v_building_no.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label for="form-post-code" class="form-label">Kod pocztowy</label>
+                            <input id="form-post-code" type="text" name="restaurant-post-code" placeholder="np. 43-100"
+                                class="form-control {{form.v_post_code.bts_class}}" value="{{form.v_post_code.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label for="form-city" class="form-label">Miasto</label>
+                        <input id="form-city" type="text" name="restaurant-city" placeholder="np. Gliwice"
+                            class="form-control {{form.v_city.bts_class}}" value="{{form.v_city.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <button type="submit" name="restaurant-button" class="btn btn-dark btn-md w-100 py-2 app-primary-button">
+                        {{add_edit_text}} restaurację
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</section>
-
+</div>
 {{> partials/footer-view.partial }}
