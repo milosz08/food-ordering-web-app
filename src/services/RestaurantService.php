@@ -55,8 +55,10 @@ class RestaurantService extends MvcService
                 $this->dbh->beginTransaction();
 
                 if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] ||  $v_street['invl'] || 
+                      $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
                 $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
-                    {
+                      $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
+                {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
                     $query = "
                         SELECT COUNT(id) FROM restaurants
@@ -64,10 +66,10 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                            $v_street['value'],
-                            $v_building_no['value'],
-                            $v_post_code['value'],
-                            $v_city['value']
+                        $v_street['value'],
+                        $v_building_no['value'],
+                        $v_post_code['value'],
+                        $v_city['value']
                     ));
 
                     if ($statement->fetchColumn() > 0)
@@ -82,12 +84,12 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                            $v_name['value'],
-                            $v_price['value'],
-                            $v_street['value'],
-                            $v_building_no['value'],
-                            $v_post_code['value'],
-                            $v_city['value']
+                        $v_name['value'],
+                        $v_price['value'],
+                        $v_street['value'],
+                        $v_building_no['value'],
+                        $v_post_code['value'],
+                        $v_city['value']
                     ));
                     // Sekcja zapytań zwracająca id ostatnio dodanej restauracji
                     $query = "SELECT id FROM restaurants ORDER BY id DESC LIMIT 1";
@@ -145,7 +147,7 @@ class RestaurantService extends MvcService
             $statement->execute(array($_GET['id']));
             $restaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
             if (count($restaurant) == 0) header('Location:index.php?action=home/welcome');
-
+            
             $v_name = array('value' => $restaurant[0]['name'], 'invl' => false, 'bts_class' => '');
             $v_street = array('value' => $restaurant[0]['street'], 'invl' => false, 'bts_class' => '');
             $v_building_no = array('value' => $restaurant[0]['building_locale_nr'], 'invl' => false, 'bts_class' => '');
@@ -174,10 +176,10 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                            $v_street['value'],
-                            $v_building_no['value'],
-                            $v_post_code['value'],
-                            $v_city['value'],
+                        $v_street['value'],
+                        $v_building_no['value'],
+                        $v_post_code['value'],
+                        $v_city['value'],
                         $_GET['id']
                     ));
 
@@ -193,12 +195,12 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                            $v_name['value'],
-                            $v_price['value'],
-                            $v_street['value'],
-                            $v_building_no['value'],
-                            $v_post_code['value'],
-                            $v_city['value'],
+                        $v_name['value'],
+                        $v_price['value'],
+                        $v_street['value'],
+                        $v_building_no['value'],
+                        $v_post_code['value'],
+                        $v_city['value'],
                         $photos['banner'],
                         $photos['profile'],
                         $_GET['id']
@@ -228,5 +230,5 @@ class RestaurantService extends MvcService
         );
     }
 
-//--------------------------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------
 

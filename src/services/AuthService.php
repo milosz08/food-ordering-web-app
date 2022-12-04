@@ -187,10 +187,10 @@ class AuthService extends MvcService
         {
             $login_email = Utils::validate_field_regex('login_email', '/^[a-zA-Z0-9@.]{5,100}$/');
             if ($login_email['invl']) return array(
-                    'v_login_email' => $login_email,
-                    'banner_message' => $this->_banner_message,
-                    'banner_error' => $this->_banner_error,
-                );
+                'v_login_email' => $login_email,
+                'banner_message' => $this->_banner_message,
+                'banner_error' => $this->_banner_error,
+            );
             try
             {
                 $this->dbh->beginTransaction();
@@ -253,7 +253,7 @@ class AuthService extends MvcService
         $show_change_password = true;
         $v_password = array('value' => '', 'invl' => false, 'bts_class' => '');
         $v_password_rep = array('value' => '', 'invl' => false, 'bts_class' => '');
-        try 
+        try
         {
             $this->dbh->beginTransaction();
             if (!isset($_GET['code'])) throw new Exception('Podany kod autoryzacyjny jest nieprawidłowy lub nie istnieje.');
