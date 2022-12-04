@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 03:02:33                   *
+ * Ostatnia modyfikacja: 2022-12-04 18:01:36                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,30 +20,36 @@
  * załaduje się jeszcze przed załadowaniem obrazka i nie znajdzie zasobu na którym ma wykonać akcję.                                     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-window.addEventListener('load', function() {
+/**
+ * Skrypt umoliwiający pokazywanie/chowanie hasła w polu input na przycisk
+ */
+const passVisibilityUI = {
+    pswVisibilityBtn: document.querySelectorAll('.password-input-toggler'),
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Skrypt umoliwiający pokazywanie/chowanie hasła w polu input na przycisk
-     */
-    const passwordVisibilityToggleButton = document.querySelectorAll('.password-input-toggler');
-    if (passwordVisibilityToggleButton !== null) {  
-        passwordVisibilityToggleButton.forEach(el => {
+    pswVisibilityInvoker: function () {
+        if (passVisibilityUI.pswVisibilityBtn === null) return;
+        const invokeOnClick = function (el) {
             const inputChild = el.parentNode.firstElementChild;
             const buttonIcon = el.parentNode.children[1].firstElementChild;
-            el.addEventListener('click', function() {
+            el.addEventListener('click', function () {
                 if (inputChild.value.length !== 0) {
                     inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
                     buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
                 }
             });
-            inputChild.addEventListener('input', function() {
+            inputChild.addEventListener('input', function () {
                 if (this.value === '') {
                     inputChild.type = 'password';
                     buttonIcon.innerText = 'visibility';
                 }
             });
-        });
-    }
+        };
+        this.pswVisibilityBtn.forEach(invokeOnClick.bind(this), false);
+    },
+};
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+window.addEventListener('load', function () {
+    passVisibilityUI.pswVisibilityInvoker();
 });
