@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 18:06:29                   *
+ * Ostatnia modyfikacja: 2022-12-04 02:39:27                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

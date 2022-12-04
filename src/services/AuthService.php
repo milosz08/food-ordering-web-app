@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 19:47:52                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-04 03:27:01                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -181,14 +181,11 @@ class AuthService extends MvcService
         if (isset($_POST['form-send-request-change-pass']))
         {
             $login_email = Utils::validate_field_regex('login_email', '/^[a-zA-Z0-9@.]{5,100}$/');
-            if ($login_email['invl'])
-            {
-                return array(
+            if ($login_email['invl']) return array(
                     'v_login_email' => $login_email,
                     'banner_message' => $this->_banner_message,
                     'banner_error' => $this->_banner_error,
                 );
-            }
             try
             {
                 $this->dbh->beginTransaction();
@@ -212,10 +209,7 @@ class AuthService extends MvcService
                 ";
                 $statement = $this->dbh->prepare($query);
                 $rnd_ota_token = Utils::generate_random_seq();
-                $statement->execute(array(
-                    $rnd_ota_token,
-                    $user_data['id'],
-                ));
+                $statement->execute(array($rnd_ota_token, $user_data['id']));
 
                 $email_request_vars = array(
                     'user_full_name' => $user_data['full_name'],
@@ -266,9 +260,7 @@ class AuthService extends MvcService
                 SELECT user_id FROM ota_user_token WHERE ota_token = ? AND expiration_date >= NOW() AND is_used = false
             ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array(
-                $_GET['code'],
-            ));
+            $statement->execute(array($_GET['code']));
 
             $user_id = $statement->fetchColumn();
             if (empty($user_id))
@@ -279,7 +271,6 @@ class AuthService extends MvcService
                     <a class="alert-link" href="' . $redir_link . '">kliknij tutaj</a>.
                 ');
             }
-            
             if (isset($_POST['form-send-change-pass']))
             {
                 $v_password = Utils::validate_field_regex('change-password', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
@@ -294,18 +285,12 @@ class AuthService extends MvcService
                     
                     $query = "UPDATE users SET password = ? WHERE id = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(array(
-                        sha1($v_password['value']),
-                        $user_id,
-                    ));
+                    $statement->execute(array(sha1($v_password['value']), $user_id));
                     $this->_banner_message = '
                         Twoje hasło zostało zmienione. Kliknij <a class="alert-link" href="index.php?action=auth/login">tutaj</a> aby 
                         zalogować się na konto.
                     ';
                     $this->_banner_error = false;
-                    $v_password['value'] = '';
-                    $v_password_rep['value'] = '';
-                    $_POST = array();
                 }
             }
             $statement->closeCursor();
