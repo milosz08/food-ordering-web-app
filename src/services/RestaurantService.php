@@ -56,8 +56,6 @@ class RestaurantService extends MvcService
 
                 if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] ||  $v_street['invl'] || 
                       $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
-                $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
-                      $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
                 {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
                     $query = "
@@ -232,3 +230,13 @@ class RestaurantService extends MvcService
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
+    private function create_images_if_not_exist($id, $field_profile, $field_banner)
+    {
+        if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
+        $banner = "uploads/restaurants/$id/" . $id . '_banner.' . $field_banner['ext'];
+        $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
+        move_uploaded_file($field_banner['path'], $banner);
+        move_uploaded_file($field_profile['path'], $profile);
+        return array('banner' => $banner, 'profile' => $profile);
+    }
+}

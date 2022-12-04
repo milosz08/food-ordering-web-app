@@ -77,4 +77,13 @@ class Utils
         return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '', 'path' => $path, 'ext' => $ext);
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function validate_exact_fields($valueFirst, $fieldSecond)
+    {
+        if ($valueFirst['value'] !== $_POST[$fieldSecond])
+            return array('value' => $_POST[$fieldSecond], 'invl' => true, 'bts_class' => 'is-invalid');
+        return array('value' => $_POST[$fieldSecond], 'invl' => false, 'bts_class' => '');
+    }
+
 }
