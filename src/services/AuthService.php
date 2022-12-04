@@ -50,6 +50,7 @@ class AuthService extends MvcService
                 $v_surname = Utils::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
                 $v_login = Utils::validate_field_regex('registration-login', '/^[a-zA-Z0-9]{5,30}$/');
                 $v_password = Utils::validate_field_regex('registration-password', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
+                $v_password_rep = Utils::validate_exact_fields($v_password, 'registration-password-rep');
                 $v_email = Utils::validate_email_field('registration-email');
                 $account_type = $_POST['registration-role'];
                 $v_building_no = Utils::validate_field_regex('registration-building-number', '/^[0-9]{1,5}$/');
@@ -64,15 +65,13 @@ class AuthService extends MvcService
                 $this->dbh->beginTransaction();
 
                 if (!($v_name['invl'] || $v_surname['invl'] || $v_login['invl'] || $v_password['invl'] || $v_email['invl'] ||
-                    $v_building_no['invl'] || $v_locale_no['invl'] || $v_post_code['invl'] || $v_city['invl'] || $v_street['invl']))
+                      $v_building_no['invl'] || $v_locale_no['invl'] || $v_post_code['invl'] || $v_city['invl'] || $v_street['invl'] ||
+                      $v_password_rep['invl']))
                 {
                     // Zapytanie zwracające liczbę istniejących już kont o podanym loginie i/lub emailu
                     $query = "SELECT COUNT(id) FROM users WHERE login = ? OR email = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(array(
-                        $v_login['value'],
-                        $v_email['value']
-                    ));
+                    $statement->execute(array($v_login['value'], $v_email['value']));
                     
                     if ($statement->fetchColumn() > 0) throw new Exception('Podany użytkownik istnieje już w systemie. Podaj inne dane.');
 
@@ -117,6 +116,7 @@ class AuthService extends MvcService
                 'v_surname' => $v_surname,
                 'v_login' => $v_login,
                 'v_password' => $v_password,
+                'v_password_rep' => $v_password_rep,
                 'v_email' => $v_email,
                 'v_building_no' => $v_building_no,
                 'v_locale_no' => $v_locale_no,
