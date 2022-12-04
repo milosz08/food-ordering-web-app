@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 18:01:36                   *
+ * Ostatnia modyfikacja: 2022-12-04 18:03:27                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -32,16 +32,14 @@ const passVisibilityUI = {
             const inputChild = el.parentNode.firstElementChild;
             const buttonIcon = el.parentNode.children[1].firstElementChild;
             el.addEventListener('click', function () {
-                if (inputChild.value.length !== 0) {
-                    inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
-                    buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
-                }
+                if (inputChild.value.length === 0) return;
+                inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
+                buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
             });
             inputChild.addEventListener('input', function () {
-                if (this.value === '') {
-                    inputChild.type = 'password';
-                    buttonIcon.innerText = 'visibility';
-                }
+                if (this.value !== '') return;
+                inputChild.type = 'password';
+                buttonIcon.innerText = 'visibility';
             });
         };
         this.pswVisibilityBtn.forEach(invokeOnClick.bind(this), false);
