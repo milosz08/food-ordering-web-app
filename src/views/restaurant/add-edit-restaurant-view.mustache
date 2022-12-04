@@ -2,8 +2,9 @@
 <div class="d-flex flex-column justify-content-center container flex-grow-1">
     <div class="row d-flex justify-content-center align-items-center media-large-form-size-box mx-auto">
         {{#is_error}}
-        <div class="alert alert-danger mb-0" role="alert">
+        <div class="alert alert-danger mb-0 alert-dismissible fade show" role="alert">
             {{{form.error}}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {{/is_error}}
         <div class="card rounded-3 custom-card-padding">
