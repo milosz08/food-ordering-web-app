@@ -149,7 +149,7 @@ class AuthService extends MvcService
                     WHERE (login = :login OR email = :login) AND password = :pass
                 ";
                 $statement = $this->dbh->prepare($query);
-                $statement->bindValue(':login', $login['value']);
+                $statement->bindValue(':login', $login_email['value']);
                 $statement->bindValue(':pass', sha1($password['value']));
                 $statement->execute();
                 if (count($statement->fetchAll()) > 0) header('Location:index.php?action=home/welcome');
@@ -161,7 +161,7 @@ class AuthService extends MvcService
                 $this->_banner_error = true;
             }
             return array(
-                'v_login' => $login,
+                'v_loginemail' => $login_email,
                 'v_password' => $password,
                 'banner_message' => $this->_banner_message,
                 'banner_error' => $this->_banner_error,
