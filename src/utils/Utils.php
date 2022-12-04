@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 02:01:09                   *
+ * Ostatnia modyfikacja: 2022-12-04 19:42:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -52,13 +52,12 @@ class Utils
 
     public static function validate_image_regex($value)
     {
+        if (!isset($_FILES[$value])) return array('value' => '', 'invl' => true, 'bts_class' => 'is-invalid', 'path' => '', 'ext' => '');
+
         $path = $_FILES[$value]['tmp_name'];
         $imgValue = $_FILES[$value]['name'];
         $ext = pathinfo($imgValue, PATHINFO_EXTENSION);
         $without_blanks = trim(htmlspecialchars($imgValue));
-        
-        if (empty($path))
-            return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);;
 
         $image_info = getimagesize($path);
         $image_size = filesize($path);
