@@ -178,6 +178,11 @@ class AuthService extends MvcService
     public function attempt_renew_password()
     {
         $login_email = '';
+        if (isset($_GET['sendto']))
+        {
+            $this->_banner_message = 'Na adres email ' . $_GET['sendto'] . ' została wysłana wiadomość z linkiem autoryzacyjnym.';
+            $this->_banner_error = false;
+        }
         if (isset($_POST['form-send-request-change-pass']))
         {
             $login_email = Utils::validate_field_regex('login_email', '/^[a-zA-Z0-9@.]{5,100}$/');
@@ -219,10 +224,7 @@ class AuthService extends MvcService
                 $subject = 'Reset hasła dla konta ' . $user_data['full_name'];
                 $this->smtp_client->send_message($user_data['email'], $subject, 'renew-password', $email_request_vars);
 
-                $this->_banner_message = 'Na adres email ' . $user_data['email'] . ' została wysłana wiadomość z linkiem autoryzacyjnym.';
-                $this->_banner_error = false;
-                $login_email['value'] = '';
-                $_POST = array();
+                header('Location:index.php?action=auth/password/renew/request&sendto=' . $user_data['email'], true, 303);
                 $statement->closeCursor();
                 $this->dbh->commit();
             }
