@@ -15,6 +15,7 @@
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\AuthService;
 
@@ -41,12 +42,13 @@ class AuthController extends MvcController
      */
     public function register()
     {
+        $banner_data = Utils::check_session_and_unset('successful_register_user');
         $form_data = $this->_service->register();
+        $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
         $this->renderer->render('auth/registration-view', array(
             'page_title' => 'Rejestracja', 
             'form' => $form_data,
-            'show_banner' => !empty($form_data['banner_message']),
-            'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
+            'banner' => $banner_data,
         ));
     }
 
@@ -57,12 +59,13 @@ class AuthController extends MvcController
      */
     public function login()
     {
+        $banner_data = Utils::check_session_and_unset('attempt_activate_account');
         $form_data = $this->_service->login_user();
+        $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
             'form' => $form_data,
-            'show_banner' => !empty($form_data['banner_message']),
-            'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
+            'banner' => $banner_data,
         ));
     }
 
@@ -73,12 +76,13 @@ class AuthController extends MvcController
      */
     public function password_renew_request()
     {
+        $banner_data = Utils::check_session_and_unset('attempt_change_password');
         $form_data = $this->_service->attempt_renew_password();
+        $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
         $this->renderer->render('auth/renew-password-email-view', array(
             'page_title' => 'Resetuj hasło',
             'form' => $form_data,
-            'show_banner' => !empty($form_data['banner_message']),
-            'banner_class' => $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
+            'banner' => $banner_data,
         ));
     }
 
@@ -93,8 +97,6 @@ class AuthController extends MvcController
         $this->renderer->render('auth/renew-password-change-view', array(
             'page_title' => 'Zmień hasło',
             'form' => $form_data,
-            'show_banner' => !empty($form_data['banner_message']),
-            'banner_class' => $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
         ));
     }
 

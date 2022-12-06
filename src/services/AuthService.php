@@ -102,7 +102,16 @@ class AuthService extends MvcService
                     ));
                     $statement->closeCursor();
                     $statement_id->closeCursor();
-                    header('Location:index.php?action=auth/login');
+                    $this->_banner_message = '
+                        Twoje konto zostało pomyślnie stworzone. Aby móc zalogować się na konto, musisz je aktywować przy pomocy linku
+                        wysłanego na podany podczas rejestracji adres email.
+                    ';
+                    $_SESSION['successful_register_user'] = array(
+                        'banner_message' => $this->_banner_message,
+                        'show_banner' => !empty($this->_banner_message),
+                        'banner_class' => 'alert-warning',
+                    );
+                    header('Location:index.php?action=auth/register', true, 301);
                 }
                 $this->dbh->commit();
             }
@@ -153,8 +162,12 @@ class AuthService extends MvcService
                 $statement->bindValue(':login', $login_email['value']);
                 $statement->bindValue(':pass', sha1($password['value']));
                 $statement->execute();
-                if (count($statement->fetchAll()) > 0) header('Location:index.php?action=home/welcome');
-                throw new Exception('Nieprawidłowy login i/lub hasło. Spróbuj ponownie.');
+                $_SESSION['logged_user'] = array(
+                    'user_id' => $result['id'],
+                    'user_role' => array('role_id' => $result['role_id'], 'role_name' => $result['role_name']),
+                    'user_full_name' => $result['full_name'],
+                );
+                header('Location:index.php?action=home/welcome', true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
             }
             catch (Exception $e)
             {
@@ -217,6 +230,16 @@ class AuthService extends MvcService
 
                 $statement->closeCursor();
                 $this->dbh->commit();
+                $this->_banner_message = 'Na adres email ' . $user_data['email'] . ' została wysłana wiadomość z linkiem autoryzacyjnym.';
+                $this->_banner_error = false;
+        
+                $_SESSION['attempt_change_password'] = array(
+                    'banner_message' => $this->_banner_message,
+                    'banner_error' => $this->_banner_error,
+                    'show_banner' => !empty($this->_banner_message),
+                    'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
+                );
+                header('Location:index.php?action=auth/password/renew/request', true, 301);
             }
             catch (Exception $e)
             {

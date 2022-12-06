@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:19:32                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:47:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -98,8 +98,13 @@ class RestaurantService extends MvcService
                     $statement->execute(array($photos['banner'], $photos['profile'], $id_image));
 
                     $statement->closeCursor();
-                    // Tymczasowe przekierowanie do strony głównej po poprawnym dodaniu restauracji
-                    header('Location:index.php?action=home/welcome');
+                    $this->_banner_message = 'Restauracja została pomyślnie utworzona. Teraz czeka na zatwierdzenie administratora.';
+                    $_SESSION['manipulate_restaurant_banner'] = array(
+                        'banner_message' => $this->_banner_message,
+                        'show_banner' => !empty($this->_banner_message),
+                        'banner_class' => 'alert-success',
+                    );
+                    header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
                 }
                 $this->dbh->commit();
             } 
@@ -188,8 +193,14 @@ class RestaurantService extends MvcService
                         $v_city['value'], $photos['banner'], $photos['profile'], $_GET['id']
                     ));
                     $statement->closeCursor();
-                    // Tymczasowe przekierowanie do strony głównej po poprawnym dodaniu restauracji
-                    header('Location:index.php?action=home/welcome');
+                    $this->_banner_message = 'Restauracja została pomyślnie zedytowana.';
+
+                    $_SESSION['manipulate_restaurant_banner'] = array(
+                        'banner_message' => $this->_banner_message,
+                        'show_banner' => !empty($this->_banner_message),
+                        'banner_class' => 'alert-success',
+                    );
+                    header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
                 }
             }
             $this->dbh->commit();
