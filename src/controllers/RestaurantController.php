@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-02 20:08:12                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-06 17:42:37                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -37,12 +37,24 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/add. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/dashboard. 
      */
-    public function add()
+    public function panel_dashboard()
+    {
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-dashboard-view', array(
+            'page_title' => 'Panel restauratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
+     */
+    public function panel_add()
     {
         $add_restaurant_form_data = $this->_service->add_restaurant();
-        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Dodaj restaurację',
             'add_edit_text' => 'Dodaj',
             'is_error' => !empty($add_restaurant_form_data['error']),
@@ -53,12 +65,12 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/edit.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
      */
-    public function edit()
+    public function panel_edit()
     {
         $edit_restaurant_form_data = $this->_service->edit_restaurant();
-        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
             'add_edit_text' => 'Edytuj',
             'is_error' => !empty($edit_restaurant_form_data['error']),
@@ -72,11 +84,11 @@ class RestaurantController extends MvcController
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
      *      index.php?action=restaurant
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=restaurant/add
-     * renderując widok z metody welcode() powyższej klasy.
+     *      index.php?action=restaurant/panel/dashbaord
+     * renderując widok z metody panel_dashboard() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=restaurant/add');
+        header('Location:index.php?action=restaurant/panel/dashboard');
     }
 }

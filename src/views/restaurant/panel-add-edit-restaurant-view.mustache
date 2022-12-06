@@ -1,4 +1,3 @@
-{{> partials/header-view.partial }}
 <div class="d-flex flex-column justify-content-center container flex-grow-1">
     <div class="row d-flex justify-content-center align-items-center media-large-form-size-box mx-auto">
         {{#is_error}}
@@ -66,7 +65,7 @@
                             class="form-control {{form.v_city.bts_class}}" value="{{form.v_city.value}}">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
-                    <button type="submit" name="restaurant-button" class="btn btn-dark btn-md w-100 py-2 app-primary-button">
+                    <button type="submit" name="restaurant-button" class="btn btn-primary btn-md w-100 py-2">
                         {{add_edit_text}} restaurację
                     </button>
                 </div>
@@ -74,4 +73,3 @@
         </div>
     </div>
 </div>
-{{> partials/footer-view.partial }}
