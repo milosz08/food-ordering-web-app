@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 20:04:36                   *
+ * Ostatnia modyfikacja: 2022-12-06 16:53:14                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -47,7 +47,7 @@ class AuthService extends MvcService
             try
             {
                 $v_name = Utils::validate_field_regex('registration-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
-                $v_surname = Utils::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ- ]{2,50}$/');
+                $v_surname = Utils::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ \-]{2,50}$/');
                 $v_login = Utils::validate_field_regex('registration-login', Config::get('__REGEX_LOGIN__'));
                 $v_password = Utils::validate_field_regex('registration-password', Config::get('__REGEX_PASSWORD__'));
                 $v_password_rep = Utils::validate_exact_fields($v_password, 'registration-password-rep');
