@@ -228,33 +228,40 @@ class RestaurantService extends MvcService
     /**
      * Metoda odpowiadająca za usuwanie obecnej restauracji.
      * Jeśli restauracja została pomyślnie usunięta następuje (tymczasowo) przekierowanie do strony głównej.
-     * dorobienie weryfikacji id podczas sesji//
+     * dorobienie weryfikacji id podczas sesji
      */
     public function delete_restaurant()
     {
-        if (isset($_POST['restaurant-delete-button'])) {
-            try {
+        if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+        try
+        {
                 $this->dbh->beginTransaction();
-                if (!isset($_GET['id']))
-                    header('Location:index.php?action=home/welcome');
-                $query = " DELETE FROM restaurants WHERE id = ?  ";
-                $statement = $this->dbh->prepare($query);
-                $restaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
-                $statement->execute(
-                    array($_GET['id'])
-                );
 
-                if ($restaurant->fetchColumn() > 0) // > ? zmiana znaku
-                    throw new Exception('Nie ma takiej restauracji lub nie można jej usunąć.');
+            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ?";
+                $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+
+            if ($statement->fetchColumn() == 0) throw new Exception('Podana resturacja nie istnieje w systemie lub została już usunięta.');
+
+            $query = "DELETE FROM restaurants WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+
+            $this->_banner_message = 'Pomyślnie usuniętą wybraną restaurację z systemu.';
                 $statement->closeCursor();
                 $this->dbh->commit();
-                // Tymczasowe przekierowanie do strony głównej po usunieciu restauracji
-                header('Location:index.php?action=home/welcome');
-            } catch (Exception $e) {
-                $this->dbh->rollback();
-                $this->_error = $e->getMessage();
-            }
         }
+        catch (Exception $e)
+        {
+                $this->dbh->rollback();
+            $this->_banner_message = $e->getMessage();
+            $this->_if_banner_error = true;
+            }
+        $_SESSION['manipulate_restaurant_banner'] = array(
+            'banner_message' => $this->_banner_message,
+            'show_banner' => !empty($this->_banner_message),
+            'banner_class' => $this->_if_banner_error ? 'alert-danger' : 'alert-success',
+        );
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

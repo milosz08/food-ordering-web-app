@@ -79,6 +79,17 @@ class RestaurantController extends MvcController
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
+    
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/delete.
+     */
+    public function panel_myrestaurant_delete()
+    {
+        $this->_service->delete_restaurant();
+        header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
