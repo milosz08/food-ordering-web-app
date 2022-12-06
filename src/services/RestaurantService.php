@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 20:16:53                   *
+ * Ostatnia modyfikacja: 2022-12-06 17:54:01                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -228,6 +228,40 @@ class RestaurantService extends MvcService
             'v_city' => $v_city,
             'error' => $this->_error,
         );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    
+    /**
+     * Metoda odpowiadająca za usuwanie obecnej restauracji.
+     * Jeśli restauracja została pomyślnie usunięta następuje (tymczasowo) przekierowanie do strony głównej.
+     * dorobienie weryfikacji id podczas sesji//
+     */
+    public function delete_restaurant()
+    {
+        if (isset($_POST['restaurant-delete-button'])) {
+            try {
+                $this->dbh->beginTransaction();
+                if (!isset($_GET['id']))
+                    header('Location:index.php?action=home/welcome');
+                $query = " DELETE FROM restaurants WHERE id = ?  ";
+                $statement = $this->dbh->prepare($query);
+                $restaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $statement->execute(
+                    array($_GET['id'])
+                );
+
+                if ($restaurant->fetchColumn() > 0) // > ? zmiana znaku
+                    throw new Exception('Nie ma takiej restauracji lub nie można jej usunąć.');
+                $statement->closeCursor();
+                $this->dbh->commit();
+                // Tymczasowe przekierowanie do strony głównej po usunieciu restauracji
+                header('Location:index.php?action=home/welcome');
+            } catch (Exception $e) {
+                $this->dbh->rollback();
+                $this->_error = $e->getMessage();
+            }
+        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
