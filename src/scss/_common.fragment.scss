@@ -7,8 +7,8 @@
  * Data utworzenia: 2022-11-10, 18:44:02                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 03:36:59                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-06 23:39:32                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
@@ -29,12 +29,13 @@
 }
 
 .custom-card-padding {
-   padding: 40px;
+    padding: 40px;
 }
 
 .app-primary-button {
     border: none;
     background-color: var(--primary-color);
+
     &:hover {
         background-color: var(--primary-dark-color);
     }
@@ -46,8 +47,70 @@
     .custom-card-padding {
         padding: 20px;
     }
+
     .media-form-size-box {
         width: calc(100% - 20px);
         margin: 0 10px;
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+.headear1-error-page {
+    font-size: 60px;
+}
+
+.headear2-error-page {
+    font-size: 30px;
+}
+
+.headear3-error-page {
+    font-size: 25px;
+}
+
+#mmenu_screen>.row {
+    min-height: 100vh;
+}
+
+.flex-fill {
+    flex: 1 1 auto;
+    min-height: 500px;
+}
+
+.error-page-main {
+    background-color: #d6d4ce;
+}
+
+.error-page-right {
+    height: 100vh;
+    background-image: url("../images/error_page_photo.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.error-page-left {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: calc(100% - 80%);
+}
+
+.error-page-button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(+7px);
+}
+
+@media only screen and (max-width: 575px) {
+    .error-page-right {
+        display: none;
+        visibility: hidden;
+    }
+
+    .error-page-left {
+        height: 100vh;
+        min-height: 600px;
     }
 }
