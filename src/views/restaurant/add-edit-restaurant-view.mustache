@@ -66,9 +66,19 @@
                             class="form-control {{form.v_city.bts_class}}" value="{{form.v_city.value}}">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
-                    <button type="submit" name="restaurant-button" class="btn btn-dark btn-md w-100 py-2 app-primary-button">
-                        {{add_edit_text}} restaurację
-                    </button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" name="restaurant-button" class="btn btn-dark btn-md w-100 py-2 app-primary-button col-md-6">
+                                {{add_edit_text}} restaurację
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" name="restaurant-delete-button" class="btn btn-danger btn-md w-100 py-2 ">
+                                {{add_delete_text}} restaurację
+                            </button>
+                        </div>
+                        
+                    </div>
                 </div>
             </form>
         </div>

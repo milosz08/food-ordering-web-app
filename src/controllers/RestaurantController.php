@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-02 20:08:12                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-06 16:48:41                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -61,6 +61,23 @@ class RestaurantController extends MvcController
         $this->renderer->render('restaurant/add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
             'add_edit_text' => 'Edytuj',
+            'add_delete_text' => 'Usuń',
+            'is_error' => !empty($edit_restaurant_form_data['error']),
+            'form' => $edit_restaurant_form_data,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/delete.
+     */
+    public function delete()
+    {
+        $edit_restaurant_form_data = $this->_service->delete_restaurant();
+        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+            'page_title' => 'Edytuj restaurację',
+            'add_edit_text' => 'Edytuj',
+            'add_delete_text' => 'Usuń',
             'is_error' => !empty($edit_restaurant_form_data['error']),
             'form' => $edit_restaurant_form_data,
         ));
