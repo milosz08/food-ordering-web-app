@@ -1,2 +1,18 @@
-404 Podana strona lub zasób nie istnieje
-<a href="index.php">Przejdź do strony głównej</a>
+<div class="container-fluid main_container d-flex error-page-main">
+    <div class="row flex-fill">
+        <div class="col-sm-6 h-100 error-page-left">
+            <h1 class="headear1-error-page">Error 404</h1>
+            <h2 class="headear2-error-page">Podana strona lub zasób nie istnieje</h2>
+            <div class="split-error-page-left">
+                <h3 class="headear3-error-page">Przejdź do strony głównej</h3>
+                <br>
+                <form action="index.php">
+                    <button type="submit" class="btn btn-dark btn-md py-2 app-primary-button error-page-button">Powrót
+                        do strony głównej</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-6 mmenu_screen--direktaction bg-faded flex-fill error-page-right">
+        </div>
+    </div>
+</div>
