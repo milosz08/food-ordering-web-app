@@ -9,12 +9,13 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:07:31                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:44:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\RestaurantService;
 
@@ -43,6 +44,20 @@ class RestaurantController extends MvcController
     {
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-dashboard-view', array(
             'page_title' => 'Panel restauratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurants. 
+     */
+    public function panel_myrestaurants()
+    {
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
+            'page_title' => 'Moje restauracje',
+            'banner' => $mainpulate_restaurant_banner,
         ));
     }
 

@@ -235,10 +235,10 @@ class RestaurantService extends MvcService
         if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
         try
         {
-                $this->dbh->beginTransaction();
+            $this->dbh->beginTransaction();
 
             $query = "SELECT COUNT(*) FROM restaurants WHERE id = ?";
-                $statement = $this->dbh->prepare($query);
+            $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
             if ($statement->fetchColumn() == 0) throw new Exception('Podana resturacja nie istnieje w systemie lub została już usunięta.');
@@ -248,15 +248,15 @@ class RestaurantService extends MvcService
             $statement->execute(array($_GET['id']));
 
             $this->_banner_message = 'Pomyślnie usuniętą wybraną restaurację z systemu.';
-                $statement->closeCursor();
-                $this->dbh->commit();
+            $statement->closeCursor();
+            $this->dbh->commit();
         }
         catch (Exception $e)
         {
-                $this->dbh->rollback();
+            $this->dbh->rollback();
             $this->_banner_message = $e->getMessage();
             $this->_if_banner_error = true;
-            }
+        }
         $_SESSION['manipulate_restaurant_banner'] = array(
             'banner_message' => $this->_banner_message,
             'show_banner' => !empty($this->_banner_message),
@@ -268,11 +268,23 @@ class RestaurantService extends MvcService
 
     private function create_images_if_not_exist($id, $field_profile, $field_banner)
     {
-        if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
-        $banner = "uploads/restaurants/$id/" . $id . '_banner.' . $field_banner['ext'];
-        $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
-        move_uploaded_file($field_banner['path'], $banner);
-        move_uploaded_file($field_profile['path'], $profile);
-        return array('banner' => $banner, 'profile' => $profile);
+        $images_paths = array('banner' => '', 'profile' => '');
+        if (!empty($field_profile['value']) && !empty($field_banner['value']))
+        {
+            if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
+        }
+        if (!empty($field_profile['value'])) 
+        {
+            $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
+            move_uploaded_file($field_profile['path'], $profile);
+            $images_paths['profile'] = $profile;
+        }
+        if (!empty($field_banner['value']))
+        {
+            $banner = "uploads/restaurants/$id/" . $id . '_banner.' . $field_banner['ext'];
+            move_uploaded_file($field_banner['path'], $banner);
+            $images_paths['banner'] = $banner;
+        }
+        return $images_paths;
     }
 }
