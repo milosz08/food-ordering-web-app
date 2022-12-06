@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 17:42:37                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:07:31                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -51,7 +51,7 @@ class RestaurantController extends MvcController
     /**
      * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
      */
-    public function panel_add()
+    public function panel_myrestaurant_add()
     {
         $add_restaurant_form_data = $this->_service->add_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
@@ -67,7 +67,7 @@ class RestaurantController extends MvcController
     /**
      * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
      */
-    public function panel_edit()
+    public function panel_myrestaurant_edit()
     {
         $edit_restaurant_form_data = $this->_service->edit_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
@@ -89,6 +89,6 @@ class RestaurantController extends MvcController
      */
     public function index()
     {
-        header('Location:index.php?action=restaurant/panel/dashboard');
+        header('Location:index.php?action=restaurant/panel/dashboard', true, 301);
     }
 }

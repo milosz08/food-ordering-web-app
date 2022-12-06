@@ -1,7 +1,7 @@
 <div class="d-flex flex-column justify-content-center container flex-grow-1">
     <div class="row d-flex justify-content-center align-items-center media-large-form-size-box mx-auto">
         {{#is_error}}
-        <div class="alert alert-danger mb-0 alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger mb-3 alert-dismissible fade show" role="alert">
             {{{form.error}}}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -65,7 +65,7 @@
                             class="form-control {{form.v_city.bts_class}}" value="{{form.v_city.value}}">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
-                    <button type="submit" name="restaurant-button" class="btn btn-primary btn-md w-100 py-2">
+                    <button type="submit" name="restaurant-button" class="btn btn-primary btn-md w-100 py-2 col-md-6">
                         {{add_edit_text}} restaurację
                     </button>
                 </div>

@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 02:39:27                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:06:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -102,13 +102,13 @@ class AuthController extends MvcController
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=home
+     *      index.php?action=auth
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=home/welcome
-     * renderując widok z metody welcode() powyższej klasy.
+     *      index.php?action=auth/login
+     * renderując widok z metody login() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=auth/login');
+        header('Location:index.php?action=auth/login', true, 301);
     }
 }

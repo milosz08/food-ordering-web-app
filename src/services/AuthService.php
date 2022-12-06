@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 16:53:14                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:32:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -82,22 +82,23 @@ class AuthService extends MvcService
                         $v_name['value'],
                         $v_surname['value'],
                         $v_login['value'],
-                        sha1($v_password['value']),
+                        sha1($v_password['value'] . Config::get('__SHA_SALT__')),
                         $v_email['value'],
                         (int)$account_type,
                     ));
-                    $query = "SELECT id FROM users WHERE login = ?";
+                    $query = "SELECT id, email, CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE login = ?";
                     $statement_id = $this->dbh->prepare($query);
                     $statement_id->execute(array($v_login['value']));
 
                     $query = "INSERT INTO user_address (street, building_locale_nr, post_code, city, user_id) VALUES (?,?,?,?,?)";
                     $statement = $this->dbh->prepare($query);
+                    $user_data = $statement_id->fetchAll(PDO::FETCH_ASSOC)[0];
                     $statement->execute(array(
                         $v_street['value'],
                         empty($v_locale_no['value']) ? $v_building_no['value'] : $v_building_no['value'] . '/' . $v_locale_no['value'],
                         $v_post_code['value'],
                         $v_city['value'],
-                        $statement_id->fetch(PDO::FETCH_NUM)[0],
+                        $user_data['id'],
                     ));
                     $statement->closeCursor();
                     $statement_id->closeCursor();
@@ -177,23 +178,13 @@ class AuthService extends MvcService
      */
     public function attempt_renew_password()
     {
-        $login_email = '';
-        if (isset($_GET['sendto']))
-        {
-            $this->_banner_message = 'Na adres email ' . $_GET['sendto'] . ' została wysłana wiadomość z linkiem autoryzacyjnym.';
-            $this->_banner_error = false;
-        }
+        $login_email = array('value' => '', 'invl' => false, 'bts_class' => '');
         if (isset($_POST['form-send-request-change-pass']))
         {
-            $login_email = Utils::validate_field_regex('login_email', Config::get('__REGEX_LOGINEMAIL__'));
-            if ($login_email['invl']) return array(
-                'v_login_email' => $login_email,
-                'banner_message' => $this->_banner_message,
-                'banner_error' => $this->_banner_error,
-            );
             try
             {
                 $this->dbh->beginTransaction();
+                $login_email = Utils::validate_field_regex('login_email', Config::get('__REGEX_LOGINEMAIL__'));
 
                 $query = "
                     SELECT id, email, CONCAT(first_name, ' ', last_name) AS full_name FROM users
@@ -221,10 +212,9 @@ class AuthService extends MvcService
                     'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                     'ota_token' => $rnd_ota_token,
                 );
-                $subject = 'Reset hasła dla konta ' . $user_data['full_name'];
+                $subject = 'Reset hasła dla użytkownika ' . $user_data['full_name'];
                 $this->smtp_client->send_message($user_data['email'], $subject, 'renew-password', $email_request_vars);
 
-                header('Location:index.php?action=auth/password/renew/request&sendto=' . $user_data['email'], true, 303);
                 $statement->closeCursor();
                 $this->dbh->commit();
             }
@@ -277,8 +267,9 @@ class AuthService extends MvcService
             {
                 $v_password = Utils::validate_field_regex('change-password', Config::get('__REGEX_PASSWORD__'));
                 if ($v_password['value'] != $_POST['change-password-rep'])
+                {
                     $v_password_rep = array('value' => $_POST['change-password-rep'], 'invl' => true, 'bts_class' => 'is-invalid');
-
+                }
                 if (!($v_password['invl'] || $v_password_rep['invl']))
                 {
                     $query = "UPDATE ota_user_token SET is_used = true WHERE ota_token = ?";
@@ -287,7 +278,10 @@ class AuthService extends MvcService
                     
                     $query = "UPDATE users SET password = ? WHERE id = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(array(sha1($v_password['value']), $user_id));
+                    $statement->execute(array(
+                        sha1($v_password['value'] . Config::get('__SHA_SALT__')),
+                        $user_id,
+                    ));
                     $this->_banner_message = '
                         Twoje hasło zostało zmienione. Kliknij <a class="alert-link" href="index.php?action=auth/login">tutaj</a> aby 
                         zalogować się na konto.
@@ -309,7 +303,8 @@ class AuthService extends MvcService
             'v_password' => $v_password,
             'v_password_rep' => $v_password_rep,
             'banner_message' => $this->_banner_message,
-            'banner_error' => $this->_banner_error,
+            'show_banner' => !empty($this->_banner_message),
+            'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
             'show_change_password' => $show_change_password,
         );
     }

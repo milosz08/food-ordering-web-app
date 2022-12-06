@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 17:54:01                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:19:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,7 +24,8 @@ use App\Core\MvcService;
 
 class RestaurantService extends MvcService
 {
-    private $_error;
+    private $_banner_message;
+    private $_if_banner_error;
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -45,10 +46,10 @@ class RestaurantService extends MvcService
         {
             try
             {
-                $v_name = Utils::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ-\/%@$: ]{2,50}$/');
+                $v_name = Utils::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
                 $v_price = Utils::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
                 $v_building_no = Utils::validate_field_regex('restaurant-building-no', Config::get('__REGEX_BUILDING_NO__'));
-                $v_post_code = Utils::validate_field_regex('restaurant-post-code', '');
+                $v_post_code = Utils::validate_field_regex('restaurant-post-code', Config::get('__REGEX_POSTCODE__'));
                 $v_city = Utils::validate_field_regex('restaurant-city', Config::get('__REGEX_CITY__'));
                 $v_street = Utils::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
                 $v_banner = Utils::validate_image_regex('restaurant-banner');
@@ -56,7 +57,7 @@ class RestaurantService extends MvcService
                 
                 $this->dbh->beginTransaction();
 
-                if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] ||  $v_street['invl'] || 
+                if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] || $v_street['invl'] || 
                       $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
                 {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
@@ -66,10 +67,7 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_street['value'],
-                        $v_building_no['value'],
-                        $v_post_code['value'],
-                        $v_city['value']
+                        $v_street['value'], $v_building_no['value'], $v_post_code['value'], $v_city['value']
                     ));
 
                     if ($statement->fetchColumn() > 0)
@@ -79,17 +77,12 @@ class RestaurantService extends MvcService
                     
                     // Sekcja zapytań dodająca wprowadzone dane do tabeli restaurants
                     $query = "
-                        INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city) 
-                        VALUES (?,?,?,?,?,?)
+                        INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city) VALUES (?,?,?,?,?,?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_name['value'],
-                        $v_price['value'],
-                        $v_street['value'],
-                        $v_building_no['value'],
-                        $v_post_code['value'],
-                        $v_city['value']
+                        $v_name['value'], $v_price['value'], $v_street['value'], $v_building_no['value'], $v_post_code['value'],
+                        $v_city['value'],
                     ));
                     // Sekcja zapytań zwracająca id ostatnio dodanej restauracji
                     $query = "SELECT id FROM restaurants ORDER BY id DESC LIMIT 1";
@@ -113,7 +106,7 @@ class RestaurantService extends MvcService
             catch (Exception $e) 
             {
                 $this->dbh->rollback();
-                $this->_error = $e->getMessage();
+                $this->_banner_message = $e->getMessage();
             }
             return array(
                 'v_name' => $v_name,
@@ -124,7 +117,7 @@ class RestaurantService extends MvcService
                 'v_building_no' => $v_building_no,
                 'v_post_code' => $v_post_code,
                 'v_city' => $v_city,
-                'error' => $this->_error,
+                'error' => $this->_banner_message,
             );
         }
     }
@@ -137,7 +130,7 @@ class RestaurantService extends MvcService
         $v_profile = array('invl' => false, 'bts_class' => '');
         try
         {
-            if (!isset($_GET['id'])) header('Location:index.php?action=home/welcome');
+            if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
 
             $this->dbh->beginTransaction();
 
@@ -146,7 +139,7 @@ class RestaurantService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
             $restaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if (count($restaurant) == 0) header('Location:index.php?action=home/welcome');
+            if (count($restaurant) == 0) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
             
             $v_name = array('value' => $restaurant[0]['name'], 'invl' => false, 'bts_class' => '');
             $v_street = array('value' => $restaurant[0]['street'], 'invl' => false, 'bts_class' => '');
@@ -176,11 +169,7 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_street['value'],
-                        $v_building_no['value'],
-                        $v_post_code['value'],
-                        $v_city['value'],
-                        $_GET['id']
+                        $v_street['value'], $v_building_no['value'], $v_post_code['value'], $v_city['value'], $_GET['id']
                     ));
 
                     if ($statement->fetchColumn() > 0)
@@ -195,15 +184,8 @@ class RestaurantService extends MvcService
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_name['value'],
-                        $v_price['value'],
-                        $v_street['value'],
-                        $v_building_no['value'],
-                        $v_post_code['value'],
-                        $v_city['value'],
-                        $photos['banner'],
-                        $photos['profile'],
-                        $_GET['id']
+                        $v_name['value'], $v_price['value'], $v_street['value'], $v_building_no['value'], $v_post_code['value'],
+                        $v_city['value'], $photos['banner'], $photos['profile'], $_GET['id']
                     ));
                     $statement->closeCursor();
                     // Tymczasowe przekierowanie do strony głównej po poprawnym dodaniu restauracji
@@ -215,7 +197,7 @@ class RestaurantService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $this->_error = $e->getMessage();
+            $this->_banner_message = $e->getMessage();
         }
         return array(
             'v_name' => $v_name,
@@ -226,7 +208,7 @@ class RestaurantService extends MvcService
             'v_building_no' => $v_building_no,
             'v_post_code' => $v_post_code,
             'v_city' => $v_city,
-            'error' => $this->_error,
+            'error' => $this->_banner_message,
         );
     }
 
