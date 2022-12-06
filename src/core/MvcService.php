@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 22:46:32                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-03 17:07:49                   *
+ * Ostatnia modyfikacja: 2022-12-07 00:01:55                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,6 +34,16 @@ abstract class MvcService
         $this->pdo = PdoDbContext::get_instance(); // pobranie instancji klasy PdoDbContext i przypisanie jej do pola
         $this->dbh = $this->pdo->get_handler(); // pobranie uchwytu do bazy danych z obiekty klasy PdoDbContext
         $this->smtp_client = SmtpMail::get_instance(); // pobranie instancji klasy SmtpMail i przypisanie jej do pola
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda odpowiedzialna za haszowanie hasła poprzez funkcję Bcrypt. Zawiera również sól.
+     */
+    protected function passwd_hash($value)
+    {
+        return password_hash($value, PASSWORD_BCRYPT, array('salt' => Config::get('__SHA_SALT__')));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

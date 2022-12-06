@@ -9,12 +9,13 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 03:40:49                   *
+ * Ostatnia modyfikacja: 2022-12-07 00:29:15                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\HomeService;
 
@@ -77,8 +78,15 @@ class HomeController extends MvcController
      */
     public function welcome()
     {
+        $logout_modal = Utils::check_session_and_unset('logout_modal_data');
+        
+        echo '<pre>';
+        var_dump($_SESSION['logged_user'] ?? '');
+        echo '</pre>';
+        
         $this->renderer->render('home/home-view', array(
             'page_title' => 'Start',
+            'logout_modal_visible' => $logout_modal['is_open'] ?? false,
         ));
     }
 

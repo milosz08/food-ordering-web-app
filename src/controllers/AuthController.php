@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:06:18                   *
+ * Ostatnia modyfikacja: 2022-12-07 00:09:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -120,6 +120,20 @@ class AuthController extends MvcController
     {
         $this->_service->resend_account_activation_link();
         header('Location:index.php?action=auth/login', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/logout.
+     */
+    public function logout()
+    {
+        unset($_SESSION['logged_user']);
+        header('Location:index.php?action=home', true, 301);
+        $_SESSION['logout_modal_data'] = array(
+            'is_open' => true,
+        );
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

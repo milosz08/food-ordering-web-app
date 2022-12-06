@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:32:09                   *
+ * Ostatnia modyfikacja: 2022-12-07 00:09:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -82,7 +82,7 @@ class AuthService extends MvcService
                         $v_name['value'],
                         $v_surname['value'],
                         $v_login['value'],
-                        sha1($v_password['value'] . Config::get('__SHA_SALT__')),
+                        $this->passwd_hash($v_password['value']),
                         $v_email['value'],
                         (int)$account_type,
                     ));
@@ -181,7 +181,7 @@ class AuthService extends MvcService
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue(':login', $login_email['value']);
-                $statement->bindValue(':pass', sha1($password['value'] . Config::get('__SHA_SALT__')));
+                $statement->bindValue(':pass', $this->passwd_hash($password['value']));
                 $statement->execute();
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                 
@@ -340,7 +340,7 @@ class AuthService extends MvcService
                     $query = "UPDATE users SET password = ? WHERE id = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        sha1($v_password['value'] . Config::get('__SHA_SALT__')),
+                        $this->passwd_hash($v_password['value']),
                         $user_id,
                     ));
                     $this->_banner_message = '
@@ -494,20 +494,6 @@ class AuthService extends MvcService
             'banner_message' => $this->_banner_message,
             'show_banner' => !empty($this->_banner_message),
             'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
-        );
-    }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Metoda wylogowująca z systemu i przekierowująca do strony głównej.
-     */
-    public function logout()
-    {
-        unset($_SESSION['logged_user']);
-        header('Location:index.php?action=home', true, 301);
-        $_SESSION['logout_modal_data'] = array(
-            'is_open' => true,
         );
     }
 }
