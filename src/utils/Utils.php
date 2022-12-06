@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 19:42:18                   *
+ * Ostatnia modyfikacja: 2022-12-06 22:20:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -52,7 +52,7 @@ class Utils
 
     public static function validate_image_regex($value)
     {
-        if (!isset($_FILES[$value])) return array('value' => '', 'invl' => true, 'bts_class' => 'is-invalid', 'path' => '', 'ext' => '');
+        if (!isset($_FILES[$value])) return array('value' => '', 'invl' => false, 'bts_class' => 'is-valid', 'path' => '', 'ext' => '');
 
         $path = $_FILES[$value]['tmp_name'];
         $imgValue = $_FILES[$value]['name'];
@@ -85,4 +85,29 @@ class Utils
         return array('value' => $_POST[$fieldSecond], 'invl' => false, 'bts_class' => '');
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function check_session_and_unset($session_value_key)
+    {
+        $session_value = null;
+        if (isset($_SESSION[$session_value_key]))
+        {
+            $session_value = $_SESSION[$session_value_key];
+            unset($_SESSION[$session_value_key]);
+        }
+        return $session_value;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function fill_banner_with_form_data($form_data, $banner_data)
+    {
+        if (!isset($banner_data)) $banner_data = array(
+            'banner_message' => $form_data['banner_message'] ?? '',
+            'banner_error' => false,
+            'show_banner' => !empty($form_data['banner_message']),
+            'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
+        );
+        return $banner_data;
+    }
 }

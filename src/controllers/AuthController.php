@@ -103,6 +103,28 @@ class AuthController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/account/activate.
+     */
+    public function account_activate()
+    {
+        $this->_service->attempt_activate_account();
+        header('Location:index.php?action=auth/login', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/account/resend/code&userid=?.
+     */
+    public function account_activate_resend_code()
+    {
+        $this->_service->resend_account_activation_link();
+        header('Location:index.php?action=auth/login', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
      *      index.php?action=auth
      * Metoda przekierowuje użytkownika na adres:

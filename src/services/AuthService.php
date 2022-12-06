@@ -100,6 +100,27 @@ class AuthService extends MvcService
                         $v_city['value'],
                         $user_data['id'],
                     ));
+
+                    // sekcja odpowiedzialna za generowanie OTA tokenu, wstawiania do tabeli i wysyłanie wiadomości email z wygenerowanym
+                    // tokenem. Jeśli wszystko się powiedzie, użytkownik w wiadomości email po kliknięciu aktywuje konto
+                    $query = "
+                        INSERT INTO ota_user_token (ota_token, expiration_date, user_id, type_id)
+                        VALUES (?, DATE_ADD(NOW(), INTERVAL 10 MINUTE), ?, 
+                        (SELECT id FROM ota_token_types WHERE type='activate account' LIMIT 1))
+                    ";
+                    $statement = $this->dbh->prepare($query);
+                    $rnd_ota_token = Utils::generate_random_seq();
+                    $statement->execute(array($rnd_ota_token, $user_data['id']));
+
+                    $email_request_vars = array(
+                        'user_full_name' => $user_data['full_name'],
+                        'basic_server_path' => Config::get('__DEF_APP_HOST__'),
+                        'ota_token' => $rnd_ota_token,
+                        'regenerate_link' => 'auth/account/activate/resend/code&userid=' . $user_data['id'],
+                    );
+                    $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
+                    $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);
+
                     $statement->closeCursor();
                     $statement_id->closeCursor();
                     $this->_banner_message = '
@@ -153,15 +174,31 @@ class AuthService extends MvcService
             $password = Utils::validate_field_regex('pass', Config::get('__REGEX_PASSWORD__'));
             try
             {
-                // zapytanie pobierające użytkownika na podstawie loginu oraz zahaszowanego hasła
                 $query = "
-                    SELECT users.id FROM users INNER JOIN roles ON users.role_id=roles.id 
+                    SELECT users.id AS id, is_activated, role_id, roles.name AS role_name, CONCAT(first_name,' ', last_name) AS full_name
+                    FROM users INNER JOIN roles ON users.role_id=roles.id 
                     WHERE (login = :login OR email = :login) AND password = :pass
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue(':login', $login_email['value']);
-                $statement->bindValue(':pass', sha1($password['value']));
+                $statement->bindValue(':pass', sha1($password['value'] . Config::get('__SHA_SALT__')));
                 $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                
+                if (count($result) == 0) throw new Exception('Nieprawidłowy login i/lub hasło. Spróbuj ponownie.');
+                $result = $result[0];
+
+                // sprawdzanie, czy użytkownik ma aktywowane konto, jeśli nie wyświetlenie linka do wysyłki wiadomości email z tokenem OTA
+                if ($result['is_activated'] == 0)
+                {
+                    $redir_link = 'index.php?action=auth/account/activate/resend/code&userid=' . $result['id'];
+                    throw new Exception('
+                        Twoje konto nie zostało aktywowane. Aby aktywować konto sprawdź stwoją skrzynkę pocztową. W celu wysłania ponownie
+                        kodu aktywacyjnego, <a class="alert-link" href="' . $redir_link . '">kliknij tutaj</a>.
+                    ');
+                }
+                $statement->closeCursor();
+
                 $_SESSION['logged_user'] = array(
                     'user_id' => $result['id'],
                     'user_role' => array('role_id' => $result['role_id'], 'role_name' => $result['role_name']),
@@ -198,7 +235,7 @@ class AuthService extends MvcService
             {
                 $this->dbh->beginTransaction();
                 $login_email = Utils::validate_field_regex('login_email', Config::get('__REGEX_LOGINEMAIL__'));
-
+                
                 $query = "
                     SELECT id, email, CONCAT(first_name, ' ', last_name) AS full_name FROM users
                     WHERE login = :login_email OR email = :login_email
@@ -213,8 +250,8 @@ class AuthService extends MvcService
 
                 $user_data = $user_data[0];
                 $query = "
-                    INSERT INTO ota_user_token (ota_token, expiration_date, user_id)
-                    VALUES (?, DATE_ADD(NOW(), INTERVAL 10 MINUTE), ?)
+                    INSERT INTO ota_user_token (ota_token, expiration_date, user_id, type_id)
+                    VALUES (?, DATE_ADD(NOW(), INTERVAL 10 MINUTE), ?, (SELECT id FROM ota_token_types WHERE type='change password' LIMIT 1))
                 ";
                 $statement = $this->dbh->prepare($query);
                 $rnd_ota_token = Utils::generate_random_seq();
@@ -273,6 +310,7 @@ class AuthService extends MvcService
             
             $query = "
                 SELECT user_id FROM ota_user_token WHERE ota_token = ? AND expiration_date >= NOW() AND is_used = false
+                AND type_id = (SELECT id FROM ota_token_types WHERE type='change password' LIMIT 1)
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['code']));
@@ -329,6 +367,147 @@ class AuthService extends MvcService
             'show_banner' => !empty($this->_banner_message),
             'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
             'show_change_password' => $show_change_password,
+        );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda odpowiedzialna za wysłanie rządania aktywowania konta na podstawie tokenu OTA w parametrze GET. Jeśli token istnieje, nie
+     * został wykorzystany i nie został przedawniony, zmienany jest jego status na wykorzystany oraz konto użytkownika zostaje aktywowane.
+     * Od tej pory użytkownik może logować się do systemu.
+     */
+    public function attempt_activate_account()
+    {
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            if (!isset($_GET['code'])) throw new Exception('W celu ukończenia aktywacji konta należy podać kod autoryzacyjny.');
+            if (!preg_match('/^[0-9A-Za-z]{10,}$/', $_GET['code']))
+                throw new Exception('Podany kod nie jest prawidłowym kodem autoryzacyjnym.');
+            
+            // zapytanie złożone sprawdzające token czy istnieje, czy nie jest przedawiony, czy nie został już użyty oraz czy konto
+            // użytkownika powiązane z tym tokem nie zostało już zaktywowane
+            $query = "
+                SELECT user_id FROM ota_user_token AS ota
+                INNER JOIN users AS us ON ota.user_id = us.id
+                WHERE ota_token = ? AND expiration_date >= NOW() AND is_used = false AND is_activated = 0
+                AND type_id = (SELECT id FROM ota_token_types WHERE type='activate account' LIMIT 1)
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['code']));
+
+            $user_id = $statement->fetchColumn();
+            if (empty($user_id)) throw new Exception('Podany kod autoryzacyjny wygasł lub Twoje konto zostało już aktywowane.');
+            
+            $query = "UPDATE ota_user_token SET is_used = true WHERE ota_token = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['code']));
+                    
+            $query = "UPDATE users SET is_activated = 1 WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($user_id));
+            $this->_banner_message = '
+                Twoje konto zostało aktywowane. Wpisz poniżej dane w formularzu, aby zalogować się na nowo utworzone konto.
+            ';
+            $this->_banner_error = false;
+
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
+            $this->dbh->rollback();
+        }
+        $_SESSION['attempt_activate_account'] = array(
+            'banner_message' => $this->_banner_message,
+            'show_banner' => !empty($this->_banner_message),
+            'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
+        );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda odpowiedzialna za ponowne wysłanie wiadomości email do użytkownika z tokenem. Jeśli token nie wygasł i nie został użyty, jest
+     * on wykorzystywany. W przeciwnym wypadku generowany jest nowy token, zapisywany w bazie i wysyłany w wiadomości email w postaci linku.
+     * Użytkownik klikając w link zostanie przeniesiony do strony weryfikującej poprawność tokenu i aktywującej konto.
+     */
+    public function resend_account_activation_link()
+    {
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            if (!isset($_GET['userid'])) throw new Exception('W celu ponownego wysłania tokenu należy podać identyfikator użytkownika.');
+
+            $query = "
+                SELECT user_id AS id, ota_token, email, CONCAT(first_name, ' ', last_name) AS full_name FROM ota_user_token AS ota
+                INNER JOIN users AS us ON ota.user_id = us.id
+                WHERE user_id = ? AND expiration_date >= NOW() AND is_used = false
+                AND type_id = (SELECT id FROM ota_token_types WHERE type = 'activate account' LIMIT 1)
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['userid']));
+
+            $user_data = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $ota_token = '';
+            if (count($user_data) == 0)
+            {
+                $query = "
+                    INSERT INTO ota_user_token (ota_token, expiration_date, user_id, type_id)
+                    VALUES (?, DATE_ADD(NOW(), INTERVAL 10 MINUTE), ?, 
+                    (SELECT id FROM ota_token_types WHERE type = 'activate account' LIMIT 1))
+                ";
+                $statement = $this->dbh->prepare($query);
+                $rnd_ota_token = Utils::generate_random_seq();
+                $statement->execute(array($rnd_ota_token, $_GET['userid']));
+                $ota_token = $rnd_ota_token;
+            }
+            else $user_data = $user_data[0];
+            $ota_token = $user_data['ota_token'];
+            
+            $email_request_vars = array(
+                'user_full_name' => $user_data['full_name'],
+                'basic_server_path' => Config::get('__DEF_APP_HOST__'),
+                'ota_token' => $ota_token,
+                'regenerate_link' => 'auth/account/activate/resend/code&userid=' . $user_data['id'],
+            );
+            $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
+            $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);
+
+            $this->_banner_message = 'Na adres email skojarzony z kontem ' . $user_data['full_name'] . ' został wysłany kod autoryzacyjny.';
+            $this->_banner_error = false;
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
+            $this->dbh->rollback();
+        }
+        $_SESSION['attempt_activate_account'] = array(
+            'banner_message' => $this->_banner_message,
+            'show_banner' => !empty($this->_banner_message),
+            'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
+        );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda wylogowująca z systemu i przekierowująca do strony głównej.
+     */
+    public function logout()
+    {
+        unset($_SESSION['logged_user']);
+        header('Location:index.php?action=home', true, 301);
+        $_SESSION['logout_modal_data'] = array(
+            'is_open' => true,
         );
     }
 }
