@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 01:00:17                   *
+ * Ostatnia modyfikacja: 2022-12-07 11:46:00                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -330,10 +330,7 @@ class AuthService extends MvcService
             if (isset($_POST['form-send-change-pass']))
             {
                 $v_password = Utils::validate_field_regex('change-password', Config::get('__REGEX_PASSWORD__'));
-                if ($v_password['value'] != $_POST['change-password-rep'])
-                {
-                    $v_password_rep = array('value' => $_POST['change-password-rep'], 'invl' => true, 'bts_class' => 'is-invalid');
-                }
+                $v_password_rep = Utils::validate_exact_fields($v_password, 'change-password-rep');
                 if (!($v_password['invl'] || $v_password_rep['invl']))
                 {
                     $query = "UPDATE ota_user_token SET is_used = true WHERE ota_token = ?";
