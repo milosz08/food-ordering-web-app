@@ -1,6 +1,6 @@
 {{> partials/header-view.partial }}
 <div class="d-flex flex-column justify-content-center container flex-grow-1">
-    <div class="row d-flex justify-content-center align-items-center media-large-form-size-box mx-auto">
+    <div class="row d-flex justify-content-center align-items-center w-100 mx-auto media-large-form-size-box">
         {{#banner.show_banner}}
         <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
             {{{banner.banner_message}}}
@@ -12,7 +12,7 @@
                 <h3 class="fw-normal mb-5 text-secondary">Rejestracja</h3>
                 <div class="col-lg-6 px-4">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3">
                             <label for="form-name" class="form-label">Imię</label>
                             <input type="text" name="registration-name" class="form-control {{form.v_name.bts_class}}"
                                 id="form-name" value="{{form.v_name.value}}" placeholder="np. Jan">
@@ -25,40 +25,49 @@
                                 value="{{form.v_surname.value}}" placeholder="np. Kowalski">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="form-login" class="form-label">Login</label>
-                            <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}"
-                                id="form-login" value="{{form.v_login.value}}" placeholder="np. jankowalski123">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-login" class="form-label">Login</label>
+                        <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}"
+                            id="form-login" value="{{form.v_login.value}}" placeholder="np. jankowalski123">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-email" class="form-label">Adres E-mail</label>
+                        <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}"
+                            id="form-email" value="{{form.v_email.value}}" placeholder="np. jankowalski@email.pl">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-password" class="form-label">Hasło</label>
+                        <div class="input-group has-validation">
+                            <input type="password" name="registration-password" placeholder="minimum 8 znaków"
+                                class="form-control {{form.v_password.bts_class}}" id="form-password">
+                            <button type="button" class="input-group-text password-input-toggler">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="form-email" class="form-label">Adres E-mail</label>
-                            <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}"
-                                id="form-email" value="{{form.v_email.value}}" placeholder="np. jankowalski@email.pl">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-repeat-password" class="form-label">Powtórz hasło</label>
+                        <div class="input-group has-validation">
+                            <input type="password" name="registration-password-rep" placeholder="minimum 8 znaków"
+                                class="form-control {{form.v_password_rep.bts_class}}" id="form-repeat-password">
+                            <button type="button" class="input-group-text password-input-toggler">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="form-password" class="form-label">Hasło</label>
-                            <div class="input-group has-validation">
-                                <input type="password" name="registration-password" placeholder="minimum 8 znaków"
-                                    class="form-control {{form.v_password.bts_class}}" id="form-password">
-                                <button type="button" class="input-group-text password-input-toggler">
-                                    <span class="material-symbols-outlined">visibility</span>
-                                </button>
-                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="form-repeat-password" class="form-label">Powtórz hasło</label>
-                            <div class="input-group has-validation">
-                                <input type="password" name="registration-password-rep" placeholder="minimum 8 znaków"
-                                    class="form-control {{form.v_password_rep.bts_class}}" id="form-repeat-password">
-                                <button type="button" class="input-group-text password-input-toggler">
-                                    <span class="material-symbols-outlined">visibility</span>
-                                </button>
-                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3 text-secondary fw-light lh-sm">
+                        Hasło musi spełniać następujące kryteria:
+                        <ul>
+                            <li>minimum 8 znaków</li>
+                            <li>przynajmniej jedna wielka i mała litera</li>
+                            <li>przynajmniej jedna cyfra</li>
+                            <li>przynajmniej jeden znak specjalny: @$&*</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-lg-6 px-4">
@@ -69,15 +78,15 @@
                             <option value="2">Restaurator</option>
                         </select>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label for="form-building" class="form-label">Nr budynku</label>
                             <input type="text" name="registration-building-number"
                                 class="form-control {{form.v_building_no.bts_class}}" id="form-building"
                                 value="{{form.v_building_no.value}}" placeholder="np. 65">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3">
                             <label for="form-locale" class="form-label">Nr mieszkania</label>
                             <input type="text" name="registration-local-number"
                                 class="form-control {{form.v_locale_no.bts_class}}" id="form-locale"
@@ -85,15 +94,15 @@
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label for="form-post-code" class="form-label">Kod pocztowy</label>
                             <input type="text" name="registration-post-code"
                                 class="form-control {{form.v_post_code.bts_class}}" id="form-post-code"
                                 value="{{form.v_post_code.value}}" placeholder="np. 43-100">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3">
                             <label for="form-city" class="form-label">Miasto</label>
                             <input type="text" name="registration-city" class="form-control {{form.v_city.bts_class}}"
                                 id="form-city" value="{{form.v_city.value}}" placeholder="np. Gliwice">
