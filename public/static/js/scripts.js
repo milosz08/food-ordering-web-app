@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 00:22:29                   *
+ * Ostatnia modyfikacja: 2022-12-07 01:01:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -47,8 +47,11 @@ const passVisibilityUI = {
 };
 
 const showLogoutModalOnLoad = {
+    modalElm: document.getElementById('logout-modal'),
+
     showModalInvoker: function() {
-        const myModal = new bootstrap.Modal(document.getElementById('logout-modal'), {});
+        if (this.modalElm === null) return;
+        const myModal = new bootstrap.Modal(this.modalElm, {});
         myModal.show();
     },
 };

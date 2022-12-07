@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 22:46:32                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 00:01:55                   *
+ * Ostatnia modyfikacja: 2022-12-07 00:54:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -43,7 +43,7 @@ abstract class MvcService
      */
     protected function passwd_hash($value)
     {
-        return password_hash($value, PASSWORD_BCRYPT, array('salt' => Config::get('__SHA_SALT__')));
+        return password_hash($value, PASSWORD_BCRYPT);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

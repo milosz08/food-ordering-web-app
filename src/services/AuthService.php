@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 00:09:32                   *
+ * Ostatnia modyfikacja: 2022-12-07 01:00:17                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -175,18 +175,21 @@ class AuthService extends MvcService
             try
             {
                 $query = "
-                    SELECT users.id AS id, is_activated, role_id, roles.name AS role_name, CONCAT(first_name,' ', last_name) AS full_name
+                    SELECT users.id AS id, is_activated, role_id, roles.name AS role_name, CONCAT(first_name,' ', last_name) AS full_name,
+                    password
                     FROM users INNER JOIN roles ON users.role_id=roles.id 
-                    WHERE (login = :login OR email = :login) AND password = :pass
+                    WHERE login = :login OR email = :login
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue(':login', $login_email['value']);
-                $statement->bindValue(':pass', $this->passwd_hash($password['value']));
                 $statement->execute();
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                 
-                if (count($result) == 0) throw new Exception('Nieprawidłowy login i/lub hasło. Spróbuj ponownie.');
+                if (count($result) == 0) throw new Exception('Konto z podanymi parametrami nie istnieje w systemie.');
                 $result = $result[0];
+
+                if (!password_verify($password['value'], $result['password']))
+                    throw new Exception('Nieprawidłowy login i/lub hasło. Spróbuj ponownie.');
 
                 // sprawdzanie, czy użytkownik ma aktywowane konto, jeśli nie wyświetlenie linka do wysyłki wiadomości email z tokenem OTA
                 if ($result['is_activated'] == 0)
