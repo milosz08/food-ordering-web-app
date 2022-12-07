@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 19:19:36                   *
+ * Ostatnia modyfikacja: 2022-12-07 19:30:31                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -56,7 +56,8 @@ Config::set('__REGEX_CITY__', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]
 Config::set('__REGEX_STREET__', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]{2,100}$/');
 Config::set('__REGEX_POSTCODE__', '/^[0-9]{2}-[0-9]{3}$/');
 Config::set('__REGEX_BUILDING_NO__', '/^([0-9]+(?:[a-z]{0,1})){1,5}$/');
-Config::set('__REGEX_PASSWORD__', '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/');
+Config::set('__REGEX_PASSWORD__', '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*]).{8,}$/');
 Config::set('__REGEX_LOGIN__', '/^[a-zA-Z0-9]{5,30}$/');
 Config::set('__REGEX_LOGINEMAIL__', '/^[a-zA-Z0-9@.]{5,100}$/');
 Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
+Config::set('__REGEX_OTA__', '/^[0-9A-Za-z]{10,}$/');

@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 11:46:00                   *
+ * Ostatnia modyfikacja: 2022-12-07 19:31:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -309,7 +309,9 @@ class AuthService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            if (!isset($_GET['code'])) throw new Exception('Podany kod autoryzacyjny jest nieprawidłowy lub nie istnieje.');
+            if (!isset($_GET['code'])) throw new Exception('W celu zmiany hasła należy podać kod autoryzacyjny.');
+            if (!preg_match(Config::get('__REGEX_OTA__'), $_GET['code']))
+                throw new Exception('Podany kod nie jest prawidłowym kodem autoryzacyjnym.');
             
             $query = "
                 SELECT user_id FROM ota_user_token WHERE ota_token = ? AND expiration_date >= NOW() AND is_used = false
@@ -384,7 +386,7 @@ class AuthService extends MvcService
             $this->dbh->beginTransaction();
 
             if (!isset($_GET['code'])) throw new Exception('W celu ukończenia aktywacji konta należy podać kod autoryzacyjny.');
-            if (!preg_match('/^[0-9A-Za-z]{10,}$/', $_GET['code']))
+            if (!preg_match(Config::get('__REGEX_OTA__'), $_GET['code']))
                 throw new Exception('Podany kod nie jest prawidłowym kodem autoryzacyjnym.');
             
             // zapytanie złożone sprawdzające token czy istnieje, czy nie jest przedawiony, czy nie został już użyty oraz czy konto
