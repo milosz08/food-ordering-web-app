@@ -9,13 +9,13 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-22 20:12:47                   *
- * Modyfikowany przez: Desi                                    *
+ * Ostatnia modyfikacja: 2022-12-07 00:50:15                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\HomeService;
 
@@ -78,13 +78,10 @@ class HomeController extends MvcController
      */
     public function welcome()
     {
-        $user_model = new UserModel('Jan', 'Kowalski');
-
-        $concat_name = $this->_service->concat($user_model->get_name(), $user_model->get_surname());
-
+        $logout_modal = Utils::check_session_and_unset('logout_modal_data');
         $this->renderer->render('home/home-view', array(
-            'page_title' => 'Witaj ' . $concat_name,
-            'user_name' => $concat_name,
+            'page_title' => 'Start',
+            'logout_modal_visible' => $logout_modal['is_open'] ?? false,
         ));
     }
 

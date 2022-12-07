@@ -9,12 +9,13 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-28 21:24:32                   *
+ * Ostatnia modyfikacja: 2022-12-07 00:09:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\AuthService;
 
@@ -41,11 +42,13 @@ class AuthController extends MvcController
      */
     public function register()
     {
-        $registraion_form_data = $this->_service->register();
+        $banner_data = Utils::check_session_and_unset('successful_register_user');
+        $form_data = $this->_service->register();
+        $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
         $this->renderer->render('auth/registration-view', array(
             'page_title' => 'Rejestracja', 
-            'form' => $registraion_form_data,
-            'is_error' => !empty($registraion_form_data['error']),
+            'form' => $form_data,
+            'banner' => $banner_data,
         ));
     }
 
@@ -56,25 +59,94 @@ class AuthController extends MvcController
      */
     public function login()
     {
-        $login_form_data = $this->_service->login_user();
+        $banner_data = Utils::check_session_and_unset('attempt_activate_account');
+        $form_data = $this->_service->login_user();
+        $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
-            'form' => $login_form_data,
-            'is_error' => !empty($login_form_data['error']),
+            'form' => $form_data,
+            'banner' => $banner_data,
         ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/password/renew/request. 
+     */
+    public function password_renew_request()
+    {
+        $banner_data = Utils::check_session_and_unset('attempt_change_password');
+        $form_data = $this->_service->attempt_renew_password();
+        $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
+        $this->renderer->render('auth/renew-password-email-view', array(
+            'page_title' => 'Resetuj hasło',
+            'form' => $form_data,
+            'banner' => $banner_data,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/password/renew/change. 
+     */
+    public function password_renew_change()
+    {
+        $form_data = $this->_service->renew_change_password();
+        $this->renderer->render('auth/renew-password-change-view', array(
+            'page_title' => 'Zmień hasło',
+            'form' => $form_data,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/account/activate.
+     */
+    public function account_activate()
+    {
+        $this->_service->attempt_activate_account();
+        header('Location:index.php?action=auth/login', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/account/resend/code&userid=?.
+     */
+    public function account_activate_resend_code()
+    {
+        $this->_service->resend_account_activation_link();
+        header('Location:index.php?action=auth/login', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/logout.
+     */
+    public function logout()
+    {
+        unset($_SESSION['logged_user']);
+        header('Location:index.php?action=home', true, 301);
+        $_SESSION['logout_modal_data'] = array(
+            'is_open' => true,
+        );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=home
+     *      index.php?action=auth
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=home/welcome
-     * renderując widok z metody welcode() powyższej klasy.
+     *      index.php?action=auth/login
+     * renderując widok z metody login() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=auth/login');
+        header('Location:index.php?action=auth/login', true, 301);
     }
 }

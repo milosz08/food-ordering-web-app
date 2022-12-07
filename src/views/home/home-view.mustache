@@ -1,5 +1,8 @@
 {{> partials/header-view.partial }}
+{{#logout_modal_visible}}
+    {{> partials/logout-modal-view.partial }}
+{{/logout_modal_visible}}
 
-<h1 class="testing-class">{{ user_name }}!</h1>
+<h1>Strona Startowa!</h1>
 
 {{> partials/footer-view.partial }}

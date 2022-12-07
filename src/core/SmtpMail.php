@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-01, 15:08:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-01 16:53:58                   *
+ * Ostatnia modyfikacja: 2022-12-02 00:46:24                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,7 +24,7 @@ use PHPMailer\PHPMailer\PHPMailer;
  * Parametry połączenia z serwerem zaciągane są z pliku .env. Klasa przechowuje jedną publiczną metodę umożliwiającą wysłanie wiadomości *
  * na wskazany adres poprzez szablon HTML pobierany z zewnętrznego pliku w folderze ~/templates.                                         *
  *                                                                                                                                       *
- * Po więcej szczegółów na temat biblioteki, przedź pod adres: https://github.com/PHPMailer/PHPMailer                                    *                                                                                              *
+ * Po więcej szczegółów na temat biblioteki, przedź pod adres: https://github.com/PHPMailer/PHPMailer                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class SmtpMail

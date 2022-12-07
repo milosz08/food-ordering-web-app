@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:43                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-27 20:40:48                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2022-12-04 03:28:26                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -31,15 +31,5 @@ class HomeService extends MvcService
     protected function __construct()
     {
         parent::__construct();
-    }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Prosty przykład metody serwisu dodającej do siebie dwa stringi i zwracającej połączony ciąg znaków.
-     */
-    public function concat($value_first, $value_second)
-    {
-        return $value_first . ' ' . $value_second;
     }
 }

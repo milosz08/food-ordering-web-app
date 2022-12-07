@@ -1,0 +1,11 @@
+<div>główny widok tabeli z restauracjami konkretnego restauratora</div>
+przycisk na razie jeden główny, ale w planach w każdym rekordzie w tabeli z restauracją przycisk do usuwania
+
+{{#banner.show_banner}}
+<div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
+    {{{banner.banner_message}}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/banner.show_banner}}
+
+<a class="btn btn-danger btn-md w-100 py-2 " href="index.php?action=restaurant/panel/myrestaurant/delete&id=0">Usuń restaurację</a>

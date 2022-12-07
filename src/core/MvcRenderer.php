@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 23:39:35                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 05:49:58                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2022-12-06 17:11:08                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
@@ -45,6 +45,7 @@ class MvcRenderer
         Mustache_Autoloader::register(); // zarejestrowanie silnika szablonów mustache
         // wywołanie klasy Mustache_Engine odpowiadającej za ładowanie ścieżek do katalogów widoków i widoków częściowych
         self::$_mustache = new Mustache_Engine(array(
+            'pragmas' => array(Mustache_Engine::PRAGMA_BLOCKS),
             'loader' => new Mustache_Loader_FilesystemLoader(__SRC_DIR__ . '/views'), // ładowanie widoków
             'partials_loader' => new Mustache_Loader_FilesystemLoader(__SRC_DIR__ . '/views'), // ładowanie widoków częściowych
         ));
@@ -78,6 +79,22 @@ class MvcRenderer
             'embed_page_title' => $data['page_title'] ?? Config::get('__PAGE_TITLE__'),
         ));
         echo $template->render($extended_data); // wyrenderuj, sprarsuj i wyświetl szablon
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda umożliwiająca renderowanie widoku zagnieżdżonego na podstawie nazwy szablonu wrappera (owijającego) przekazywanego w
+     * parametrze $wrapper_pattern_name oraz nazwy szablonu zagnieżdżonego przekazywanego w parametrze $embed_pattern_name. Metoda dodatkowo
+     * przyjmuje parametr $data w postaci tablicy właściwości przekazywanych do szablonu.
+     */
+    public function render_embed($wrapper_pattern_name, $embed_pattern_name, $data = array())
+    {
+        $additional_embed_view_data = array_merge($data, array(
+            // wstaw funkcję wywołania zwrotnego szablonu renderowanego w szablonie owijającym
+            'embed_rendering_section' => function () use ($embed_pattern_name) { return '{{> ' . $embed_pattern_name . ' }}'; },
+        ));
+        $this->render($wrapper_pattern_name, $additional_embed_view_data); // renderuj widok
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

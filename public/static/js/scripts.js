@@ -7,8 +7,8 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 01:46:29                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2022-12-07 01:01:59                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -20,11 +20,45 @@
  * załaduje się jeszcze przed załadowaniem obrazka i nie znajdzie zasobu na którym ma wykonać akcję.                                     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-console.log('Hello Web! - bezpośrednio po wysłaniu rządania http');
+/**
+ * Skrypt umoliwiający pokazywanie/chowanie hasła w polu input na przycisk
+ */
+const passVisibilityUI = {
+    pswVisibilityBtn: document.querySelectorAll('.password-input-toggler'),
 
-window.addEventListener('load', function() {
-    
-    // Tutaj umieszczać skrypty uruchamiające się dopiero po załadowaniu całego drzewa DOM (wszystkich selektorów i zasobów HTML)
-    
-    console.log('Hello DOM Tree! - po załadowaniu drzewa DOM');
+    pswVisibilityInvoker: function () {
+        if (passVisibilityUI.pswVisibilityBtn === null) return;
+        const invokeOnClick = function (el) {
+            const inputChild = el.parentNode.firstElementChild;
+            const buttonIcon = el.parentNode.children[1].firstElementChild;
+            el.addEventListener('click', function () {
+                if (inputChild.value.length === 0) return;
+                inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
+                buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
+            });
+            inputChild.addEventListener('input', function () {
+                if (this.value !== '') return;
+                inputChild.type = 'password';
+                buttonIcon.innerText = 'visibility';
+            });
+        };
+        this.pswVisibilityBtn.forEach(invokeOnClick.bind(this), false);
+    },
+};
+
+const showLogoutModalOnLoad = {
+    modalElm: document.getElementById('logout-modal'),
+
+    showModalInvoker: function() {
+        if (this.modalElm === null) return;
+        const myModal = new bootstrap.Modal(this.modalElm, {});
+        myModal.show();
+    },
+};
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+window.addEventListener('load', function () {
+    passVisibilityUI.pswVisibilityInvoker();
+    showLogoutModalOnLoad.showModalInvoker();
 });

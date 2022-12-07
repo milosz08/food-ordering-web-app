@@ -6,9 +6,9 @@
  * Projekt: restaurant-project-php-si                          *
  * Data utworzenia: 2022-11-10, 18:44:02                       *
  * Autor: Milosz08                                             *
- *                                                             *
- * Ostatnia modyfikacja: 2022-11-27 19:54:19                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ *                                                             *              
+ * Ostatnia modyfikacja: 2022-12-07 00:30:13                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
@@ -18,11 +18,90 @@
  * Konwencja nazewnictwa klas: .nazwa1-nazwa2-nazwa3, gdzie parametr nazwa to poszczególne człony (rozdzielone znakiem myślnika).        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-.testing-class {
-    color: var(--testing-color-variable); // wykorzystanie przykładowej zmiennej odnoszącej się do koloru z pliku _varialbes.fragment.scss
+.media-form-size-box {
+    width: 100%;
+    max-width: 500px;
 }
 
-.danger-class{
-    margin-top: 9px;
-    margin-bottom: 0;
+.media-large-form-size-box {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.custom-card-padding {
+    padding: 40px;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+@media only screen and (max-width: 500px) {
+    .custom-card-padding {
+        padding: 20px;
+    }
+
+    .media-form-size-box {
+        width: calc(100% - 20px);
+        margin: 0 10px;
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+.headear1-error-page {
+    font-size: 60px;
+}
+
+.headear2-error-page {
+    font-size: 30px;
+}
+
+.headear3-error-page {
+    font-size: 25px;
+}
+
+#mmenu_screen>.row {
+    min-height: 100vh;
+}
+
+.flex-fill {
+    flex: 1 1 auto;
+    min-height: 500px;
+}
+
+.error-page-main {
+    background-color: #d6d4ce;
+}
+
+.error-page-right {
+    height: 100vh;
+    background-image: url("../images/error_page_photo.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.error-page-left {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: calc(100% - 80%);
+}
+
+.error-page-button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(+7px);
+}
+
+@media only screen and (max-width: 575px) {
+    .error-page-right {
+        display: none;
+        visibility: hidden;
+    }
+
+    .error-page-left {
+        height: 100vh;
+        min-height: 600px;
+    }
 }

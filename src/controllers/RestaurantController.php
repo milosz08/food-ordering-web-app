@@ -9,19 +9,19 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-30 14:39:33                   *
+ * Ostatnia modyfikacja: 2022-12-06 23:44:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\RestaurantService;
 
 /**
- * Kontroler odpowiadający za obsługę logowania, rejestracji oraz innych usług autentykacji i autoryzacji użytkowników.
+ * Kontroler odpowiadający za obsługę dodawania oraz edytowania restauracji.
  */
-
 class RestaurantController extends MvcController
 {
     private $_service; // instancja serwisu
@@ -32,18 +32,44 @@ class RestaurantController extends MvcController
     {
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
-        $this->_service = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RegistrationService
+        $this->_service = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RestaurantService
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/add-restaurant. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/dashboard. 
      */
-    public function add()
+    public function panel_dashboard()
+    {
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-dashboard-view', array(
+            'page_title' => 'Panel restauratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurants. 
+     */
+    public function panel_myrestaurants()
+    {
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
+            'page_title' => 'Moje restauracje',
+            'banner' => $mainpulate_restaurant_banner,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
+     */
+    public function panel_myrestaurant_add()
     {
         $add_restaurant_form_data = $this->_service->add_restaurant();
-        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Dodaj restaurację',
             'add_edit_text' => 'Dodaj',
             'is_error' => !empty($add_restaurant_form_data['error']),
@@ -54,12 +80,12 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/edit-restaurant.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
      */
-    public function edit()
+    public function panel_myrestaurant_edit()
     {
         $edit_restaurant_form_data = $this->_service->edit_restaurant();
-        $this->renderer->render('restaurant/add-edit-restaurant-view', array(
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
             'add_edit_text' => 'Edytuj',
             'is_error' => !empty($edit_restaurant_form_data['error']),
@@ -68,18 +94,27 @@ class RestaurantController extends MvcController
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
+    
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/delete.
+     */
+    public function panel_myrestaurant_delete()
+    {
+        $this->_service->delete_restaurant();
+        header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=home
+     *      index.php?action=restaurant
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=home/welcome
-     * renderując widok z metody welcode() powyższej klasy.
+     *      index.php?action=restaurant/panel/dashbaord
+     * renderując widok z metody panel_dashboard() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=restaurant/add');
+        header('Location:index.php?action=restaurant/panel/dashboard', true, 301);
     }
 }
-
- 
