@@ -12,32 +12,20 @@ przycisk na razie jeden główny, ale w planach w każdym rekordzie w tabeli z r
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nazwa Restauracji</th>
-        <th scope="col">Ulica, Kod pocztowy, Miasto</th>
+        <th scope="col">Ulica, Nr. budynku ,Kod pocztowy, Miasto</th>
         <th scope="col">Cena Dostawy</th>
       </tr>
     </thead>
     <tbody>
+      {{#items}}
       <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>Otto</td>
+        <th scope="row">{{iterator}}</th>
+        <td>{{res.name}}</td>
+        <td>{{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}</td>
+        <td>{{res.delivery_price}}</td>
         <td><a link href="">Pokaż więcej</a></td>
       </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>Otto</td>
-        <td><a link href="">Pokaż więcej</a></td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Larry the Bird</td>
-        <td>@twitter</td>
-        <td>@twitter</td>
-        <td><a link href="">Pokaż więcej</a></td>
-      </tr>
+      {{/items}}
     </tbody>
   </table>
 <a class="btn btn-danger btn-md w-100 py-2 " href="index.php?action=restaurant/panel/myrestaurant/delete&id=0">Usuń restaurację</a>

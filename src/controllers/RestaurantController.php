@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:44:06                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-09 22:50:54                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -54,10 +54,12 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurants()
     {
+        $restaurant_table = $this->_service->create_restaurant_table();
         $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
             'page_title' => 'Moje restauracje',
             'banner' => $mainpulate_restaurant_banner,
+            'items' => $restaurant_table['user_restaurant'],
         ));
     }
 

@@ -9,12 +9,13 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:47:38                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-09 22:52:05                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
 
+use App\Models\RestaurantModel;
 use PDO;
 use Exception;
 
@@ -287,4 +288,33 @@ class RestaurantService extends MvcService
         }
         return $images_paths;
     }
+
+    public function create_restaurant_table()
+    {
+        try {
+            $it = array();
+            $i = 1;
+            $user_restaurant = array();
+            $query = "SELECT  name, street, building_locale_nr, post_code, city, delivery_price, id FROM restaurants WHERE user_id = ? ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            
+            while($restaurant = $statement->fetchObject(RestaurantModel::class)) // przejdź przez wszystkie rekordy
+            {
+                //array_push($it, array('iterator' => $i));
+
+                array_push($user_restaurant, array('res' => $restaurant, 'iterator' => $i) );
+                $i++;
+            }
+        }
+        catch (Exception $e)
+        {
+            $this->_banner_message = $e->getMessage();
+        }
+        return array(
+            //'it' => $it,
+            'user_restaurant' => $user_restaurant,
+        );
+    }
+    
 }
