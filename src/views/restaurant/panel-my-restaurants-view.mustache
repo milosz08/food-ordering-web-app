@@ -7,5 +7,36 @@ przycisk na razie jeden główny, ale w planach w każdym rekordzie w tabeli z r
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{/banner.show_banner}}
-
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nazwa Restauracji</th>
+        <th scope="col">Ulica, Kod pocztowy, Miasto</th>
+        <th scope="col">Cena Dostawy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>Otto</td>
+        <td><a link href="">Pokaż więcej</a></td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>Otto</td>
+        <td><a link href="">Pokaż więcej</a></td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td colspan="2">Larry the Bird</td>
+        <td colspan="3">@twitter</td>
+        <td><a link href="">Pokaż więcej</a></td>
+      </tr>
+    </tbody>
+  </table>
 <a class="btn btn-danger btn-md w-100 py-2 " href="index.php?action=restaurant/panel/myrestaurant/delete&id=0">Usuń restaurację</a>
