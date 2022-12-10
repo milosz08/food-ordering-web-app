@@ -1,3 +1,10 @@
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/myrestaurants">Moje restauracje</a></li>
+		<li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} restaurację</li>
+	</ol>
+</nav>
 <div class="d-flex flex-column justify-content-center container flex-grow-1">
     <div class="row d-flex justify-content-center align-items-center mx-auto w-100 media-large-form-size-box">
         {{#is_error}}
