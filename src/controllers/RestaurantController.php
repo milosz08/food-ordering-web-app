@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-10 15:34:45                   *
+ * Ostatnia modyfikacja: 2022-12-10 15:48:39                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -60,6 +60,7 @@ class RestaurantController extends MvcController
             'page_title' => 'Moje restauracje',
             'banner' => $mainpulate_restaurant_banner,
             'items' => $restaurant_table['user_restaurant'],
+            'list' => $restaurant_table['pagination'],
         ));
     }
 
