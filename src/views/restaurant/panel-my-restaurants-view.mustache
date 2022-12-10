@@ -10,26 +10,47 @@ przycisk na razie jeden główny, ale w planach w każdym rekordzie w tabeli z r
 <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nazwa Restauracji</th>
-        <th scope="col">Ulica, Nr. budynku ,Kod pocztowy, Miasto</th>
-        <th scope="col">Cena Dostawy</th>
+			<th>Lp</th>
+			<th>Nazwa Restauracji</th>
+			<th>Dane adresowe</th>
+			<th>Cena Dostawy</th>
+			<th>Akcja</th>
       </tr>
     </thead>
     <tbody>
       {{#items}}
       <tr>
-        <th scope="row">{{iterator}}</th>
-        <td>{{res.name}}</td>
-        <td>{{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}</td>
-        <td>{{res.delivery_price}}</td>
-        <td><div class="d-grid gap-2 d-md-block">
-              <button class="btn btn-success" type="button">Wyświetl</button>
-              <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-res-id="{{res.id}}">Usuń</button>
+			<td class="align-middle">{{iterator}}</td>
+			<td class="align-middle">{{res.name}}</td>
+			<td class="align-middle">ul. {{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}</td>
+			<td class="align-middle">{{res.delivery_price}}</td>
+			<td>
+				<div class="d-grid gap-2 d-md-block">
+					<a href="index.php?action=restaurant/panel/myrestaurant/edit&id={{res.id}}" class="btn btn-primary"
+						role="button">Edytuj</a>
+					<button class="btn btn-danger" data-bs-toggle="modal"
+						data-bs-target="#delete-res-modal">Usuń</button>
             </div>
         </td>
       </tr>
-      {{> partials/delete-restaurant-modal-view.partial}}
+		<div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji operacji nie można będzie
+						cofnąć.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+						<a class="btn btn-outline-danger" href="index.php?action=restaurant/panel/myrestaurant/delete&id={{res.id}}">Usuń</a>
+					</div>
+				</div>
+			</div>
+		</div>
       {{/items}}
     </tbody>
   </table>    
