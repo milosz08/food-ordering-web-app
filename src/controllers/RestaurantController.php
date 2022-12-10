@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-10 15:48:39                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-10 17:26:17                   *
+ * Modyfikowany przez: Dariusz Krawczyk                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -67,7 +67,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurant/add. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
      */
     public function panel_myrestaurant_add()
     {
@@ -83,7 +83,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurant/edit&id=?.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
      */
     public function panel_myrestaurant_edit()
     {

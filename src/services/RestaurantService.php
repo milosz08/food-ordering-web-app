@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-10 14:25:10                   *
+ * Ostatnia modyfikacja: 2022-12-10 19:46:00                   *
  * Modyfikowany przez: Dariusz Krawczyk                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -289,27 +289,55 @@ class RestaurantService extends MvcService
         return $images_paths;
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda odpowiadająca za tworzenie tabeli w zakładce 'Lista restauracji'.
+     * Tabela przechowuje kolejno wszystkie restauracje, które posiada zalogowany użytkownik.
+     * Tabela przechowuje poszczególne informacje o restauracji, a także przyciski odpowiadające za przejście
+     * do zakładki edytowania wybranej restauracji oraz jej usunięcie. Tabela została wzbogacona o funkcję paginacji, 
+     * wyświetlającej tylko 6 elementów na jednej ze stron.
+     */
     public function create_restaurant_table()
     {
+        /**
+        * Sprawdzanie, czy przypisana została wartość 'i' do adresu, odpowiadającej za wyświetlaną stronę paginacji.
+        * Jeśli wartość nie została podana, to jako wartość pierwszej strony wpisywana zostaje wartość '0'.
+        */
+        if (!isset($_GET['i'])) header('Location:index.php?action=restaurant/panel/myrestaurants&i=0', true, 301);
         try {
-            $i = 1;
-            $it = array();
-            $user_restaurant = array();
+            $max_res_number = 1; // deklaracja zmiennej odpowiadającej za maksymalną liczbę wierszy wyświetlanej na stronie
+            $res_sum_number = 1; // deklaracja zmiennej przechowującą sume zliczonych restauracji
+            $page = $_GET['i']; // pobranie indeksu paginacji
+            $user_restaurant = array(); // tablica 
+
+            // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
             $query = "SELECT  name, street, building_locale_nr, post_code, city, delivery_price, id FROM restaurants WHERE user_id = ? ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
             
-            while($restaurant = $statement->fetchObject(RestaurantModel::class)) // przejdź przez wszystkie rekordy
+            // 'while' odpowiadada za przejście przez wszystkie znaleznione rekordy
+            while($restaurant = $statement->fetchObject(RestaurantModel::class)) 
             {
-                array_push($user_restaurant, array('res' => $restaurant, 'iterator' => $i) );
-                $i++;
+                // 'if' sprawdza warunek dla kolejnych stron paginacji, aby wpisać odpowiednie elementy do tablicy dla danych przedziałów
+                if (($res_sum_number > $page*6) && (($page*7+$max_res_number) < ($page*7+7)) )
+                {
+                    // wkładanie do tablicy $user_restaurant poszczególnych restauracji wraz z ich numerem w kolejności
+                    array_push($user_restaurant, array('res' => $restaurant, 'iterator' => $res_sum_number));
+                    $max_res_number++; // maksymalna wartość zmiennej wyniesie 7, czyli 6 restauracji na strone
+                }
+                $res_sum_number++; // zliczanie restauracji
             }
-            $pagination = array();
-            $j = 1;
-            while($j < var_dump((int)$i / 6))
+
+            
+            $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
+            $i = 0; // zmienna pomocnicza
+            // W zależności od posiadanych restauracji podzielonych przez 6, tyle razy wykona się pętla 
+            while($i < (($res_sum_number-1)/6))
             {
-                array_push($paginationm, array('page' => var_dump((int) $i / 6)));
-                $j++;
+                // dodawanie iteracji do tablicy $pagination
+                array_push($pagination, array('page' => $i+1, 'i' => $i));
+                $i++;
             }
         }
         catch (Exception $e)
