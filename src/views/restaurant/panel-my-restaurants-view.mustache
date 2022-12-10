@@ -1,68 +1,71 @@
 <nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/dashboard">Panel główny</a></li>
-		<li class="breadcrumb-item active" aria-current="page">Moje restauracje</li>
-	</ol>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Moje restauracje</li>
+    </ol>
 </nav>
 {{#banner.show_banner}}
 <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
-	{{{banner.banner_message}}}
-	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {{{banner.banner_message}}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{/banner.show_banner}}
 <table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Lp</th>
-			<th>Nazwa Restauracji</th>
-			<th>Dane adresowe</th>
-			<th>Cena Dostawy</th>
-			<th>Akcja</th>
-		</tr>
-	</thead>
-	<tbody>
-		{{#items}}
-		<tr>
-			<td class="align-middle">{{iterator}}</td>
-			<td class="align-middle">{{res.name}}</td>
-			<td class="align-middle">ul. {{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}</td>
-			<td class="align-middle">{{res.delivery_price}}</td>
-			<td>
-				<div class="d-grid gap-2 d-md-block">
-					<a href="index.php?action=restaurant/panel/myrestaurant/edit&id={{res.id}}" class="btn btn-primary"
-						role="button">Edytuj</a>
-					<button class="btn btn-danger" data-bs-toggle="modal"
-						data-bs-target="#delete-res-modal">Usuń</button>
-				</div>
-			</td>
-		</tr>
-		<div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji operacji nie można będzie
-						cofnąć.
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-						<a class="btn btn-outline-danger" href="index.php?action=restaurant/panel/myrestaurant/delete&id={{res.id}}">Usuń</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		{{/items}}
-	</tbody>
+    <thead>
+        <tr>
+            <th>Lp</th>
+            <th>Nazwa Restauracji</th>
+            <th>Dane adresowe</th>
+            <th>Cena Dostawy</th>
+            <th>Akcja</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#items}}
+        <tr>
+            <td class="align-middle">{{iterator}}</td>
+            <td class="align-middle">{{res.name}}</td>
+            <td class="align-middle">ul. {{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}</td>
+            <td class="align-middle">{{res.delivery_price}}</td>
+            <td>
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="index.php?action=restaurant/panel/myrestaurant/edit&id={{res.id}}" class="btn btn-primary"
+                        role="button">Edytuj</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#delete-res-modal">Usuń</button>
+                </div>
+            </td>
+        </tr>
+        <div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji
+                        operacji nie można będzie
+                        cofnąć.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                        <a class="btn btn-outline-danger"
+                            href="index.php?action=restaurant/panel/myrestaurant/delete&id={{res.id}}">Usuń</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/items}}
+    </tbody>
 </table>
 <nav aria-label="Page navigation example">
-	<ul class="pagination pagination-sm">
-		<li class="page-item active" aria-current="page">
-			<span class="page-link">1</span>
-		</li>
-		<li class="page-item"><a class="page-link" href="#">2</a></li>
-		<li class="page-item"><a class="page-link" href="#">3</a></li>
-	</ul>
+    <ul class="pagination pagination-sm">
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">1</span>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+    </ul>
 </nav>
