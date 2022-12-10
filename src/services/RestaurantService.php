@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-09 22:52:05                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2022-12-10 14:25:10                   *
+ * Modyfikowany przez: Dariusz Krawczyk                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -292,8 +292,8 @@ class RestaurantService extends MvcService
     public function create_restaurant_table()
     {
         try {
-            $it = array();
             $i = 1;
+            $it = array();
             $user_restaurant = array();
             $query = "SELECT  name, street, building_locale_nr, post_code, city, delivery_price, id FROM restaurants WHERE user_id = ? ";
             $statement = $this->dbh->prepare($query);
@@ -301,10 +301,15 @@ class RestaurantService extends MvcService
             
             while($restaurant = $statement->fetchObject(RestaurantModel::class)) // przejdź przez wszystkie rekordy
             {
-                //array_push($it, array('iterator' => $i));
-
                 array_push($user_restaurant, array('res' => $restaurant, 'iterator' => $i) );
                 $i++;
+            }
+            $pagination = array();
+            $j = 1;
+            while($j < var_dump((int)$i / 6))
+            {
+                array_push($paginationm, array('page' => var_dump((int) $i / 6)));
+                $j++;
             }
         }
         catch (Exception $e)
@@ -312,7 +317,7 @@ class RestaurantService extends MvcService
             $this->_banner_message = $e->getMessage();
         }
         return array(
-            //'it' => $it,
+            'pagination' => $pagination,
             'user_restaurant' => $user_restaurant,
         );
     }
