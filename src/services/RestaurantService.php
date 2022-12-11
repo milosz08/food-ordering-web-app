@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 04:07:38                   *
+ * Ostatnia modyfikacja: 2022-12-11 20:14:36                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -107,7 +107,7 @@ class RestaurantService extends MvcService
                         'show_banner' => !empty($this->_banner_message),
                         'banner_class' => 'alert-success',
                     );
-                    header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
                 }
                 $this->dbh->commit();
             } 
@@ -139,7 +139,7 @@ class RestaurantService extends MvcService
         $v_profile = array('invl' => false, 'bts_class' => '');
         try
         {
-            if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+            if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
             $this->dbh->beginTransaction();
 
             // Zapytanie zwracające aktualne wartości edytowanej restauracji z bazy danych
@@ -147,7 +147,7 @@ class RestaurantService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
             $restaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if (count($restaurant) == 0) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+            if (count($restaurant) == 0) header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
             
             $v_name = array('value' => $restaurant[0]['name'], 'invl' => false, 'bts_class' => '');
             $v_street = array('value' => $restaurant[0]['street'], 'invl' => false, 'bts_class' => '');
@@ -206,7 +206,7 @@ class RestaurantService extends MvcService
                         'show_banner' => !empty($this->_banner_message),
                         'banner_class' => 'alert-success',
                     );
-                    header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
                 }
             }
             $this->dbh->commit();
@@ -252,7 +252,7 @@ class RestaurantService extends MvcService
      */
     public function delete_restaurant()
     {
-        if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+        if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
         try
         {
             $this->dbh->beginTransaction();
@@ -372,5 +372,4 @@ class RestaurantService extends MvcService
             'user_restaurants' => $user_restaurants,
         );
     }
-    
 }

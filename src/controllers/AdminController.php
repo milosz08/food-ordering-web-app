@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 02:41:59                   *
+ * Ostatnia modyfikacja: 2022-12-11 20:27:40                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,7 +34,7 @@ class AdminController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=admin/panel/dashboard. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/dashboard. 
      */
     public function panel_dashboard()
     {
@@ -46,7 +46,7 @@ class AdminController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=admin/panel/profile. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/profile. 
      */
     public function panel_profile()
     {
@@ -58,7 +58,7 @@ class AdminController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=admin/panel/settings. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/settings. 
      */
     public function panel_settings()
     {
@@ -71,13 +71,13 @@ class AdminController extends MvcController
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=admin
+     *      admin
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=admin/panel/dashbaord
+     *      admin/panel/dashbaord
      * renderując widok z metody panel_dashboard() powyższej klasy.
      */
 	public function index()
     {
-        header('Location:index.php?action=admin/panel/dashboard');
+        header('Location:' . __URL_INIT_DIR__ . 'admin/panel/dashboard');
 	}
 }

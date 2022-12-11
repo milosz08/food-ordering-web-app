@@ -1,0 +1,4 @@
+# jeśli moduł indeksowania istnieje, zablokuj możliwość przeglądania plików
+<IfModule mod_autoindex.c>
+	Options -Indexes
+</IfModule>

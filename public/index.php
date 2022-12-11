@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 17:21:57                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-28 20:57:02                   *
+ * Ostatnia modyfikacja: 2022-12-12 00:47:26                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -32,6 +32,8 @@ define('__SEP__', DIRECTORY_SEPARATOR); // zadeklarowanie domyślnego separatora
 define('__ROOT__', realpath(dirname(__FILE__) . __SEP__ . '..')); // stała definiująca ścieżkę do głównego katalogu aplikacji
 define('__SCAN_DIRS__', array('core', 'utils', 'models', 'services')); // katalogi, których pliki podlegają ładowaniu
 define('__SRC_DIR__', __ROOT__ . __SEP__ . 'src' . __SEP__); // ścieżka do katalogu /src/
+define('__PROTO__', isset($_SERVER['HTTPS']) ? 'https://' : 'http://'); // protokół serwera: HTTP/HTTPS
+define('__URL_INIT_DIR__', count(explode('/', $_SERVER['PHP_SELF'])) < 4 ? '/' : '/' . explode('/', $_SERVER['PHP_SELF'])[1] . '/' );
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 

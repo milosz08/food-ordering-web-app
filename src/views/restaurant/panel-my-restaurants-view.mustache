@@ -1,6 +1,6 @@
 <nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item"><a href="{{base_dir}}restaurant/panel/dashboard">Panel główny</a></li>
         <li class="breadcrumb-item active" aria-current="page">Moje restauracje</li>
     </ol>
 </nav>
@@ -42,7 +42,7 @@
                 </td>
                 <td class="align-middle {{status.color_bts}}">{{status.text}}</td>
                 <td class="align-middle fit flex-nowrap">
-                    <a href="index.php?action=restaurant/panel/myrestaurant/edit&id={{res.id}}" class="btn btn-primary"
+                    <a href="{{base_dir}}restaurant/panel/myrestaurant/edit&id={{res.id}}" class="btn btn-primary"
                         type="button">
                         Edytuj
                     </a>
@@ -51,7 +51,7 @@
                             <i class="bi bi-x-lg"></i>
                         </span>
                     </button>
-                    <a href="index.php?action=restaurant/panel/myrestaurant/details&id={{res.id}}" class="btn btn-primary ms-2"
+                    <a href="{{base_dir}}restaurant/panel/myrestaurant/details&id={{res.id}}" class="btn btn-primary ms-2"
                         type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Szczegóły restauracji">
                         <i class="bi bi-arrow-right"></i>
                     </a>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                            <a class="btn btn-outline-danger" href="index.php?action=restaurant/panel/myrestaurant/delete&id={{res.id}}">
+                            <a class="btn btn-outline-danger" href="{{base_dir}}restaurant/panel/myrestaurant/delete&id={{res.id}}">
                                 Usuń
                             </a>
                         </div>
@@ -104,7 +104,7 @@
                 </li>
                 {{#data.pagination}}
                 <li class="page-item">
-                    <a class="page-link" href="index.php?action=restaurant/panel/myrestaurants&page={{i}}">{{page}}</a>
+                    <a class="page-link" href="{{base_dir}}restaurant/panel/myrestaurants&page={{i}}">{{page}}</a>
                 </li>
                 {{/data.pagination}}
                 <li class="page-item">

@@ -1,5 +1,5 @@
 <nav class="d-flex justify-content-between navbar fixed-top bg-dark bg-gradient">
-    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="index.php?action=admin/panel/dashboard">
+    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}admin/panel/dashboard">
         CMS | <span class="text-white-50">Panel administratora</span>
     </a>
     <div class="dropdown d-block d-md-none">
@@ -10,18 +10,18 @@
             </span>
         </button>
         <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
-            <li><a class="dropdown-item" href="index.php?action=admin/panel/dashboard">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/dashboard">
                 <i class="bi bi-house-door me-2"></i>Panel główny</a>
             </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="index.php?action=admin/panel/profile">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/profile">
                 <i class="bi bi-person me-2"></i>Profil
             </a></li>
-            <li><a class="dropdown-item" href="index.php?action=admin/panel/settings">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/settings">
                 <i class="bi bi-gear me-2"></i>Ustawienia
             </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="index.php?action=auth/logout">
+            <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
                 <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
             </a></li>
         </ul>
@@ -29,18 +29,18 @@
     <div class="dropdown">
         <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
             data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+            <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
             <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
-            <li><a class="dropdown-item" href="index.php?action=admin/panel/profile">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/profile">
                 <i class="bi bi-person me-2"></i>Profil
             </a></li>
-            <li><a class="dropdown-item" href="index.php?action=admin/panel/settings">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/settings">
                 <i class="bi bi-gear me-2"></i>Ustawienia
             </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="index.php?action=auth/logout">
+            <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
                 <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
             </a></li>
         </ul>
@@ -53,7 +53,7 @@
                 <div class="border-top my-3"></div>
                 <ul class="list-unstyled">
                     <li class="mb-1">
-                        <a href="index.php?action=admin/panel/dashboard"
+                        <a href="{{base_dir}}admin/panel/dashboard"
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
                             <i class="bi bi-house-door me-2"></i>Panel główny
                         </a>
@@ -66,13 +66,13 @@
                         </button>
                         <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="account-collapse">
                             <li class="mb-2">
-                                <a href="index.php?action=admin/panel/profile" 
+                                <a href="{{base_dir}}admin/panel/profile" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
                                     <i class="bi bi-person me-2"></i>Profil
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a href="index.php?action=admin/panel/settings" 
+                                <a href="{{base_dir}}admin/panel/settings" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
                                     <i class="bi bi-gear me-2"></i>Ustawienia
                                 </a>
@@ -80,7 +80,7 @@
                         </ul>
                     </li>
                     <li class="mb-1">
-                        <a href="index.php?action=auth/logout" class="btn btn-secondary d-inline-flex align-items-center rounded border-0 w-100 mb-3">
+                        <a href="{{base_dir}}auth/logout" class="btn btn-secondary d-inline-flex align-items-center rounded border-0 w-100 mb-3">
                             <i class="bi bi-box-arrow-left me-2"></i>
                             Wyloguj
                         </a>
@@ -93,7 +93,7 @@
                 <ul class="list-unstyled">
                     <li class="border-top my-3"></li>
                     <li class="mb-1">
-                        <a href="index.php?action=admin/panel/dashboard" type="button"
+                        <a href="{{base_dir}}admin/panel/dashboard" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
                             <i class="bi bi-house-door fs-5"></i>
@@ -101,14 +101,14 @@
                     </li>
                     <li class="border-top my-3"></li>
                     <li class="mb-1">
-                        <a href="index.php?action=admin/panel/profile" type="button"
+                        <a href="{{base_dir}}admin/panel/profile" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
                             <i class="bi bi-person fs-5"></i>
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="index.php?action=admin/panel/settings" type="button"
+                        <a href="{{base_dir}}admin/panel/settings" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Ustawienia"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
                             <i class="bi bi-gear fs-5"></i>
@@ -116,7 +116,7 @@
                     </li>
                     <li class="border-top my-3"></li>
                     <li class="mb-1">
-                        <a href="index.php?action=auth/logout" type="button"
+                        <a href="{{base_dir}}auth/logout" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj"
                             class="btn btn-secondary text-center rounded border-0 w-100 text-start lh-sm mb-3">
                             <i class="bi bi-box-arrow-left fs-5"></i>

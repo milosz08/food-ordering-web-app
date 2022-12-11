@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-10 22:08:52                   *
+ * Ostatnia modyfikacja: 2022-12-12 00:42:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -49,7 +49,7 @@ Config::set('__SMTP_PASSWORD__', $_ENV['SMTP_PASSWORD']); // hasło do konta z k
 Config::set('__SMTP_AUTO_REPLY__', 'info@restaurant.miloszgilga.pl'); // email alternatywny, używany do odpowiadania na wiadomości serwera
 
 Config::set('__SHA_SALT__', $_ENV['SHA_SALT']); // sól do algorytmu haszującego hasła
-Config::set('__DEF_APP_HOST__', 'http://localhost:5545' . $_SERVER['PHP_SELF']); // domyślny host serwera
+Config::set('__DEF_APP_HOST__', __PROTO__ . $_SERVER['HTTP_HOST'] . __URL_INIT_DIR__); // domyślny host serwera
 
 // regexy do walidacji pól formularzy
 Config::set('__REGEX_CITY__', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]{2,60}$/');
