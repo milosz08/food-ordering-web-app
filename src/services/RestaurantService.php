@@ -227,6 +227,19 @@ class RestaurantService extends MvcService
     //--------------------------------------------------------------------------------------------------------------------------------------
     
     /**
+     * Metoda odpowiadająca za pobranie szczegółów wybranej restauracji z bazy danych i zwrócenie ich do widoku. Jeśli nie znajdzie
+     * restauracji z podanym ID przypisanym do użytkownika, przekierowanie do strony z listą restauracji.
+     */
+    public function get_restaurant_details()
+    {
+        return array(
+            'res_id' => $_GET['id'] ?? 'brak id',
+        );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    
+    /**
      * Metoda odpowiadająca za usuwanie obecnej restauracji.
      * Jeśli restauracja została pomyślnie usunięta następuje (tymczasowo) przekierowanie do strony głównej.
      * dorobienie weryfikacji id podczas sesji

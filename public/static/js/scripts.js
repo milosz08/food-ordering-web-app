@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 03:34:28                   *
+ * Ostatnia modyfikacja: 2022-12-11 03:45:57                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,9 +66,22 @@ const showLogoutModalOnLoad = {
     },
 };
 
+/**
+ * Skrypt odpowiadający za ładowanie tooltipów z Bootstrapa.
+ */
+const initializeBtsTooltipsOnLoad = {
+    initializeTooltipsInvoker: function() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        tooltipTriggerList.forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
+    }
+};
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 window.addEventListener('load', function () {
+    initializeBtsTooltipsOnLoad.initializeTooltipsInvoker();
     passVisibilityUI.pswVisibilityInvoker();
     showLogoutModalOnLoad.showModalInvoker();
 });

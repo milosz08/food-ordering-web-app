@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 17:42:32                   *
+ * Ostatnia modyfikacja: 2022-12-11 02:41:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -40,6 +40,30 @@ class AdminController extends MvcController
     {
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-dashboard-view', array(
             'page_title' => 'Panel administratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=admin/panel/profile. 
+     */
+    public function panel_profile()
+    {
+        $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-profile-view', array(
+            'page_title' => 'Profil administratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=admin/panel/settings. 
+     */
+    public function panel_settings()
+    {
+        $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-settings-view', array(
+            'page_title' => 'Ustawienia',
         ));
     }
 
