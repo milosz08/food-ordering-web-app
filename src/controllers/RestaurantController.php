@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 02:42:21                   *
+ * Ostatnia modyfikacja: 2022-12-11 04:08:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,7 +66,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurant/add. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
      */
     public function panel_myrestaurant_add()
     {
@@ -82,7 +82,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurant/edit&id=?.
+     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
      */
     public function panel_myrestaurant_edit()
     {
