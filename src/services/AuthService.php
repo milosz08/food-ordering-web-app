@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 19:31:42                   *
+ * Ostatnia modyfikacja: 2022-12-11 03:17:57                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -176,7 +176,7 @@ class AuthService extends MvcService
             {
                 $query = "
                     SELECT users.id AS id, is_activated, role_id, roles.name AS role_name, CONCAT(first_name,' ', last_name) AS full_name,
-                    password
+                    password, photo_url
                     FROM users INNER JOIN roles ON users.role_id=roles.id 
                     WHERE login = :login OR email = :login
                 ";
@@ -206,6 +206,7 @@ class AuthService extends MvcService
                     'user_id' => $result['id'],
                     'user_role' => array('role_id' => $result['role_id'], 'role_name' => $result['role_name']),
                     'user_full_name' => $result['full_name'],
+                    'user_profile_image' => $result['photo_url'],
                 );
                 header('Location:index.php?action=home/welcome', true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
             }

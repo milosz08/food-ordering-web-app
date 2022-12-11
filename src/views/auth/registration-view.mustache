@@ -7,7 +7,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {{/banner.show_banner}}
-        <div class="card rounded-3 custom-card-padding">
+        <div class="card rounded-3 py-4 px-3 py-sm-5 px-sm-5">
             <form class="row" action="" method="post" novalidate>
                 <h3 class="fw-normal mb-5 text-secondary">Rejestracja</h3>
                 <div class="col-lg-6 px-4">
@@ -44,7 +44,7 @@
                             <input type="password" name="registration-password" placeholder="minimum 8 znaków"
                                 class="form-control {{form.v_password.bts_class}}" id="form-password">
                             <button type="button" class="input-group-text password-input-toggler">
-                                <span class="material-symbols-outlined">visibility</span>
+                                <i class="bi bi-eye-fill"></i>
                             </button>
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
@@ -55,7 +55,7 @@
                             <input type="password" name="registration-password-rep" placeholder="minimum 8 znaków"
                                 class="form-control {{form.v_password_rep.bts_class}}" id="form-repeat-password">
                             <button type="button" class="input-group-text password-input-toggler">
-                                <span class="material-symbols-outlined">visibility</span>
+                                <i class="bi bi-eye-fill"></i>
                             </button>
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>

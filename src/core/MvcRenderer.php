@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 23:39:35                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 17:11:08                   *
+ * Ostatnia modyfikacja: 2022-12-10 22:30:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -77,6 +77,7 @@ class MvcRenderer
             // jeśli użytkonik ustawił niestandardowy tytuł, przypisz do embed_page_title, w przeciwnym razie przypisz wartość
             // __PAGE_TITLE__ (patrz plik config.php)
             'embed_page_title' => $data['page_title'] ?? Config::get('__PAGE_TITLE__'),
+            'logged_user' => $_SESSION['logged_user'] ?? '', // dane zalogowanego użytkownika przekazywane do widoku
         ));
         echo $template->render($extended_data); // wyrenderuj, sprarsuj i wyświetl szablon
     }

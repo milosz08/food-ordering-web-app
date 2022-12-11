@@ -1,14 +1,15 @@
-<nav aria-label="breadcrumb">
+<nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/dashboard">Panel główny</a></li>
         <li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/myrestaurants">Moje restauracje</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} restaurację</li>
     </ol>
 </nav>
+<h2 class="mt-4 mb-4 text-secondary fw-normal">{{add_edit_text}} restaurację</h2>
 <div class="d-flex flex-column justify-content-center container flex-grow-1">
-    <div class="row d-flex justify-content-center align-items-center mx-auto w-100 media-large-form-size-box">
+    <div class="row d-flex justify-content-center align-items-center mx-auto w-100">
         {{#is_error}}
-        <div class="alert alert-danger mb-3 alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger mb-2 alert-dismissible fade show" role="alert">
             {{{form.error}}}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -26,7 +27,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="form-price-for-delivery" class="form-label">Cena za dostawę (powyżej 1zł)</label>
                         <div class="input-group has-validation">
-                            <input type="text" name="restaurant-delivery-price"
+                                    <input type="text" name="restaurant-delivery-price" id="form-price-for-delivery"
                                 class="form-control {{form.v_price.bts_class}}" placeholder="np. 8.00 lub 8,00"
                                 value="{{form.v_price.value}}">
                             <span class="input-group-text">zł</span>
@@ -51,7 +52,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="form-street" class="form-label">Ulica</label>
                         <input type="text" name="restaurant-street" class="form-control {{form.v_street.bts_class}}"
-                            value="{{form.v_street.value}}" placeholder="np. Długa">
+                            value="{{form.v_street.value}}" placeholder="np. Długa" id="form-street">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
                     <div class="row mb-2">

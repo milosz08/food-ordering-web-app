@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 01:01:59                   *
+ * Ostatnia modyfikacja: 2022-12-11 03:34:28                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,18 +34,28 @@ const passVisibilityUI = {
             el.addEventListener('click', function () {
                 if (inputChild.value.length === 0) return;
                 inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
-                buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
+                if (buttonIcon.classList.contains('bi-eye-slash-fill')) {
+                    buttonIcon.classList.remove('bi-eye-slash-fill');
+                    buttonIcon.classList.add('bi-eye-fill');
+                } else {
+                    buttonIcon.classList.remove('bi-eye-fill');
+                    buttonIcon.classList.add('bi-eye-slash-fill');
+                }
             });
             inputChild.addEventListener('input', function () {
                 if (this.value !== '') return;
                 inputChild.type = 'password';
-                buttonIcon.innerText = 'visibility';
+                buttonIcon.classList.remove('bi-eye-slash-fill');
+                buttonIcon.classList.add('bi-eye-fill');
             });
         };
         this.pswVisibilityBtn.forEach(invokeOnClick.bind(this), false);
     },
 };
 
+/**
+ * Skrypt pokazujący na stałe modal odpowiadający za informowanie użytkownika o poprawnym wylogowaniu
+ */
 const showLogoutModalOnLoad = {
     modalElm: document.getElementById('logout-modal'),
 

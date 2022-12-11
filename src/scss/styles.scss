@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-04 01:55:23                   *
+ * Ostatnia modyfikacja: 2022-12-11 03:30:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -21,6 +21,5 @@
  *        Należy mieć to na uwadze podczas tworzenia odwołań do klas css w innych plikach fragmentów.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-@import '_variables.fragment.scss';
 @import '_resets.fragment.scss';
 @import '_common.fragment.scss';

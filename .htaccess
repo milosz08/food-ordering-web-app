@@ -1,9 +1,6 @@
 # uruchomienie możliwości manipulowania adresem URL serwera Apache
 RewriteEngine On
 
-# zablokowanie możliwości przeglądania katalogów projektu z poziomu przeglądarki
-Options -Indexes
-
 # ustawienie domyślnego katalogu aplikacji (domyślnego katalogu w którym mają obowiązywać reguły przepisywania adresu URL)
 RewriteBase /restaurant-project-php-si/ 
 
