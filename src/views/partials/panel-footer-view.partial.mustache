@@ -1,0 +1,22 @@
+<footer class="px-5 py-3 mt-5 bg-dark text-white-50 fw-normal">
+    <div class="container">
+        <div class="row align-items-center hstack">
+            <div class="col-md-4 mb-4 mb-md-0"><span class="text-light">CMS </span>Panel v1.0 by Dobre.pl</div>
+            <div class="col-md-8 hstack gap-3">
+                <div class="vr d-none d-md-block"></div>
+                <div>
+                    <p class="my-0">
+                        Zalogowano na konto:
+                        <span class="text-light">
+                            ({{logged_user.user_full_name}}#{{logged_user.user_id}})
+                        </span>
+                        <a class="text-secondary" href="index.php?action=auth/logout">(Wyloguj)</a>
+                    </p>
+                    <p class="my-0">
+                        Sesja aktywna. Przydział praw: <span class="text-light">{{logged_user.user_role.role_name}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

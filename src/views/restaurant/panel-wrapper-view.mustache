@@ -1,102 +1,193 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid d-flex justify-content-start mx-3">
-        <a class="navbar-brand" href="index.php?action=restaurant/panel/dashboard">
-            <span class="material-symbols-outlined"> storefront</span> Panel restauratora</a>
+<nav class="d-flex justify-content-between navbar fixed-top bg-dark bg-gradient">
+    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="index.php?action=restaurant/panel/dashboard">
+        CMS | <span class="text-white-50">Panel restauratora</span>
+    </a>
+    <div class="dropdown d-block d-md-none">
+        <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="text-light fs-5 fw-normal ms-3 me-1">
+                CMS | <span class="text-white-50">Panel restauratora</span>
+            </span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/dashboard">
+                <i class="bi bi-house-door me-2"></i>Panel główny</a>
+            </li>
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/orders">
+                <i class="bi bi-cart3 me-2"></i>Zamówienia</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/myrestaurants">
+                <i class="bi bi-shop me-2"></i>Moje restauracje</a>
+            </li>
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/myrestaurant/add">
+                <i class="bi bi-plus-circle me-2"></i>Dodaj restaurację</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/profile">
+                <i class="bi bi-person me-2"></i>Profil
+            </a></li>
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/settings">
+                <i class="bi bi-gear me-2"></i>Ustawienia
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="index.php?action=auth/logout">
+                <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+            </a></li>
+        </ul>
     </div>
-    <div class="container-fluid d-flex justify-content-end mx-3">
-        <div class="dropdown">
-            <a href="#"
-                class="d-flex align-items-center text-white link-black text-decoration-none dropdown-toggle mx-3"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>User</strong>
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href="#">Opcje</a></li>
-                <li><a class="dropdown-item" href="#">Profil</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="index.php?action=auth/logout">Wyloguj</a></li>
-            </ul>
-        </div>
+    <div class="dropdown">
+        <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+            <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/profile">
+                <i class="bi bi-person me-2"></i>Profil
+            </a></li>
+            <li><a class="dropdown-item" href="index.php?action=restaurant/panel/settings">
+                <i class="bi bi-gear me-2"></i>Ustawienia
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="index.php?action=auth/logout">
+                <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+            </a></li>
+        </ul>
     </div>
-
 </nav>
-<div class="container-fluid">
-    <div class="row flex-nowrap ">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark position-fixed">
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 ">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none ">
-                    <span class="fs-5 d-none d-sm-inline ">Menu</span>
-                </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start "
-                    id="menu">
-                    <li class="nav-item ">
-                        <a href="index.php?action=home/welcome" class="nav-link align-middle px-0 text-white bg-dark">
-                            <span class="material-symbols-outlined">home</span> <span
-                                class="ms-1 d-none d-sm-inline">Strona główna</span>
+<div class="container-fluid d-flex flex-column flex-fill">
+    <div class="row flex-fill flex-nowrap">
+        <div class="col-2 d-none d-xl-block">
+            <nav class="sticky-top panel-left-nav">
+                <div class="border-top my-3"></div>
+                <ul class="list-unstyled">
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/dashboard"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-house-door me-2"></i>Panel główny
                         </a>
                     </li>
-                    <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-speedometer2"></i> <span
-                                class="ms-1 d-none d-sm-inline text-white bg-dark"><span
-                                    class="material-symbols-outlined">
-                                    chevron_right</span>Restauracja</span> </a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0 text-white bg-dark"> <span
-                                        class="d-none d-sm-inline">Dodaj restauracje
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/orders"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
+                            <i class="bi bi-cart3 me-2"></i>Zamówienia
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#res-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Restauracje
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="res-collapse">
+                            <li class="mb-2">
+                                <a href="index.php?action=restaurant/panel/myrestaurants" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <i class="bi bi-shop me-2"></i>Moje restauracje
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="nav-link px-0 text-white bg-dark"> <span
-                                        class="d-none d-sm-inline">Usuń restauracje</a>
+                            <li class="mb-2">
+                                <a href="index.php?action=restaurant/panel/myrestaurant/add" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <i class="bi bi-plus-circle me-2"></i>Dodaj restaurację
+                                </a>
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-bootstrap"></i> <span
-                                class="ms-1 d-none d-sm-inline text-white bg-dark"><span
-                                    class="material-symbols-outlined">
-                                    chevron_right</span>Dania</span></a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0 text-white bg-dark"> <span
-                                        class="d-none d-sm-inline">Dodaj danie </a>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Moje konto
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="account-collapse">
+                            <li class="mb-2">
+                                 <a href="index.php?action=restaurant/panel/profile" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <i class="bi bi-person me-2"></i>Profil
+                                </a>
                             </li>
-                            <li>
-                                <a href="#" class="nav-link px-0 text-white bg-dark"> <span
-                                        class="d-none d-sm-inline">Usuń danie</a>
+                            <li class="mb-2">
+                                <a href="index.php?action=restaurant/panel/settings" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <i class="bi bi-gear me-2"></i>Ustawienia
+                                </a>
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="index.php?action=auth/register" class="nav-link px-0 align-middle">
-                            <span class="material-symbols-outlined text-white bg-dark">app_registration</span>
-                            <span class="ms-1 d-none d-sm-inline text-white bg-dark">Rejestracja</span></a>
+                    <li class="mb-1">
+                        <a href="index.php?action=auth/logout" class="btn btn-secondary d-inline-flex align-items-center rounded border-0 w-100 mb-3">
+                            <i class="bi bi-box-arrow-left me-2"></i>
+                            Wyloguj
+                        </a>
+                    </li>    
+                </ul>
+            </nav>
+        </div>
+        <div class="col-fixed-panel-nav d-none d-md-block d-xl-none">
+            <nav class="sticky-top panel-left-nav">
+                <ul class="list-unstyled">
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/dashboard" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-house-door fs-5"></i>
+                        </a>
                     </li>
-                    <li>
-                        <a href="index.php?action=auth/login" class="nav-link px-0 align-middle">
-                            <span class="material-symbols-outlined text-white bg-dark">login</span>
-                            <span class="ms-1 d-none d-sm-inline text-white bg-dark">Logowanie</span></a>
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/orders" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Zamówienia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-cart3 fs-5"></i>
+                        </a>
                     </li>
-                    <li>
-                        <a href="index.php?action=restaurant/panel/myrestaurants"
-                            class="nav-link px-0 align-middle text-white bg-dark">
-                            <span class="material-symbols-outlined">format_list_bulleted</span>
-                            <span class="ms-1 d-none d-sm-inline">Lista restauracji</span> </a>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/myrestaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje restauracje"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-shop fs-5"></i>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/myrestaurant/add" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj restaurację"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-plus-circle fs-5"></i>
+                        </a>
+                    </li>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/profile" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-person fs-5"></i>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="index.php?action=restaurant/panel/settings" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Ustawienia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <i class="bi bi-gear fs-5"></i>
+                        </a>
+                    </li>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <a href="index.php?action=auth/logout" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj"
+                            class="btn btn-secondary text-center rounded border-0 w-100 text-start lh-sm mb-3">
+                            <i class="bi bi-box-arrow-left fs-5"></i>
+                        </a>
                     </li>
                 </ul>
-                <hr>
-
-            </div>
+            </nav>
         </div>
-        <div class="col py-3 mt-5 pl-3" style="margin-left: 17%">
-            {{{ embed_rendering_section }}}
+        <div class="col pt-5 px-0 mt-5 mh-100 shadow d-flex flex-column justify-content-between">
+            <main class="px-3 px-sm-5">
+                {{{ embed_rendering_section }}}
+            </main>
+            {{> partials/panel-footer-view.partial }}
         </div>
     </div>
 </div>
