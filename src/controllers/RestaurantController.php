@@ -54,13 +54,12 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurants()
     {
-        $restaurant_table = $this->_service->create_restaurant_table();
+        $restaurant_table = $this->_service->get_user_restaurants();
         $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
             'page_title' => 'Moje restauracje',
             'banner' => $mainpulate_restaurant_banner,
-            'items' => $restaurant_table['user_restaurant'],
-            'list' => $restaurant_table['pagination'],
+            'data' => $restaurant_table,
         ));
     }
 
@@ -97,7 +96,7 @@ class RestaurantController extends MvcController
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurant/details&id=?.
      */

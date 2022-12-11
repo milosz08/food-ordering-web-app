@@ -15,13 +15,13 @@
 
 namespace App\Services;
 
-use App\Models\RestaurantModel;
 use PDO;
 use Exception;
 
 use App\Utils\Utils;
 use App\Core\Config;
 use App\Core\MvcService;
+use App\Models\RestaurantModel;
 
 class RestaurantService extends MvcService
 {
@@ -231,7 +231,7 @@ class RestaurantService extends MvcService
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * Metoda odpowiadająca za pobranie szczegółów wybranej restauracji z bazy danych i zwrócenie ich do widoku. Jeśli nie znajdzie
      * restauracji z podanym ID przypisanym do użytkownika, przekierowanie do strony z listą restauracji.
@@ -308,27 +308,58 @@ class RestaurantService extends MvcService
         return $images_paths;
     }
 
-    public function create_restaurant_table()
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda odpowiadająca za tworzenie tabeli w zakładce 'Lista restauracji'.
+     * Tabela przechowuje kolejno wszystkie restauracje, które posiada zalogowany użytkownik.
+     * Tabela przechowuje poszczególne informacje o restauracji, a także przyciski odpowiadające za przejście
+     * do zakładki edytowania wybranej restauracji oraz jej usunięcie. Tabela została wzbogacona o funkcję paginacji, 
+     * wyświetlającej tylko 6 elementów na jednej ze stron.
+     */
+    public function get_user_restaurants()
     {
+        $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
+        $user_restaurants = array(); // tablica 
         try {
-            $i = 1;
-            $it = array();
-            $user_restaurant = array();
-            $query = "SELECT  name, street, building_locale_nr, post_code, city, delivery_price, id FROM restaurants WHERE user_id = ? ";
+            $max_res_number = 1; // deklaracja zmiennej odpowiadającej za maksymalną liczbę wierszy wyświetlanej na stronie
+            $res_sum_number = 1; // deklaracja zmiennej przechowującą sume zliczonych restauracji
+            $page = $_GET['page'] ?? 0; // pobranie indeksu paginacji
+            
+            // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
+            $query = "SELECT  name, street, building_locale_nr, post_code, city, accept, id FROM restaurants WHERE user_id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
             
-            while($restaurant = $statement->fetchObject(RestaurantModel::class)) // przejdź przez wszystkie rekordy
+            // 'while' odpowiadada za przejście przez wszystkie znaleznione rekordy
+            while($restaurant = $statement->fetchObject(RestaurantModel::class)) 
             {
-                array_push($user_restaurant, array('res' => $restaurant, 'iterator' => $i) );
-                $i++;
+                // 'if' sprawdza warunek dla kolejnych stron paginacji, aby wpisać odpowiednie elementy do tablicy dla danych przedziałów
+                if (($res_sum_number > $page*6) && (($page*7+$max_res_number) < ($page*7+7)) )
+                {
+                    // wkładanie do tablicy $user_restaurant poszczególnych restauracji wraz z ich numerem w kolejności
+                    array_push($user_restaurants, array(
+                        'res' => $restaurant,
+                        'status' => array(
+                            'text' => empty($restaurant->accept) ? 'oczekująca' : 'aktywna',
+                            'color_bts' => empty($restaurant->accept) ? 'text-danger' : 'text-success',
+                            'tooltip_text' => empty($restaurant->accept)
+                                ? 'Zostało wysłane zgłoszenie do administratora systemu, po akceptacji zmieni status na "aktywna"'
+                                : 'Restauracja widoczna jest dla wszystkich użytkowników',
+                        ),
+                        'iterator' => $res_sum_number,
+                    ));
+                    $max_res_number++; // maksymalna wartość zmiennej wyniesie 7, czyli 6 restauracji na strone
+                }
+                $res_sum_number++; // zliczanie restauracji
             }
-            $pagination = array();
-            $j = 1;
-            while($j < var_dump((int)$i / 6))
+            $i = 0; // zmienna pomocnicza
+            // W zależności od posiadanych restauracji podzielonych przez 6, tyle razy wykona się pętla 
+            while($i < (($res_sum_number-1)/6))
             {
-                array_push($paginationm, array('page' => var_dump((int) $i / 6)));
-                $j++;
+                // dodawanie iteracji do tablicy $pagination
+                array_push($pagination, array('page' => $i+1, 'i' => $i));
+                $i++;
             }
         }
         catch (Exception $e)
@@ -336,8 +367,9 @@ class RestaurantService extends MvcService
             $this->_banner_message = $e->getMessage();
         }
         return array(
+            'elm_count' => 20,
             'pagination' => $pagination,
-            'user_restaurant' => $user_restaurant,
+            'user_restaurants' => $user_restaurants,
         );
     }
     

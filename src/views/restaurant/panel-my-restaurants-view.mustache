@@ -1,4 +1,4 @@
-<nav aria-label="breadcrumb">
+<nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php?action=restaurant/panel/dashboard">Panel główny</a></li>
         <li class="breadcrumb-item active" aria-current="page">Moje restauracje</li>
@@ -10,62 +10,107 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{/banner.show_banner}}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Lp</th>
-            <th>Nazwa Restauracji</th>
-            <th>Dane adresowe</th>
-            <th>Cena Dostawy</th>
-            <th>Akcja</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#items}}
-        <tr>
-            <td class="align-middle">{{iterator}}</td>
-            <td class="align-middle">{{res.name}}</td>
-            <td class="align-middle">ul. {{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}</td>
-            <td class="align-middle">{{res.delivery_price}}</td>
-            <td>
-                <div class="d-grid gap-2 d-md-block">
+<div class="container-fluid px-0">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-lg-6 mb-3"><h2 class="text-secondary fw-light mb-0">Moje restauracje</h2></div>
+        <form class="col-lg-3 mb-3 d-flex justify-content-end" action="">
+            <input type="text" name="search-res-name" placeholder="szukaj po nazwie" class="form-control">
+            <button type="submit" name="search-res-button" class="btn btn-primary btn-md ms-2 py-2">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="table-responsive-xxl">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lp</th>
+                <th>Nazwa Restauracji</th>
+                <th class="d-none d-lg-table-cell">Dane adresowe</th>
+                <th>Status</th>
+                <th class="fit">Akcja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#data.user_restaurants}}
+            <tr>
+                <td class="align-middle">{{iterator}}</td>
+                <td class="align-middle">{{res.name}}</td>
+                <td class="align-middle d-none d-lg-table-cell">
+                    ul. {{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}
+                </td>
+                <td class="align-middle {{status.color_bts}}">{{status.text}}</td>
+                <td class="align-middle fit flex-nowrap">
                     <a href="index.php?action=restaurant/panel/myrestaurant/edit&id={{res.id}}" class="btn btn-primary"
-                        role="button">Edytuj</a>
-                    <button class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#delete-res-modal">Usuń</button>
-                </div>
-            </td>
-        </tr>
-        <div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji
-                        operacji nie można będzie
-                        cofnąć.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                        <a class="btn btn-outline-danger"
-                            href="index.php?action=restaurant/panel/myrestaurant/delete&id={{res.id}}">Usuń</a>
+                        type="button">
+                        Edytuj
+                    </a>
+                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#delete-res-modal">
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Usuń restaurację" type="button">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                    </button>
+                    <a href="index.php?action=restaurant/panel/myrestaurant/details&id={{res.id}}" class="btn btn-primary ms-2"
+                        type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Szczegóły restauracji">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </td>
+            </tr>
+            <div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji operacji nie można
+                            będzie cofnąć.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                            <a class="btn btn-outline-danger" href="index.php?action=restaurant/panel/myrestaurant/delete&id={{res.id}}">
+                                Usuń
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            {{/data.user_restaurants}}
+        </tbody>
+    </table>
+</div>
+<div class="container-fluid px-0">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-md-6 mb-3 dropdown">
+            <span class="me-2 text-secondary">Elementów na stronie</span>
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{data.elm_count}}
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">5</a></li>
+                <li><a class="dropdown-item" href="#">10</a></li>
+                <li><a class="dropdown-item" href="#">15</a></li>
+                <li><a class="dropdown-item" href="#">20</a></li>
+                <li><a class="dropdown-item" href="#">50</a></li>
+            </ul>
         </div>
-        {{/items}}
-    </tbody>
-</table>
-<nav aria-label="Page navigation example">
-    <ul class="pagination pagination-sm">
-        <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-    </ul>
-</nav>
+        <nav class="col-md-6 d-flex justify-content-end" aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
+                </li>
+                {{#data.pagination}}
+                <li class="page-item">
+                    <a class="page-link" href="index.php?action=restaurant/panel/myrestaurants&page={{i}}">{{page}}</a>
+                </li>
+                {{/data.pagination}}
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
