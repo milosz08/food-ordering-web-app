@@ -14,41 +14,55 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {{/is_error}}
-        <div class="card rounded-3 custom-card-padding">
+        <div class="py-4 px-0">
             <form class="row" action="" method="post" novalidate>
-                <h3 class="fw-normal mb-5 text-secondary">{{add_edit_text}} restaurację</h3>
-                <div class="col-lg-6 px-4">
-                    <div class="col-md-12 mb-3">
-                        <label for="form-add-restaurant" class="form-label">Nazwa restauracji</label>
-                        <input type="text" name="restaurant-name" class="form-control {{form.v_name.bts_class}}"
-                            placeholder="np. Bar Bistro" value="{{form.v_name.value}}">
-                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="form-price-for-delivery" class="form-label">Cena za dostawę (powyżej 1zł)</label>
-                        <div class="input-group has-validation">
+                <div class="col-xl-8 px-4">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="col-md-12 mb-3">
+                                <label for="form-name-restaurant" class="form-label">Nazwa restauracji</label>
+                                <input type="text" name="restaurant-name" class="form-control {{form.v_name.bts_class}}"
+                                    placeholder="np. Bar Bistro" value="{{form.v_name.value}}" id="form-name-restaurant">
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="form-price-for-delivery" class="form-label">Cena za dostawę (powyżej 1zł)</label>
+                                <div class="input-group has-validation">
                                     <input type="text" name="restaurant-delivery-price" id="form-price-for-delivery"
-                                class="form-control {{form.v_price.bts_class}}" placeholder="np. 8.00 lub 8,00"
-                                value="{{form.v_price.value}}">
-                            <span class="input-group-text">zł</span>
+                                        class="form-control {{form.v_price.bts_class}}" placeholder="np. 8.00 lub 8,00"
+                                        value="{{form.v_price.value}}">
+                                    <span class="input-group-text">zł</span>
+                                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="col-md-12 mb-3">
+                                <label for="file-banner" class="form-label">{{add_edit_text}} baner restauracji</label>
+                                <input id="file-banner" class="form-control {{form.v_banner.bts_class}}" type="file"
+                                    name="restaurant-banner" accept="image/png,image/jpeg,image/jpg" />
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="file-profile" class="form-label">{{add_edit_text}} zdjęcie główne
+                                    restauracji</label>
+                                <input id="file-profile" class="form-control {{form.v_profile.bts_class}}" type="file"
+                                    name="restaurant-profile" accept="image/png,image/jpeg,image/jpg" />
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="form-desc-restaurant" class="form-label">Opis restauracji</label>
+                            <textarea name="restaurant-description" class="form-control {{form.v_description.bts_class}}" rows="3"
+                                placeholder="Krótki opis restauracji, maksymalnie 1000 znaków." id="form-desc-restaurant" maxlength="1000"
+                            >{{form.v_description.value}}</textarea>
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="file-banner" class="form-label">{{add_edit_text}} baner restauracji</label>
-                        <input id="file-banner" class="form-control {{form.v_banner.bts_class}}" type="file"
-                            name="restaurant-banner" accept="image/png,image/jpeg,image/jpg" />
-                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="file-profile" class="form-label">{{add_edit_text}} zdjęcie główne
-                            restauracji</label>
-                        <input id="file-profile" class="form-control {{form.v_profile.bts_class}}" type="file"
-                            name="restaurant-profile" accept="image/png,image/jpeg,image/jpg" />
-                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                    </div>
                 </div>
-                <div class="col-lg-6 px-4">
+                <div class="col-xl-4 px-4">
                     <div class="col-md-12 mb-3">
                         <label for="form-street" class="form-label">Ulica</label>
                         <input type="text" name="restaurant-street" class="form-control {{form.v_street.bts_class}}"

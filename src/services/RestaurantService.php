@@ -55,11 +55,12 @@ class RestaurantService extends MvcService
                 $v_street = Utils::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
                 $v_banner = Utils::validate_image_regex('restaurant-banner');
                 $v_profile = Utils::validate_image_regex('restaurant-profile');
+                $v_description = Utils::validate_field_regex('restaurant-description', Config::get('__REGEX_DESCRIPTION__'));
                 
                 $this->dbh->beginTransaction();
 
                 if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] || $v_street['invl'] || 
-                      $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'])) 
+                      $v_building_no['invl'] ||$v_post_code['invl'] || $v_city['invl'] || $v_description['invl'])) 
                 {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
                     $query = "
@@ -78,12 +79,13 @@ class RestaurantService extends MvcService
                     
                     // Sekcja zapytań dodająca wprowadzone dane do tabeli restaurants
                     $query = "
-                        INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city) VALUES (?,?,?,?,?,?)
+                        INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city, description)
+                        VALUES (?,?,?,?,?,?,?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
                         $v_name['value'], $v_price['value'], $v_street['value'], $v_building_no['value'], $v_post_code['value'],
-                        $v_city['value'],
+                        $v_city['value'], $v_description['value'],
                     ));
                     // Sekcja zapytań zwracająca id ostatnio dodanej restauracji
                     $query = "SELECT id FROM restaurants ORDER BY id DESC LIMIT 1";
@@ -123,6 +125,7 @@ class RestaurantService extends MvcService
                 'v_building_no' => $v_building_no,
                 'v_post_code' => $v_post_code,
                 'v_city' => $v_city,
+                'v_description' => $v_description,
                 'error' => $this->_banner_message,
             );
         }
@@ -137,7 +140,6 @@ class RestaurantService extends MvcService
         try
         {
             if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
-
             $this->dbh->beginTransaction();
 
             // Zapytanie zwracające aktualne wartości edytowanej restauracji z bazy danych
@@ -153,6 +155,7 @@ class RestaurantService extends MvcService
             $v_post_code = array('value' => $restaurant[0]['post_code'], 'invl' => false, 'bts_class' => '');
             $v_city = array('value' => $restaurant[0]['city'], 'invl' => false, 'bts_class' => '');
             $v_price = array('value' => $restaurant[0]['delivery_price'], 'invl' => false, 'bts_class' => '');
+            $v_description = array('value' => $restaurant[0]['description'], 'invl' => false, 'bts_class' => '');
 
             if (isset($_POST['restaurant-button']))
             {
@@ -164,9 +167,10 @@ class RestaurantService extends MvcService
                 $v_building_no = Utils::validate_field_regex('restaurant-building-no', '/^[0-9]{1,5}$/');
                 $v_post_code = Utils::validate_field_regex('restaurant-post-code', '/^[0-9]{2}-[0-9]{3}$/');
                 $v_city = Utils::validate_field_regex('restaurant-city', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,60}$/');
+                $v_description = Utils::validate_field_regex('restaurant-description', Config::get('__REGEX_DESCRIPTION__'));
 
                 if (!($v_name['invl'] || $v_price['invl'] || $v_banner['invl'] || $v_profile['invl'] || $v_street['invl'] ||
-                      $v_building_no['invl'] || $v_post_code['invl'] || $v_city['invl']))
+                      $v_building_no['invl'] || $v_post_code['invl'] || $v_city['invl'] || $v_description['invl']))
                 {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
                     $query = "
@@ -186,15 +190,16 @@ class RestaurantService extends MvcService
                     $v_price = str_replace(',', '.', $v_price);
                     $query = "
                         UPDATE restaurants SET name = ?, delivery_price = ?, street = ?, building_locale_nr = ?, 
-                        post_code = ?, city = ?, baner_url = ?, profile_url = ? WHERE id = ?
+                        post_code = ?, city = ?, baner_url = ?, profile_url = ?, description = ?
+                        WHERE id = ?
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
                         $v_name['value'], $v_price['value'], $v_street['value'], $v_building_no['value'], $v_post_code['value'],
-                        $v_city['value'], $photos['banner'], $photos['profile'], $_GET['id']
+                        $v_city['value'], $photos['banner'], $photos['profile'], $v_description['value'], $_GET['id']
                     ));
                     $statement->closeCursor();
-                    $this->_banner_message = 'Restauracja została pomyślnie zedytowana.';
+                    $this->_banner_message = 'Pomyślnie wprowadzono nowe dane dla restauracji <strong>' . $v_name['value'] . '</strong>.';
 
                     $_SESSION['manipulate_restaurant_banner'] = array(
                         'banner_message' => $this->_banner_message,
@@ -220,6 +225,7 @@ class RestaurantService extends MvcService
             'v_building_no' => $v_building_no,
             'v_post_code' => $v_post_code,
             'v_city' => $v_city,
+            'v_description' => $v_description,
             'error' => $this->_banner_message,
         );
     }

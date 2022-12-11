@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 19:30:31                   *
+ * Ostatnia modyfikacja: 2022-12-10 22:08:52                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -61,3 +61,4 @@ Config::set('__REGEX_LOGIN__', '/^[a-zA-Z0-9]{5,30}$/');
 Config::set('__REGEX_LOGINEMAIL__', '/^[a-zA-Z0-9@.]{5,100}$/');
 Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
 Config::set('__REGEX_OTA__', '/^[0-9A-Za-z]{10,}$/');
+Config::set('__REGEX_DESCRIPTION__', '/^.{10,1000}$/');
