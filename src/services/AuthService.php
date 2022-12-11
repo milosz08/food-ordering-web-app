@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 03:17:57                   *
+ * Ostatnia modyfikacja: 2022-12-11 22:01:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -125,7 +125,8 @@ class AuthService extends MvcService
                     $statement_id->closeCursor();
                     $this->_banner_message = '
                         Twoje konto zostało pomyślnie stworzone. Aby móc zalogować się na konto, musisz je aktywować przy pomocy linku
-                        wysłanego na podany podczas rejestracji adres email.
+                        wysłanego na podany podczas rejestracji adres email. Nieaktywowane konto w przeciągu <strong><48 godzin/strong>
+                        zostanie automatycznie usunięte z systemu.
                     ';
                     $_SESSION['successful_register_user'] = array(
                         'banner_message' => $this->_banner_message,
