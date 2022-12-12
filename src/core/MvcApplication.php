@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 23:32:11                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 03:52:09                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2022-12-12 01:56:39                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
@@ -67,7 +67,9 @@ class MvcApplication
         }
         catch (ReflectionException $e) // jeśli złapie wyjątek, wyświetl stronę błędu 404
         {
-            $this->_renderer_instance->render('_not-found-view'); // renderuj widok błędu 404
+            $this->_renderer_instance->render('_not-found-view', array( // renderuj widok błędu 404
+                'page_title' => '404',
+            ));
             die; // zakończ działanie skryptu
         }
     }
