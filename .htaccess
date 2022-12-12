@@ -10,14 +10,17 @@
     # uruchom silnik przepisywania adresu URL
     RewriteEngine On 
     # ustaw bazową ścieżkę na folder aplikacji
-    RewriteBase /restaurant-project-php-si/
+    RewriteBase /
+    # dynamiczne pozyskanie ścieżki głównej folderu aplikacji i wstawienie do zmiennej środowiskowej BASE
+    RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+    RewriteRule ^(.*)$ - [E=BASE:%1]
     # wyklucz pliki z głównego katalogu projektu do przeglądania przez użytkowników
     RewriteRule ^(vendor/(.*)?|composer\.(lock|json)|\.(env|gitignore)|README.md)$ / [F,L]
     # jeśli podawana ścieżka nie odnosi się do pliku lub katalogu, przeprowadź przepisanie adresu
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     # przepisz podany parametr action na ścieżkę, np. index.php?action=home/welcome -> /home/welcome
-    RewriteRule ^(.+)$ public/index.php?action=$1 [NC,QSA,L]
+    RewriteRule ^(.+)$ %{ENV:BASE}/public/index.php?action=$1 [NC,QSA,L]
     # jeśli ścieżka zawiera parametry index.php?action=home/welcome przekieruj na stronę ROOT /
-    RewriteRule ^$ public/index.php?action=home/welcome [NC,QSA,L]
+    RewriteRule ^$ %{ENV:BASE}/public/index.php?action=home/welcome [NC,QSA,L]
 </IfModule>
