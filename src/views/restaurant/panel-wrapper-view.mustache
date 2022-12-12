@@ -24,13 +24,9 @@
                 <i class="bi bi-plus-circle me-2"></i>Dodaj restaurację</a>
             </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/profile">
-                <i class="bi bi-person me-2"></i>Profil
+            <li><a class="dropdown-item" href="{{base_dir}}">
+                <i class="bi bi-house-up me-2"></i>Strona główna
             </a></li>
-            <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/settings">
-                <i class="bi bi-gear me-2"></i>Ustawienia
-            </a></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
                 <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
             </a></li>
@@ -50,6 +46,9 @@
                 <i class="bi bi-gear me-2"></i>Ustawienia
             </a></li>
             <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{base_dir}}">
+                <i class="bi bi-house-up me-2"></i>Strona główna
+            </a></li>
             <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
                 <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
             </a></li>
@@ -95,7 +94,7 @@
                         </ul>
                     </li>
                     <li class="border-top my-3"></li>
-                    <li class="mb-1">
+                    <li class="mb-3">
                         <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
                             data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
                             <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Moje konto
@@ -115,12 +114,16 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}auth/logout" class="btn btn-secondary d-inline-flex align-items-center rounded border-0 w-100 mb-3">
-                            <i class="bi bi-box-arrow-left me-2"></i>
-                            Wyloguj
+                    <li class="mb-2">
+                        <a href="{{base_dir}}" class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
+                            <i class="bi bi-house-up me-2"></i>Strona główna
                         </a>
-                    </li>    
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{base_dir}}auth/logout" class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100">
+                            <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -174,9 +177,16 @@
                     </li>
                     <li class="border-top my-3"></li>
                     <li class="mb-1">
+                        <a href="{{base_dir}}" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Strona główna"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm mb-3">
+                            <i class="bi bi-house-up fs-5"></i>
+                        </a>
+                    </li>
+                    <li class="mb-1">
                         <a href="{{base_dir}}auth/logout" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj"
-                            class="btn btn-secondary text-center rounded border-0 w-100 text-start lh-sm mb-3">
+                            class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3">
                             <i class="bi bi-box-arrow-left fs-5"></i>
                         </a>
                     </li>

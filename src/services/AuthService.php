@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 22:01:32                   *
+ * Ostatnia modyfikacja: 2022-12-12 01:02:17                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -207,7 +207,7 @@ class AuthService extends MvcService
                     'user_id' => $result['id'],
                     'user_role' => array('role_id' => $result['role_id'], 'role_name' => $result['role_name']),
                     'user_full_name' => $result['full_name'],
-                    'user_profile_image' => $result['photo_url'],
+                    'user_profile_image' => $result['photo_url'] ?? 'static/images/default-profile-image.svg',
                 );
                 header('Location:' . __URL_INIT_DIR__, true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
             }
