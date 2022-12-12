@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 04:07:38                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-12 19:16:58                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -321,53 +321,85 @@ class RestaurantService extends MvcService
     {
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
         $user_restaurants = array(); // tablica 
+        
         try {
-            $max_res_number = 1; // deklaracja zmiennej odpowiadającej za maksymalną liczbę wierszy wyświetlanej na stronie
-            $res_sum_number = 1; // deklaracja zmiennej przechowującą sume zliczonych restauracji
-            $page = $_GET['page'] ?? 0; // pobranie indeksu paginacji
+            $this->dbh->beginTransaction();
+
+            $res_index = 1; //index restauracji w tabeli
+            $thispage = $_GET['page'] ?? 0; // pobranie indeksu paginacji
+            $page = $thispage * 5;
+            $elements = $_GET['el'] ?? 5;
+
+            if(isset($_POST['search-res-button']))
+                $like = $_POST['search-res-name'];
+            else
+                $like = "";
+
             
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
-            $query = "SELECT  name, street, building_locale_nr, post_code, city, accept, id FROM restaurants WHERE user_id = ?";
+            $query = "SELECT  name, street, building_locale_nr, post_code, city, accept, id FROM restaurants WHERE user_id = :id  
+            AND name LIKE CONCAT ('%', :search, '%') LIMIT :el OFFSET :p";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindParam(':id', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->bindParam(':el', $elements, PDO::PARAM_INT);
+            $statement->bindParam(':p', $page, PDO::PARAM_INT);
+            $statement->bindParam(':search', $like, PDO::PARAM_STR);
+            $statement->execute();
+
+
+            // 'while' odpowiadada za przejście przez wszystkie znaleznione rekordy
+            while ($restaurant = $statement->fetchObject(RestaurantModel::class)) {
+                // wkładanie do tablicy $user_restaurant poszczególnych restauracji wraz z ich numerem w kolejności
+                array_push($user_restaurants, array(
+                    'res' => $restaurant,
+                    'status' => array(
+                        'text' => empty($restaurant->accept) ? 'oczekująca' : 'aktywna',
+                        'color_bts' => empty($restaurant->accept) ? 'text-danger' : 'text-success',
+                        'tooltip_text' => empty($restaurant->accept)
+                        ? 'Zostało wysłane zgłoszenie do administratora systemu, po akceptacji zmieni status na "aktywna"'
+                        : 'Restauracja widoczna jest dla wszystkich użytkowników',
+                    ),
+                    'iterator' => $res_index+$page,
+                )
+                );
+                $res_index++;
+            }
+
+            // zapytanie zliczające wszystkie restauracje przypisane do użytkownika
+            $query = "SELECT count(id) FROM restaurants WHERE user_id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
-            
-            // 'while' odpowiadada za przejście przez wszystkie znaleznione rekordy
-            while($restaurant = $statement->fetchObject(RestaurantModel::class)) 
-            {
-                // 'if' sprawdza warunek dla kolejnych stron paginacji, aby wpisać odpowiednie elementy do tablicy dla danych przedziałów
-                if (($res_sum_number > $page*6) && (($page*7+$max_res_number) < ($page*7+7)) )
-                {
-                    // wkładanie do tablicy $user_restaurant poszczególnych restauracji wraz z ich numerem w kolejności
-                    array_push($user_restaurants, array(
-                        'res' => $restaurant,
-                        'status' => array(
-                            'text' => empty($restaurant->accept) ? 'oczekująca' : 'aktywna',
-                            'color_bts' => empty($restaurant->accept) ? 'text-danger' : 'text-success',
-                            'tooltip_text' => empty($restaurant->accept)
-                                ? 'Zostało wysłane zgłoszenie do administratora systemu, po akceptacji zmieni status na "aktywna"'
-                                : 'Restauracja widoczna jest dla wszystkich użytkowników',
-                        ),
-                        'iterator' => $res_sum_number,
-                    ));
-                    $max_res_number++; // maksymalna wartość zmiennej wyniesie 7, czyli 6 restauracji na strone
-                }
-                $res_sum_number++; // zliczanie restauracji
-            }
+            $res_sum_number = $statement->fetchColumn();
+
             $i = 0; // zmienna pomocnicza
             // W zależności od posiadanych restauracji podzielonych przez 6, tyle razy wykona się pętla 
-            while($i < (($res_sum_number-1)/6))
-            {
+            while ($i < (($res_sum_number+1)/$elements)) {
                 // dodawanie iteracji do tablicy $pagination
-                array_push($pagination, array('page' => $i+1, 'i' => $i));
+                array_push($pagination, array('page' => $i + 1, 
+                    'i' => $i,
+                    'previous' =>  $i - 1));
                 $i++;
             }
+            
+            $previous = $thispage;
+            $next = $thispage;
+            // Obsługa strzałek w paginacji
+            if($thispage > 0) 
+                $previous = $thispage - 1;
+            if ($thispage < $i-1)
+                $next = $thispage + 1;
+            $this->dbh->commit();
         }
         catch (Exception $e)
         {
+            $this->dbh->rollback();
             $this->_banner_message = $e->getMessage();
         }
         return array(
-            'elm_count' => 20,
+            'element' => $elements,
+            'previous' => $previous,
+            'next' => $next,
+            'elm_count' => 5,
             'pagination' => $pagination,
             'user_restaurants' => $user_restaurants,
         );
