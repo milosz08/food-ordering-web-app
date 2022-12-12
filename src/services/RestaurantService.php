@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-12 19:16:58                   *
+ * Ostatnia modyfikacja: 2022-12-12 19:20:13                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -79,13 +79,13 @@ class RestaurantService extends MvcService
                     
                     // Sekcja zapytań dodająca wprowadzone dane do tabeli restaurants
                     $query = "
-                        INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city, description)
-                        VALUES (?,?,?,?,?,?,?)
+                        INSERT INTO restaurants (name, delivery_price, street, building_locale_nr, post_code, city, description, user_id)
+                        VALUES (?,?,?,?,?,?,?,?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
                         $v_name['value'], $v_price['value'], $v_street['value'], $v_building_no['value'], $v_post_code['value'],
-                        $v_city['value'], $v_description['value'],
+                        $v_city['value'], $v_description['value'], $_SESSION['logged_user']['user_id'],
                     ));
                     // Sekcja zapytań zwracająca id ostatnio dodanej restauracji
                     $query = "SELECT id FROM restaurants ORDER BY id DESC LIMIT 1";
@@ -107,7 +107,7 @@ class RestaurantService extends MvcService
                         'show_banner' => !empty($this->_banner_message),
                         'banner_class' => 'alert-success',
                     );
-                    header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
                 }
                 $this->dbh->commit();
             } 
@@ -139,15 +139,15 @@ class RestaurantService extends MvcService
         $v_profile = array('invl' => false, 'bts_class' => '');
         try
         {
-            if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+            if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
             $this->dbh->beginTransaction();
 
             // Zapytanie zwracające aktualne wartości edytowanej restauracji z bazy danych
-            $query = "SELECT * FROM restaurants WHERE id = ?";
+            $query = "SELECT * FROM restaurants WHERE id = ? AND user_id = ?";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['id']));
+            $statement->execute(array($_GET['id'], $_SESSION['logged_user']['user_id']));
             $restaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if (count($restaurant) == 0) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+            if (count($restaurant) == 0) header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
             
             $v_name = array('value' => $restaurant[0]['name'], 'invl' => false, 'bts_class' => '');
             $v_street = array('value' => $restaurant[0]['street'], 'invl' => false, 'bts_class' => '');
@@ -206,7 +206,7 @@ class RestaurantService extends MvcService
                         'show_banner' => !empty($this->_banner_message),
                         'banner_class' => 'alert-success',
                     );
-                    header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
                 }
             }
             $this->dbh->commit();
@@ -252,14 +252,14 @@ class RestaurantService extends MvcService
      */
     public function delete_restaurant()
     {
-        if (!isset($_GET['id'])) header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+        if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
         try
         {
             $this->dbh->beginTransaction();
 
-            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ?";
+            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ? AND user_id = ?";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['id']));
+            $statement->execute(array($_GET['id'], $_SESSION['logged_user']['user_id']));
 
             if ($statement->fetchColumn() == 0) throw new Exception('Podana resturacja nie istnieje w systemie lub została już usunięta.');
 
@@ -404,5 +404,4 @@ class RestaurantService extends MvcService
             'user_restaurants' => $user_restaurants,
         );
     }
-    
 }

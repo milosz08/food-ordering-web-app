@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 04:08:04                   *
+ * Ostatnia modyfikacja: 2022-12-11 20:22:19                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -38,7 +38,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/dashboard. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/dashboard. 
      */
     public function panel_dashboard()
     {
@@ -50,7 +50,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurants. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/myrestaurants. 
      */
     public function panel_myrestaurants()
     {
@@ -66,7 +66,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/add. 
      */
     public function panel_myrestaurant_add()
     {
@@ -82,7 +82,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/edit.
      */
     public function panel_myrestaurant_edit()
     {
@@ -98,7 +98,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurant/details&id=?.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/myrestaurant/details&id=?.
      */
     public function panel_myrestaurant_details()
     {
@@ -112,18 +112,18 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
     
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/delete.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/delete.
      */
     public function panel_myrestaurant_delete()
     {
         $this->_service->delete_restaurant();
-        header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/profile.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/profile.
      */
     public function panel_profile()
     {
@@ -135,7 +135,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/settings.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/settings.
      */
     public function panel_settings()
     {
@@ -147,7 +147,7 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/orders.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/orders.
      */
     public function panel_orders()
     {
@@ -160,13 +160,13 @@ class RestaurantController extends MvcController
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=restaurant
+     *      restaurant
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=restaurant/panel/dashbaord
+     *      restaurant/panel/dashbaord
      * renderując widok z metody panel_dashboard() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=restaurant/panel/dashboard', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/dashboard', true, 301);
     }
 }

@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 00:50:15                   *
+ * Ostatnia modyfikacja: 2022-12-11 20:23:08                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -73,7 +73,7 @@ class HomeController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=home/welcome. Metoda na końcu wyświetla szablon z
+     * Metoda uruchamiająca się w przypadku przejścia na adres home/welcome. Metoda na końcu wyświetla szablon z
      * przekazanymi danymi przy pomocy instancji klasy MvcRenderer otrzymywanej z klasy nadrzędnej MvcController.
      */
     public function welcome()
@@ -89,13 +89,13 @@ class HomeController extends MvcController
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=home
+     *      home
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=home/welcome
+     *      /
      * renderując widok z metody welcode() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=home/welcome');
+        header('Location:' . __URL_INIT_DIR__);
     }
 }

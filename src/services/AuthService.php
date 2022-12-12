@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 03:17:57                   *
+ * Ostatnia modyfikacja: 2022-12-12 01:02:17                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -116,7 +116,7 @@ class AuthService extends MvcService
                         'user_full_name' => $user_data['full_name'],
                         'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                         'ota_token' => $rnd_ota_token,
-                        'regenerate_link' => 'auth/account/activate/resend/code&userid=' . $user_data['id'],
+                        'regenerate_link' => 'auth/account/activate/resend/code?userid=' . $user_data['id'],
                     );
                     $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
                     $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);
@@ -125,14 +125,15 @@ class AuthService extends MvcService
                     $statement_id->closeCursor();
                     $this->_banner_message = '
                         Twoje konto zostało pomyślnie stworzone. Aby móc zalogować się na konto, musisz je aktywować przy pomocy linku
-                        wysłanego na podany podczas rejestracji adres email.
+                        wysłanego na podany podczas rejestracji adres email. Nieaktywowane konto w przeciągu <strong><48 godzin/strong>
+                        zostanie automatycznie usunięte z systemu.
                     ';
                     $_SESSION['successful_register_user'] = array(
                         'banner_message' => $this->_banner_message,
                         'show_banner' => !empty($this->_banner_message),
                         'banner_class' => 'alert-warning',
                     );
-                    header('Location:index.php?action=auth/register', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'auth/register', true, 301);
                 }
                 $this->dbh->commit();
             }
@@ -194,7 +195,7 @@ class AuthService extends MvcService
                 // sprawdzanie, czy użytkownik ma aktywowane konto, jeśli nie wyświetlenie linka do wysyłki wiadomości email z tokenem OTA
                 if ($result['is_activated'] == 0)
                 {
-                    $redir_link = 'index.php?action=auth/account/activate/resend/code&userid=' . $result['id'];
+                    $redir_link = __URL_INIT_DIR__ . 'auth/account/activate/resend/code&userid=' . $result['id'];
                     throw new Exception('
                         Twoje konto nie zostało aktywowane. Aby aktywować konto sprawdź stwoją skrzynkę pocztową. W celu wysłania ponownie
                         kodu aktywacyjnego, <a class="alert-link" href="' . $redir_link . '">kliknij tutaj</a>.
@@ -206,9 +207,9 @@ class AuthService extends MvcService
                     'user_id' => $result['id'],
                     'user_role' => array('role_id' => $result['role_id'], 'role_name' => $result['role_name']),
                     'user_full_name' => $result['full_name'],
-                    'user_profile_image' => $result['photo_url'],
+                    'user_profile_image' => $result['photo_url'] ?? 'static/images/default-profile-image.svg',
                 );
-                header('Location:index.php?action=home/welcome', true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
+                header('Location:' . __URL_INIT_DIR__, true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
             }
             catch (Exception $e)
             {
@@ -280,7 +281,7 @@ class AuthService extends MvcService
                     'show_banner' => !empty($this->_banner_message),
                     'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
                 );
-                header('Location:index.php?action=auth/password/renew/request', true, 301);
+                header('Location:' . __URL_INIT_DIR__ .  'auth/password/renew/request', true, 301);
             }
             catch (Exception $e)
             {
@@ -324,7 +325,7 @@ class AuthService extends MvcService
             $user_id = $statement->fetchColumn();
             if (empty($user_id))
             {
-                $redir_link = 'index.php?action=auth/password/renew/request';
+                $redir_link = __URL_INIT_DIR__ . 'auth/password/renew/request';
                 throw new Exception('
                     Podany kod autoryzacyjny nie istnieje lub wygasł. Aby wygenerować token
                     <a class="alert-link" href="' . $redir_link . '">kliknij tutaj</a>.
@@ -346,8 +347,9 @@ class AuthService extends MvcService
                         $this->passwd_hash($v_password['value']),
                         $user_id,
                     ));
+                    $redir_link = __URL_INIT_DIR__ . 'auth/login';
                     $this->_banner_message = '
-                        Twoje hasło zostało zmienione. Kliknij <a class="alert-link" href="index.php?action=auth/login">tutaj</a> aby 
+                        Twoje hasło zostało zmienione. Kliknij <a class="alert-link" href="' . $redir_link . '">tutaj</a> aby 
                         zalogować się na konto.
                     ';
                     $this->_banner_error = false;
@@ -477,7 +479,7 @@ class AuthService extends MvcService
                 'user_full_name' => $user_data['full_name'],
                 'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                 'ota_token' => $ota_token,
-                'regenerate_link' => 'auth/account/activate/resend/code&userid=' . $user_data['id'],
+                'regenerate_link' => 'auth/account/activate/resend/code?userid=' . $user_data['id'],
             );
             $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
             $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);
