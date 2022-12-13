@@ -1,1 +1,53 @@
-<div>to jest wewnętrzy kontent strony dashboard</div>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_dir}}restaurant/panel/dashboard">Panel główny</a></li>
+    </ol>
+</nav>
+<div class="card">
+    <div class="card-body">
+        Dane statystyczne
+    </div>
+</div>
+<br>
+<div class="d-flex flex-column mb-3 justify-content-center align-items-center">
+    <div class="row mt-5">
+        <div class="col-lg-8 mb-5">
+            <canvas id="myChart" width="350" height="150"></canvas>
+        </div>
+        <div class="d-flex flex-column col-lg-4 justify-content-center align-items-center">
+            <div class="card mb-3" style="max-width: 340px;">
+                <div class="row g-0">
+                    <div class="col-md-4 text-center">
+                        <a href="{{base_dir}}restaurant/panel/orders">
+                            <i class="bi bi-cart-check text-success color-gradient icon-size"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body bg-success bg-gradient">
+                            <h5 class="card-title text text-light">Zamówienia</h5>
+                            <p class="card-text mt-3 text-light">Przejdź do zakładki zamówienia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3" style="max-width: 340px;">
+                <div class="row g-0">
+                    <div class="col-md-4 text-center">
+                        <a href="{{base_dir}}restaurant/panel/myrestaurants">
+                            <i class="bi bi-shop text-success color-gradient icon-size"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body bg-success bg-gradient">
+                            <h5 class="card-title text-light">Restauracje</h5>
+                            <p class="card-text mt-3 text-light">Przejdź do zakładki restauracje.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

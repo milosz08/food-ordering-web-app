@@ -7,8 +7,8 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 03:45:57                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-13 22:23:30                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -84,4 +84,33 @@ window.addEventListener('load', function () {
     initializeBtsTooltipsOnLoad.initializeTooltipsInvoker();
     passVisibilityUI.pswVisibilityInvoker();
     showLogoutModalOnLoad.showModalInvoker();
+});
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Skrypt odpowiadający za generowanie wykresów
+ */
+var xValues = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
+var yValues = [16, 22, 16, 21, 25, 30];
+var barColors = ["red", "green","blue","orange","purple", "grey",];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      fontSize: 18,
+      text: "Dane statystyczne zamówień"
+    }
+  }
 });
