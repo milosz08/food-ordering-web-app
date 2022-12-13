@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 17:21:57                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-12 01:51:44                   *
+ * Ostatnia modyfikacja: 2022-12-13 03:49:49                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -27,7 +27,7 @@ require_once '../vendor/autoload.php'; // import pliku do automatycznego ładowa
 session_start(); //uruchomienie sesji serwera php
 
 $server_dir = explode('/', $_SERVER['PHP_SELF']); // główny folder aplikacji w formie tablicy
-$normalized_dir = join(array_splice($server_dir, 0, array_search('public', $server_dir)), '/'); // normalizowana ścieżka aplikacji
+$normalized_dir = join('/', array_splice($server_dir, 0, array_search('public', $server_dir))); // normalizowana ścieżka aplikacji
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
