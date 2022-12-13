@@ -7,8 +7,8 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-13 22:23:30                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-13 23:15:18                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -78,39 +78,38 @@ const initializeBtsTooltipsOnLoad = {
     }
 };
 
+/**
+ * Skrypt odpowiadający za generowanie wykresów
+ */
+const chartInvoker = {
+    invokeGenerateRestaurantChart: function() {
+        const xValues = [ "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota" ];
+        const yValues = [ 16, 22, 16, 21, 25, 30 ];
+        const barColors = [ "red", "green","blue","orange","purple", "grey" ];
+
+        new Chart("restaurantDashbaordChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [
+                    { backgroundColor: barColors, data: yValues },
+                ],
+            },
+            options: {
+                legend: { display: false },
+                title: { display: true, fontSize: 18, text: "Dane statystyczne zamówień" },
+                responsive: true,
+                maintainAspectRatio: false,
+            },
+        });
+    }
+};
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 window.addEventListener('load', function () {
     initializeBtsTooltipsOnLoad.initializeTooltipsInvoker();
     passVisibilityUI.pswVisibilityInvoker();
     showLogoutModalOnLoad.showModalInvoker();
-});
-
-
-//------------------------------------------------------------------------------------------------------------------------------------------
-
-/**
- * Skrypt odpowiadający za generowanie wykresów
- */
-var xValues = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
-var yValues = [16, 22, 16, 21, 25, 30];
-var barColors = ["red", "green","blue","orange","purple", "grey",];
-
-new Chart("myChart", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-  },
-  options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      fontSize: 18,
-      text: "Dane statystyczne zamówień"
-    }
-  }
+    chartInvoker.invokeGenerateRestaurantChart();
 });
