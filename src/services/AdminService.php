@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-12-06, 15:20:33                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 15:25:00                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-14 20:22:49                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -29,4 +29,5 @@ class AdminService extends MvcService
     {
         parent::__construct();
     }
+
 }

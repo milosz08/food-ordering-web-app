@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 20:27:40                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-14 18:54:45                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -64,6 +64,18 @@ class AdminController extends MvcController
     {
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-settings-view', array(
             'page_title' => 'Ustawienia',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/settings. 
+     */
+    public function panel_restaurant_accept()
+    {
+        $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-accept-restaurant-view', array(
+            'page_title' => 'Akceptowanie restauracji',
         ));
     }
 
