@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-12 19:20:13                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2022-12-16 02:35:45                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -321,31 +321,30 @@ class RestaurantService extends MvcService
     {
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
         $user_restaurants = array(); // tablica 
-        
         try {
             $this->dbh->beginTransaction();
 
             $res_index = 1; //index restauracji w tabeli
             $thispage = $_GET['page'] ?? 0; // pobranie indeksu paginacji
             $page = $thispage * 5;
-            $elements = $_GET['el'] ?? 5;
+            $elements = $_GET['total'] ?? 5;
 
-            if(isset($_POST['search-res-button']))
-                $like = $_POST['search-res-name'];
-            else
-                $like = "";
+            if(isset($_POST['search-res-button'])) $like = $_POST['search-res-name'];
+            else $like = "";
 
             
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
-            $query = "SELECT  name, street, building_locale_nr, post_code, city, accept, id FROM restaurants WHERE user_id = :id  
-            AND name LIKE CONCAT ('%', :search, '%') LIMIT :el OFFSET :p";
+            $query = "
+                SELECT name, CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address, accept, id
+                FROM restaurants WHERE user_id = :id
+                AND name LIKE CONCAT ('%', :search, '%') LIMIT :el OFFSET :p
+            ";
             $statement = $this->dbh->prepare($query);
             $statement->bindParam(':id', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
             $statement->bindParam(':el', $elements, PDO::PARAM_INT);
             $statement->bindParam(':p', $page, PDO::PARAM_INT);
             $statement->bindParam(':search', $like, PDO::PARAM_STR);
             $statement->execute();
-
 
             // 'while' odpowiadada za przejście przez wszystkie znaleznione rekordy
             while ($restaurant = $statement->fetchObject(RestaurantModel::class)) {
@@ -360,8 +359,7 @@ class RestaurantService extends MvcService
                         : 'Restauracja widoczna jest dla wszystkich użytkowników',
                     ),
                     'iterator' => $res_index+$page,
-                )
-                );
+                ));
                 $res_index++;
             }
 
@@ -396,12 +394,12 @@ class RestaurantService extends MvcService
             $this->_banner_message = $e->getMessage();
         }
         return array(
-            'element' => $elements,
             'previous' => $previous,
             'next' => $next,
-            'elm_count' => 5,
+            'elm_count' => $elements,
             'pagination' => $pagination,
             'user_restaurants' => $user_restaurants,
+            'search_text' => $like,
         );
     }
 }
