@@ -9,14 +9,15 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-14 18:54:45                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2022-12-16 02:38:09                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
 use App\Core\MvcController;
 use App\Services\AdminService;
+use App\Models\AcceptationModel;
 
 class AdminController extends MvcController
 {
@@ -74,8 +75,18 @@ class AdminController extends MvcController
      */
     public function panel_restaurant_accept()
     {
+        ///////////////////////////////////////////////////////// tylko do testów
+        $test_res = new AcceptationModel();
+        $test_res->id = 1;
+        $test_res->full_name = "Jan Kowalski";
+        $test_res->name = "TESTIFICATE REST";
+        $test_res->address = "ul. Długa 93, 43-100 Gliwice";
+        ///////////////////////////////////////////////////////// tylko do testów
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-accept-restaurant-view', array(
             'page_title' => 'Akceptowanie restauracji',
+            'waiting_restaurants' => array(
+                array('res' => $test_res, 'iterator' => 1),
+            ),
         ));
     }
 
