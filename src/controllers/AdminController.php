@@ -9,12 +9,13 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-14 18:54:45                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2022-12-17 00:15:55                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\AdminService;
 
@@ -70,13 +71,39 @@ class AdminController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/settings. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/restaurant/accept. 
      */
     public function panel_restaurant_accept()
     {
+        $details_restaurant_data = $this->_service->show_accept_restaurants();
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-accept-restaurant-view', array(
             'page_title' => 'Akceptowanie restauracji',
+            'banner' => $mainpulate_restaurant_banner,
+            'data' => $details_restaurant_data,
         ));
+    }
+        
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/restaurant/accept/restaurant. 
+     */
+    public function panel_restaurant_accept_restaurant()
+    {
+        $this->_service->accept_restaurant();
+        header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/restaurant/accept/restaurant/reject. 
+     */
+    public function panel_restaurant_accept_restaurant_reject()
+    {
+        $this->_service->reject_restaurant();
+        header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

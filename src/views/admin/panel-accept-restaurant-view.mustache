@@ -12,7 +12,7 @@
 {{/banner.show_banner}}
 <div class="container-fluid px-0">
     <div class="row justify-content-between align-items-center">
-        <div class="col-lg-6 mb-3"><h2 class="text-secondary fw-light mb-0">Restauracjie do zaakceptowania</h2></div>
+        <div class="col-lg-6 mb-3"><h2 class="text-secondary fw-light mb-0">Restauracje do zaakceptowania</h2></div>
         <form class="col-lg-3 mb-3 d-flex justify-content-end" action="" method="post">
             <input type="text" name="search-res-name" placeholder="szukaj po nazwie" class="form-control">
             <button type="submit" name="search-res-button" class="btn btn-primary btn-md ms-2 py-2">
@@ -27,7 +27,7 @@
             <tr>
                 <th>Lp</th>
                 <th>Nazwa Restauracji</th>
-                <th>Właściciel/Właściciele</th>
+                <th>Właściciel</th>
                 <th class="d-none d-lg-table-cell">Dane adresowe</th>
                 <th class="fit">Akcja</th>
             </tr>
@@ -37,44 +37,65 @@
             <tr>
                 <td class="align-middle">{{iterator}}</td>
                 <td class="align-middle">{{res.name}}</td>
-                <td class="align-middle d-none d-lg-table-cell">
-                    {{res.first_name}}, {{res.last_name}}
+                <td class="align-middle">
+                    {{res.first_name}} {{res.last_name}}
                 </td>
                 <td class="align-middle d-none d-lg-table-cell">
                     ul. {{res.street}} {{res.building_locale_nr}}, {{res.post_code}}, {{res.city}}
                 </td>
                 <td class="align-middle fit flex-nowrap">
-                    <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" class="btn btn-primary"
-                        type="button">
+                    <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}"
+                     class="btn btn-primary" type="button">
                         Akceptuj
                     </a>
-                    <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" class="btn btn-danger"
-                        type="button">
+                    <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#reject-res-modal-{{res.id}}"
+                     class="btn btn-danger" type="button">
                         Odrzuć
                     </a>
                 </td>
             </tr>
-            <div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Akceptowanie restauracji</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji operacji nie można
-                            będzie cofnąć.
-                        </div>
+                            Czy napewno chcesz zaakceptować restauracje właściciela <strong>{{res.first_name}} {{res.last_name}}</strong> 
+                            o nazwie <strong>{{res.name}}</strong>?
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                            <a class="btn btn-outline-danger" href="{{base_dir}}admin/panel/restaurant/accept/delete?id={{res.id}}">
-                                Usuń
+                            <a class="btn btn-outline-success" href="{{base_dir}}admin/panel/restaurant/accept/restaurant?id={{res.id}}">
+                                Akceptuj
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+            <div class="modal fade" id="reject-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Akceptowanie restauracji</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Czy napewno chcesz odrzucić akceptacje restauracji właściciela <strong>{{res.first_name}} {{res.last_name}}</strong> 
+                            o nazwie <strong>{{res.name}}</strong>?
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                            <a class="btn btn-outline-danger" href="{{base_dir}}admin/panel/restaurant/accept/restaurant/reject?id={{res.id}}">
+                                Odrzuć
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             {{/data.user_restaurants}}
         </tbody>
     </table>
