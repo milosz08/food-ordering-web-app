@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 00:15:55                   *
+ * Ostatnia modyfikacja: 2022-12-17 00:25:20                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -18,6 +18,7 @@ namespace App\Controllers;
 use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\AdminService;
+use App\Models\AcceptationModel;
 
 class AdminController extends MvcController
 {

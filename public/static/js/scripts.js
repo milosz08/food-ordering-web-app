@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-13 23:15:18                   *
+ * Ostatnia modyfikacja: 2022-12-16 02:08:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -84,8 +84,8 @@ const initializeBtsTooltipsOnLoad = {
 const chartInvoker = {
     invokeGenerateRestaurantChart: function() {
         const xValues = [ "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota" ];
-        const yValues = [ 16, 22, 16, 21, 25, 30 ];
-        const barColors = [ "red", "green","blue","orange","purple", "grey" ];
+        const yValues = [ 30, 22, 43, 21, 25, 30 ];
+        const barColors = [ "#03045e", "#0077b6", "#00b4d8", "#90e0ef", "#b5d1e2" , "#caf0f8" ];
 
         new Chart("restaurantDashbaordChart", {
             type: "bar",
