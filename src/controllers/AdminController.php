@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 00:25:20                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-17 16:34:05                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -18,7 +18,6 @@ namespace App\Controllers;
 use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\AdminService;
-use App\Models\AcceptationModel;
 
 class AdminController extends MvcController
 {
@@ -40,6 +39,7 @@ class AdminController extends MvcController
      */
     public function panel_dashboard()
     {
+        $this->protector->protect_only_admin();
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-dashboard-view', array(
             'page_title' => 'Panel administratora',
         ));
@@ -52,6 +52,7 @@ class AdminController extends MvcController
      */
     public function panel_profile()
     {
+        $this->protector->protect_only_admin();
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-profile-view', array(
             'page_title' => 'Profil administratora',
         ));
@@ -64,6 +65,7 @@ class AdminController extends MvcController
      */
     public function panel_settings()
     {
+        $this->protector->protect_only_admin();
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-settings-view', array(
             'page_title' => 'Ustawienia',
         ));
@@ -76,6 +78,7 @@ class AdminController extends MvcController
      */
     public function panel_restaurant_accept()
     {
+        $this->protector->protect_only_admin();
         $details_restaurant_data = $this->_service->show_accept_restaurants();
         $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-accept-restaurant-view', array(
@@ -92,6 +95,7 @@ class AdminController extends MvcController
      */
     public function panel_restaurant_accept_restaurant()
     {
+        $this->protector->protect_only_admin();
         $this->_service->accept_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
     }
@@ -103,6 +107,7 @@ class AdminController extends MvcController
      */
     public function panel_restaurant_accept_restaurant_reject()
     {
+        $this->protector->protect_only_admin();
         $this->_service->reject_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
     }

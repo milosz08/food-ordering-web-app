@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 20:24:32                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:51:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -42,6 +42,7 @@ class AuthController extends MvcController
      */
     public function register()
     {
+        $this->protector->redirect_when_logged();
         $banner_data = Utils::check_session_and_unset('successful_register_user');
         $form_data = $this->_service->register();
         $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
@@ -59,6 +60,7 @@ class AuthController extends MvcController
      */
     public function login()
     {
+        $this->protector->redirect_when_logged();
         $banner_data = Utils::check_session_and_unset('attempt_activate_account');
         $form_data = $this->_service->login_user();
         $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
@@ -76,6 +78,7 @@ class AuthController extends MvcController
      */
     public function password_renew_request()
     {
+        $this->protector->redirect_when_logged();
         $banner_data = Utils::check_session_and_unset('attempt_change_password');
         $form_data = $this->_service->attempt_renew_password();
         $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
@@ -93,6 +96,7 @@ class AuthController extends MvcController
      */
     public function password_renew_change()
     {
+        $this->protector->redirect_when_logged();
         $form_data = $this->_service->renew_change_password();
         $this->renderer->render('auth/renew-password-change-view', array(
             'page_title' => 'Zmień hasło',
@@ -107,6 +111,7 @@ class AuthController extends MvcController
      */
     public function account_activate()
     {
+        $this->protector->redirect_when_logged();
         $this->_service->attempt_activate_account();
         header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
     }
@@ -118,6 +123,7 @@ class AuthController extends MvcController
      */
     public function account_activate_resend_code()
     {
+        $this->protector->redirect_when_logged();
         $this->_service->resend_account_activation_link();
         header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
     }
@@ -129,11 +135,15 @@ class AuthController extends MvcController
      */
     public function logout()
     {
-        unset($_SESSION['logged_user']);
-        header('Location:' . __URL_INIT_DIR__, true, 301);
-        $_SESSION['logout_modal_data'] = array(
-            'is_open' => true,
-        );
+        if (!isset($_SESSION['logged_user'])) header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
+        else
+        {
+            unset($_SESSION['logged_user']);
+            header('Location:' . __URL_INIT_DIR__, true, 301);
+            $_SESSION['logout_modal_data'] = array(
+                'is_open' => true,
+            );
+        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

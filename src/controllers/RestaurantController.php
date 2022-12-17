@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 20:22:19                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:33:57                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -42,6 +42,7 @@ class RestaurantController extends MvcController
      */
     public function panel_dashboard()
     {
+        $this->protector->protect_only_restaurator();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-dashboard-view', array(
             'page_title' => 'Panel restauratora',
         ));
@@ -54,6 +55,7 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurants()
     {
+        $this->protector->protect_only_restaurator();
         $restaurant_table = $this->_service->get_user_restaurants();
         $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
@@ -70,6 +72,7 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurant_add()
     {
+        $this->protector->protect_only_restaurator();
         $add_restaurant_form_data = $this->_service->add_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Dodaj restaurację',
@@ -86,6 +89,7 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurant_edit()
     {
+        $this->protector->protect_only_restaurator();
         $edit_restaurant_form_data = $this->_service->edit_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
@@ -102,6 +106,7 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurant_details()
     {
+        $this->protector->protect_only_restaurator();
         $details_restaurant_data = $this->_service->get_restaurant_details();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-details-view', array(
             'page_title' => 'Szczegóły restauracji',
@@ -116,6 +121,7 @@ class RestaurantController extends MvcController
      */
     public function panel_myrestaurant_delete()
     {
+        $this->protector->protect_only_restaurator();
         $this->_service->delete_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
     }
@@ -127,6 +133,7 @@ class RestaurantController extends MvcController
      */
     public function panel_profile()
     {
+        $this->protector->protect_only_restaurator();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-profile-view', array(
             'page_title' => 'Profil restauratora',
         ));
@@ -139,6 +146,7 @@ class RestaurantController extends MvcController
      */
     public function panel_settings()
     {
+        $this->protector->protect_only_restaurator();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-settings-view', array(
             'page_title' => 'Ustawienia',
         ));
@@ -151,6 +159,7 @@ class RestaurantController extends MvcController
      */
     public function panel_orders()
     {
+        $this->protector->protect_only_restaurator();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-orders-view', array(
             'page_title' => 'Zamówienia',
         ));

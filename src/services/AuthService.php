@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-12 01:02:17                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:57:27                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -21,6 +21,7 @@ use Exception;
 use App\Core\Config;
 use App\Utils\Utils;
 use App\Core\MvcService;
+use App\Core\MvcProtector;
 
 class AuthService extends MvcService
 {
@@ -209,7 +210,10 @@ class AuthService extends MvcService
                     'user_full_name' => $result['full_name'],
                     'user_profile_image' => $result['photo_url'] ?? 'static/images/default-profile-image.svg',
                 );
-                header('Location:' . __URL_INIT_DIR__, true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
+                if ($result['role_name'] == MvcProtector::ADMIN) $redir_url = 'admin/panel/dashboard';
+                else if ($result['role_name'] == MvcProtector::RESTAURATOR) $redir_url = 'restaurant/panel/dashboard';
+                else $redir_url = '';
+                header('Location:' . __URL_INIT_DIR__ . $redir_url, true, 301); // jeśli wszystko się powiedzie, przejdź do strony
             }
             catch (Exception $e)
             {
