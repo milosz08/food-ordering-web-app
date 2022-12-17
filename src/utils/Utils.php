@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-10 22:07:47                   *
+ * Ostatnia modyfikacja: 2022-12-17 15:58:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -109,6 +109,30 @@ class Utils
             'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
         );
         return $banner_data;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function create_images_if_not_exist($id, $field_profile, $field_banner)
+    {
+        $images_paths = array('banner' => '', 'profile' => '');
+        if (!empty($field_profile['value']) && !empty($field_banner['value']))
+        {
+            if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
+        }
+        if (!empty($field_profile['value'])) 
+        {
+            $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
+            move_uploaded_file($field_profile['path'], $profile);
+            $images_paths['profile'] = $profile;
+        }
+        if (!empty($field_banner['value']))
+        {
+            $banner = "uploads/restaurants/$id/" . $id . '_banner.' . $field_banner['ext'];
+            move_uploaded_file($field_banner['path'], $banner);
+            $images_paths['banner'] = $banner;
+        }
+        return $images_paths;
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

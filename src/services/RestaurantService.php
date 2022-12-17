@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-16 02:35:45                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:02:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -94,7 +94,7 @@ class RestaurantService extends MvcService
                     $thisRestaurant = $statement->fetchAll(PDO::FETCH_ASSOC);
                     $id_image = $thisRestaurant[0]['id'];
 
-                    $photos = $this->create_images_if_not_exist($id_image, $v_profile, $v_banner);
+                    $photos = Utils::create_images_if_not_exist($id_image, $v_profile, $v_banner);
                     // Sekcja zapytań uzupełniająca url zdjęcia oraz baneru
                     $query = "UPDATE restaurants SET baner_url = ?, profile_url = ? WHERE id = ?";
                     $statement = $this->dbh->prepare($query);
@@ -185,7 +185,7 @@ class RestaurantService extends MvcService
                     if ($statement->fetchColumn() > 0)
                         throw new Exception('Podana restauracja istnieje już w tym miejscu. Podaj inne dane adresowe.');
 
-                    $photos = $this->create_images_if_not_exist($_GET['id'], $v_profile, $v_banner);
+                    $photos = Utils::create_images_if_not_exist($_GET['id'], $v_profile, $v_banner);
                     // Sekcja zapytań aktualizujących pola w tabeli
                     $v_price = str_replace(',', '.', $v_price);
                     $query = "
@@ -282,30 +282,6 @@ class RestaurantService extends MvcService
             'show_banner' => !empty($this->_banner_message),
             'banner_class' => $this->_if_banner_error ? 'alert-danger' : 'alert-success',
         );
-    }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
-    private function create_images_if_not_exist($id, $field_profile, $field_banner)
-    {
-        $images_paths = array('banner' => '', 'profile' => '');
-        if (!empty($field_profile['value']) && !empty($field_banner['value']))
-        {
-            if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
-        }
-        if (!empty($field_profile['value'])) 
-        {
-            $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
-            move_uploaded_file($field_profile['path'], $profile);
-            $images_paths['profile'] = $profile;
-        }
-        if (!empty($field_banner['value']))
-        {
-            $banner = "uploads/restaurants/$id/" . $id . '_banner.' . $field_banner['ext'];
-            move_uploaded_file($field_banner['path'], $banner);
-            $images_paths['banner'] = $banner;
-        }
-        return $images_paths;
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
