@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 22:20:37                   *
+ * Ostatnia modyfikacja: 2022-12-17 15:58:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -52,7 +52,7 @@ class Utils
 
     public static function validate_image_regex($value)
     {
-        if (!isset($_FILES[$value])) return array('value' => '', 'invl' => false, 'bts_class' => 'is-valid', 'path' => '', 'ext' => '');
+        if (!isset($_FILES[$value])) return array('value' => '', 'invl' => false, 'bts_class' => '', 'path' => '', 'ext' => '');
 
         $path = $_FILES[$value]['tmp_name'];
         $imgValue = $_FILES[$value]['name'];
@@ -109,5 +109,53 @@ class Utils
             'banner_class' => isset($form_data['banner_error']) && $form_data['banner_error'] ? 'alert-danger' : 'alert-success',
         );
         return $banner_data;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function create_images_if_not_exist($id, $field_profile, $field_banner)
+    {
+        $images_paths = array('banner' => '', 'profile' => '');
+        if (!empty($field_profile['value']) && !empty($field_banner['value']))
+        {
+            if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
+        }
+        if (!empty($field_profile['value'])) 
+        {
+            $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
+            move_uploaded_file($field_profile['path'], $profile);
+            $images_paths['profile'] = $profile;
+        }
+        if (!empty($field_banner['value']))
+        {
+            $banner = "uploads/restaurants/$id/" . $id . '_banner.' . $field_banner['ext'];
+            move_uploaded_file($field_banner['path'], $banner);
+            $images_paths['banner'] = $banner;
+        }
+        return $images_paths;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function get_pagination_nav($curr_page, $total_per_page, $total_pages, $base_url)
+    {
+        return array(
+            'first_page' => array(
+                'is_active' => $curr_page != 1 ? '' : 'disabled',
+                'url' => $base_url . '?page=1&total=' . $total_per_page,
+            ),
+            'prev_page' => array(
+                'is_active' => $curr_page - 1 > 0 ? '' : 'disabled',
+                'url' => $base_url . '?page=' . $curr_page - 1 . '&total=' . $total_per_page,  
+            ),
+            'next_page' => array(
+                'is_active' => $curr_page < $total_pages ? '' : 'disabled',
+                'url' => $base_url . '?page=' . $curr_page + 1 . '&total=' . $total_per_page, 
+            ),
+            'last_page' => array(
+                'is_active' => $curr_page != $total_pages ? '' : 'disabled',
+                'url' => $base_url . '?page=' . $total_pages . '&total=' . $total_per_page,
+            ),
+        );
     }
 }

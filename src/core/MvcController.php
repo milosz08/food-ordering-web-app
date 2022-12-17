@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 22:48:46                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 05:49:00                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2022-12-17 16:22:05                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
@@ -25,12 +25,14 @@ namespace App\Core;
 abstract class MvcController
 {
     protected $renderer; // instancja klasy MvcRenderer służącej do renderowania szablonów
+    protected $protector; // instancja klasy MvcProtector słuzącej do ochrony adresu URL
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     protected function __construct()
     {
         $this->renderer = MvcRenderer::get_instance(); // pobranie instancji klasy MvcRenderer i przypisanie jej do pola
+        $this->protector = MvcProtector::get_instance($this->renderer); // pobranie instancji klasy MvcProtector i przypisanie jej do pola
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

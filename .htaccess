@@ -1,16 +1,26 @@
-# uruchomienie możliwości manipulowania adresem URL serwera Apache
-RewriteEngine On
+# Tymczasowe zablokowanie aplikacji
+# deny from all
 
-# zablokowanie możliwości przeglądania katalogów projektu z poziomu przeglądarki
-Options -Indexes
-
-# ustawienie domyślnego katalogu aplikacji (domyślnego katalogu w którym mają obowiązywać reguły przepisywania adresu URL)
-RewriteBase /restaurant-project-php-si/ 
-
-# pobierz request tylko z plików /public/dowolnyinnyplik, flaga NC oznacza brak sprawdzania wielkości znaków
-RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
-# zgodnie z regułą zdefiniowaną poniżej przekieruj ruch z danymi (L), bez znaku ucieczki (NE) oraz wykonaj przekierowanie (R)
-# z kodem końcowym odpowiedzi HTTP 302
-RewriteRule ^ %1 [L,NE,R=302]
-# dopasuj przekierowanie do wszystkich plików znajdujących się w katalogu /public
-RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+# jeśli moduł przepisywania adresu URL istnieje, przejdź do przepisywania
+<IfModule mod_rewrite.c>
+    # jeśli moduł negocjacji istnieje, zablokuj możliwość dopasowywania plików do pasującego wzorca
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+    # uruchom silnik przepisywania adresu URL
+    RewriteEngine On 
+    # ustaw bazową ścieżkę na folder aplikacji
+    RewriteBase /
+    # dynamiczne pozyskanie ścieżki głównej folderu aplikacji i wstawienie do zmiennej środowiskowej BASE
+    RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+    RewriteRule ^(.*)$ - [E=BASE:%1]
+    # wyklucz pliki z głównego katalogu projektu do przeglądania przez użytkowników
+    RewriteRule ^(vendor/(.*)?|composer\.(lock|json)|\.(env|gitignore)|README.md)$ / [F,L]
+    # jeśli podawana ścieżka nie odnosi się do pliku lub katalogu, przeprowadź przepisanie adresu
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # przepisz podany parametr action na ścieżkę, np. index.php?action=home/welcome -> /home/welcome
+    RewriteRule ^(.+)$ %{ENV:BASE}/public/index.php?action=$1 [NC,QSA,L]
+    # jeśli ścieżka zawiera parametry index.php?action=home/welcome przekieruj na stronę ROOT /
+    RewriteRule ^$ %{ENV:BASE}/public/index.php?action=home/welcome [NC,QSA,L]
+</IfModule>

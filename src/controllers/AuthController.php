@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-22, 18:48:27                       *
  * Autor: Patryk Górniak                                       *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 00:09:25                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:51:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -38,10 +38,11 @@ class AuthController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/registration. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/registration. 
      */
     public function register()
     {
+        $this->protector->redirect_when_logged();
         $banner_data = Utils::check_session_and_unset('successful_register_user');
         $form_data = $this->_service->register();
         $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
@@ -55,10 +56,11 @@ class AuthController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/login. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/login. 
      */
     public function login()
     {
+        $this->protector->redirect_when_logged();
         $banner_data = Utils::check_session_and_unset('attempt_activate_account');
         $form_data = $this->_service->login_user();
         $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
@@ -72,10 +74,11 @@ class AuthController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/password/renew/request. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/password/renew/request. 
      */
     public function password_renew_request()
     {
+        $this->protector->redirect_when_logged();
         $banner_data = Utils::check_session_and_unset('attempt_change_password');
         $form_data = $this->_service->attempt_renew_password();
         $banner_data = Utils::fill_banner_with_form_data($form_data, $banner_data);
@@ -89,10 +92,11 @@ class AuthController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/password/renew/change. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/password/renew/change. 
      */
     public function password_renew_change()
     {
+        $this->protector->redirect_when_logged();
         $form_data = $this->_service->renew_change_password();
         $this->renderer->render('auth/renew-password-change-view', array(
             'page_title' => 'Zmień hasło',
@@ -103,37 +107,43 @@ class AuthController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/account/activate.
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/account/activate.
      */
     public function account_activate()
     {
+        $this->protector->redirect_when_logged();
         $this->_service->attempt_activate_account();
-        header('Location:index.php?action=auth/login', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/account/resend/code&userid=?.
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/account/resend/code&userid=?.
      */
     public function account_activate_resend_code()
     {
+        $this->protector->redirect_when_logged();
         $this->_service->resend_account_activation_link();
-        header('Location:index.php?action=auth/login', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=auth/logout.
+     * Metoda uruchamiająca się w przypadku przejścia na adres auth/logout.
      */
     public function logout()
     {
-        unset($_SESSION['logged_user']);
-        header('Location:index.php?action=home', true, 301);
-        $_SESSION['logout_modal_data'] = array(
-            'is_open' => true,
-        );
+        if (!isset($_SESSION['logged_user'])) header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
+        else
+        {
+            unset($_SESSION['logged_user']);
+            header('Location:' . __URL_INIT_DIR__, true, 301);
+            $_SESSION['logout_modal_data'] = array(
+                'is_open' => true,
+            );
+        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -147,6 +157,6 @@ class AuthController extends MvcController
      */
     public function index()
     {
-        header('Location:index.php?action=auth/login', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
     }
 }

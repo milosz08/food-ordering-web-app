@@ -1,11 +1,88 @@
-<div>główny widok tabeli z restauracjami konkretnego restauratora</div>
-przycisk na razie jeden główny, ale w planach w każdym rekordzie w tabeli z restauracją przycisk do usuwania
-
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_dir}}restaurant/panel/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Moje restauracje</li>
+    </ol>
+</nav>
 {{#banner.show_banner}}
 <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
     {{{banner.banner_message}}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{/banner.show_banner}}
-
-<a class="btn btn-danger btn-md w-100 py-2 " href="index.php?action=restaurant/panel/myrestaurant/delete&id=0">Usuń restaurację</a>
+<div class="container-fluid px-0">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-lg-6 mb-3"><h2 class="text-secondary fw-light mb-0">Moje restauracje</h2></div>
+        <form class="col-lg-3 mb-3 d-flex justify-content-end" action="" method="post">
+            <input type="text" name="search-res-name" placeholder="szukaj po nazwie" class="form-control" value="{{data.search_text}}">
+            <button type="submit" name="search-res-button" class="btn btn-primary btn-md ms-2 py-2">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="table-responsive-xxl">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lp</th>
+                <th>Nazwa Restauracji</th>
+                <th class="d-none d-lg-table-cell">Dane adresowe</th>
+                <th>Status</th>
+                <th class="fit">Akcja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#data.user_restaurants}}
+            <tr>
+                <td class="align-middle">{{it}}</td>
+                <td class="align-middle">{{name}}</td>
+                <td class="align-middle d-none d-lg-table-cell">{{address}}</td>
+                <td class="align-middle {{status.color_bts}}">
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{status.tooltip_text}}" type="button">
+                        {{status.text}}
+                    </span>
+                </td>
+                <td class="align-middle fit flex-nowrap">
+                    <a href="{{base_dir}}restaurant/panel/myrestaurant/edit?id={{res.id}}" class="btn btn-primary" type="button">
+                        Edytuj
+                    </a>
+                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#delete-res-modal-{{res.id}}">
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Usuń restaurację" type="button">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                    </button>
+                    <a href="{{base_dir}}restaurant/panel/myrestaurant/details?id={{res.id}}" class="btn btn-primary ms-2"
+                        type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Szczegóły restauracji">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </td>
+            </tr>
+            <div class="modal fade" id="delete-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Czy napewno chcesz usunąć restauracje <strong>{{res.name}}</strong>? Po usunięciu restauracji operacji nie można
+                            będzie cofnąć.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                            <a class="btn btn-outline-danger" href="{{base_dir}}restaurant/panel/myrestaurant/delete?id={{res.id}}">
+                                Usuń
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/data.user_restaurants}}
+        </tbody>
+    </table>
+</div>
+{{#data.pagination_visible}}
+    {{> partials/pagination-view.partial}}
+{{/data.pagination_visible}}

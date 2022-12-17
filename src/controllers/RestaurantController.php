@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 23:44:06                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:33:57                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -38,10 +38,11 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/dashboard. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/dashboard. 
      */
     public function panel_dashboard()
     {
+        $this->protector->protect_only_restaurator();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-dashboard-view', array(
             'page_title' => 'Panel restauratora',
         ));
@@ -50,24 +51,28 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/myrestaurants. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/myrestaurants. 
      */
     public function panel_myrestaurants()
     {
+        $this->protector->protect_only_restaurator();
+        $restaurant_table = $this->_service->get_user_restaurants();
         $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
             'page_title' => 'Moje restauracje',
             'banner' => $mainpulate_restaurant_banner,
+            'data' => $restaurant_table,
         ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/add. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/add. 
      */
     public function panel_myrestaurant_add()
     {
+        $this->protector->protect_only_restaurator();
         $add_restaurant_form_data = $this->_service->add_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Dodaj restaurację',
@@ -80,10 +85,11 @@ class RestaurantController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/edit.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/edit.
      */
     public function panel_myrestaurant_edit()
     {
+        $this->protector->protect_only_restaurator();
         $edit_restaurant_form_data = $this->_service->edit_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
@@ -94,27 +100,82 @@ class RestaurantController extends MvcController
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/myrestaurant/details&id=?.
+     */
+    public function panel_myrestaurant_details()
+    {
+        $this->protector->protect_only_restaurator();
+        $details_restaurant_data = $this->_service->get_restaurant_details();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-details-view', array(
+            'page_title' => 'Szczegóły restauracji',
+            'data' => $details_restaurant_data,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
     
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=restaurant/panel/delete.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/delete.
      */
     public function panel_myrestaurant_delete()
     {
+        $this->protector->protect_only_restaurator();
         $this->_service->delete_restaurant();
-        header('Location:index.php?action=restaurant/panel/myrestaurants', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/profile.
+     */
+    public function panel_profile()
+    {
+        $this->protector->protect_only_restaurator();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-profile-view', array(
+            'page_title' => 'Profil restauratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/settings.
+     */
+    public function panel_settings()
+    {
+        $this->protector->protect_only_restaurator();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-settings-view', array(
+            'page_title' => 'Ustawienia',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/orders.
+     */
+    public function panel_orders()
+    {
+        $this->protector->protect_only_restaurator();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-orders-view', array(
+            'page_title' => 'Zamówienia',
+        ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=restaurant
+     *      restaurant
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=restaurant/panel/dashbaord
+     *      restaurant/panel/dashbaord
      * renderując widok z metody panel_dashboard() powyższej klasy.
      */
     public function index()
     {
-        header('Location:index.php?action=restaurant/panel/dashboard', true, 301);
+        header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/dashboard', true, 301);
     }
 }

@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-24, 11:15:26                       *
  * Autor: Blazej Kubicius                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 01:00:17                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:57:27                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -21,6 +21,7 @@ use Exception;
 use App\Core\Config;
 use App\Utils\Utils;
 use App\Core\MvcService;
+use App\Core\MvcProtector;
 
 class AuthService extends MvcService
 {
@@ -116,7 +117,7 @@ class AuthService extends MvcService
                         'user_full_name' => $user_data['full_name'],
                         'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                         'ota_token' => $rnd_ota_token,
-                        'regenerate_link' => 'auth/account/activate/resend/code&userid=' . $user_data['id'],
+                        'regenerate_link' => 'auth/account/activate/resend/code?userid=' . $user_data['id'],
                     );
                     $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
                     $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);
@@ -125,14 +126,15 @@ class AuthService extends MvcService
                     $statement_id->closeCursor();
                     $this->_banner_message = '
                         Twoje konto zostało pomyślnie stworzone. Aby móc zalogować się na konto, musisz je aktywować przy pomocy linku
-                        wysłanego na podany podczas rejestracji adres email.
+                        wysłanego na podany podczas rejestracji adres email. Nieaktywowane konto w przeciągu <strong><48 godzin/strong>
+                        zostanie automatycznie usunięte z systemu.
                     ';
                     $_SESSION['successful_register_user'] = array(
                         'banner_message' => $this->_banner_message,
                         'show_banner' => !empty($this->_banner_message),
                         'banner_class' => 'alert-warning',
                     );
-                    header('Location:index.php?action=auth/register', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'auth/register', true, 301);
                 }
                 $this->dbh->commit();
             }
@@ -176,7 +178,7 @@ class AuthService extends MvcService
             {
                 $query = "
                     SELECT users.id AS id, is_activated, role_id, roles.name AS role_name, CONCAT(first_name,' ', last_name) AS full_name,
-                    password
+                    password, photo_url
                     FROM users INNER JOIN roles ON users.role_id=roles.id 
                     WHERE login = :login OR email = :login
                 ";
@@ -194,7 +196,7 @@ class AuthService extends MvcService
                 // sprawdzanie, czy użytkownik ma aktywowane konto, jeśli nie wyświetlenie linka do wysyłki wiadomości email z tokenem OTA
                 if ($result['is_activated'] == 0)
                 {
-                    $redir_link = 'index.php?action=auth/account/activate/resend/code&userid=' . $result['id'];
+                    $redir_link = __URL_INIT_DIR__ . 'auth/account/activate/resend/code&userid=' . $result['id'];
                     throw new Exception('
                         Twoje konto nie zostało aktywowane. Aby aktywować konto sprawdź stwoją skrzynkę pocztową. W celu wysłania ponownie
                         kodu aktywacyjnego, <a class="alert-link" href="' . $redir_link . '">kliknij tutaj</a>.
@@ -206,8 +208,12 @@ class AuthService extends MvcService
                     'user_id' => $result['id'],
                     'user_role' => array('role_id' => $result['role_id'], 'role_name' => $result['role_name']),
                     'user_full_name' => $result['full_name'],
+                    'user_profile_image' => $result['photo_url'] ?? 'static/images/default-profile-image.svg',
                 );
-                header('Location:index.php?action=home/welcome', true, 301); // jeśli wszystko się powiedzie, przejdź do strony głównej
+                if ($result['role_name'] == MvcProtector::ADMIN) $redir_url = 'admin/panel/dashboard';
+                else if ($result['role_name'] == MvcProtector::RESTAURATOR) $redir_url = 'restaurant/panel/dashboard';
+                else $redir_url = '';
+                header('Location:' . __URL_INIT_DIR__ . $redir_url, true, 301); // jeśli wszystko się powiedzie, przejdź do strony
             }
             catch (Exception $e)
             {
@@ -279,7 +285,7 @@ class AuthService extends MvcService
                     'show_banner' => !empty($this->_banner_message),
                     'banner_class' => $this->_banner_error ? 'alert-danger' : 'alert-success',
                 );
-                header('Location:index.php?action=auth/password/renew/request', true, 301);
+                header('Location:' . __URL_INIT_DIR__ .  'auth/password/renew/request', true, 301);
             }
             catch (Exception $e)
             {
@@ -309,7 +315,9 @@ class AuthService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            if (!isset($_GET['code'])) throw new Exception('Podany kod autoryzacyjny jest nieprawidłowy lub nie istnieje.');
+            if (!isset($_GET['code'])) throw new Exception('W celu zmiany hasła należy podać kod autoryzacyjny.');
+            if (!preg_match(Config::get('__REGEX_OTA__'), $_GET['code']))
+                throw new Exception('Podany kod nie jest prawidłowym kodem autoryzacyjnym.');
             
             $query = "
                 SELECT user_id FROM ota_user_token WHERE ota_token = ? AND expiration_date >= NOW() AND is_used = false
@@ -321,7 +329,7 @@ class AuthService extends MvcService
             $user_id = $statement->fetchColumn();
             if (empty($user_id))
             {
-                $redir_link = 'index.php?action=auth/password/renew/request';
+                $redir_link = __URL_INIT_DIR__ . 'auth/password/renew/request';
                 throw new Exception('
                     Podany kod autoryzacyjny nie istnieje lub wygasł. Aby wygenerować token
                     <a class="alert-link" href="' . $redir_link . '">kliknij tutaj</a>.
@@ -330,10 +338,7 @@ class AuthService extends MvcService
             if (isset($_POST['form-send-change-pass']))
             {
                 $v_password = Utils::validate_field_regex('change-password', Config::get('__REGEX_PASSWORD__'));
-                if ($v_password['value'] != $_POST['change-password-rep'])
-                {
-                    $v_password_rep = array('value' => $_POST['change-password-rep'], 'invl' => true, 'bts_class' => 'is-invalid');
-                }
+                $v_password_rep = Utils::validate_exact_fields($v_password, 'change-password-rep');
                 if (!($v_password['invl'] || $v_password_rep['invl']))
                 {
                     $query = "UPDATE ota_user_token SET is_used = true WHERE ota_token = ?";
@@ -346,8 +351,9 @@ class AuthService extends MvcService
                         $this->passwd_hash($v_password['value']),
                         $user_id,
                     ));
+                    $redir_link = __URL_INIT_DIR__ . 'auth/login';
                     $this->_banner_message = '
-                        Twoje hasło zostało zmienione. Kliknij <a class="alert-link" href="index.php?action=auth/login">tutaj</a> aby 
+                        Twoje hasło zostało zmienione. Kliknij <a class="alert-link" href="' . $redir_link . '">tutaj</a> aby 
                         zalogować się na konto.
                     ';
                     $this->_banner_error = false;
@@ -387,7 +393,7 @@ class AuthService extends MvcService
             $this->dbh->beginTransaction();
 
             if (!isset($_GET['code'])) throw new Exception('W celu ukończenia aktywacji konta należy podać kod autoryzacyjny.');
-            if (!preg_match('/^[0-9A-Za-z]{10,}$/', $_GET['code']))
+            if (!preg_match(Config::get('__REGEX_OTA__'), $_GET['code']))
                 throw new Exception('Podany kod nie jest prawidłowym kodem autoryzacyjnym.');
             
             // zapytanie złożone sprawdzające token czy istnieje, czy nie jest przedawiony, czy nie został już użyty oraz czy konto
@@ -477,7 +483,7 @@ class AuthService extends MvcService
                 'user_full_name' => $user_data['full_name'],
                 'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                 'ota_token' => $ota_token,
-                'regenerate_link' => 'auth/account/activate/resend/code&userid=' . $user_data['id'],
+                'regenerate_link' => 'auth/account/activate/resend/code?userid=' . $user_data['id'],
             );
             $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
             $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);

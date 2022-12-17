@@ -9,12 +9,13 @@
  * Data utworzenia: 2022-12-06, 15:19:53                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-06 17:42:32                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:34:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
 
+use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\AdminService;
 
@@ -34,10 +35,11 @@ class AdminController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres index.php?action=admin/panel/dashboard. 
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/dashboard. 
      */
     public function panel_dashboard()
     {
+        $this->protector->protect_only_admin();
         $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-dashboard-view', array(
             'page_title' => 'Panel administratora',
         ));
@@ -46,14 +48,81 @@ class AdminController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/profile. 
+     */
+    public function panel_profile()
+    {
+        $this->protector->protect_only_admin();
+        $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-profile-view', array(
+            'page_title' => 'Profil administratora',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/settings. 
+     */
+    public function panel_settings()
+    {
+        $this->protector->protect_only_admin();
+        $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-settings-view', array(
+            'page_title' => 'Ustawienia',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/restaurant/accept. 
+     */
+    public function panel_restaurant_accept()
+    {
+        $this->protector->protect_only_admin();
+        $details_restaurant_data = $this->_service->show_accept_restaurants();
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
+        $this->renderer->render_embed('admin/panel-wrapper-view', 'admin/panel-accept-restaurant-view', array(
+            'page_title' => 'Akceptowanie restauracji',
+            'banner' => $mainpulate_restaurant_banner,
+            'data' => $details_restaurant_data,
+        ));
+    }
+        
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/restaurant/accept/restaurant. 
+     */
+    public function panel_restaurant_accept_restaurant()
+    {
+        $this->protector->protect_only_admin();
+        $this->_service->accept_restaurant();
+        header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres admin/panel/restaurant/accept/restaurant/reject. 
+     */
+    public function panel_restaurant_accept_restaurant_reject()
+    {
+        $this->protector->protect_only_admin();
+        $this->_service->reject_restaurant();
+        header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      * Metoda uruchamiana, kiedy użytkownik w ścieżce zapytania poda jedynie nazwę kontrolera, czyli jak ścieżka jest mniej więcej taka:
-     *      index.php?action=admin
+     *      admin
      * Metoda przekierowuje użytkownika na adres:
-     *      index.php?action=admin/panel/dashbaord
+     *      admin/panel/dashbaord
      * renderując widok z metody panel_dashboard() powyższej klasy.
      */
 	public function index()
     {
-        header('Location:index.php?action=admin/panel/dashboard');
+        header('Location:' . __URL_INIT_DIR__ . 'admin/panel/dashboard');
 	}
 }

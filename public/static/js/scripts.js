@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-07 01:01:59                   *
+ * Ostatnia modyfikacja: 2022-12-16 02:08:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,18 +34,28 @@ const passVisibilityUI = {
             el.addEventListener('click', function () {
                 if (inputChild.value.length === 0) return;
                 inputChild.type = inputChild.type === 'text' ? 'password' : 'text';
-                buttonIcon.innerText = buttonIcon.innerText === 'visibility_off' ? 'visibility' : 'visibility_off';
+                if (buttonIcon.classList.contains('bi-eye-slash-fill')) {
+                    buttonIcon.classList.remove('bi-eye-slash-fill');
+                    buttonIcon.classList.add('bi-eye-fill');
+                } else {
+                    buttonIcon.classList.remove('bi-eye-fill');
+                    buttonIcon.classList.add('bi-eye-slash-fill');
+                }
             });
             inputChild.addEventListener('input', function () {
                 if (this.value !== '') return;
                 inputChild.type = 'password';
-                buttonIcon.innerText = 'visibility';
+                buttonIcon.classList.remove('bi-eye-slash-fill');
+                buttonIcon.classList.add('bi-eye-fill');
             });
         };
         this.pswVisibilityBtn.forEach(invokeOnClick.bind(this), false);
     },
 };
 
+/**
+ * Skrypt pokazujący na stałe modal odpowiadający za informowanie użytkownika o poprawnym wylogowaniu
+ */
 const showLogoutModalOnLoad = {
     modalElm: document.getElementById('logout-modal'),
 
@@ -56,9 +66,50 @@ const showLogoutModalOnLoad = {
     },
 };
 
+/**
+ * Skrypt odpowiadający za ładowanie tooltipów z Bootstrapa.
+ */
+const initializeBtsTooltipsOnLoad = {
+    initializeTooltipsInvoker: function() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        tooltipTriggerList.forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
+    }
+};
+
+/**
+ * Skrypt odpowiadający za generowanie wykresów
+ */
+const chartInvoker = {
+    invokeGenerateRestaurantChart: function() {
+        const xValues = [ "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota" ];
+        const yValues = [ 30, 22, 43, 21, 25, 30 ];
+        const barColors = [ "#03045e", "#0077b6", "#00b4d8", "#90e0ef", "#b5d1e2" , "#caf0f8" ];
+
+        new Chart("restaurantDashbaordChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [
+                    { backgroundColor: barColors, data: yValues },
+                ],
+            },
+            options: {
+                legend: { display: false },
+                title: { display: true, fontSize: 18, text: "Dane statystyczne zamówień" },
+                responsive: true,
+                maintainAspectRatio: false,
+            },
+        });
+    }
+};
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 window.addEventListener('load', function () {
+    initializeBtsTooltipsOnLoad.initializeTooltipsInvoker();
     passVisibilityUI.pswVisibilityInvoker();
     showLogoutModalOnLoad.showModalInvoker();
+    chartInvoker.invokeGenerateRestaurantChart();
 });
