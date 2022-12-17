@@ -1,7 +1,6 @@
 # Projekt Serwisy Internetowe (SI).
 
-Demo aplikacji (tymczasowo zablokowane po stronie serwera, bo panel admina i resturatora nie jest chroniony)<br>
-[restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl/)
+Demo aplikacji: [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl/)
 
 ## UWAGA!
 Commity należy wrzucać tylko i wyłącznie na branch `CPSIP-2-Development`. Branch `CPSIP-1-Initial-project-boilerplate` ma zostać nienaruszony, aby
