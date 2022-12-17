@@ -320,86 +320,66 @@ class RestaurantService extends MvcService
     public function get_user_restaurants()
     {
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
-        $user_restaurants = array(); // tablica 
-        try {
+        $user_restaurants = array();
+        $pages_nav = array();
+        $pagination_visible = true; // widoczność paginacji
+        try
+        {
             $this->dbh->beginTransaction();
 
-            $res_index = 1; //index restauracji w tabeli
-            $thispage = $_GET['page'] ?? 0; // pobranie indeksu paginacji
-            $page = $thispage * 5;
-            $elements = $_GET['total'] ?? 5;
+            $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
+            $page = ($curr_page - 1) * 5;
+            $total_per_page = $_GET['total'] ?? 5;
+            $search_text = $_POST['search-res-name'] ?? '';
 
-            if(isset($_POST['search-res-button'])) $like = $_POST['search-res-name'];
-            else $like = "";
-
-            
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
             $query = "
-                SELECT name, CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address, accept, id
-                FROM restaurants WHERE user_id = :id
-                AND name LIKE CONCAT ('%', :search, '%') LIMIT :el OFFSET :p
+                SELECT ROW_NUMBER() OVER(ORDER BY id) as it, name, accept, id,
+                CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address
+                FROM restaurants WHERE user_id = :id AND name LIKE :search LIMIT :total OFFSET :page
             ";
             $statement = $this->dbh->prepare($query);
-            $statement->bindParam(':id', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
-            $statement->bindParam(':el', $elements, PDO::PARAM_INT);
-            $statement->bindParam(':p', $page, PDO::PARAM_INT);
-            $statement->bindParam(':search', $like, PDO::PARAM_STR);
+            $statement->bindValue('id', $_SESSION['logged_user']['user_id']);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
+            $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
 
-            // 'while' odpowiadada za przejście przez wszystkie znaleznione rekordy
-            while ($restaurant = $statement->fetchObject(RestaurantModel::class)) {
-                // wkładanie do tablicy $user_restaurant poszczególnych restauracji wraz z ich numerem w kolejności
-                array_push($user_restaurants, array(
-                    'res' => $restaurant,
-                    'status' => array(
-                        'text' => empty($restaurant->accept) ? 'oczekująca' : 'aktywna',
-                        'color_bts' => empty($restaurant->accept) ? 'text-danger' : 'text-success',
-                        'tooltip_text' => empty($restaurant->accept)
-                        ? 'Zostało wysłane zgłoszenie do administratora systemu, po akceptacji zmieni status na "aktywna"'
-                        : 'Restauracja widoczna jest dla wszystkich użytkowników',
-                    ),
-                    'iterator' => $res_index+$page,
-                ));
-                $res_index++;
-            }
-
+            while ($row = $statement->fetchObject(RestaurantModel::class)) array_push($user_restaurants, $row);
+            
             // zapytanie zliczające wszystkie restauracje przypisane do użytkownika
-            $query = "SELECT count(id) FROM restaurants WHERE user_id = ?";
+            $query = "SELECT count(*) FROM restaurants WHERE user_id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
-            $res_sum_number = $statement->fetchColumn();
 
-            $i = 0; // zmienna pomocnicza
-            // W zależności od posiadanych restauracji podzielonych przez 6, tyle razy wykona się pętla 
-            while ($i < (($res_sum_number+1)/$elements)) {
-                // dodawanie iteracji do tablicy $pagination
-                array_push($pagination, array('page' => $i + 1, 
-                    'i' => $i,
-                    'previous' =>  $i - 1));
-                $i++;
-            }
-            
-            $previous = $thispage;
-            $next = $thispage;
-            // Obsługa strzałek w paginacji
-            if($thispage > 0) 
-                $previous = $thispage - 1;
-            if ($thispage < $i-1)
-                $next = $thispage + 1;
+            $total_pages = ceil($statement->fetchColumn() / $total_per_page);
+            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
+                'it' => $i,
+                'url' => 'restaurant/panel/myrestaurants?page=' . $i . '&total=' . $total_per_page, 
+                'selected' => $curr_page ==  $i ? 'active' : '',
+            ));
+
+            $pages_nav = Utils::get_pagination_nav($curr_page, $total_per_page, $total_pages, 'restaurant/panel/myrestaurants');
             $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $this->_banner_message = $e->getMessage();
+            $pagination_visible = false;
+            $_SESSION['manipulate_restaurant_banner'] = array(
+                'banner_message' => $e->getMessage(),
+                'show_banner' => !empty($e->getMessage()),
+                'banner_class' => 'alert-danger',
+            );
         }
         return array(
-            'previous' => $previous,
-            'next' => $next,
-            'elm_count' => $elements,
+            'total_per_page' => $total_per_page,
+            'pagination_url' => 'restaurant/panel/myrestaurants',
             'pagination' => $pagination,
+            'pagination_visible' => $pagination_visible,
+            'pages_nav' => $pages_nav,
             'user_restaurants' => $user_restaurants,
-            'search_text' => $like,
+            'search_text' => $search_text,
         );
     }
 }

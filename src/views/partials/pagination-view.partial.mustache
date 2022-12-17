@@ -1,0 +1,46 @@
+<div class="container-fluid px-0">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-md-6 mb-3 dropdown">
+            <span class="me-2 text-secondary">Elementów na stronie</span>
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
+                {{data.total_per_page}}
+            </button>
+            <ul class="dropdown-menu" name= "taskOption">
+                <li><a class="dropdown-item" href="{{base_dir}}{{data.pagination_url}}?page=1&total=5">5</a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}{{data.pagination_url}}?page=1&total=10">10</a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}{{data.pagination_url}}?page=1&total=15">15</a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}{{data.pagination_url}}?page=1&total=20">20</a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}{{data.pagination_url}}?page=1&total=50">50</a></li>
+            </ul>
+        </div>
+        <nav class="col-md-6 d-flex justify-content-end" aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                <li class="page-item">
+                    <a class="page-link {{data.pages_nav.first_page.is_active}}" href="{{base_dir}}{{data.pages_nav.first_page.url}}">
+                        <i class="bi bi-chevron-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link {{data.pages_nav.prev_page.is_active}}" href="{{base_dir}}{{data.pages_nav.prev_page.url}}">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                {{#data.pagination}}
+                <li class="page-item">
+                    <a class="page-link {{selected}}" href="{{base_dir}}{{url}}">{{it}}</a>
+                </li>
+                {{/data.pagination}}
+                <li class="page-item">
+                    <a class="page-link {{data.pages_nav.next_page.is_active}}" href="{{base_dir}}{{data.pages_nav.next_page.url}}">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link {{data.pages_nav.last_page.is_active}}" href="{{base_dir}}{{data.pages_nav.last_page.url}}">
+                        <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -35,10 +35,14 @@
         <tbody>
             {{#data.user_restaurants}}
             <tr>
-                <td class="align-middle">{{iterator}}</td>
-                <td class="align-middle">{{res.name}}</td>
-                <td class="align-middle d-none d-lg-table-cell">{{res.address}}</td>
-                <td class="align-middle {{status.color_bts}}">{{status.text}}</td>
+                <td class="align-middle">{{it}}</td>
+                <td class="align-middle">{{name}}</td>
+                <td class="align-middle d-none d-lg-table-cell">{{address}}</td>
+                <td class="align-middle {{status.color_bts}}">
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{status.tooltip_text}}" type="button">
+                        {{status.text}}
+                    </span>
+                </td>
                 <td class="align-middle fit flex-nowrap">
                     <a href="{{base_dir}}restaurant/panel/myrestaurant/edit?id={{res.id}}" class="btn btn-primary" type="button">
                         Edytuj
@@ -79,39 +83,6 @@
         </tbody>
     </table>
 </div>
-<div class="container-fluid px-0">
-    <div class="row justify-content-between align-items-center">
-        <div class="col-md-6 mb-3 dropdown">
-            <span class="me-2 text-secondary">Elementów na stronie</span>
-            <button class="btn btn-primary btn-sm dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                {{data.elm_count}}
-            </button>
-            <ul class="dropdown-menu" name= "taskOption">
-                <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/myrestaurants?page=0&total=5">5</a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/myrestaurants?page=0&total=10">10</a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/myrestaurants?page=0&total=15">15</a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/myrestaurants?page=0&total=20">20</a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}restaurant/panel/myrestaurants?page=0&total=50">50</a></li>
-            </ul>
-        </div>
-        <nav class="col-md-6 d-flex justify-content-end" aria-label="Page navigation example">
-            <ul class="pagination pagination-sm">
-                <li class="page-item">
-                    <a class="page-link" href="{{base_dir}}restaurant/panel/myrestaurants?page={{data.previous}}&total={{data.elm_count}}">
-                        <i class="bi bi-chevron-left"></i>
-                    </a>
-                </li>
-                {{#data.pagination}}
-                <li class="page-item">
-                    <a class="page-link" href="{{base_dir}}restaurant/panel/myrestaurants?page={{i}}&total={{data.elm_count}}">{{page}}</a>
-                </li>
-                {{/data.pagination}}
-                <li class="page-item">
-                    <a class="page-link" href="{{base_dir}}restaurant/panel/myrestaurants?page={{data.next}}&total={{data.elm_count}}">
-                        <i class="bi bi-chevron-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</div>
+{{#data.pagination_visible}}
+    {{> partials/pagination-view.partial}}
+{{/data.pagination_visible}}

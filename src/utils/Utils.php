@@ -110,4 +110,28 @@ class Utils
         );
         return $banner_data;
     }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function get_pagination_nav($curr_page, $total_per_page, $total_pages, $base_url)
+    {
+        return array(
+            'first_page' => array(
+                'is_active' => $curr_page != 1 ? '' : 'disabled',
+                'url' => $base_url . '?page=1&total=' . $total_per_page,
+            ),
+            'prev_page' => array(
+                'is_active' => $curr_page - 1 > 0 ? '' : 'disabled',
+                'url' => $base_url . '?page=' . $curr_page - 1 . '&total=' . $total_per_page,  
+            ),
+            'next_page' => array(
+                'is_active' => $curr_page < $total_pages ? '' : 'disabled',
+                'url' => $base_url . '?page=' . $curr_page + 1 . '&total=' . $total_per_page, 
+            ),
+            'last_page' => array(
+                'is_active' => $curr_page != $total_pages ? '' : 'disabled',
+                'url' => $base_url . '?page=' . $total_pages . '&total=' . $total_per_page,
+            ),
+        );
+    }
 }

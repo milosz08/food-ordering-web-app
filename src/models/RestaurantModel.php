@@ -9,15 +9,28 @@
  * Data utworzenia: 2022-12-09, 21:18:35                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-16 02:13:24                   *
+ * Ostatnia modyfikacja: 2022-12-17 16:00:03                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace App\Models;
 
 class RestaurantModel
 {
+    public $it; // indeks wiersza
     public $id; //id z bazy danych
     public $name; // nazwa restauracji
     public $address; // adres lokalu 
     public $accept; //czy zatwierdzona przez administratora
+    public $status; // status
+
+    public function __construct()
+    {
+        $this->status = array(
+            'text' => empty($this->accept) ? 'oczekująca' : 'aktywna',
+            'color_bts' => empty($this->accept) ? 'text-danger' : 'text-success',
+            'tooltip_text' => empty($this->accept)
+                ? 'Zostało wysłane zgłoszenie do administratora systemu, po akceptacji zmieni status na "aktywna"'
+                : 'Restauracja widoczna jest dla wszystkich użytkowników',
+        );
+    }
 }
