@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-16 02:35:45                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-17 16:53:23                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -326,8 +326,8 @@ class RestaurantService extends MvcService
 
             $res_index = 1; //index restauracji w tabeli
             $thispage = $_GET['page'] ?? 0; // pobranie indeksu paginacji
-            $page = $thispage * 5;
             $elements = $_GET['total'] ?? 5;
+            $page = $thispage * $elements;
 
             if(isset($_POST['search-res-button'])) $like = $_POST['search-res-name'];
             else $like = "";
@@ -371,7 +371,7 @@ class RestaurantService extends MvcService
 
             $i = 0; // zmienna pomocnicza
             // W zależności od posiadanych restauracji podzielonych przez 6, tyle razy wykona się pętla 
-            while ($i < (($res_sum_number+1)/$elements)) {
+            while ($i < (($res_sum_number)/$elements)) {
                 // dodawanie iteracji do tablicy $pagination
                 array_push($pagination, array('page' => $i + 1, 
                     'i' => $i,
