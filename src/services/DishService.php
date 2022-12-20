@@ -9,20 +9,15 @@
  * Data utworzenia: 2022-12-20, 19:10:30                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-20 19:28:04                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2022-12-20 19:37:05                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
 
- use PDO;
- use Exception;
- 
- use App\Utils\Utils;
- use App\Core\Config;
- use App\Core\MvcService;
+use App\Core\MvcService;
 
-class RestaurantService extends MvcService
+class DishService extends MvcService
 {
     //--------------------------------------------------------------------------------------------------------------------------------------
 
