@@ -44,15 +44,15 @@
                     </span>
                 </td>
                 <td class="align-middle fit flex-nowrap">
-                    <a href="{{base_dir}}restaurant/panel/myrestaurant/edit?id={{res.id}}" class="btn btn-primary" type="button">
+                    <a href="{{base_dir}}restaurant/panel/myrestaurant/edit?id={{id}}" class="btn btn-primary" type="button">
                         Edytuj
                     </a>
-                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#delete-res-modal-{{res.id}}">
+                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#delete-res-modal-{{id}}">
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Usuń restaurację" type="button">
                             <i class="bi bi-x-lg"></i>
                         </span>
                     </button>
-                    <a href="{{base_dir}}restaurant/panel/myrestaurant/details?id={{res.id}}" class="btn btn-primary ms-2"
+                    <a href="{{base_dir}}restaurant/panel/myrestaurant/details?id={{id}}" class="btn btn-primary ms-2"
                         type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Szczegóły restauracji">
                         <i class="bi bi-arrow-right"></i>
                     </a>
@@ -72,7 +72,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                            <a class="btn btn-outline-danger" href="{{base_dir}}restaurant/panel/myrestaurant/delete?id={{res.id}}">
+                            <a class="btn btn-outline-danger" href="{{base_dir}}restaurant/panel/myrestaurant/delete?id={{id}}">
                                 Usuń
                             </a>
                         </div>
