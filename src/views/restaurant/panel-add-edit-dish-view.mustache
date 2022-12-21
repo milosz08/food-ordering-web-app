@@ -46,13 +46,12 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="form-type-dish" class="form-label">Typ dania</label>
-                                <input type="text" name="dish-type" class="form-control {{form.type.bts_class}}"
-                                    placeholder="np. Kebab" value="{{form.v_type.value}}"
-                                    id="form-type-dish">
+                                <input type="text" name="dish-type" class="form-control {{form.v_type.bts_class}}"
+                                    placeholder="np. Kebab" value="{{form.v_type.value}}" id="form-type-dish">
                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                             </div>
                         </div>
-                       
+
 
                     </div>
                     <div class="row">
@@ -60,7 +59,7 @@
                             <label for="form-desc-dish" class="form-label">Opis restauracji</label>
                             <textarea name="dish-description" class="form-control {{form.v_description.bts_class}}"
                                 rows="3" placeholder="Krótki opis dania, składniki, maksymalnie 1000 znaków."
-                                id="form-desc-dish" maxlength="1000">{{form.v_description.value}}</textarea>
+                                id="form-desc-dish" maxlength="1000">{{form.restaurants.v_description.value}}</textarea>
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <button type="submit" name="dish-button" class="btn btn-primary btn-md w-100 py-2 col-md-6">
@@ -78,14 +77,16 @@
                             Wybierz restauracje
                         </button>
                         <ul class="dropdown-menu">
-                            {{#form.restaurants}}
+                            {{#res.restaurants}}
                             <li>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault"> {{name}}, {{street}} {{building_locale_nr}}, {{city}}</label>
+                                    <input class="form-check-input" type="checkbox" value="{{id}}" name="check_list[]"
+                                        id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault"> {{name}}, {{street}}
+                                        {{building_locale_nr}}, {{city}}, {{id}}</label>
                                 </div>
                             </li>
-                            {{/form.restaurants}}
+                            {{/res.restaurants}}
                         </ul>
                     </div>
                 </div>

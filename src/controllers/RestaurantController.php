@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-20 22:56:50                   *
+ * Ostatnia modyfikacja: 2022-12-21 15:57:20                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -35,7 +35,7 @@ class RestaurantController extends MvcController
     {
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
-        $this->_dishService = DishService::get_instance(DishService::class);
+        $this->_dishService = new DishService();
         $this->_resService = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RestaurantService
         
     }
@@ -178,11 +178,13 @@ class RestaurantController extends MvcController
     {
         $this->protector->protect_only_restaurator();
         $add_dish_form_data = $this->_dishService->add_dish();
+        $show_res = $this->_dishService->show_restaurants();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-dish-view', array(
             'page_title' => 'Dodaj danie',
             'add_edit_text' => 'Dodaj',
             'is_error' => !empty($add_dish_form_data['error']),
             'form' => $add_dish_form_data,
+            'res' => $show_res
         ));
     }
 
