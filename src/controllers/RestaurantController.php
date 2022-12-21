@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-21 15:57:20                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2022-12-21 20:06:31                   *
+ * Modyfikowany przez: cptn3m012                               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -184,6 +184,23 @@ class RestaurantController extends MvcController
             'add_edit_text' => 'Dodaj',
             'is_error' => !empty($add_dish_form_data['error']),
             'form' => $add_dish_form_data,
+            'res' => $show_res
+        ));
+    }
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/edit. 
+     */
+    public function panel_dish_edit()
+    {
+        $this->protector->protect_only_restaurator();
+        $edit_dish_form_data = $this->_dishService->edit_dish();
+        $show_res = $this->_dishService->show_restaurants();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-dish-view', array(
+            'page_title' => 'Edytuj danie',
+            'add_edit_text' => 'Edytuj',
+            'is_error' => !empty($edit_dish_form_data['error']),
+            'form' => $edit_dish_form_data,
             'res' => $show_res
         ));
     }
