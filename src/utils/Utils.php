@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-21 16:58:42                   *
+ * Ostatnia modyfikacja: 2022-12-22 08:38:48                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -142,11 +142,11 @@ class Utils
         $images_paths = array('profile' => '');
         if (!empty($field_profile['value']))
         {
-            if (!file_exists("uploads/restaurants/$id/")) mkdir("uploads/restaurants/$id/");
+            if (!file_exists("uploads/dishes/$id/")) mkdir("uploads/dishes/$id/");
         }
         if (!empty($field_profile['value'])) 
         {
-            $profile = "uploads/restaurants/$id/" . $id . '_profile.' . $field_profile['ext'];
+            $profile = "uploads/dishes/$id/" . $id . '_profile.' . $field_profile['ext'];
             move_uploaded_file($field_profile['path'], $profile);
             $images_paths['profile'] = $profile;
         }

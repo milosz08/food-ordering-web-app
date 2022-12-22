@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-12-20, 19:10:30                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-21 20:34:48                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2022-12-22 08:52:45                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -57,8 +57,11 @@ class DishService extends MvcService
      */
     public function add_dish()
     {
-        if (isset($_POST['dish-button'])) 
-        {
+
+
+
+        if (isset($_POST['dish-button'])) {
+
             try {
                 $v_type = Utils::validate_field_regex('dish-type', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
                 $v_name = Utils::validate_field_regex('dish-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
@@ -68,8 +71,8 @@ class DishService extends MvcService
 
                 $this->dbh->beginTransaction();
                 
-                if (!($v_type['invl'] || $v_name['invl'] || $v_price['invl'] || $v_profile['invl'] || empty($_POST['check_list']))) 
-                {
+                if (!($v_type['invl'] || $v_name['invl'] || $v_price['invl'] || $v_profile['invl'] || empty($_POST['check_list']))) {
+
                     //Sekcja sprawdzania czy podany typ dania jest już wpisany do tabeli 'dish_type'.
                     $query = " SELECT Count(id) FROM dish_type WHERE name = ?";
                     $statement = $this->dbh->prepare($query);
@@ -114,9 +117,9 @@ class DishService extends MvcService
                     // ------------------------------------------------------------------------------------------- huj wie jak to dodać
                     $photo = Utils::create_image_if_not_exist_dish($id_image, $v_profile);
                     // Sekcja zapytań uzupełniająca id restauracji posiadającej danie z tabeli łączącej 
-                    $query = "UPDATE dishes SET photo_url = ?,restaurant_id = ? WHERE id = ?";
+                    $query = "UPDATE dishes SET photo_url = ?, restaurant_id = ? WHERE id = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(array($photo ,$id_image, $id_image));
+                    $statement->execute(array($photo['profile'] ,$id_image, $id_image));
 
                     $statement->closeCursor();
                     $this->_banner_message = 'Danie zostało pomyślnie dodane.';
@@ -142,113 +145,4 @@ class DishService extends MvcService
             );
         }
     }
-
-     //--------------------------------------------------------------------------------------------------------------------------------------
-    public function edit_dish()
-    {
-        $v_profile = array('invl' => false, 'bts_class' => '');
-        try {
-            if (!isset($_GET['id']))
-                header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/dish/add', true, 301);
-            $this->dbh->beginTransaction();
-
-            // Zapytanie zwracające aktualne wartości edytowanego dania z bazy danych
-            $query = "SELECT * FROM dishes WHERE id = ? AND restaurant_id = ?";
-            $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['id'], $_SESSION['logged_user']['user_id']));
-            $dishes = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if (count($dishes) == 0)
-                header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/dish/add', true, 301);
-
-            $v_type = array('value' => $dishes[0]['type'], 'invl' => false, 'bts_class' => '');
-            $v_name = array('value' => $dishes[0]['name'], 'invl' => false, 'bts_class' => '');
-            $v_price = array('value' => $dishes[0]['price'], 'invl' => false, 'bts_class' => '');
-            $v_description = array('value' => $dishes[0]['description'], 'invl' => false, 'bts_class' => '');
-
-            if (isset($_POST['dish-button'])) {
-                $v_type = Utils::validate_field_regex('dish-type', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $v_name = Utils::validate_field_regex('dish-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $v_price = Utils::validate_field_regex('dish-price', Config::get('__REGEX_PRICE__'));
-                $v_profile = Utils::validate_image_regex('dish-profile');
-                $v_description = Utils::validate_field_regex('dish-description', Config::get('__REGEX_DESCRIPTION__'));
-
-                if (!($v_type['invl'] || $v_name['invl'] || $v_price['invl'] || $v_profile['invl'] || empty($_POST['check_list']))) {
-                    $query = "
-                     SELECT Count(id) FROM dish_type WHERE name = ?
-                    ";
-                    $statement = $this->dbh->prepare($query);
-                    $statement->execute(array($v_type['value']));
-
-                    // Jeśli nic o tej samej nazwie typu nie jest wpisane, to dodaj ten typ dania do tabeli.
-                    if ($statement->fetchColumn() == 0) {
-                        $query = "INSERT INTO dish_type (name) VALUES (?)";
-                        $statement = $this->dbh->prepare($query);
-                        $statement->execute(array($v_type['value']));
-                    }
-                    // Pobranie ID dodanego, bądź istniejącego dania. 
-                    $query = " SELECT id FROM dish_type WHERE name = ?";
-                    $statement = $this->dbh->prepare($query);
-                    $statement->execute(array($v_type['value']));
-                    $thisDish = $statement->fetchAll(PDO::FETCH_ASSOC);
-                    $id_dish = $thisDish[0]['id'];
-
-                    $photo = Utils::create_image_if_not_exist_dish($_GET['id'], $v_profile);
-                    // Zaktulizowane tabeli z danami nowymi wartościami
-                    $query = "
-                UPDATE dishes SET name = ?, description = ?, photo_url = ?, price = ?, dish_type_id = ? WHERE id = ?
-                ";
-                    $statement = $this->dbh->prepare($query);
-                    $statement->execute(array($v_name['value'], $v_description['value'], $v_profile['value'], $v_price['value'], $v_type['value']));
-
-                    // Sprawdzanie czy użytkownik wgrał nowe zdjęcie
-                    if (!$v_profile['invl']) {
-                        // Zaktualizowanie nowego zdjęcia
-                        $query = "UPDATE dishes SET photo_url = ? WHERE id = ?";
-                        $statement = $this->dbh->prepare($query);
-                        $statement->execute(array($v_profile['value']));
-                    }
-                }
-
-                if (isset($_POST['dish-button'])) {
-                    $v_dish_id = Utils::validate_field_regex('dish-id', '/^[0-9]{1,11}$/');
-
-                    $this->dbh->beginTransaction();
-
-                    if (!$v_dish_id['invl']) {
-                        //Usuń wszystkie istniejące wiersze w tabeli rest_dish dla tego dania
-                        $query = "
-                        DELETE FROM rest_dish WHERE dish_id = ?
-                        ";
-                        $statement = $this->dbh->prepare($query);
-                        $statement->execute(array($v_dish_id['value']));
-
-                        //Sprawdzanie pola wyboru 
-                        if (!empty($_POST['check_list'])) {
-                            //Wstaw wiersze do tabeli rest_dish dla tego dania i wybranych restauracji
-                            foreach ($_POST['check_list'] as $selected) {
-                                $query = "
-                                INSERT INTO rest_dish (dish_id, restaurant_id) VALUES (?, ?)
-                                ";
-                                $statement = $this->dbh->prepare($query);
-                                $statement->execute(array($v_dish_id['value'], $selected));
-                            }
-                        }
-                    }
-                    $this->dbh->commit();
-                }
-            }
-        } catch (Exception $e) {
-            $this->dbh->rollback();
-            $this->_banner_message = $e->getMessage();
-        }
-        return array(
-            'v_type' => $v_type,
-            'v_name' => $v_name,
-            'v_price' => $v_price,
-            'v_profile' => $v_profile,
-            'v_description' => $v_description,
-            'error' => $this->_banner_message
-        );
-    }
-
 }
