@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-06, 15:20:33                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 00:09:43                   *
+ * Ostatnia modyfikacja: 2022-12-23 22:07:27                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -46,7 +46,7 @@ class AdminService extends MvcService
     public function show_accept_restaurants()
     {
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
-        $user_restaurants = array(); // tablica 
+        $waiting_restaurants = array(); // tablica
 
         try {
             $this->dbh->beginTransaction();
@@ -63,8 +63,8 @@ class AdminService extends MvcService
 
 
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
-            $query = "SELECT r.id, u.first_name, u.last_name, r.name, r.street, r.building_locale_nr, r.post_code, r.city 
-            FROM restaurants r INNER JOIN users u ON r.user_id = u.id WHERE name LIKE CONCAT ('%', :search, '%') 
+            $query = "SELECT r.id, CONCAT(u.first_name, ' ', u.last_name) AS full_name, r.name, CONCAT(r.street,' ', r.building_locale_nr, ' ',  r.post_code, ' ', r.city)
+            AS address FROM restaurants r INNER JOIN users u ON r.user_id = u.id WHERE name LIKE CONCAT ('%', :search, '%') 
             AND accept = 0 LIMIT :el OFFSET :p";
 
             $statement = $this->dbh->prepare($query);
@@ -78,7 +78,7 @@ class AdminService extends MvcService
             while ($restaurant = $statement->fetchObject(AcceptationModel::class)) {
                 // wkładanie do tablicy $user_restaurant poszczególnych restauracji wraz z ich numerem w kolejności
                 array_push(
-                    $user_restaurants,
+                    $waiting_restaurants,
                     array(
                         'res' => $restaurant,
                         'status' => array(
@@ -128,7 +128,7 @@ class AdminService extends MvcService
             'next' => $next,
             'elm_count' => 5,
             'pagination' => $pagination,
-            'user_restaurants' => $user_restaurants
+            'waiting_restaurants' => $waiting_restaurants
         );
     }
 

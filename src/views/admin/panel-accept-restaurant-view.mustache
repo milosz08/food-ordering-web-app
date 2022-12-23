@@ -33,24 +33,44 @@
             </tr>
         </thead>
         <tbody>
-            {{#waiting_restaurants}}
+            {{#data.waiting_restaurants}}
             <tr>
                 <td class="align-middle">{{iterator}}</td>
                 <td class="align-middle">{{res.name}}</td>
                 <td class="align-middle d-none d-lg-table-cell">{{res.full_name}}</td>
                 <td class="align-middle d-none d-lg-table-cell">{{res.address}}</td>
                 <td class="align-middle fit flex-nowrap">
-                    <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" class="btn btn-primary" type="button">
-                        Akceptuj
-                    </a>
-                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#resolve-res-modal-{{res.id}}">
+                    <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
+                    class="btn btn-primary" type="button">Akceptuj</a>
+                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#reject-res-modal-{{res.id}}">
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Odrzuć" type="button">
                             <i class="bi bi-x-lg"></i>
                         </span>
                     </button>
                 </td>
             </tr>
-            <div class="modal fade" id="resolve-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Akceptowanie restauracji</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Czy napewno chcesz zaakceptować restaurację <strong>{{res.name}}</strong>? Po jej zaakceptowaniu zostanie
+                        na adres email właściciela zostanie wysłana wiadomość z informacją o zaakceptowaniu.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                        <a class="btn btn-outline-success" href="{{base_dir}}admin/panel/restaurant/accept/restaurant?id={{res.id}}">
+                            Zaakceptuj
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="modal fade" id="reject-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -59,19 +79,19 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Czy napewno chcesz odrzucić restaurację restauracje <strong>{{res.name}}</strong>? Po jej odrzuceniu zostanie
+                            Czy napewno chcesz odrzucić restaurację <strong>{{res.name}}</strong>? Po jej odrzuceniu zostanie
                             usunięta z systemu oraz na adres email właściciela zostanie wysłana wiadomość z informacją o odrzuceniu.
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                            <a class="btn btn-outline-success" href="{{base_dir}}admin/panel/restaurant/accept/restaurant?id={{res.id}}">
-                                Akceptuj
+                            <a class="btn btn-outline-danger" href="{{base_dir}}admin/panel/restaurant/accept/restaurant/reject?id={{res.id}}">
+                                Odrzuć
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            {{/waiting_restaurants}}
+            {{/data.waiting_restaurants}}
         </tbody>
     </table>
 </div>
