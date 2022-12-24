@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-21 20:06:31                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2022-12-23 23:30:29                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -112,10 +112,12 @@ class RestaurantController extends MvcController
     public function panel_myrestaurant_details()
     {
         $this->protector->protect_only_restaurator();
-        $details_restaurant_data = $this->_resService->get_restaurant_details();
+        $details_restaurant_dish = $this->_resService->get_restaurant_details();
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-details-view', array(
             'page_title' => 'Szczegóły restauracji',
-            'data' => $details_restaurant_data,
+            'banner' => $mainpulate_restaurant_banner,
+            'data' => $details_restaurant_dish,
         ));
     }
 
