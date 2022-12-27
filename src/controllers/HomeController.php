@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 20:23:08                   *
+ * Ostatnia modyfikacja: 2022-12-27 21:24:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -68,6 +68,15 @@ class HomeController extends MvcController
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
         $this->_service = HomeService::get_instance(HomeService::class); // pobranie instancji klasy HomeService
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public function restaurants()
+    {
+        $this->renderer->render_embed('home/restaurants-list-view', array(
+            'page_title' => 'Lista restauracji',
+        ));
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
