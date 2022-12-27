@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-27, 18:07:47                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-27 18:15:13                   *
+ * Ostatnia modyfikacja: 2022-12-27 18:37:17                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -30,6 +30,13 @@
          // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
          parent::__construct();
          $this->_service = MainService::get_instance(MainService::class); // pobranie instancji klasy AdminService
+     }
+
+     public function panel_restaurants_list()
+     {
+         $this->renderer->render_embed( 'main/panel-restaurants-list-view', array(
+             'page_title' => 'Lista restauracji',
+         ));
      }
      
      //--------------------------------------------------------------------------------------------------------------------------------------

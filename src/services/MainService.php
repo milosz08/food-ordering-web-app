@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-27, 18:11:15                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-27 18:13:31                   *
+ * Ostatnia modyfikacja: 2022-12-27 18:30:44                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,5 +24,9 @@
 
  class MainService extends MvcService
 {
-
+    protected function __construct()
+    {
+        parent::__construct();
+    }
+    
 }
