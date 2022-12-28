@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-27 21:24:05                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-28 21:27:53                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -106,5 +106,38 @@ class HomeController extends MvcController
     public function index()
     {
         header('Location:' . __URL_INIT_DIR__);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na profil uzytkownika.
+     */
+    public function general_user_orders()
+    {
+        $this->renderer->render('home/panel-general-user-orders', array(
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na edycje profilu uzytkownika.
+     */
+    public function general_user_profile_edit()
+    {
+        $this->renderer->render('home/panel-general-user-profile-edit', array(
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na profil uzytkownika.
+     */
+    public function general_user_dashboard()
+    {
+        $this->renderer->render('home/panel-general-user-dashboard', array(
+        ));
     }
 }
