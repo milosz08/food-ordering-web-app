@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-28 21:27:53                   *
- * Modyfikowany przez: Desi                                    *
+ * Ostatnia modyfikacja: 2022-12-29 00:00:16                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -126,7 +126,12 @@ class HomeController extends MvcController
      */
     public function general_user_profile_edit()
     {
+        $banner_data = Utils::check_session_and_unset('successful_change_data');
+        $edit_login_profile = $this->_service->profileEdit();
+        $banner_data = Utils::fill_banner_with_form_data($edit_login_profile, $banner_data);
         $this->renderer->render('home/panel-general-user-profile-edit', array(
+            'form' => $edit_login_profile,
+            'banner' => $banner_data,
         ));
     }
 

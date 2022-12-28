@@ -13,81 +13,37 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="form-name" class="form-label">Imię</label>
-                            <input type="text" name="registration-name" class="form-control {{form.v_name.bts_class}}"
+                            <input type="text" name="name" class="form-control {{form.v_name.bts_class}}"
                                 id="form-name" value="{{form.v_name.value}}">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="form-surname" class="form-label">Nazwisko</label>
-                            <input type="text" name="registration-surname"
+                            <input type="text" name="surname"
                                 class="form-control {{form.v_surname.bts_class}}" id="form-surname"
                                 value="{{form.v_surname.value}}">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="form-login" class="form-label">Login</label>
-                        <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}"
-                            id="form-login" value="{{form.v_login.value}}">
-                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                    </div>
-                    <div class="col-md-12 mb-3">
                         <label for="form-email" class="form-label">Adres E-mail</label>
-                        <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}"
+                        <input type="text" name="email" class="form-control {{form.v_email.bts_class}}"
                             id="form-email" value="{{form.v_email.value}}">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="form-password" class="form-label">Hasło</label>
-                        <div class="input-group has-validation">
-                            <input type="password" name="registration-password"
-                                class="form-control {{form.v_password.bts_class}}" id="form-password">
-                            <button type="button" class="input-group-text password-input-toggler">
-                                <i class="bi bi-eye-fill"></i>
-                            </button>
-                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="form-repeat-password" class="form-label">Powtórz hasło</label>
-                        <div class="input-group has-validation">
-                            <input type="password" name="registration-password-rep"
-                                class="form-control {{form.v_password_rep.bts_class}}" id="form-repeat-password">
-                            <button type="button" class="input-group-text password-input-toggler">
-                                <i class="bi bi-eye-fill"></i>
-                            </button>
-                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-3 text-secondary fw-light lh-sm">
-                        Hasło musi spełniać następujące kryteria:
-                        <ul>
-                            <li>minimum 8 znaków</li>
-                            <li>przynajmniej jedna wielka i mała litera</li>
-                            <li>przynajmniej jedna cyfra</li>
-                            <li>przynajmniej jeden znak specjalny: #?!@$%^&*</li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="col-lg-6 px-4">
-                    <div class="mb-3">
-                        <label for="form-role" class="form-label">Wybierz typ konta</label>
-                        <select id="form-role" class="form-select registration-form-select" name="registration-role">
-                            <option value="1">Klient</option>
-                            <option value="2">Restaurator</option>
-                        </select>
-                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="form-building" class="form-label">Nr budynku</label>
-                            <input type="text" name="registration-building-number"
+                            <input type="text" name="building-number"
                                 class="form-control {{form.v_building_no.bts_class}}" id="form-building"
                                 value="{{form.v_building_no.value}}">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="form-locale" class="form-label">Nr mieszkania</label>
-                            <input type="text" name="registration-local-number"
+                            <input type="text" name="local-number"
                                 class="form-control {{form.v_locale_no.bts_class}}" id="form-locale"
                                 value="{{form.v_locale_no.value}}">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
@@ -96,25 +52,25 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="form-post-code" class="form-label">Kod pocztowy</label>
-                            <input type="text" name="registration-post-code"
+                            <input type="text" name="post-code"
                                 class="form-control {{form.v_post_code.bts_class}}" id="form-post-code"
                                 value="{{form.v_post_code.value}}">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="form-city" class="form-label">Miasto</label>
-                            <input type="text" name="registration-city" class="form-control {{form.v_city.bts_class}}"
+                            <input type="text" name="city" class="form-control {{form.v_city.bts_class}}"
                                 id="form-city" value="{{form.v_city.value}}">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
                         <label for="form-street" class="form-label">Ulica</label>
-                        <input type="text" name="registration-street" class="form-control {{form.v_street.bts_class}}"
+                        <input type="text" name="street" class="form-control {{form.v_street.bts_class}}"
                             id="form-street" value="{{form.v_street.value}}">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
-                    <button type="submit" name="registration-button" class="btn btn-primary btn-md w-100 py-2">
+                    <button type="submit" name="save-changes-button" class="btn btn-primary btn-md w-100 py-2">
                         Zaaktualizuj dane
                     </button>
                 </div>
