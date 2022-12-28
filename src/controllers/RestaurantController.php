@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-28 14:24:30                   *
+ * Ostatnia modyfikacja: 2022-12-28 14:59:54                   *
  * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -208,7 +208,7 @@ class RestaurantController extends MvcController
     }
 
     /**
-     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/delete.
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/dish/delete?id=.
      */
     public function panel_dish_delete()
     {
