@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 20:00:52                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-24 11:01:40                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-28 14:40:10                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -253,7 +253,7 @@ class RestaurantService extends MvcService
 
             // zapytanie do bazy danych, które zwróci poszczególne dania dla obecnie wybranej restauracji
             $query = "
-                SELECT ROW_NUMBER() OVER(ORDER BY b.restaurants_id) as it, d.name, t.name AS type, d.description, d.price
+                SELECT ROW_NUMBER() OVER(ORDER BY b.restaurants_id) as it, d.id, d.name, t.name AS type, d.description, d.price
                 FROM (dishes d INNER JOIN dish_type t ON d.dish_type_id = t.id)
                 INNER JOIN rest_dish_binding b ON d.restaurant_id = b.dishes_id
                 WHERE restaurants_id = :id AND d.name LIKE :search LIMIT :total OFFSET :page

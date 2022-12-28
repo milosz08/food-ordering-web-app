@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-23 23:30:29                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2022-12-28 14:24:30                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -205,6 +205,25 @@ class RestaurantController extends MvcController
             'form' => $edit_dish_form_data,
             'res' => $show_res
         ));
+    }
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/delete.
+     */
+    public function panel_dish_delete()
+    {
+        $this->_dishService->remove_dish();
+        //header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/restaurant/single. 
+     */
+    public function panel_restaurant_single()
+    {
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-single-view');
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-12-20, 19:10:30                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-22 13:54:19                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2022-12-28 14:51:59                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -57,8 +57,6 @@ class DishService extends MvcService
      */
     public function add_dish()
     {
-
-
 
         if (isset($_POST['dish-button'])) {
 
@@ -145,7 +143,6 @@ class DishService extends MvcService
             );
         }
     }
-
     //--------------------------------------------------------------------------------------------------------------------------------------
     public function edit_dish()
     {
@@ -251,6 +248,37 @@ class DishService extends MvcService
             'v_profile' => $v_profile,
             'v_description' => $v_description,
             'error' => $this->_banner_message
+        );
+    }
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Metoda odpowiadająca za usuwanie dania.
+     */
+    public function remove_dish()
+    {
+        $v_profile = array('invl' => false, 'bts_class' => '');
+        try {
+            if (!isset($_GET['id']))
+                header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
+            $this->dbh->beginTransaction();
+
+            // Zapytanie usuwajace danie z restauracji
+            $query = "DELETE * FROM dishes WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            //$dishes = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement->closeCursor();
+            $this->_banner_message = 'Pomyślnie usunięto wybrane danie z systemu.';
+            $this->dbh->commit();
+        }
+        catch (Exception $e) {
+            $this->dbh->rollback();
+            $this->_banner_message = $e->getMessage();
+        }
+        $_SESSION['manipulate_restaurant_banner'] = array(
+            'banner_message' => $this->_banner_message,
+            'show_banner' => !empty($this->_banner_message),
+            'banner_class' => $this->_if_banner_error ? 'alert-danger' : 'alert-success',
         );
     }
 }
