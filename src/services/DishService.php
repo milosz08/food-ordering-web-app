@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-20, 19:10:30                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-28 21:38:46                   *
+ * Ostatnia modyfikacja: 2022-12-30 00:02:46                   *
  * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -262,6 +262,12 @@ class DishService extends MvcService
                 header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
             $this->dbh->beginTransaction();
 
+            $query = "SELECT restaurants_id FROM rest_dish_binding WHERE dishes_id= ? ";
+                    $statement = $this->dbh->prepare($query); 
+                    $statement->execute(array($_GET['id']));
+                    $thisDish = $statement->fetchAll(PDO::FETCH_ASSOC);
+                    $id_dish = $thisDish[0]['restaurants_id'];
+
             // Zapytanie usuwajace danie z restauracji
             $query = "DELETE FROM dishes WHERE id = ?";
             $statement = $this->dbh->prepare($query);
@@ -275,6 +281,7 @@ class DishService extends MvcService
             $this->dbh->rollback();
             $this->_banner_message = $e->getMessage();
         }
+        header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurant/details?id='.$id_dish, true, 301);
         $_SESSION['manipulate_restaurant_banner'] = array(
             'banner_message' => $this->_banner_message,
             'show_banner' => !empty($this->_banner_message),
@@ -286,58 +293,49 @@ class DishService extends MvcService
 
     /**
      * Metoda odpowiadająca za pobranie szczegółów dań wybranej restauracji z bazy danych i zwrócenie ich do widoku.
-     * JESZCZE NIE ZROBIONE JAK COS
      */
     public function search_restaurant_dish()
     {
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
-        $restaurant_dish = array();
         $pages_nav = array();
         $pagination_visible = true; // widoczność paginacji
-        try
-        {
+        try {
             $this->dbh->beginTransaction();
-
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
             $search_text = $_POST['search-dish-name'] ?? '';
-
-            // zapytanie do bazy danych, które zwróci poszczególne dania dla obecnie wybranej restauracji
+            // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
             $query = "
-                SELECT ROW_NUMBER() OVER(ORDER BY b.restaurants_id) as it, d.id, d.name, t.name AS type, d.description, d.price
-                FROM (dishes d INNER JOIN dish_type t ON d.dish_type_id = t.id)
-                INNER JOIN rest_dish_binding b ON d.restaurant_id = b.dishes_id
-                WHERE restaurants_id = :id AND d.name LIKE :search LIMIT :total OFFSET :page
+                SELECT ROW_NUMBER() OVER(ORDER BY id) as it, name, accept, id,
+                CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address
+                FROM dishes WHERE name LIKE :search LIMIT :total OFFSET :page
             ";
             $statement = $this->dbh->prepare($query);
-            $statement->bindValue('id', $_GET['id']);
+            $statement->bindValue('id', $_SESSION['logged_user']['user_id']);
             $statement->bindValue('search', '%' . $search_text . '%');
             $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
 
-            while ($row = $statement->fetchObject(DishesModel::class)) array_push($restaurant_dish, $row);
-            
-            // zapytanie zliczające wszystkie dania przypisane do restauracji
-            $query = "SELECT count(*) FROM rest_dish_binding WHERE restaurants_id = :id";
+            while ($row = $statement->fetchObject(RestaurantModel::class))
+                array_push($user_restaurants, $row);
+            // zapytanie zliczające wszystkie restauracje przypisane do użytkownika
+            $query = "SELECT count(*) FROM rest_dish_binding as r INNER JOIN dishes as d 
+            IN r.dishes_id = d.restaurant_id WHERE restaurants_id = ? AND d.name IS LIKE $search_text";
             $statement = $this->dbh->prepare($query);
-            $statement->bindValue('id', $_GET['id']);
-            $statement->execute();
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
 
             $total_pages = ceil($statement->fetchColumn() / $total_per_page);
-            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
-                'it' => $i,
-                'url' => 'restaurant/panel/myrestaurant/details?id=' . $_GET['id']. '&page=' . $i . '&total=' . $total_per_page, 
-                'selected' => $curr_page ==  $i ? 'active' : '',
-            ));
-
-            $pages_nav = Utils::get_pagination_nav($curr_page, $total_per_page, $total_pages, 
-            'restaurant/panel/myrestaurant/details?id=' . $_GET['id']);
+            for ($i = 1; $i <= $total_pages; $i++)
+                array_push($pagination, array(
+                    'it' => $i,
+                    'url' => 'restaurant/panel/myrestaurants?page=' . $i . '&total=' . $total_per_page,
+                    'selected' => $curr_page == $i ? 'active' : '',)
+                );
+            $pages_nav = Utils::get_pagination_nav($curr_page, $total_per_page, $total_pages, 'restaurant/panel/myrestaurants');
             $this->dbh->commit();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $this->dbh->rollback();
             $pagination_visible = false;
             $_SESSION['manipulate_restaurant_banner'] = array(
@@ -348,13 +346,12 @@ class DishService extends MvcService
         }
         return array(
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'restaurant/panel/myrestaurant/details?id=' . $_GET['id'],
+            'pagination_url' => 'restaurant/panel/myrestaurants',
             'pagination' => $pagination,
             'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
-            'restaurant_dish' => $restaurant_dish,
+            'user_restaurants' => $user_restaurants,
             'search_text' => $search_text,
-            'res_id' => $_GET['id'] ?? 'brak id',
         );
     }
 }
