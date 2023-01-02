@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-29 00:00:16                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-02 19:58:07                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -72,10 +72,18 @@ class HomeController extends MvcController
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres home/restaurants. Metoda wyświetla wszystkie aktywne restauracje
+     * na głównej podstronie serwisu
+     */
     public function restaurants()
     {
-        $this->renderer->render_embed('home/restaurants-list-view', array(
+        $restaurant_list = $this->_service->restaurant_list();
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
+        $this->renderer->render('home/restaurants-list-view', array(
             'page_title' => 'Lista restauracji',
+            'banner' => $mainpulate_restaurant_banner,
+            'data' => $restaurant_list,
         ));
     }
 

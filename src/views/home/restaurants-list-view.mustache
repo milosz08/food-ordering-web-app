@@ -17,7 +17,7 @@
                     <label class="switch" style="margin-left: 150px;">
                         <input type="checkbox">
                         <span class="slider round"></span>
-                    </label>  
+                    </label>
                     <br>
                     <br>
                     <label class="switch" style="margin-left: 150px;">
@@ -32,8 +32,9 @@
                     </label>
                     <br>
                     <div class="dropdown mt-3" style="margin-left: 80px;">
-                        <button class="btn btn-primary btn-sm dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dopasowanie
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="submit" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dopasowanie
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="">Oceny</a></li>
@@ -47,283 +48,75 @@
         </div>
         <div class="col-sm-8">
             <form class="col-sm-12 mb-3 d-flex justify-content-end" action="" method="post">
-                <input type="text" name="search-res-name" placeholder="szukaj" class="form-control" value="{{data.search_text}}">
+                <input type="text" name="search-res-list-name" placeholder="szukaj" class="form-control"
+                    value="{{data.search_text}}">
                 <button type="submit" name="search-res-button" class="btn btn-primary btn-md ms-2 py-2">
                     <i class="bi bi-search"></i>
                 </button>
             </form>
 
-            
-            
+            {{#data.rest_list}}
+
             <div class="card mb-3">
                 <div class="row g-0">
                     <div class="col-md-4 d-block" style="position: relative;">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_banner.jpg" class="img-fluid rounded-start" style="height: 100%;" alt="...">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_profile.jpg" class="img-fluid" style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75" alt="...">
+
+                        {{#baner_url}}
+                        <img src="/restaurant-project-php-si/public/{{baner_url}}" class="img-fluid rounded-start"
+                            style="height: 100%;" alt="...">
+                        {{/baner_url}}
+                        {{^baner_url}}
+                        <img src="https://image-assets.eu-2.volcanic.cloud/api/v1/assets/images/ff61eb2dd52e078ee22e70b4e58332ff?t=1669801859&format=webp"
+                            class="img-fluid rounded-start" style="height: 100%;" alt="...">
+                        {{/baner_url}}
+
+                        {{#profile_url}}
+                        <img src="/restaurant-project-php-si/public/{{profile_url}}" class="img-fluid"
+                            style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75"
+                            alt="...">
+                        {{/profile_url}}
+                        {{^profile_url}}
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg" class="img-fluid"
+                            style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75"
+                            alt="...">
+                        {{/profile_url}}
+
                     </div>
                     <div class="col-md-8">
                         <div class="card-body-sm p-3">
-                            <h5 class="card-title fw-bold">Nazwa restauracji1</h5>
+                            <h5 class="card-title fw-bold">{{name}}</h5>
                             <p class="card-text fw-lighter font-monospace">
-                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp; 
-                                <i class="bi bi-bicycle fs-5" style="color: green;"></i> 5,99zł&nbsp;&nbsp; 
+                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp;
+                                <i class="bi bi-bicycle fs-5" style="color: green;"></i>
+                                {{delivery_price}}zł&nbsp;&nbsp;
                                 <i class="bi bi-clock" style="color: blue;"></i> 50-60min
                             </p>
                             <p class="card-text">
                                 <small class="text-muted d-block text-truncate">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
+                                    {{description}}
                                 </small>
-                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
-                                type="button" class="btn btn-primary btn-md py-1">
+                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{id}}" data-bs-toggle="modal"
+                                    data-bs-target="#accept-res-modal-{{id}}" type="button"
+                                    class="btn btn-primary btn-md py-1">
                                     Pokaż pełny opis
                                 </a>
                             </p>
                         </div>
-                        <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-hidden="true">
+                        <div class="modal fade" id="accept-res-modal-{{id}}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
+                                        {{description}}
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4 d-block" style="position: relative;">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_banner.jpg" class="img-fluid rounded-start" style="height: 100%;" alt="...">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_profile.jpg" class="img-fluid" style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body-sm p-3">
-                            <h5 class="card-title fw-bold">Nazwa restauracji1</h5>
-                            <p class="card-text fw-lighter font-monospace">
-                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp; 
-                                <i class="bi bi-bicycle fs-5" style="color: green;"></i> 5,99zł&nbsp;&nbsp; 
-                                <i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                            </p>
-                            <p class="card-text">
-                                <small class="text-muted d-block text-truncate">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                </small>
-                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
-                                type="button" class="btn btn-primary btn-md py-1">
-                                    Pokaż pełny opis
-                                </a>
-                            </p>
-                        </div>
-                        <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4 d-block" style="position: relative;">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_banner.jpg" class="img-fluid rounded-start" style="height: 100%;" alt="...">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_profile.jpg" class="img-fluid" style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body-sm p-3">
-                            <h5 class="card-title fw-bold">Nazwa restauracji1</h5>
-                            <p class="card-text fw-lighter font-monospace">
-                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp; 
-                                <i class="bi bi-bicycle fs-5" style="color: green;"></i> 5,99zł&nbsp;&nbsp; 
-                                <i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                            </p>
-                            <p class="card-text">
-                                <small class="text-muted d-block text-truncate">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                </small>
-                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
-                                type="button" class="btn btn-primary btn-md py-1">
-                                    Pokaż pełny opis
-                                </a>
-                            </p>
-                        </div>
-                        <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4 d-block" style="position: relative;">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_banner.jpg" class="img-fluid rounded-start" style="height: 100%;" alt="...">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_profile.jpg" class="img-fluid" style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body-sm p-3">
-                            <h5 class="card-title fw-bold">Nazwa restauracji1</h5>
-                            <p class="card-text fw-lighter font-monospace">
-                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp; 
-                                <i class="bi bi-bicycle fs-5" style="color: green;"></i> 5,99zł&nbsp;&nbsp; 
-                                <i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                            </p>
-                            <p class="card-text">
-                                <small class="text-muted d-block text-truncate">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                </small>
-                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
-                                type="button" class="btn btn-primary btn-md py-1">
-                                    Pokaż pełny opis
-                                </a>
-                            </p>
-                        </div>
-                        <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4 d-block" style="position: relative;">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_banner.jpg" class="img-fluid rounded-start" style="height: 100%;" alt="...">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_profile.jpg" class="img-fluid" style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body-sm p-3">
-                            <h5 class="card-title fw-bold">Nazwa restauracji1</h5>
-                            <p class="card-text fw-lighter font-monospace">
-                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp; 
-                                <i class="bi bi-bicycle fs-5" style="color: green;"></i> 5,99zł&nbsp;&nbsp; 
-                                <i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                            </p>
-                            <p class="card-text">
-                                <small class="text-muted d-block text-truncate">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                </small>
-                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
-                                type="button" class="btn btn-primary btn-md py-1">
-                                    Pokaż pełny opis
-                                </a>
-                            </p>
-                        </div>
-                        <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4 d-block" style="position: relative;">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_banner.jpg" class="img-fluid rounded-start" style="height: 100%;" alt="...">
-                        <img src="/restaurant-project-php-si/public/uploads/restaurants/21/21_profile.jpg" class="img-fluid" style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body-sm p-3">
-                            <h5 class="card-title fw-bold">Nazwa restauracji1</h5>
-                            <p class="card-text fw-lighter font-monospace">
-                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp; 
-                                <i class="bi bi-bicycle fs-5" style="color: green;"></i> 5,99zł&nbsp;&nbsp; 
-                                <i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                            </p>
-                            <p class="card-text">
-                                <small class="text-muted d-block text-truncate">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                </small>
-                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{res.id}}" data-bs-toggle="modal" data-bs-target="#accept-res-modal-{{res.id}}" 
-                                type="button" class="btn btn-primary btn-md py-1">
-                                    Pokaż pełny opis
-                                </a>
-                            </p>
-                        </div>
-                        <div class="modal fade" id="accept-res-modal-{{res.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Zamknij</button>
                                     </div>
                                 </div>
                             </div>
@@ -332,8 +125,11 @@
                 </div>
             </div>
 
-
+            {{/data.rest_list}}
 
         </div>
     </div>
 </div>
+{{#data.pagination_visible}}
+{{> partials/restaurant-list-pagination-view.partial}}
+{{/data.pagination_visible}}

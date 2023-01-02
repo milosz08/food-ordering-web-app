@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:43                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-29 00:07:00                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-02 19:50:30                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -21,6 +21,7 @@ use Exception;
 use App\Core\Config;
 use App\Utils\Utils;
 use App\Core\MvcService;
+use App\Models\ListRestaurantModel;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Przykładowy serwis. Serwis jest to klasa dostarczająca metody zapewniające logikę biznesową akcji w kontrolerach (dodawanie do        *
@@ -32,22 +33,26 @@ use App\Core\MvcService;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class HomeService extends MvcService
-{
+{   
+    private $_banner_message = '';
+    private $_show_banner = false;
+    private $_banner_error = false;
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
     protected function __construct()
     {
         parent::__construct();
     }
 
-    private $_banner_message = '';
-    private $_show_banner = false;
-    private $_banner_error = false;
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
     /*
      * Metoda odpowiadająca edycji profilu zalogowanego użytkownika 
      */
     public function profileEdit()
     {
-        
+
         try {
             $local_nr = "";
             $this->dbh->beginTransaction();
@@ -94,8 +99,8 @@ class HomeService extends MvcService
                 $v_street = Utils::validate_field_regex('street', Config::get('__REGEX_STREET__'));
 
                 if (
-                    !($v_name['invl'] || $v_surname['invl'] || $v_email['invl'] || $v_building_no['invl'] || $v_locale_no['invl'] || 
-                    $v_post_code['invl'] || $v_city['invl'] || $v_street['invl'])
+                    !($v_name['invl'] || $v_surname['invl'] || $v_email['invl'] || $v_building_no['invl'] || $v_locale_no['invl'] ||
+                        $v_post_code['invl'] || $v_city['invl'] || $v_street['invl'])
                 ) {
                     // Zapytanie zwracające liczbę istniejących już kont o podanym loginie i/lub emailu
                     $query = "SELECT COUNT(id) FROM users WHERE email = ? AND NOT id = ?";
@@ -117,7 +122,7 @@ class HomeService extends MvcService
                         )
                     );
 
-                    $query = "UPDATE user_address SET street = ?, building_locale_nr = ?, post_code = ?, city = ? WHERE user_id = ?"; 
+                    $query = "UPDATE user_address SET street = ?, building_locale_nr = ?, post_code = ?, city = ? WHERE user_id = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(
                         array(
@@ -159,4 +164,75 @@ class HomeService extends MvcService
             'banner_error' => $this->_banner_error,
         );
     }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /*
+     * Metoda odpowiadająca za wyświetlanie wszystkich restauracji na głównej podstronie
+     */
+    public function restaurant_list()
+    {
+        $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
+        $rest_list = array();
+        $pages_nav = array();
+        $pagination_visible = true; // widoczność paginacji
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
+            $page = ($curr_page - 1) * 5;
+            $total_per_page = $_GET['total'] ?? 5;
+            $search_text = $_POST['search-res-list-name'] ?? '';    // wyszukiwanie po frazie nazwy restauracji
+
+            // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich zaakceptowanych restauracji
+            $query = "
+            SELECT ROW_NUMBER() OVER(ORDER BY id) as it, id, name, delivery_price, description, baner_url, profile_url
+            FROM restaurants WHERE accept = 1 AND name LIKE :search LIMIT :total OFFSET :page
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
+            $statement->bindValue('page', $page, PDO::PARAM_INT);
+            $statement->execute();
+
+            while ($row = $statement->fetchObject(ListRestaurantModel::class)) array_push($rest_list, $row);
+            
+            // zapytanie zliczające wszystkie aktywne restauracje
+            $query = "SELECT count(*) FROM restaurants WHERE accept = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();
+
+            $total_pages = ceil($statement->fetchColumn() / $total_per_page);
+            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
+                'it' => $i,
+                'url' => 'home/restaurants?page=' . $i . '&total=' . $total_per_page, 
+                'selected' => $curr_page ==  $i ? 'active' : '',
+            ));
+
+            $pages_nav = Utils::get_pagination_nav($curr_page, $total_per_page, $total_pages, 'home/restaurants');
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            $pagination_visible = false;
+            $_SESSION['manipulate_restaurant_banner'] = array(
+                'banner_message' => $e->getMessage(),
+                'show_banner' => !empty($e->getMessage()),
+                'banner_class' => 'alert-danger',
+            );
+        }
+        return array(
+            'total_per_page' => $total_per_page,
+            'pagination_url' => 'home/restaurants',
+            'pagination' => $pagination,
+            'pagination_visible' => $pagination_visible,
+            'pages_nav' => $pages_nav,
+            'rest_list' => $rest_list,
+            'search_text' => $search_text,
+        );
+    }
 }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
