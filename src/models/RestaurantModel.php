@@ -9,10 +9,12 @@
  * Data utworzenia: 2022-12-09, 21:18:35                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 16:00:03                   *
+ * Ostatnia modyfikacja: 2023-01-02 20:57:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace App\Models;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantModel
 {
@@ -23,6 +25,8 @@ class RestaurantModel
     public $accept; //czy zatwierdzona przez administratora
     public $status; // status
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     public function __construct()
     {
         $this->status = array(

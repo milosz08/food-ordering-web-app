@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-28, 20:29:37                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-22 08:38:48                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-04 02:14:59                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Utils;
@@ -155,25 +155,39 @@ class Utils
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
-    public static function get_pagination_nav($curr_page, $total_per_page, $total_pages, $base_url)
+    public static function get_pagination_nav($curr_page, $total_per_page, $total_pages, $total, $base_url)
     {
+        if (strpos($base_url, '?')) $start_char = '&';
+        else $start_char = '?';
         return array(
             'first_page' => array(
                 'is_active' => $curr_page != 1 ? '' : 'disabled',
-                'url' => $base_url . '?page=1&total=' . $total_per_page,
+                'url' => $base_url . $start_char . 'page=1&total=' . $total_per_page,
             ),
             'prev_page' => array(
                 'is_active' => $curr_page - 1 > 0 ? '' : 'disabled',
-                'url' => $base_url . '?page=' . $curr_page - 1 . '&total=' . $total_per_page,  
+                'url' => $base_url . $start_char . 'page=' . $curr_page - 1 . '&total=' . $total_per_page,  
             ),
             'next_page' => array(
                 'is_active' => $curr_page < $total_pages ? '' : 'disabled',
-                'url' => $base_url . '?page=' . $curr_page + 1 . '&total=' . $total_per_page, 
+                'url' => $base_url . $start_char . 'page=' . $curr_page + 1 . '&total=' . $total_per_page, 
             ),
             'last_page' => array(
                 'is_active' => $curr_page != $total_pages ? '' : 'disabled',
-                'url' => $base_url . '?page=' . $total_pages . '&total=' . $total_per_page,
+                'url' => $base_url . $start_char . 'page=' . $total_pages . '&total=' . $total_per_page,
             ),
+            'records' => array(
+                'first'=> ($curr_page - 1) * $total_per_page + 1,
+                'last' => ($curr_page - 1) * $total_per_page + $total_per_page,
+                'total' => $total,
+            )
         );
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function load_service($dir_name, $service_class)
+    {
+        require_once __SRC_DIR__ . 'services' . __SEP__ . $dir_name . __SEP__ . $service_class . '.php';
     }
 }

@@ -7,8 +7,8 @@
  * Data utworzenia: 2022-11-10, 18:44:02                       *
  * Autor: Milosz08                                             *
  *                                                             *              
- * Ostatnia modyfikacja: 2022-12-29 18:48:15                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-03 20:47:10                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
@@ -19,7 +19,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 .media-small-form-size-box {
-    max-width: 500px;
+    max-width: 450px;
 }
 
 .media-large-form-size-box {
@@ -54,8 +54,20 @@
     top: 5rem;
 }
 
+.left-nav-container {
+    max-width: 300px;
+}
+
+.add-content-button {
+    width: fit-content;
+}
+
 .col-fixed-panel-nav {
     width: 70px;
+}
+
+.table-fixed-size {
+    max-width: 250px;
 }
 
 .table td.fit, 
@@ -79,6 +91,12 @@
 .card-panel-size {
     max-width: 340px;
     width: 100%;
+}
+
+@media only screen and (max-width: 992px) {
+    .add-content-button {
+        width: 100%;
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------

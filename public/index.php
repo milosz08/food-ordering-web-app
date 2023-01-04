@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 17:21:57                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-13 03:49:49                   *
+ * Ostatnia modyfikacja: 2023-01-04 05:11:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -33,7 +33,7 @@ $normalized_dir = join('/', array_splice($server_dir, 0, array_search('public', 
 
 define('__SEP__', DIRECTORY_SEPARATOR); // zadeklarowanie domyślnego separatora plików w formie stałej globalnej
 define('__ROOT__', realpath(dirname(__FILE__) . __SEP__ . '..')); // stała definiująca ścieżkę do głównego katalogu aplikacji
-define('__SCAN_DIRS__', array('core', 'utils', 'models', 'services')); // katalogi, których pliki podlegają ładowaniu
+define('__SCAN_DIRS__', array('core', 'utils', 'models')); // katalogi, których pliki podlegają ładowaniu
 define('__SRC_DIR__', __ROOT__ . __SEP__ . 'src' . __SEP__); // ścieżka do katalogu /src/
 define('__PROTO__', isset($_SERVER['HTTPS']) ? 'https://' : 'http://'); // protokół serwera: HTTP/HTTPS
 define('__URL_INIT_DIR__', count(explode('/', $_SERVER['PHP_SELF'])) < 4 ? '/' : $normalized_dir . '/' );
@@ -44,4 +44,4 @@ require_once __SRC_DIR__ . 'core' . __SEP__ . 'CoreLoader.php'; // import loader
 
 CoreLoader::load(); // instantancja i ładowanie rdzenia aplikacji
 MvcRenderer::load(); // ładowanie konfiguracji silnika szablonów
-MvcApplication::run(); // instantacja i uruchomienie aplikacji
+MvcApplication::run(); // instantancja i uruchomienie aplikacji

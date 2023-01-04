@@ -9,13 +9,15 @@
  * Data utworzenia: 2022-11-10, 23:34:33                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 04:19:55                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2023-01-02 20:55:18                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use Dotenv\Dotenv;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa umożliwiająca dodawanie plików z folderu plików źródłowych aplikacji /src/. Pliki te są dodawane z folderów, których nazwy      *
@@ -27,7 +29,7 @@ class CoreLoader
 {
     private static $_singleton_instance; // instancja klasy CoreLoader jako obiektu singleton
     
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function __construct()
     {
@@ -36,7 +38,7 @@ class CoreLoader
         $this->scanning_dirs_and_load_files(); // uruchomienie funkcji do ładowania klas
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca ładowanie plików ze wskazanych katalogów (ładowanie z użyciem instrukcji require_once). Lista
@@ -57,7 +59,7 @@ class CoreLoader
         require_once  __SRC_DIR__ . 'config.php'; // ładowanie dodatkowego pliku konfiguracyjnego
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca załadowanie klas rdzenia. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia obiektu).

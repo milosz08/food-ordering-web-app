@@ -9,13 +9,15 @@
  * Data utworzenia: 2022-11-10, 23:32:11                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-12 01:56:39                   *
+ * Ostatnia modyfikacja: 2023-01-02 20:55:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use ReflectionException;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Główna klasa uruchamiana przy starcie aplikacji. To ona odpowiada za dynamiczne tworzenie przetwarzanie parametru action zapytania    *
@@ -29,7 +31,7 @@ class MvcApplication
     private $_selected_controller; // mapowany obiekt klasy kontrolera na podstawie zapytania
     private $_renderer_instance; // instancja klasy Renderer obsługującej renderowanie widoków oraz szablonów mustache
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function __construct()
     {
@@ -37,7 +39,7 @@ class MvcApplication
         $this->render_mvc(); // wywołanie metody prywatnej odwiadającej za parsowanie ścieżki i wywołanie metody kontrolera
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za tworzenie klasy kontrolera i wywoływanie metody tego kontrolera na podstawie parametrów zapytania. Jeśli
@@ -74,7 +76,7 @@ class MvcApplication
         }
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za parsowanie adresu URL z parametrami zapytania. Jeśli nie znajdzie parametrów zapytania, zwracane są domyślne
@@ -88,14 +90,6 @@ class MvcApplication
     private function parse_url()
     {
         $action_type = Config::get('__MVC_DEF_METHOD__'); // pobranie domyślnej metody kontrolera, jeśli nie poda się parametru action
-        if (!isset($_GET['action'])) // jeśli parametr action nie istnieje, tj. jeśli adres to po prostu index.php?
-        {
-            return array(
-                // klucz w tablicy o nazwie 'controller' przechowujący nazwę HomeController (domyślny to home, a suffix to Controller)
-                'controller' => ucfirst(Config::get('__MVC_DEF_CONTROLLER__')) . Config::get('__MVC_CONTROLLER_SUFFIX__'),
-                'method' =>     $action_type,
-            );
-        }
         // odseparowanie od siebie nazwy kontrolera oraz metody tego kontrolera, dla przykładu, jeśli zapytanie będzie równe:
         //      index.php?action=home/hello
         // wartość w zmiennej będzie tablicą i będzie to: array('home', 'hello')
@@ -115,7 +109,7 @@ class MvcApplication
         );
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca instantancję aplikacji. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia obiektu).
