@@ -47,6 +47,40 @@
     </div>
     <div class="dropdown mt-1">
         <button class="d-flex align-items-center border-0 text-white bg-transparent me-4" data-bs-toggle="dropdown"
+            aria-expanded="true">
+            <h5><i class="bi bi-cart4"></i></h5>
+            <span class="mx-1 d-none d-sm-block"></span>
+        </button>
+        <ul class="nav nav-pills mr-auto justify-content-center text-small">
+            <li class="nav-item dropdown-menu-lg-start">
+                <ul class="dropdown-menu p-1 " style="width: 250px;">
+                    <li>
+                        <div class="row">
+                            <h6 class="card-title p-3 mb-2">Restauracja testowa dluga nazwa</h6>
+                            <div class="d-flex flex-row">                      
+                                <div class="def-number-input number-input safari_only mt-1">
+                                    <input class="quantity fw-bold text-black" min="1" name="quantity" value="1"
+                                      type="number" style="width: 39px;">
+                                </div>
+                                <p class="card-text p-1">przykładowe danie tez dluga nazwa nawet</p>
+                                <button class="d-flex align-items-top border-0 text-danger bg-transparent mt-1">
+                                    <i class="bi bi-trash3"></i>
+                                    <span class="mx-1 d-none d-sm-block"></span>
+                                </button>
+                            </div>
+                            <p class="card-text text-center">Cena</p>
+                        </div>
+                    </li>
+                    <div class="d-flex flex-column justify-content-center dropdown-item">
+                        <a href="#" class="link-danger p-1 mt-1 mb-1 text-center">Wyczyść Koszyk</a>
+                        <a href="#" class="btn btn-success p-1 mt-1 mb-1 ">Zamow</a>
+                    </div>   
+                </ul> 
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown mt-1">
+        <button class="d-flex-column align-items-center border-0 text-white bg-transparent me-4" data-bs-toggle="dropdown"
             aria-expanded="false">
             <h5><i class="bi bi-bell"></i></h5>
             <span class="mx-1 d-none d-sm-block"></span>
@@ -99,9 +133,9 @@
                             </div>
                         </div>
                     </li>
-            </li>        
-        </ul>
-    </div>
+                </li>        
+            </ul>
+        </div>  
     </div>
 </div>
 </nav>
