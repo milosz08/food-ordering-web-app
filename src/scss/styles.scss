@@ -7,19 +7,155 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 03:30:09                   *
+ * Ostatnia modyfikacja: 2023-01-07 00:17:27                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * W tym pliku należy umieszczać wszystkie częściowe pliki SASS. Konwencja nazewnictwa częściowych plików: _nazwa.fragment.scss, gdzie   *
- * parametr nazwa odnosi się do unikalnej nazwy pliku. Każdy plik częściowy należy dodać do listy poniżej instrukcją @import, inaczej    *
- * style z tego pliku nie zostaną załadowane i przetranspilowane na kod CSS.                                                             *
- *                                                                                                                                       *
- * UWAGA! Kolejność dodawanych plików ma znaczenie (pliki od góry będą ładowane wcześniej od plików znajdujących się na dole listy).     *
- *        Należy mieć to na uwadze podczas tworzenia odwołań do klas css w innych plikach fragmentów.                                    *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-@import '_resets.fragment.scss';
-@import '_common.fragment.scss';
+body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.media-small-form-size-box {
+    max-width: 450px;
+}
+
+.media-large-form-size-box {
+    max-width: 1000px;
+}
+
+.error-page-header {
+    font-size: 4rem;
+}
+
+.default-page-image {
+    background-image: url(../images/default-page-background.png);
+    background-size: cover;
+    background-position: left;
+    background-repeat: no-repeat;
+}
+
+.smooth-transition {
+    transition: .2s;
+}
+
+.search-max-width {
+    max-width: 350px;
+    width: 100%;
+}
+
+.top-margin-header {
+    margin-top: 80px;
+}
+
+.btn-hover-dark {
+    &:hover {
+        background-color: var(--bs-gray-200);
+    }
+    &[aria-expanded="true"] .chewron-icon {
+        transform: rotate(90deg);
+    }
+}
+
+.footer-link-hover {
+    color: var(--bs-light);
+    &:hover {
+        color: var(--bs-gray-500);
+    }
+}
+
+.panel-left-nav {
+    top: 5rem;
+}
+
+.restaurant-card {
+    height: 170px;
+}
+
+.left-nav-container {
+    max-width: 300px;
+}
+
+.add-content-button {
+    width: fit-content;
+}
+
+.col-fixed-panel-nav {
+    width: 70px;
+}
+
+.preview-image-src {
+    background-position: center;
+    background-size: cover;
+}
+
+.upload-image-preview-container {
+    width: 100px;
+    height: 100px;
+    &.wide-image {
+        width: 100%;
+        height: 100px;
+    }
+}
+
+.restaurant-banner-image {
+    position: absolute;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 500px;
+    width: 100%;
+    opacity: .2;
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(transparent 10%, var(--bs-light));
+    }
+    &.gradient-left {
+        height: 100%;
+        background-attachment: initial;
+        opacity: .3;
+        &:before {
+            background-image: none;
+        }
+    }
+}
+
+.min-z-index {
+    z-index: 1 !important;
+}
+
+.display-none {
+    display: none;
+}
+
+.upload-file-preview {
+    display: none;
+}
+
+.table-fixed-size {
+    max-width: 250px;
+}
+
+.table td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.icon-size {
+    font-size: 4rem;
+}
+
+@media only screen and (max-width: 992px) {
+    .add-content-button {
+        width: 100%;
+    }
+}
