@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 20:53:43                   *
+ * Ostatnia modyfikacja: 2023-01-07 01:55:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -28,6 +28,8 @@ use App\Core\Config;
  *      Config::get('__KLUCZ__');                                                                                                        *
  *                                                                                                                                       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Config::set('__MVC_DEF_METHOD__', 'index'); // domyślna metoda kontrolera uruchamiana w przypadku braku parametru action w zapytaniu
 Config::set('__MVC_CONTROLLER_SUFFIX__', 'Controller'); // domyślny sufix plików kontrolerów (np. Home>Controller<, Example>Controller<) itp.
@@ -50,6 +52,8 @@ Config::set('__SMTP_AUTO_REPLY__', 'info@restaurant.miloszgilga.pl'); // email a
 Config::set('__SHA_SALT__', $_ENV['SHA_SALT']); // sól do algorytmu haszującego hasła
 Config::set('__DEF_APP_HOST__', __PROTO__ . $_SERVER['HTTP_HOST'] . __URL_INIT_DIR__); // domyślny host serwera
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // regexy do walidacji pól formularzy
 Config::set('__REGEX_CITY__', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]{2,60}$/');
 Config::set('__REGEX_STREET__', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]{2,100}$/');
@@ -61,3 +65,4 @@ Config::set('__REGEX_LOGINEMAIL__', '/^[a-zA-Z0-9@.]{5,100}$/');
 Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
 Config::set('__REGEX_OTA__', '/^[0-9A-Za-z]{10,}$/');
 Config::set('__REGEX_DESCRIPTION__', '/^.{10,1000}$/');
+Config::set('__REGEX_PHONE_PL__', '/^[0-9]{3} [0-9]{3} [0-9]{3}$/');

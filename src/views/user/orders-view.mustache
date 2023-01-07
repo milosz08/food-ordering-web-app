@@ -1,0 +1,45 @@
+{{> partials/header-view.partial }}
+<main class="container-lg flex-grow-1 top-margin-header">
+    <h1>do poprawy!</h1>
+    <div class="col-lg-6 mb-3"><h2 class="text-secondary fw-light mb-0">Profil Użytkownika</h2></div>
+    <div class="table-responsive-xxl">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="card" style="width: xxl;">
+                            <div class="card-body">
+                                <h5 class="card-title">Restauracja</h5>
+                                <p class="card-text"> Opis zamówienia</p>
+                                <div class="d-flex justify-content-end">
+                                    <p class="m-2">Kwota</p>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#data.restaurant_dish}}
+                <tr>
+                    <th>
+                        <div class="card" style="width: 40rem;">
+                            <div class="card-body">
+                                <h5 class="align-middle">{{res.name}}</h5>
+                                <p class="align-middle d-none d-lg-table-cell">{{zamowione danie}}</p>
+                                <div class="d-flex justify-content-end">
+                                    <p class="align-middle">{{price}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                {{/data.restaurant_dish}}
+            </tbody>
+        </table>
+    </div>
+    {{#data.pagination_visible}}
+        {{> partials/pagination-view.partial}}
+    {{/data.pagination_visible}}
+</main>
+{{> partials/footer-view.partial }}

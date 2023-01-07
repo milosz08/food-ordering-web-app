@@ -1,0 +1,212 @@
+<h2 class="mb-3 text-secondary fw-normal">{{add_edit_text}} restaurację</h2>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/restaurants">Moje restauracje</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} restaurację</li>
+    </ol>
+</nav>
+<hr class="mb-3"/>
+{{#banner.show_banner}}
+<div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
+    {{{banner.banner_message}}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/banner.show_banner}}
+<form action="" method="post" enctype="multipart/form-data" novalidate>
+    <div class="container-fluid pt-3 px-0">
+        <div class="row px-4 g-5">
+            <div class="col-xl-8">
+                <div class="row g-5">
+                    <div class="col-xl-6">
+                        <div class="col-md-12 mb-3">
+                            <label for="form-name-restaurant" class="form-label">Nazwa restauracji:</label>
+                            <input type="text" name="restaurant-name" class="form-control {{data.res.name.bts_class}}"
+                                placeholder="np. Bar Bistro" value="{{data.res.name.value}}" id="form-name-restaurant">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="form-price-for-delivery" class="form-label">Cena za dostawę (powyżej 1zł):</label>
+                            <div class="input-group has-validation">
+                                <input type="text" name="restaurant-delivery-price" id="form-price-for-delivery"
+                                    class="form-control {{data.res.delivery_price.bts_class}}" placeholder="np. 8.00 lub 8,00"
+                                    value="{{data.res.delivery_price.value}}">
+                                <span class="input-group-text">zł</span>
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="form-city" class="form-label">Miasto:</label>
+                            <input id="form-city" type="text" name="restaurant-city" placeholder="np. Gliwice"
+                                class="form-control {{data.res.city.bts_class}}" value="{{data.res.city.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-12 mb-3 image-preview-container" data-img-preview-src="{{data.res.banner_url.value}}">
+                            <label for="file-banner" class="form-label">Baner restauracji:</label>
+                            {{#data.has_banner}}
+                            <div class="position-relative upload-image-preview-container wide-image">
+                                <div class="w-100 h-100 preview-image-src rounded"></div>
+                                <a href="{{base_dir}}owner/restaurants/delete-restaurant-banner?id={{data.res_id}}"
+                                    class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+                                    fw-normal text-decoration-none text-white">
+                                    Usuń zdjęcie
+                                </a>
+                            </div>
+                            {{/data.has_banner}}
+                            {{^data.has_banner}}
+                            <input id="file-banner" class="form-control {{data.res.banner_url.bts_class}}" type="file" name="restaurant-banner"
+                                accept="image/png,image/jpeg,image/jpg" />
+                            <div class="invalid-feedback">Nieprawidłowe proporcje i/lub zbyt duży rozmiar pliku!</div>
+                            <div class="my-3 upload-file-preview {{data.hide_banner_preview_class}}">
+                                <p class="mb-2">Podgląd załadowanego zdjęcia:</p>
+                                <div class="position-relative upload-image-preview-container wide-image">
+                                    <div class="w-100 h-100 preview-image-src rounded"></div>
+                                    <button class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+                                        fw-normal remove-photo text-decoration-none" type="button">
+                                        Usuń zdjęcie
+                                    </button>
+                                </div>
+                            </div>
+                            {{/data.has_banner}}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="col-md-12 mb-3">
+                            <label for="form-street" class="form-label">Ulica:</label>
+                            <input type="text" name="restaurant-street" class="form-control {{data.res.street.bts_class}}"
+                                value="{{data.res.street.value}}" placeholder="np. Długa" id="form-street">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="row g-5">
+                            <div class="col-md-6 mb-3">
+                                <label for="form-building-no" class="form-label">Nr budynku:</label>
+                                <input id="form-building-no" type="text" name="restaurant-building-no" placeholder="np. 65"
+                                    class="form-control {{data.res.building_locale_nr.bts_class}}"
+                                    value="{{data.res.building_locale_nr.value}}">
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="form-post-code" class="form-label">Kod pocztowy:</label>
+                                <input id="form-post-code" type="text" name="restaurant-post-code" placeholder="np. 43-100"
+                                    class="form-control {{data.res.post_code.bts_class}}" value="{{data.res.post_code.value}}">
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="form-phone" class="form-label">Numer telefonu:</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text">+48</span>
+                                <input id="form-phone" type="tel" name="restaurant-phone" placeholder="123 456 789" 
+                                    class="form-control {{data.res.phone_number.bts_class}}" value="{{data.res.phone_number.value}}">
+                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3 image-preview-container" data-img-preview-src="{{data.res.profile_url.value}}">
+                            <label for="file-profile" class="form-label">Zdjęcie profilowe restauracji:</label>
+                            {{#data.has_profile}}
+                            <div class="position-relative upload-image-preview-container">
+                                <div class="w-100 h-100 preview-image-src rounded"></div>
+                                <a href="{{base_dir}}owner/restaurants/delete-restaurant-profile?id={{data.res_id}}"
+                                    class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+                                    fw-normal text-decoration-none text-white">
+                                    Usuń zdjęcie
+                                </a>
+                            </div>
+                            {{/data.has_profile}}
+                            {{^data.has_profile}}
+                            <input id="file-profile" class="form-control {{data.res.profile_url.bts_class}}" type="file" name="restaurant-profile"
+                                accept="image/png,image/jpeg,image/jpg" />
+                            <div class="invalid-feedback">Nieprawidłowe proporcje i/lub zbyt duży rozmiar pliku!</div>
+                            <div class="my-3 upload-file-preview {{data.hide_profile_preview_class}}">
+                                <p class="mb-2">Podgląd załadowanego zdjęcia:</p>
+                                <div class="position-relative upload-image-preview-container">
+                                    <div class="w-100 h-100 preview-image-src rounded"></div>
+                                    <button class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+                                        fw-normal remove-photo text-decoration-none" type="button">
+                                        Usuń zdjęcie
+                                    </button>
+                                </div>
+                            </div>
+                            {{/data.has_profile}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-5">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-desc-restaurant" class="form-label">Opis restauracji:</label>
+                        <textarea name="restaurant-description" class="form-control {{data.res.description.bts_class}}" rows="3"
+                            placeholder="Krótki opis restauracji, maksymalnie 600 znaków." id="form-desc-restaurant" maxlength="600"
+                        >{{data.res.description.value}}</textarea>
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-phone" class="form-label">Godziny otwarcia:</label>
+                    <div class="accordion" id="weekdays-accordion">
+                        {{#data.res_hours}}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button text-capitalize {{active_default.collapse}} py-2 px-4" type="button" 
+                                    data-bs-toggle="collapse" data-bs-target="#{{identifier}}" aria-expanded="{{active_default.aria}}" 
+                                    aria-controls="{{identifier}}">
+                                    {{name}}
+                                </button>
+                            </h2>
+                            <div id="{{identifier}}" class="accordion-collapse collapse {{active_default.bts_class}}" 
+                                data-bs-parent="#weekdays-accordion">
+                                <div class="accordion-body py-3 px-4 container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="form-{{identifier}}-hour-open" class="form-label">Godzina otwarcia:</label>
+                                            <input type="time" name="restaurant-{{identifier}}-open-hour" id="form-{{identifier}}-hour-open"
+                                                class="form-control {{open_hour.bts_class}}" value="{{open_hour.value}}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="form-{{identifier}}-hour-close" class="form-label">Godzina zamknięcia:</label>
+                                            <input type="time" name="restaurant-{{identifier}}-close-hour" id="form-{{identifier}}-hour-close"
+                                                class="form-control {{close_hour.bts_class}}" value="{{close_hour.value}}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-check ms-3">
+                                            <input class="form-check-input day-checkbox" type="checkbox" id="form-{{identifier}}-closed" 
+                                                {{is_closed}} name="restaurant-{{identifier}}-closed">
+                                            <label class="form-check-label" for="form-{{identifier}}-closed">
+                                                Zamknięte w tym dniu tygodnia
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/data.res_hours}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="mb-3"/>
+    <div class="d-flex justify-content-end hgroup gap-3">
+        <button class="btn btn-secondary mb-2 add-content-button" data-bs-toggle="modal" data-bs-target="#discard-changes" type="button">
+            <i class="bi bi-arrow-return-left me-2"></i>Odrzuć zmiany
+        </button>
+        <button type="submit" name="restaurant-button" class="btn btn-primary btn-md mb-2 add-content-button">
+            {{add_edit_text}} restaurację
+        </button>
+    </div>
+    <div class="modal fade" id="discard-changes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">Czy na pewno chcesz odrzucić zmiany i powrócić do poprzedniej strony?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <a class="btn btn-outline-danger" href="{{base_dir}}owner/restaurants">
+                        Odrzuć
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
