@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:50:25                   *
+ * Ostatnia modyfikacja: 2023-01-07 02:59:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -100,7 +100,6 @@ function imagePreview() {
 
 function showModal() {
     const modal = document.getElementById('logout-modal');
-    console.log(modal);
     if (modal !== null) new bootstrap.Modal(modal, {}).show();
 };
 
@@ -120,9 +119,9 @@ function lightDarkFaviconIcon() {
     const onUpdate = function(isDark) {
         if (isDark) {
             lightSchemeIcon.remove();
-            document.head.append(darkSchemeIcon);
+            $('head').append(darkSchemeIcon);
         } else {
-            document.head.append(lightSchemeIcon);
+            $('head').append(lightSchemeIcon);
             darkSchemeIcon.remove();
         }
     };
