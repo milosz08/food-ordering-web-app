@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 02:22:20                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:20:53                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -101,7 +101,7 @@ class RestaurantsService extends MvcService
         {
             $this->dbh->rollback();
             $pagination_visible = false;
-            SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,

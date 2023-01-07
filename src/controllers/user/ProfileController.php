@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:22:13                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 01:04:35                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:21:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,12 +45,11 @@ class ProfileController extends MvcController
     public function edit_profile()
     {
         $this->protector->protect_only_user();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::EDIT_USER_PROFILE_PAGE);
         $edit_login_profile = $this->_service->edit_user_profile();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::EDIT_USER_PROFILE_PAGE);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::EDIT_USER_PROFILE_PAGE_BANNER);
         $this->renderer->render('user/edit-profile-view', array(
             'page_title' => 'Edytuj profil',
-            'form' => $edit_login_profile,
+            'data' => $edit_login_profile,
             'banner' => $banner_data,
         ));
     }
@@ -63,8 +62,10 @@ class ProfileController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_user();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::USER_PROFILE_PAGE_BANNER);
         $this->renderer->render('user/profile-view', array(
             'page_title' => 'Profil',
+            'banner' => $banner_data,
         ));
 	}
 }

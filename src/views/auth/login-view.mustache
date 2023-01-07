@@ -13,14 +13,14 @@
                 <hr class="mb-4">
                 <div class="col-md-12 mb-4">
                     <label for="form-login" class="form-label">Login/adres email:</label>
-                    <input type="text" name="login_email" value="{{form.v_loginemail.value}}" id="form-login"
-                        class="form-control {{form.v_loginemail.bts_class}}">
+                    <input type="text" name="login_email" value="{{data.login_email.value}}" id="form-login"
+                        class="form-control {{data.login_email.bts_class}}">
                     <div class="invalid-feedback">Podaj prawidłową wartość!</div>
                 </div>
                 <div class="col-md-12 mb-4">
                     <label for="form-pass" class="form-label">Hasło:</label>
                     <div class="input-group has-validation">
-                        <input type="password" name="pass" class="form-control {{form.v_password.bts_class}}" id="form-pass">
+                        <input type="password" name="pass" class="form-control {{data.password.bts_class}}" id="form-pass">
                         <button type="button" class="input-group-text password-input-toggler">
                             <i class="bi bi-eye-fill"></i>
                         </button>

@@ -105,8 +105,8 @@ class LoginService extends MvcService
             }
             SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
             return array(
-                'v_loginemail' => $login_email,
-                'v_password' => $password,
+                'login_email' => $login_email,
+                'password' => $password,
             );
         }
     }
