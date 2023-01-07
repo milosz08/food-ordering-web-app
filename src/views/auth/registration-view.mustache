@@ -15,35 +15,35 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="form-name" class="form-label">Imię:</label>
-                            <input type="text" name="registration-name" class="form-control {{form.v_name.bts_class}}"
-                                id="form-name" value="{{form.v_name.value}}" placeholder="np. Jan">
+                            <input type="text" name="registration-name" class="form-control {{data.user.name.bts_class}}"
+                                id="form-name" value="{{data.user.name.value}}" placeholder="np. Jan">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="form-surname" class="form-label">Nazwisko:</label>
                             <input type="text" name="registration-surname"
-                                class="form-control {{form.v_surname.bts_class}}" id="form-surname"
-                                value="{{form.v_surname.value}}" placeholder="np. Kowalski">
+                                class="form-control {{data.user.surname.bts_class}}" id="form-surname"
+                                value="{{data.user.surname.value}}" placeholder="np. Kowalski">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="form-login" class="form-label">Login:</label>
-                        <input type="text" name="registration-login" class="form-control {{form.v_login.bts_class}}"
-                            id="form-login" value="{{form.v_login.value}}" placeholder="np. jankowalski123">
+                        <input type="text" name="registration-login" class="form-control {{data.user.login.bts_class}}"
+                            id="form-login" value="{{data.user.login.value}}" placeholder="np. jankowalski123">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="form-email" class="form-label">Adres E-mail:</label>
-                        <input type="text" name="registration-email" class="form-control {{form.v_email.bts_class}}"
-                            id="form-email" value="{{form.v_email.value}}" placeholder="np. jankowalski@email.pl">
+                        <input type="text" name="registration-email" class="form-control {{data.user.email.bts_class}}"
+                            id="form-email" value="{{data.user.email.value}}" placeholder="np. jankowalski@email.pl">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="form-password" class="form-label">Hasło:</label>
                         <div class="input-group has-validation">
                             <input type="password" name="registration-password" placeholder="minimum 8 znaków"
-                                class="form-control {{form.v_password.bts_class}}" id="form-password">
+                                class="form-control {{data.user.password.bts_class}}" id="form-password">
                             <button type="button" class="input-group-text password-input-toggler">
                                 <i class="bi bi-eye-fill"></i>
                             </button>
@@ -54,7 +54,7 @@
                         <label for="form-repeat-password" class="form-label">Powtórz hasło:</label>
                         <div class="input-group has-validation">
                             <input type="password" name="registration-password-rep" placeholder="minimum 8 znaków"
-                                class="form-control {{form.v_password_rep.bts_class}}" id="form-repeat-password">
+                                class="form-control {{data.user.password_rep.bts_class}}" id="form-repeat-password">
                             <button type="button" class="input-group-text password-input-toggler">
                                 <i class="bi bi-eye-fill"></i>
                             </button>
@@ -83,15 +83,15 @@
                         <div class="col-md-6 mb-3">
                             <label for="form-building" class="form-label">Nr budynku:</label>
                             <input type="text" name="registration-building-number"
-                                class="form-control {{form.v_building_no.bts_class}}" id="form-building"
-                                value="{{form.v_building_no.value}}" placeholder="np. 65">
+                                class="form-control {{data.user.building_nr.bts_class}}" id="form-building"
+                                value="{{data.user.building_nr.value}}" placeholder="np. 65">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="form-locale" class="form-label">Nr mieszkania:</label>
                             <input type="text" name="registration-local-number"
-                                class="form-control {{form.v_locale_no.bts_class}}" id="form-locale"
-                                value="{{form.v_locale_no.value}}" placeholder="np. 12c">
+                                class="form-control {{data.user.locale_nr.bts_class}}" id="form-locale"
+                                value="{{data.user.locale_nr.value}}" placeholder="np. 12c">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
@@ -99,21 +99,21 @@
                         <div class="col-md-6 mb-3">
                             <label for="form-post-code" class="form-label">Kod pocztowy:</label>
                             <input type="text" name="registration-post-code"
-                                class="form-control {{form.v_post_code.bts_class}}" id="form-post-code"
-                                value="{{form.v_post_code.value}}" placeholder="np. 43-100">
+                                class="form-control {{data.user.post_code.bts_class}}" id="form-post-code"
+                                value="{{data.user.post_code.value}}" placeholder="np. 43-100">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="form-city" class="form-label">Miasto:</label>
-                            <input type="text" name="registration-city" class="form-control {{form.v_city.bts_class}}"
-                                id="form-city" value="{{form.v_city.value}}" placeholder="np. Gliwice">
+                            <input type="text" name="registration-city" class="form-control {{data.user.city.bts_class}}"
+                                id="form-city" value="{{data.user.city.value}}" placeholder="np. Gliwice">
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
                         <label for="form-street" class="form-label">Ulica:</label>
-                        <input type="text" name="registration-street" class="form-control {{form.v_street.bts_class}}"
-                            id="form-street" value="{{form.v_street.value}}" placeholder="np. Długa">
+                        <input type="text" name="registration-street" class="form-control {{data.user.street.bts_class}}"
+                            id="form-street" value="{{data.user.street.value}}" placeholder="np. Długa">
                         <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                     </div>
                     <button type="submit" name="registration-button" class="btn btn-primary btn-md w-100">

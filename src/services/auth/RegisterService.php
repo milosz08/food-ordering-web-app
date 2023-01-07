@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:42:37                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:47:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,10 +20,12 @@ use Exception;
 use App\Core\Config;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
+use App\Models\RegisterUserModel;
 use App\Services\Helpers\AuthHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\ValidationHelper;
 
+ResourceLoader::load_model('RegisterUserModel', 'auth');
 ResourceLoader::load_service_helper('AuthHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
@@ -49,35 +51,35 @@ class RegisterService extends MvcService
      */
     public function register_user()
     {
+        $user = new RegisterUserModel;
         if(isset($_POST['registration-button']))
         {
             try
             {
-                $v_name = ValidationHelper::validate_field_regex('registration-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
-                $v_surname = ValidationHelper::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ \-]{2,50}$/');
-                $v_login = ValidationHelper::validate_field_regex('registration-login', Config::get('__REGEX_LOGIN__'));
-                $v_password = ValidationHelper::validate_field_regex('registration-password', Config::get('__REGEX_PASSWORD__'));
-                $v_password_rep = ValidationHelper::validate_exact_fields($v_password, 'registration-password-rep');
-                $v_email = ValidationHelper::validate_email_field('registration-email');
-                $account_type = $_POST['registration-role'];
-                $v_building_no = ValidationHelper::validate_field_regex('registration-building-number', Config::get('__REGEX_BUILDING_NO__'));
-                if (!empty($_POST['registration-local-number']))
-                    $v_locale_no = ValidationHelper::validate_field_regex('registration-local-number', Config::get('__REGEX_BUILDING_NO__'));
-                else
-                    $v_locale_no = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => '');
-                $v_post_code = ValidationHelper::validate_field_regex('registration-post-code', Config::get('__REGEX_POSTCODE__'));
-                $v_city = ValidationHelper::validate_field_regex('registration-city', Config::get('__REGEX_CITY__'));
-                $v_street = ValidationHelper::validate_field_regex('registration-street', Config::get('__REGEX_STREET__'));
+                $user->name = ValidationHelper::validate_field_regex('registration-name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
+                $user->surname = ValidationHelper::validate_field_regex('registration-surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ \-]{2,50}$/');
+                $user->login = ValidationHelper::validate_field_regex('registration-login', Config::get('__REGEX_LOGIN__'));
+                $user->password = ValidationHelper::validate_field_regex('registration-password', Config::get('__REGEX_PASSWORD__'));
+                $user->password_rep = ValidationHelper::validate_exact_fields($user->password, 'registration-password-rep');
+                $user->email = ValidationHelper::validate_email_field('registration-email');
+                $user->building_nr = ValidationHelper::validate_field_regex('registration-building-number', Config::get('__REGEX_BUILDING_NO__'));
+                if (!empty($_POST['registration-local-number'])) $user->locale_nr = ValidationHelper::validate_field_regex(
+                    'registration-local-number', Config::get('__REGEX_BUILDING_NO__')
+                );
+                else $user->locale_nr = array(
+                    'value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => ''
+                );
+                $user->post_code = ValidationHelper::validate_field_regex('registration-post-code', Config::get('__REGEX_POSTCODE__'));
+                $user->city = ValidationHelper::validate_field_regex('registration-city', Config::get('__REGEX_CITY__'));
+                $user->street = ValidationHelper::validate_field_regex('registration-street', Config::get('__REGEX_STREET__'));
 
-                if (!($v_name['invl'] || $v_surname['invl'] || $v_login['invl'] || $v_password['invl'] || $v_email['invl'] ||
-                      $v_building_no['invl'] || $v_locale_no['invl'] || $v_post_code['invl'] || $v_city['invl'] || $v_street['invl'] ||
-                      $v_password_rep['invl']))
+                if ($user->all_is_valid())
                 {
                     $this->dbh->beginTransaction();
                     // Zapytanie zwracające liczbę istniejących już kont o podanym loginie i/lub emailu
                     $query = "SELECT COUNT(id) FROM users WHERE login = ? OR email = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(array($v_login['value'], $v_email['value']));
+                    $statement->execute(array($user->name['value'], $user->email['value']));
                     
                     if ($statement->fetchColumn() > 0) throw new Exception('Podany użytkownik istnieje już w systemie. Podaj inne dane.');
 
@@ -85,25 +87,29 @@ class RegisterService extends MvcService
                     $query = "INSERT INTO users (first_name, last_name, login, password, email, role_id) VALUES (?,?,?,?,?,?)";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_name['value'],
-                        $v_surname['value'],
-                        $v_login['value'],
-                        $this->passwd_hash($v_password['value']),
-                        $v_email['value'],
-                        (int)$account_type,
+                        $user->name['value'],
+                        $user->surname['value'],
+                        $user->login['value'],
+                        $this->passwd_hash($user->password['value']),
+                        $user->email['value'],
+                        (int)$_POST['registration-role'],
                     ));
-                    $query = "SELECT id, email, CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE login = ?";
+                    $query = "SELECT id, CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE login = ?";
                     $statement_id = $this->dbh->prepare($query);
-                    $statement_id->execute(array($v_login['value']));
+                    $statement_id->execute(array($user->login['value']));
+                    $user_data = $statement_id->fetch(PDO::FETCH_ASSOC);
 
-                    $query = "INSERT INTO user_address (street, building_locale_nr, post_code, city, user_id) VALUES (?,?,?,?,?)";
+                    $query = "
+                        INSERT INTO user_address (street, building_nr, locale_nr, post_code, city, user_id)
+                        VALUES (?,?,NULLIF(?,''),?,?,?)
+                    ";
                     $statement = $this->dbh->prepare($query);
-                    $user_data = $statement_id->fetchAll(PDO::FETCH_ASSOC)[0];
                     $statement->execute(array(
-                        $v_street['value'],
-                        empty($v_locale_no['value']) ? $v_building_no['value'] : $v_building_no['value'] . '/' . $v_locale_no['value'],
-                        $v_post_code['value'],
-                        $v_city['value'],
+                        $user->street['value'],
+                        $user->building_nr['value'],
+                        $user->locale_nr['value'],
+                        $user->post_code['value'],
+                        $user->city['value'],
                         $user_data['id'],
                     ));
 
@@ -125,7 +131,7 @@ class RegisterService extends MvcService
                         'regenerate_link' => 'auth/account/activate/resend/code?userid=' . $user_data['id'],
                     );
                     $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
-                    $this->smtp_client->send_message($user_data['email'], $subject, 'activate-account', $email_request_vars);
+                    $this->smtp_client->send_message($user->email['value'], $subject, 'activate-account', $email_request_vars);
 
                     $statement->closeCursor();
                     $statement_id->closeCursor();
@@ -139,27 +145,16 @@ class RegisterService extends MvcService
                         $this->_banner_error, 'alert-warning'
                     );
                     header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
+                    die;
                 }
             }
             catch (Exception $e)
             {
                 $this->dbh->rollback();
-                $this->_banner_error = true;
-                $this->_banner_message = $e->getMessage();
+                SessionHelper::create_session_banner(SessionHelper::REGISTER_PAGE_BANNER, $e->getMessage(), true);
             }
-            SessionHelper::create_session_banner(SessionHelper::REGISTER_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
             return array(
-                'v_name' => $v_name,
-                'v_surname' => $v_surname,
-                'v_login' => $v_login,
-                'v_password' => $v_password,
-                'v_password_rep' => $v_password_rep,
-                'v_email' => $v_email,
-                'v_building_no' => $v_building_no,
-                'v_locale_no' => $v_locale_no,
-                'v_post_code' => $v_post_code,
-                'v_city' => $v_city,
-                'v_street' => $v_street,
+                'user' => $user,
             );
         }
     }
