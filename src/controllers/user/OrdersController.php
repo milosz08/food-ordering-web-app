@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:51:17                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-07 16:43:47                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -38,6 +38,42 @@ class OrdersController extends MvcController
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Przejście pod adres: /user/orders/dashboard/orders
+     */
+    public function dashboard_orders()
+    {
+        $this->renderer->render('user/orders-list-view', array(
+            'page_title' => 'Twoje zamówienia',
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /user/orders/dashboard/single/order
+     */
+    public function dashboard_single_order()
+    {
+        $this->renderer->render('user/single-order-view', array(
+            'page_title' => 'Szczegóły zamówienia',
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /user/orders/order/finish
+     */
+    public function order_finish()
+    {
+        $this->renderer->render('user/orders-view', array(
+            'page_title' => 'Składanie zamówienia',
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Przejście pod adres: /user/orders
      */
