@@ -1,1 +1,94 @@
-<header>To jest nagłówek wyrenderowany przez plik częściowy</header>
+{{#logged_user}}
+<header class="navbar py-1 shadow-sm bg-white fixed-top max-z-index">
+    <div class="container-lg d-flex flex-wrap align-items-center justify-content-md-between">
+        <a class="navbar-brand d-flex align-items-center" href="{{base_dir}}">
+            <img src="{{base_dir}}public/static/images/app-logo.png" width="40px" height="40px" />
+            <span class="ms-2 mb-0 text-dark">Dobre.pl</span>
+        </a>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="{{base_dir}}restaurants" class="nav-link px-2 link-dark">Restauracje</a></li>
+            {{#is_normal_user}}
+                <li><a href="{{base_dir}}user/profile" class="nav-link px-2 link-dark">Moje konto</a></li>
+                <li><a href="{{base_dir}}user/orders" class="nav-link px-2 link-dark">Moje zamówienia</a></li>
+            {{/is_normal_user}}
+            {{^is_normal_user}}
+                <li><a href="{{base_dir}}{{logged_user.user_role.role_eng}}/dashboard" class="nav-link px-2 link-dark">Panel CMS</a></li>
+            {{/is_normal_user}}
+        </ul>
+        <div class="text-end">
+            <div class="dropdown">
+                <button class="d-flex align-items-center border-0 bg-transparent dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
+                </button>
+                <ul class="dropdown-menu text-small">
+                    {{#is_normal_user}}
+                        <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}user/orders">
+                            <span class="material-symbols-outlined me-2 fs-5">list_alt</span>Moje zamówienia
+                        </a></li>
+                    {{/is_normal_user}}
+                    {{^is_normal_user}}
+                        <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}{{logged_user.user_role.role_eng}}/dashboard">
+                            <span class="material-symbols-outlined me-2 fs-5">door_open</span>Panel CMS
+                        </a></li>
+                    {{/is_normal_user}}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}{{logged_user.user_role.role_eng}}/profile">
+                        <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
+                    </a></li>
+                    <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}{{logged_user.user_role.role_eng}}/settings">
+                        <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
+                    </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+                        <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+                    </button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+{{/logged_user}}
+{{^logged_user}}
+<header class="navbar py-1 shadow-sm bg-white fixed-top max-z-index">
+    <div class="container-lg d-flex flex-wrap align-items-center justify-content-md-between">
+        <a class="navbar-brand d-flex align-items-center" href="{{base_dir}}">
+            <img src="{{base_dir}}public/static/images/app-logo.png" width="40px" height="40px" />
+            <span class="ms-2 mb-0 text-dark">Dobre.pl</span>
+        </a>
+        <div class="d-none d-md-flex">
+            <form action="{{base_dir}}restaurants" method="get" role="search" class="hstack">
+                <input class="form-control form-control-sm" type="search" placeholder="Szukaj restauracji" name="search">
+                <button type="submit" class="btn btn-sm btn-primary ms-2"><i class="bi bi-search"></i></button>
+            </form>
+            <a href="{{base_path}}auth/login" class="btn btn-sm btn-outline-primary ms-4 me-2">Zaloguj</a>
+            <a href="{{base_path}}auth/register" class="btn btn-sm btn-primary">Rejestracja</a>
+        </div>
+        <div class="d-block d-md-none">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <a class="navbar-brand d-flex align-items-center" href="{{base_dir}}">
+                        <img src="{{base_dir}}public/static/images/app-logo.png" width="40px" height="40px" />
+                        <span class="ms-2 mb-0 text-dark">Dobre.pl</span>
+                    </a>
+                    <button type="button" class="btn-close me-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form action="{{base_dir}}restaurants" method="get" role="search" class="hstack mb-4">
+                        <input class="form-control form-control" type="search" placeholder="Szukaj restauracji" name="search">
+                        <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
+                    </form>
+                    <div class="vstack gap-2">
+                        <a href="{{base_path}}auth/login" class="btn btn-outline-primary">Zaloguj</a>
+                        <a href="{{base_path}}auth/register" class="btn btn-primary">Rejestracja</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{{/logged_user}}
