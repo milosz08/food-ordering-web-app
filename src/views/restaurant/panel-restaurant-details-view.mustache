@@ -5,7 +5,75 @@
         <li class="breadcrumb-item active" aria-current="page">Szczegóły restauracji</li>
     </ol>
 </nav>
-<h2 class="text-secondary fw-light mb-0">
-    Szczegóły restauracji
-    <span class="fw-normal text-primary">#{{data.res_id}}</span>
-</h2>
+{{#banner.show_banner}}
+<div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
+    {{{banner.banner_message}}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/banner.show_banner}}
+<div class="container-fluid px-0">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-lg-6 mb-3"><h2 class="text-secondary fw-light mb-0">Dania restauracji</h2></div>
+        <form class="col-lg-3 mb-3 d-flex justify-content-end" action="" method="post">
+            <input type="text" name="search-dish-name" placeholder="Szukaj po nazwie" class="form-control" value="{{data.search_text}}">
+            <button type="submit" name="search-dish-button" class="btn btn-primary btn-md ms-2 py-2">
+            <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="table-responsive-xxl">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lp</th>
+                <th>Nazwa dania</th>
+                <th>Typ dania</th>
+                <th class="d-none d-lg-table-cell">Opis</th>
+                <th class="fit">Cena</th>
+                <th class="fit">Akcja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#data.restaurant_dish}}
+            <tr>
+                <td class="align-middle">{{it}}</td>
+                <td class="align-middle">{{name}}</td>
+                <td class="align-middle">{{type}}</td>
+                <td class="align-middle d-none d-lg-table-cell">{{description}}</td>
+                <td class="align-middle">{{price}}</td>
+                <td>
+                    <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#delete-dish-modal-{{id}}">
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Usuń danie" type="button">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                    </button>
+                </td>
+            </tr>
+            <div class="modal fade" id="delete-dish-modal-{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Akceptowanie restauracji</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Czy napewno chcesz usunąć wybrane danie: <strong>{{name}}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                        <a class="btn btn-outline-danger" href="{{base_dir}}restaurant/panel/dish/delete?id={{id}}">
+                            Usuń
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+            {{/data.restaurant_dish}}
+        </tbody>
+    </table>
+</div>
+{{#data.pagination_visible}}
+    {{> partials/pagination-view.partial}}
+{{/data.pagination_visible}}

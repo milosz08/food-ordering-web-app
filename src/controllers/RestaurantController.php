@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-27, 19:49:47                       *
  * Autor: cptn3m012                                            *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 16:33:57                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2022-12-28 14:59:54                   *
+ * Modyfikowany przez: Desi                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -18,13 +18,16 @@ namespace App\Controllers;
 use App\Utils\Utils;
 use App\Core\MvcController;
 use App\Services\RestaurantService;
+use App\Services\DishService;
 
 /**
  * Kontroler odpowiadający za obsługę dodawania oraz edytowania restauracji.
  */
 class RestaurantController extends MvcController
 {
-    private $_service; // instancja serwisu
+    private $_resService; // instancja serwisu
+    private $_dishService;
+
     
     //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -32,7 +35,9 @@ class RestaurantController extends MvcController
     {
         // Wywołanie konstruktora z klasy MvcController. Każda klasa kontrolera musi wywoływać konstruktor klasy nadrzędniej!
         parent::__construct();
-        $this->_service = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RestaurantService
+        $this->_dishService = new DishService();
+        $this->_resService = RestaurantService::get_instance(RestaurantService::class); // pobranie instancji klasy RestaurantService
+        
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -56,7 +61,7 @@ class RestaurantController extends MvcController
     public function panel_myrestaurants()
     {
         $this->protector->protect_only_restaurator();
-        $restaurant_table = $this->_service->get_user_restaurants();
+        $restaurant_table = $this->_resService->get_user_restaurants();
         $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-my-restaurants-view', array(
             'page_title' => 'Moje restauracje',
@@ -73,7 +78,7 @@ class RestaurantController extends MvcController
     public function panel_myrestaurant_add()
     {
         $this->protector->protect_only_restaurator();
-        $add_restaurant_form_data = $this->_service->add_restaurant();
+        $add_restaurant_form_data = $this->_resService->add_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Dodaj restaurację',
             'add_edit_text' => 'Dodaj',
@@ -90,7 +95,7 @@ class RestaurantController extends MvcController
     public function panel_myrestaurant_edit()
     {
         $this->protector->protect_only_restaurator();
-        $edit_restaurant_form_data = $this->_service->edit_restaurant();
+        $edit_restaurant_form_data = $this->_resService->edit_restaurant();
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
             'add_edit_text' => 'Edytuj',
@@ -107,10 +112,12 @@ class RestaurantController extends MvcController
     public function panel_myrestaurant_details()
     {
         $this->protector->protect_only_restaurator();
-        $details_restaurant_data = $this->_service->get_restaurant_details();
+        $details_restaurant_dish = $this->_resService->get_restaurant_details();
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-details-view', array(
             'page_title' => 'Szczegóły restauracji',
-            'data' => $details_restaurant_data,
+            'banner' => $mainpulate_restaurant_banner,
+            'data' => $details_restaurant_dish,
         ));
     }
 
@@ -122,7 +129,7 @@ class RestaurantController extends MvcController
     public function panel_myrestaurant_delete()
     {
         $this->protector->protect_only_restaurator();
-        $this->_service->delete_restaurant();
+        $this->_resService->delete_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
     }
 
@@ -163,6 +170,60 @@ class RestaurantController extends MvcController
         $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-orders-view', array(
             'page_title' => 'Zamówienia',
         ));
+    }
+
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/add. 
+     */
+    public function panel_dish_add()
+    {
+        $this->protector->protect_only_restaurator();
+        $add_dish_form_data = $this->_dishService->add_dish();
+        $show_res = $this->_dishService->show_restaurants();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-dish-view', array(
+            'page_title' => 'Dodaj danie',
+            'add_edit_text' => 'Dodaj',
+            'is_error' => !empty($add_dish_form_data['error']),
+            'form' => $add_dish_form_data,
+            'res' => $show_res
+        ));
+    }
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/edit. 
+     */
+    public function panel_dish_edit()
+    {
+        $this->protector->protect_only_restaurator();
+        $edit_dish_form_data = $this->_dishService->edit_dish();
+        $show_res = $this->_dishService->show_restaurants();
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-add-edit-dish-view', array(
+            'page_title' => 'Edytuj danie',
+            'add_edit_text' => 'Edytuj',
+            'is_error' => !empty($edit_dish_form_data['error']),
+            'form' => $edit_dish_form_data,
+            'res' => $show_res
+        ));
+    }
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/dish/delete?id=.
+     */
+    public function panel_dish_delete()
+    {
+        $this->_dishService->remove_dish();
+        //header('Location:' . __URL_INIT_DIR__ . 'restaurant/panel/myrestaurants', true, 301);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres restaurant/panel/restaurant/single. 
+     */
+    public function panel_restaurant_single()
+    {
+        $this->renderer->render_embed('restaurant/panel-wrapper-view', 'restaurant/panel-restaurant-single-view');
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

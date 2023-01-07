@@ -1,0 +1,135 @@
+<div class="container-flex m-3">
+    <div class="row justify-content-between">
+        <div class="col-sm-4 d-flex">
+            <div class="col-sm text-left">
+                <div class="sticky-top">
+                    <p class="fs-5 fw-bold" style="margin-left: 50px;">7 restauracji</p>
+                    <p class="fs-5 fw-bold" style="margin-left: 50px;">Czynne</p>
+                    <p class="fs-5 fw-bold" style="margin-left: 50px;">Bezpłatna dostawa</p>
+                    <p class="fs-5 fw-bold" style="margin-left: 50px;">Oferty i rabaty</p>
+                    <p class="fs-5 fw-bold" style="margin-left: 50px;">Sortuj według</p>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="sticky-top">
+                    <br>
+                    <br>
+                    <label class="switch" style="margin-left: 150px;">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <br>
+                    <br>
+                    <label class="switch" style="margin-left: 150px;">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <br>
+                    <br>
+                    <label class="switch" style="margin-left: 150px;">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <br>
+                    <div class="dropdown mt-3" style="margin-left: 80px;">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="submit" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dopasowanie
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="">Oceny</a></li>
+                            <li><a class="dropdown-item" href="">Kosztu dostawy</a></li>
+                            <li><a class="dropdown-item" href="">Czasu dostawy</a></li>
+                            <li><a class="dropdown-item" href="">Alfabetycznie</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <form class="col-sm-12 mb-3 d-flex justify-content-end" action="" method="post">
+                <input type="text" name="search-res-list-name" placeholder="szukaj" class="form-control"
+                    value="{{data.search_text}}">
+                <button type="submit" name="search-res-button" class="btn btn-primary btn-md ms-2 py-2">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+
+            {{#data.rest_list}}
+
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4 d-block" style="position: relative;">
+
+                        {{#baner_url}}
+                        <img src="/restaurant-project-php-si/public/{{baner_url}}" class="img-fluid rounded-start"
+                            style="height: 100%;" alt="...">
+                        {{/baner_url}}
+                        {{^baner_url}}
+                        <img src="https://image-assets.eu-2.volcanic.cloud/api/v1/assets/images/ff61eb2dd52e078ee22e70b4e58332ff?t=1669801859&format=webp"
+                            class="img-fluid rounded-start" style="height: 100%;" alt="...">
+                        {{/baner_url}}
+
+                        {{#profile_url}}
+                        <img src="/restaurant-project-php-si/public/{{profile_url}}" class="img-fluid"
+                            style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75"
+                            alt="...">
+                        {{/profile_url}}
+                        {{^profile_url}}
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg" class="img-fluid"
+                            style="border-radius: 50%; position: absolute; left: 5%; top: 40%;" width="75" height="75"
+                            alt="...">
+                        {{/profile_url}}
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body-sm p-3">
+                            <h5 class="card-title fw-bold">{{name}}</h5>
+                            <p class="card-text fw-lighter font-monospace">
+                                <i class="bi bi-star-fill" style="color: orange;"></i> 4,2(11)&nbsp;&nbsp;
+                                <i class="bi bi-bicycle fs-5" style="color: green;"></i>
+                                {{delivery_price}}zł&nbsp;&nbsp;
+                                <i class="bi bi-clock" style="color: blue;"></i> 50-60min
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted d-block text-truncate">
+                                    {{description}}
+                                </small>
+                                <a href="{{base_dir}}admin/panel/restaurant/accept?id={{id}}" data-bs-toggle="modal"
+                                    data-bs-target="#accept-res-modal-{{id}}" type="button"
+                                    class="btn btn-primary btn-md py-1">
+                                    Pokaż pełny opis
+                                </a>
+                            </p>
+                        </div>
+                        <div class="modal fade" id="accept-res-modal-{{id}}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Opis</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{description}}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Zamknij</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{/data.rest_list}}
+
+        </div>
+    </div>
+</div>
+{{#data.pagination_visible}}
+{{> partials/restaurant-list-pagination-view.partial}}
+{{/data.pagination_visible}}

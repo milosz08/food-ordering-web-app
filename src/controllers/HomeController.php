@@ -9,8 +9,8 @@
  * Data utworzenia: 2022-11-10, 19:43:27                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-11 20:23:08                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-02 19:58:07                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -73,6 +73,23 @@ class HomeController extends MvcController
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Metoda uruchamiająca się w przypadku przejścia na adres home/restaurants. Metoda wyświetla wszystkie aktywne restauracje
+     * na głównej podstronie serwisu
+     */
+    public function restaurants()
+    {
+        $restaurant_list = $this->_service->restaurant_list();
+        $mainpulate_restaurant_banner = Utils::check_session_and_unset('manipulate_restaurant_banner');
+        $this->renderer->render('home/restaurants-list-view', array(
+            'page_title' => 'Lista restauracji',
+            'banner' => $mainpulate_restaurant_banner,
+            'data' => $restaurant_list,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      * Metoda uruchamiająca się w przypadku przejścia na adres home/welcome. Metoda na końcu wyświetla szablon z
      * przekazanymi danymi przy pomocy instancji klasy MvcRenderer otrzymywanej z klasy nadrzędnej MvcController.
      */
@@ -97,5 +114,43 @@ class HomeController extends MvcController
     public function index()
     {
         header('Location:' . __URL_INIT_DIR__);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na profil uzytkownika.
+     */
+    public function general_user_orders()
+    {
+        $this->renderer->render('home/panel-general-user-orders', array(
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na edycje profilu uzytkownika.
+     */
+    public function general_user_profile_edit()
+    {
+        $banner_data = Utils::check_session_and_unset('successful_change_data');
+        $edit_login_profile = $this->_service->profileEdit();
+        $banner_data = Utils::fill_banner_with_form_data($edit_login_profile, $banner_data);
+        $this->renderer->render('home/panel-general-user-profile-edit', array(
+            'form' => $edit_login_profile,
+            'banner' => $banner_data,
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Metoda uruchamiająca się w przypadku przejścia na profil uzytkownika.
+     */
+    public function general_user_dashboard()
+    {
+        $this->renderer->render('home/panel-general-user-dashboard', array(
+        ));
     }
 }
