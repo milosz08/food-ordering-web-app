@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 18:56:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 01:36:00                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:48:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -97,6 +97,7 @@ class LoginService extends MvcService
                 else if ($result['role_name'] == MvcProtector::OWNER) $redir_url = 'owner/dashboard';
                 else $redir_url = '';
                 header('Location:' . __URL_INIT_DIR__ . $redir_url, true, 301); // jeśli wszystko się powiedzie, przejdź do strony
+                die;
             }
             catch (Exception $e)
             {
