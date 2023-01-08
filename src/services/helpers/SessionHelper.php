@@ -9,13 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
-<<<<<<< HEAD
- * Ostatnia modyfikacja: 2023-01-08 01:09:47                   *
+ * Ostatnia modyfikacja: 2023-01-08 01:12:51                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
-=======
- * Ostatnia modyfikacja: 2023-01-08 01:09:47                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
->>>>>>> 4885b21a29450233dae64ec217eac0099ffa2955
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
