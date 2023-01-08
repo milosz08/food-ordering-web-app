@@ -1,5 +1,11 @@
 {{> partials/header-view.partial }}
 <main class="container-lg flex-grow-1 top-margin-header">
+    {{#banner.show_banner}}
+    <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
+        {{{banner.banner_message}}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{/banner.show_banner}}
     to jest wewnętrzny kontent strony dla profilu użytkownika<br>
     <a href="{{base_dir}}user/profile/edit-profile">Edytuj profil użytkownika</a>
 </main>

@@ -9,20 +9,21 @@
  * Data utworzenia: 2023-01-02, 21:12:35                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 02:02:00                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:24:34                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
 
-use PDO;
 use Exception;
 use App\Core\Config;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
+use App\Models\EditUserProfileModel;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\ValidationHelper;
 
+ResourceLoader::load_model('EditUserProfileModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
  
@@ -47,57 +48,40 @@ class ProfileService extends MvcService
      */
     public function edit_user_profile()
     {
+        $user = new EditUserProfileModel;
         try
         {
-            $local_nr = "";
             $this->dbh->beginTransaction();
             
             $query = "
-                SELECT first_name, last_name, email, street, post_code, city, building_locale_nr
+                SELECT first_name, last_name, email, street, post_code, city, building_nr, IFNULL(locale_nr, '') AS locale_nr
                 FROM users INNER JOIN user_address ON users.id = user_address.user_id
                 WHERE users.id = ?
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
-            $user = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            $v_name = array('value' => $user[0]['first_name'], 'invl' => false, 'bts_class' => '');
-            $v_surname = array('value' => $user[0]['last_name'], 'invl' => false, 'bts_class' => '');
-            $v_email = array('value' => $user[0]['email'], 'invl' => false, 'bts_class' => '');
-            $v_post_code = array('value' => $user[0]['post_code'], 'invl' => false, 'bts_class' => '');
-            $v_city = array('value' => $user[0]['city'], 'invl' => false, 'bts_class' => '');
-            $v_street = array('value' => $user[0]['street'], 'invl' => false, 'bts_class' => '');
-            $building_local_nr = $user[0]['building_locale_nr'];
-
-            $arr = explode("/", $building_local_nr, 2); // Pobranie samego numeru budynku ze stringa
-
-            // Pobranie tylko i wyłączenie numeru lokalu ze stringa
-            if ($pos = strpos($building_local_nr, "/")) $local_nr = substr($building_local_nr, $pos + 1);
-
-            $v_building_no = array('value' => $arr[0], 'invl' => false, 'bts_class' => '');
-            $v_locale_no = array('value' => $local_nr, 'invl' => false, 'bts_class' => '');
+            $user = $statement->fetchObject(EditUserProfileModel::class);
 
             if (isset($_POST['save-changes-button']))
             {
-                $v_name = ValidationHelper::validate_field_regex('name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
-                $v_surname = ValidationHelper::validate_field_regex('surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ \-]{2,50}$/');
-                $v_email = ValidationHelper::validate_email_field('email');
-                $v_building_no = ValidationHelper::validate_field_regex('building-number', Config::get('__REGEX_BUILDING_NO__'));
+                $user->first_name = ValidationHelper::validate_field_regex('name', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,50}$/');
+                $user->last_name = ValidationHelper::validate_field_regex('surname', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ \-]{2,50}$/');
+                $user->email = ValidationHelper::validate_email_field('email');
+                $user->building_nr = ValidationHelper::validate_field_regex('building-number', Config::get('__REGEX_BUILDING_NO__'));
                 if (!empty($_POST['local-number']))
-                    $v_locale_no = ValidationHelper::validate_field_regex('local-number', Config::get('__REGEX_BUILDING_NO__'));
+                    $user->locale_nr = ValidationHelper::validate_field_regex('local-number', Config::get('__REGEX_BUILDING_NO__'));
                 else
-                    $v_locale_no = array('value' => $_POST['local-number'], 'invl' => false, 'bts_class' => '');
-                $v_post_code = ValidationHelper::validate_field_regex('post-code', Config::get('__REGEX_POSTCODE__'));
-                $v_city = ValidationHelper::validate_field_regex('city', Config::get('__REGEX_CITY__'));
-                $v_street = ValidationHelper::validate_field_regex('street', Config::get('__REGEX_STREET__'));
+                    $user->locale_nr = array('value' => $_POST['local-number'], 'invl' => false, 'bts_class' => '');
+                $user->post_code = ValidationHelper::validate_field_regex('post-code', Config::get('__REGEX_POSTCODE__'));
+                $user->city = ValidationHelper::validate_field_regex('city', Config::get('__REGEX_CITY__'));
+                $user->street = ValidationHelper::validate_field_regex('street', Config::get('__REGEX_STREET__'));
 
-                if (!($v_name['invl'] || $v_surname['invl'] || $v_email['invl'] || $v_building_no['invl'] || $v_locale_no['invl'] || 
-                    $v_post_code['invl'] || $v_city['invl'] || $v_street['invl']))
+                if ($user->all_is_valid())
                 {
                     // Zapytanie zwracające liczbę istniejących już kont o podanym loginie i/lub emailu
                     $query = "SELECT COUNT(id) FROM users WHERE email = ? AND NOT id = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(array($v_email['value'], $_SESSION['logged_user']['user_id']));
+                    $statement->execute(array($user->email['value'], $_SESSION['logged_user']['user_id']));
 
                     if ($statement->fetchColumn() > 0) throw new Exception('Podany email istnieje już w systemie.');
 
@@ -105,26 +89,31 @@ class ProfileService extends MvcService
                     $query = "UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_name['value'],
-                        $v_surname['value'],
-                        $v_email['value'],
-                        $_SESSION['logged_user']['user_id']
+                        $user->first_name['value'],
+                        $user->last_name['value'],
+                        $user->email['value'],
+                        $_SESSION['logged_user']['user_id'],
                     ));
 
-                    $query = "UPDATE user_address SET street = ?, building_locale_nr = ?, post_code = ?, city = ? WHERE user_id = ?"; 
+                    $query = "
+                        UPDATE user_address SET street = ?, building_nr = ?, locale_nr = NULLIF(?,''), post_code = ?, city = ?
+                        WHERE user_id = ?
+                    "; 
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $v_street['value'],
-                        empty($v_locale_no['value']) ? $v_building_no['value'] : $v_building_no['value'] . '/' . $v_locale_no['value'],
-                        $v_post_code['value'],
-                        $v_city['value'],
-                        $_SESSION['logged_user']['user_id']
+                        $user->street['value'],
+                        $user->building_nr['value'],
+                        $user->locale_nr['value'],
+                        $user->post_code['value'],
+                        $user->city['value'],
+                        $_SESSION['logged_user']['user_id'],
                     ));
                     $statement->closeCursor();
 
-                    $this->_banner_message = 'Dane zostały pomyślnie zmienione';
-                    SessionHelper::create_session_banner(SessionHelper::EDIT_USER_PROFILE_PAGE, $this->_banner_message, $this->_banner_error);
-                    header('Location:' . __URL_INIT_DIR__ . 'user/edit-profile', true, 301);
+                    $this->_banner_message = 'Twoje dane profilu zostały pomyślnie zmienione.';
+                    SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+                    header('Location:' . __URL_INIT_DIR__ . 'user/profile', true, 301);
+                    die;
                 }
                 $this->dbh->commit();
             }
@@ -132,19 +121,10 @@ class ProfileService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $this->_banner_message = $e->getMessage();
-            $this->_banner_error = true;
+            SessionHelper::create_session_banner(SessionHelper::EDIT_USER_PROFILE_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::EDIT_USER_PROFILE_PAGE, $this->_banner_message, $this->_banner_error);
         return array(
-            'v_name' => $v_name,
-            'v_surname' => $v_surname,
-            'v_email' => $v_email,
-            'v_building_no' => $v_building_no,
-            'v_locale_no' => $v_locale_no,
-            'v_post_code' => $v_post_code,
-            'v_city' => $v_city,
-            'v_street' => $v_street,
+            'user' => $user,
         );
     }
 }

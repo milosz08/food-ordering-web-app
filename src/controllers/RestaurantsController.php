@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 22:57:42                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:20:53                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -57,7 +57,7 @@ class RestaurantsController extends MvcController
 	public function index()
     {
         $res_list = $this->_service->get_all_accepted_restaurants();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::HOME_RESTAURANTS_LIST_PAGE);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER);
         $this->renderer->render('restaurants/all-restaurants-view', array(
             'page_title' => 'Restauracje',
             'banner' => $banner_data,

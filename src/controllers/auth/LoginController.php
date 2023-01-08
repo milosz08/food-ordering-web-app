@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 18:31:08                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:46:30                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:48:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -50,7 +50,7 @@ class LoginController extends MvcController
         if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::LOGIN_PAGE_BANNER); 
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
-            'form' => $form_data,
+            'data' => $form_data,
             'banner' => $banner_data,
         ));
 	}

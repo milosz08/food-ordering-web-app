@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 02:34:35                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:51:55                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -283,16 +283,15 @@ class DishesService extends MvcService
                     $statement->closeCursor();
                     $this->dbh->commit();
                     header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid']);
+                    die;
                 }
             }
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+            SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'dish' => $dish,
@@ -364,6 +363,7 @@ class DishesService extends MvcService
                     $statement->closeCursor();
                     $this->dbh->commit();
                     header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid']);
+                    die;
                 } else $dish->photo_url['value'] = $dish_photo;
             }
             $statement->closeCursor();
@@ -371,10 +371,8 @@ class DishesService extends MvcService
         }
         catch (Exception $e)
         {
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+            SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'dish' => $dish,

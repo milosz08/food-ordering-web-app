@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:20:35                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:39:55                   *
+ * Ostatnia modyfikacja: 2023-01-07 19:43:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,11 +45,11 @@ class RegisterController extends MvcController
 	public function index()
     {
         $this->protector->redirect_when_logged();
-        $form_data = $this->_service->register_user();
+        $register_user_data = $this->_service->register_user();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::REGISTER_PAGE_BANNER);
         $this->renderer->render('auth/registration-view', array(
             'page_title' => 'Rejestracja', 
-            'form' => $form_data,
+            'data' => $register_user_data,
             'banner' => $banner_data,
         ));
 	}
