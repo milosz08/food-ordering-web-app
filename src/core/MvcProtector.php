@@ -9,11 +9,13 @@
  * Data utworzenia: 2022-12-17, 15:54:57                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 16:53:39                   *
+ * Ostatnia modyfikacja: 2023-01-02 23:51:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa przechowująca metody odpowiedzialne za ochronę ściezek aplikacji. W zalezności od wybranej metody, umozliwi ona przeglądanie    *
@@ -26,18 +28,18 @@ class MvcProtector
     private static $_singleton_instance;
     private $_renderer;
 
-    public const USER = "user";
-    public const RESTAURATOR = "restaurator";
+    public const USER = "klient";
+    public const OWNER = "właściciel";
     public const ADMIN = "administrator";
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     protected function __construct($renderer)
     {
         $this->_renderer = $renderer;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Wszyscy uzytkownicy zalogowani na konto USER mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
@@ -47,17 +49,17 @@ class MvcProtector
         $this->redirect_on_role(self::USER);
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Wszyscy uzytkownicy zalogowani na konto RESTAURATOR mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
+     * Wszyscy uzytkownicy zalogowani na konto OWNER mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
      */
-    public function protect_only_restaurator()
+    public function protect_only_owner()
     {
-        $this->redirect_on_role(self::RESTAURATOR);
+        $this->redirect_on_role(self::OWNER);
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Wszyscy uzytkownicy zalogowani na konto ADMIN mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
@@ -67,7 +69,7 @@ class MvcProtector
         $this->redirect_on_role(self::ADMIN);
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda renderująca widok błędu 401, jeśli uzytkownic spróbuje odwołać się do zasobu do którego nie ma dostępu z poziomu roli pobranej
@@ -85,7 +87,7 @@ class MvcProtector
         die;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Metoda przekierowująca na wybrany adres (panel administratora, panel restauratora, strona główna) w zaleności od roli zalogowanego
@@ -98,13 +100,13 @@ class MvcProtector
         {
             $role = $logged_user_details['user_role'];
             if ($role['role_name'] == self::USER) header('Location: ' . __URL_INIT_DIR__, true, 301);
-            else if ($role['role_name'] == self::RESTAURATOR)
-                header('Location: ' . __URL_INIT_DIR__ . 'restaurant/panel/dashboard', true, 301);
-            else if ($role['role_name'] == self::ADMIN) header('Location: ' . __URL_INIT_DIR__ . 'admin/panel/dashboard', true, 301);
+            else if ($role['role_name'] == self::OWNER)
+                header('Location: ' . __URL_INIT_DIR__ . 'owner/dashboard', true, 301);
+            else if ($role['role_name'] == self::ADMIN) header('Location: ' . __URL_INIT_DIR__ . 'admin/dashboard', true, 301);
         }
     }    
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda tworząca obiekt klasy MvcProtector i zwracająca go. Jedyna metoda która pozwala na uzyskanie instancji klasy MvcProtector.

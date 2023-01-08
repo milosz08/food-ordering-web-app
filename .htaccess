@@ -21,6 +21,6 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     # przepisz podany parametr action na ścieżkę, np. index.php?action=home/welcome -> /home/welcome
     RewriteRule ^(.+)$ %{ENV:BASE}/public/index.php?action=$1 [NC,QSA,L]
-    # jeśli ścieżka zawiera parametry index.php?action=home/welcome przekieruj na stronę ROOT /
-    RewriteRule ^$ %{ENV:BASE}/public/index.php?action=home/welcome [NC,QSA,L]
+    # jeśli ścieżka zawiera parametry index.php?action=index przekieruj na stronę ROOT /
+    RewriteRule ^$ %{ENV:BASE}/public/index.php?action=index [NC,QSA,L]
 </IfModule>

@@ -1,0 +1,83 @@
+{{> partials/header-view.partial }}
+<main class="d-flex flex-column justify-content-center container-xl flex-grow-1">
+    <div class="row d-flex justify-content-center align-items-center w-100 mx-auto media-large-form-size-box">
+        {{#banner.show_banner}}
+        <div class="alert {{banner.banner_class}} mt-3 mb-0 alert-dismissible fade show" role="alert">
+            {{{banner.banner_message}}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/banner.show_banner}}
+        <div class="card my-3 rounded-3 p-4">
+            <form class="row" action="" method="post" novalidate>
+                <h3 class="fw-normal mb-4 text-center text-secondary">Edycja danych osobowych</h3>
+                <hr class="mb-4">
+                <div class="col-lg-6 px-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="form-name" class="form-label">Imię:</label>
+                            <input type="text" name="name" class="form-control {{data.user.first_name.bts_class}}"
+                                id="form-name" value="{{data.user.first_name.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="form-surname" class="form-label">Nazwisko:</label>
+                            <input type="text" name="surname"
+                                class="form-control {{data.user.last_name.bts_class}}" id="form-surname"
+                                value="{{data.user.last_name.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-email" class="form-label">Adres E-mail:</label>
+                        <input type="text" name="email" class="form-control {{data.user.email.bts_class}}"
+                            id="form-email" value="{{data.user.email.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="form-building" class="form-label">Nr budynku:</label>
+                            <input type="text" name="building-number"
+                                class="form-control {{data.user.building_nr.bts_class}}" id="form-building"
+                                value="{{data.user.building_nr.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="form-locale" class="form-label">Nr mieszkania:</label>
+                            <input type="text" name="local-number"
+                                class="form-control {{data.user.locale_nr.bts_class}}" id="form-locale"
+                                value="{{data.user.locale_nr.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 px-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="form-post-code" class="form-label">Kod pocztowy:</label>
+                            <input type="text" name="post-code"
+                                class="form-control {{data.user.post_code.bts_class}}" id="form-post-code"
+                                value="{{data.user.post_code.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="form-city" class="form-label">Miasto:</label>
+                            <input type="text" name="city" class="form-control {{data.user.city.bts_class}}"
+                                id="form-city" value="{{data.user.city.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label for="form-street" class="form-label">Ulica:</label>
+                        <input type="text" name="street" class="form-control {{data.user.street.bts_class}}"
+                            id="form-street" value="{{data.user.street.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <button type="submit" name="save-changes-button" class="btn btn-primary btn-md w-100">
+                        Zaaktualizuj dane
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{{> partials/footer-view.partial }}

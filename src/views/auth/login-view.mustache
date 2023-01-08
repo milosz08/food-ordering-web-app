@@ -1,39 +1,39 @@
 {{> partials/header-view.partial }}
-<div class="d-flex flex-column justify-content-center container flex-grow-1">
+<div class="d-flex flex-column justify-content-center container flex-grow-1 top-margin-header mb-5">
     <div class="row d-flex justify-content-center align-items-center w-100 mx-auto media-small-form-size-box">
         {{#banner.show_banner}}
-        <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
+        <div class="alert {{banner.banner_class}} mt-3 mb-0 alert-dismissible fade show" role="alert">
             {{{banner.banner_message}}}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {{/banner.show_banner}}
-        <div class="card rounded-3 py-4 px-3 py-sm-5 px-sm-5">
-            <form class="mb-5" action="" method="post" novalidate>
-                <h3 class="fw-normal mb-5 text-secondary">Logowanie</h3>
+        <div class="card my-3 rounded-3 p-4">
+            <form action="" method="post" novalidate>
+                <h3 class="fw-normal mb-4 text-center text-secondary">Logowanie</h3>
+                <hr class="mb-4">
                 <div class="col-md-12 mb-4">
-                    <label for="form-login" class="form-label">Login lub adres email</label>
-                    <input type="text" name="login_email" value="{{form.v_loginemail.value}}"
-                        placeholder="Podaj login lub adres e-mail" class="form-control {{form.v_loginemail.bts_class}}"
-                        id="form-login">
+                    <label for="form-login" class="form-label">Login/adres email:</label>
+                    <input type="text" name="login_email" value="{{data.login_email.value}}" id="form-login"
+                        class="form-control {{data.login_email.bts_class}}">
                     <div class="invalid-feedback">Podaj prawidłową wartość!</div>
                 </div>
                 <div class="col-md-12 mb-4">
-                    <label for="form-pass" class="form-label">Hasło</label>
+                    <label for="form-pass" class="form-label">Hasło:</label>
                     <div class="input-group has-validation">
-                        <input type="password" name="pass" placeholder="Podaj hasło"
-                            class="form-control {{form.v_password.bts_class}}" id="form-pass">
+                        <input type="password" name="pass" class="form-control {{data.password.bts_class}}" id="form-pass">
                         <button type="button" class="input-group-text password-input-toggler">
                             <i class="bi bi-eye-fill"></i>
                         </button>
                         <div class="invalid-feedback">Podaj prawidłową wartość!</div>
                     </div>
                 </div>
-                <button type="submit" name="form-login" class="btn btn-primary btn-md w-100 py-2">Zaloguj</button>
+                <button type="submit" name="form-login" class="btn btn-primary btn-md w-100">Zaloguj</button>
             </form>
+            <hr class="mt-4 mb-4">
             <div class="d-flex justify-content-center align-items-center">
                 <a class="pe-3 text-muted" href="{{base_dir}}auth/register">Nie mam jeszcze konta</a>
                 &#9642;
-                <a class="ps-3 text-muted" href="{{base_dir}}auth/password/renew/request">Zapomniałem hasła</a>
+                <a class="ps-3 text-muted" href="{{base_dir}}auth/forgot-password">Zapomniałem hasła</a>
             </div>
         </div>
     </div>

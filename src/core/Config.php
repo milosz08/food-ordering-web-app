@@ -9,13 +9,15 @@
  * Data utworzenia: 2022-11-10, 23:35:12                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 20:29:39                   *
- * Modyfikowany przez: Patryk Górniak                          *
+ * Ostatnia modyfikacja: 2023-01-02 20:54:58                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use Exception;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa konfiguracyjna przechowująca statyczną tablicę asocjacyjną z właściwościami KLUCZ->WARTOŚĆ dostępnymi z poziomu całej aplikacji *
@@ -37,7 +39,7 @@ class Config
      */
     private static $config_data = array();
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda dodająca nową wartość konfiguracyjną do globalnej tablicy $config_data składającej się z klucza i wartości, gdzie odpowiednio
@@ -53,7 +55,7 @@ class Config
         self::$config_data[$key] = $value; // dodawanie wartości pod wskazany klucz (jako indeks tablicy asocjacyjnej)
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda pobierająca wartość konfiguracyjną z globalnej tablicy $config_data na podstawie przekazywanego klucza w parametrze metody.
@@ -68,7 +70,7 @@ class Config
         return self::$config_data[$key]; // zwróć wartość na podstawie podanego klucza
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda tworząca ścieżkę poprzez dodawanie między kolejnymi segmentami znaków separacji (dopasowywanych dynamiczne na podstawie

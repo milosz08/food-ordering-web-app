@@ -9,14 +9,16 @@
  * Data utworzenia: 2022-11-11, 01:32:02                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-11-11 04:18:58                   *
- * Modyfikowany przez: Milosz08                                *
+ * Ostatnia modyfikacja: 2023-01-02 20:57:10                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use PDO;
 use PDOException;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa przechowująca instancję klasy PDO. Można do niej dołączyć dodatkowe metody i zapytania wspólne dla wielu sekcji aplikacji aby   *
@@ -29,7 +31,7 @@ class PdoDbContext
     private static $_singleton_instance; // instancja klasy PdoDbContext jako obiektu singleton
     private $_db_handler; // instancja PDO
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function __construct()
     {
@@ -53,7 +55,7 @@ class PdoDbContext
         }
     }
     
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda getter zwracająca uchwyt do bazy danych.
@@ -63,7 +65,7 @@ class PdoDbContext
         return $this->_db_handler;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca instantancję klasy PdoDbContext. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia 
