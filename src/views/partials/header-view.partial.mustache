@@ -9,7 +9,7 @@
             <li><a href="{{base_dir}}restaurants" class="nav-link px-2 link-dark">Restauracje</a></li>
             {{#is_normal_user}}
                 <li><a href="{{base_dir}}user/profile" class="nav-link px-2 link-dark">Moje konto</a></li>
-                <li><a href="{{base_dir}}user/orders" class="nav-link px-2 link-dark">Moje zamówienia</a></li>
+                <li><a href="{{base_dir}}user/orders/order-finish" class="nav-link px-2 link-dark">Moje zamówienia</a></li>
             {{/is_normal_user}}
             {{^is_normal_user}}
                 <li><a href="{{base_dir}}{{logged_user.user_role.role_eng}}/dashboard" class="nav-link px-2 link-dark">Panel CMS</a></li>

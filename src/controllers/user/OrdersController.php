@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 16:43:47                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-08 00:34:44                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -19,6 +19,7 @@ use App\Core\MvcService;
 use App\Core\MvcController;
 use App\Core\ResourceLoader;
 use App\User\Services\OrdersService;
+use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('OrdersService', 'user'); // ładowanie serwisu przy użyciu require_once
 
@@ -63,12 +64,20 @@ class OrdersController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /user/orders/order/finish
+     * Przejście pod adres: /user/orders/order-finish
      */
     public function order_finish()
     {
+        $this->protector->protect_only_user();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
+        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
+        $adress = $this->_service->fillAdress();
+        $delete_discount_code = $this->_service->deleteDiscountCode();
         $this->renderer->render('user/orders-view', array(
             'page_title' => 'Składanie zamówienia',
+            'form' => $adress,
+            'banner' => $banner_data,
+            'discount' => $delete_discount_code
         ));
     }
 

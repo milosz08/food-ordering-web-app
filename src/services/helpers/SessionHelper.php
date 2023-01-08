@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 20:10:26                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-07 22:41:02                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -30,6 +30,7 @@ class SessionHelper
     const LOGOUT_PAGE_BANNER = 'logout_page_banner';
     const EDIT_USER_PROFILE_PAGE = 'edit_user_profile_page';
     const HOME_RESTAURANTS_LIST_PAGE = 'home_restaurants_list_page';
+    const ORDER_FINISH_PAGE = 'order_finish_page';
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
