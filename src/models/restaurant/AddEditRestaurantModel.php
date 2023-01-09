@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 02:56:18                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-05 18:17:05                   *
+ * Ostatnia modyfikacja: 2023-01-09 12:24:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,6 +29,7 @@ class AddEditRestaurantModel
     public $banner_url; // baner restauracji
     public $profile_url; // zdjęcie restauracji (logo)
     public $phone_number; // numer telefonu do restauracji
+    public $delivery_free; // darmowa dostawa
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

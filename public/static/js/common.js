@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 02:59:18                   *
+ * Ostatnia modyfikacja: 2023-01-09 12:21:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,11 +45,11 @@ function showHidePassword() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function disableHoursOnClose() {
-    $('.day-checkbox').toArray().forEach(function (el) {
+function disableInputsOnCheckedCheckbox() {
+    $('.disable-checkbox').each(function (_, el) {
         const toggleDisabledInputs = function (checkbox) {
-            const timeInputs = $(checkbox).parent().parent().parent().find('input[type="time"]');
-            timeInputs.toArray().forEach(function (input) {
+            const timeInputs = $(checkbox).parent().parent().parent().find('.control-dis');
+            timeInputs.each(function (_, input) {
                 $(input).attr('disabled', $(checkbox).is(":checked"));
             });
         };
@@ -113,6 +113,12 @@ function chooseSelectedDishType() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function selectFreeDeliveryPrice() {
+    const is_custom_type = $('#:selected').text() === 'Niestandardowy typ potrawy';
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function lightDarkFaviconIcon() {
     const lightSchemeIcon = $('link#light-scheme-icon');
     const darkSchemeIcon = $('link#dark-scheme-icon');
@@ -136,7 +142,7 @@ function onLoad() {
     showModal();
     showHidePassword();
     imagePreview();
-    disableHoursOnClose();
+    disableInputsOnCheckedCheckbox();
     lightDarkFaviconIcon();
 
     $('#form-type-dish').on('change', chooseSelectedDishType);

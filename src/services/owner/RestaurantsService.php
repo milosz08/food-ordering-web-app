@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:53:39                   *
+ * Ostatnia modyfikacja: 2023-01-09 18:35:45                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -159,7 +159,10 @@ class RestaurantsService extends MvcService
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $res->delivery_price = ValidationHelper::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
+                if (!isset($_POST['restaurant-delivery-free']))
+                    $res->delivery_price = ValidationHelper::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
+                else
+                    $res->delivery_price = array('value' => '', 'invl' => false, 'bts_class' => '');
                 $res->building_locale_nr = ValidationHelper::validate_field_regex('restaurant-building-no', Config::get('__REGEX_BUILDING_NO__'));
                 $res->post_code = ValidationHelper::validate_field_regex('restaurant-post-code', Config::get('__REGEX_POSTCODE__'));
                 $res->city = ValidationHelper::validate_field_regex('restaurant-city', Config::get('__REGEX_CITY__'));
@@ -170,7 +173,7 @@ class RestaurantsService extends MvcService
                 $res->phone_number = ValidationHelper::validate_field_regex('restaurant-phone', Config::get('__REGEX_PHONE_PL__'));
                 foreach ($res_hours as $res_hour) ValidationHelper::validate_hour($res_hour); // walidacja godzin
                 $all_hours_valid = true; foreach ($res_hours as $res_hour) $all_hours_valid = $res_hour->all_hours_is_valid();
-        
+
                 if ($res->all_is_valid() && $all_hours_valid)
                 {
                     $this->check_if_phone_number_exist($res->phone_number['value']);
@@ -191,7 +194,7 @@ class RestaurantsService extends MvcService
                     $query = "
                         INSERT INTO restaurants 
                         (name, delivery_price, street, building_locale_nr, post_code, city, description, phone_number, user_id)
-                        VALUES (?,?,?,?,?,?,?,REPLACE(?,' ',''),?)
+                        VALUES (?,NULLIF(?,''),?,?,?,?,?,REPLACE(?,' ',''),?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
@@ -251,7 +254,7 @@ class RestaurantsService extends MvcService
             $statement->closeCursor();
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
-        catch (Exception $e) 
+        catch (Exception $e)
         {
             $res->profile_url['value'] = '';
             $res->banner_url['value'] = '';
@@ -260,6 +263,7 @@ class RestaurantsService extends MvcService
         }
         return array(
             'res' => $res,
+            'is_delivery_free' => isset($_POST['restaurant-delivery-free']) ? 'checked' : '',
             'res_hours' => $res_hours,
         );
     }
@@ -280,7 +284,8 @@ class RestaurantsService extends MvcService
 
             // Zapytanie zwracające aktualne wartości edytowanej restauracji z bazy danych
             $query = "
-                SELECT name, street, building_locale_nr, post_code, city, banner_url, profile_url, delivery_price, description,
+                SELECT name, street, building_locale_nr, post_code, city, banner_url, profile_url,
+                CAST(delivery_price as DECIMAL(10,2)) AS delivery_price, description, IFNULL(delivery_price, '') AS delivery_free,
                 CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number
                 FROM restaurants
                 WHERE id = ? AND user_id = ?
@@ -293,10 +298,14 @@ class RestaurantsService extends MvcService
             $banner_photo = $res->banner_url['value'];
 
             $res_hours = $this->get_restaurant_weekdays_and_hours();
+            $is_delivery_free = empty($res->delivery_free) ? 'checked' : '';
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $res->price = ValidationHelper::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
+                if (!isset($_POST['restaurant-delivery-free']))
+                    $res->delivery_price = ValidationHelper::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
+                else
+                    $res->delivery_price = array('value' => '', 'invl' => false, 'bts_class' => '');
                 $res->banner_url = ValidationHelper::validate_image_regex('restaurant-banner');
                 $res->profile_url = ValidationHelper::validate_image_regex('restaurant-profile');
                 $res->street = ValidationHelper::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
@@ -308,6 +317,7 @@ class RestaurantsService extends MvcService
                 foreach ($res_hours as $res_hour) ValidationHelper::validate_hour($res_hour); // walidacja godzin
                 $all_hours_valid = true; foreach ($res_hours as $res_hour) $all_hours_valid = $res_hour->all_hours_is_valid();
 
+                $is_delivery_free = isset($_POST['restaurant-delivery-free']) ? 'checked' : '';
                 if ($res->all_is_valid() && $all_hours_valid)
                 {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
@@ -369,15 +379,15 @@ class RestaurantsService extends MvcService
                     );
                     // Sekcja zapytań aktualizujących pola w tabeli
                     $query = "
-                        UPDATE restaurants SET name = ?, delivery_price = ?, street = ?, building_locale_nr = ?, post_code = ?, city = ?,
-                        banner_url = NULLIF(?,''), profile_url = NULLIF(?,''), description = ?, phone_number = REPLACE(?,' ','')
+                        UPDATE restaurants SET name = ?, delivery_price = NULLIF(?,''), street = ?, building_locale_nr = ?, post_code = ?, 
+                        city = ?, banner_url = NULLIF(?,''), profile_url = NULLIF(?,''), description = ?, phone_number = REPLACE(?,' ','')
                         WHERE id = ?
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $res->name['value'], $res->price['value'], $res->street['value'], $res->building_no['value'], $res->post_code['value'],
-                        $res->city['value'], $photos['banner'], $photos['profile'], $res->description['value'], $res->phone_number['value'],
-                        $_GET['id'],
+                        $res->name['value'], $res->delivery_price['value'], $res->street['value'], $res->building_no['value'], 
+                        $res->post_code['value'], $res->city['value'], $photos['banner'], $photos['profile'], $res->description['value'], 
+                        $res->phone_number['value'], $_GET['id'],
                     ));
 
                     // aktulizowanie adresów profilu i banera w zmiennych po pobraniu zmienionych wartości w bazie danych
@@ -393,8 +403,8 @@ class RestaurantsService extends MvcService
                     $this->dbh->commit();
 
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
-                    header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
-                    die;
+                    //header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
+                    //die;
                 }
                 else
                 {
@@ -414,6 +424,7 @@ class RestaurantsService extends MvcService
             'res' => $res,
             'res_id' => $_GET['id'],
             'res_hours' => $res_hours,
+            'is_delivery_free' => $is_delivery_free,
             'has_profile' => !empty($res->profile_url['value']),
             'has_banner' => !empty($res->banner_url['value']),
             'hide_profile_preview_class' => $res->profile_url['invl'] ? 'display-none' : '',
@@ -522,8 +533,9 @@ class RestaurantsService extends MvcService
             PaginationHelper::check_parameters($redirect_url);
 
             $restaurant_query = "
-                SELECT r.id, CONCAT(first_name, ' ', last_name) AS full_name, name, accept, description, delivery_price, building_locale_nr,
-                street, post_code, city, CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
+                SELECT r.id, CONCAT(first_name, ' ', last_name) AS full_name, name, accept, description, building_locale_nr,
+                IFNULL(delivery_price, 'za darmo') AS delivery_price, city, street, post_code,
+                CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
                 (SELECT COUNT(*) FROM dishes WHERE restaurant_id = r.id) AS count_of_dishes, r.profile_url, r.banner_url,
                 CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number
                 FROM restaurants AS r

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:51:55                   *
+ * Ostatnia modyfikacja: 2023-01-09 18:32:07                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -487,8 +487,10 @@ class DishesService extends MvcService
             
             $query = "
                 SELECT d.name, t.name AS type, d.description AS description, price, r.name AS r_name, d.photo_url AS photo_url,
-                CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS r_address, delivery_price AS r_delivery_price,
-                CONCAT(u.first_name, ' ', u.last_name) AS r_full_name, price + delivery_price AS total_price,
+                CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS r_address, 
+                IFNULL(delivery_price, 'za darmo') AS r_delivery_price,
+                CONCAT(u.first_name, ' ', u.last_name) AS r_full_name,
+                IFNULL(delivery_price, 0) + price AS total_price,
                 t.user_id IS NOT NULL AS is_custom_type, prepared_time
                 FROM (((dishes AS d
                 INNER JOIN restaurants AS r ON d.restaurant_id = r.id)

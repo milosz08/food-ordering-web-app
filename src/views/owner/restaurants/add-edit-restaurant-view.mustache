@@ -29,10 +29,15 @@
                             <label for="form-price-for-delivery" class="form-label">Cena za dostawę (powyżej 1zł):</label>
                             <div class="input-group has-validation">
                                 <input type="text" name="restaurant-delivery-price" id="form-price-for-delivery"
-                                    class="form-control {{data.res.delivery_price.bts_class}}" placeholder="np. 8.00 lub 8,00"
+                                    class="form-control control-dis {{data.res.delivery_price.bts_class}}" placeholder="np. 8.00 lub 8,00"
                                     value="{{data.res.delivery_price.value}}">
                                 <span class="input-group-text">zł</span>
                                 <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            </div>
+                            <div class="mt-2">
+                                <input class="form-check-input disable-checkbox" type="checkbox" id="form-delivery-free" 
+                                    {{data.is_delivery_free}} name="restaurant-delivery-free">
+                                <label class="form-check-label ms-1" for="form-delivery-free">Darmowa dostawa</label>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
@@ -159,19 +164,19 @@
                                 <div class="accordion-body py-3 px-4 container-fluid">
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="form-{{identifier}}-hour-open" class="form-label">Godzina otwarcia:</label>
+                                            <label for="form-{{identifier}}-hour-open" class="form-label">Otwarcie:</label>
                                             <input type="time" name="restaurant-{{identifier}}-open-hour" id="form-{{identifier}}-hour-open"
-                                                class="form-control {{open_hour.bts_class}}" value="{{open_hour.value}}">
+                                                class="form-control control-dis {{open_hour.bts_class}}" value="{{open_hour.value}}">
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="form-{{identifier}}-hour-close" class="form-label">Godzina zamknięcia:</label>
+                                            <label for="form-{{identifier}}-hour-close" class="form-label">Zamknięcie:</label>
                                             <input type="time" name="restaurant-{{identifier}}-close-hour" id="form-{{identifier}}-hour-close"
-                                                class="form-control {{close_hour.bts_class}}" value="{{close_hour.value}}">
+                                                class="form-control control-dis {{close_hour.bts_class}}" value="{{close_hour.value}}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-check ms-3">
-                                            <input class="form-check-input day-checkbox" type="checkbox" id="form-{{identifier}}-closed" 
+                                            <input class="form-check-input disable-checkbox" type="checkbox" id="form-{{identifier}}-closed" 
                                                 {{is_closed}} name="restaurant-{{identifier}}-closed">
                                             <label class="form-check-label" for="form-{{identifier}}-closed">
                                                 Zamknięte w tym dniu tygodnia
