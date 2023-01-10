@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-08 01:10:19                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-10 21:09:15                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -42,10 +42,16 @@ class OrdersController extends MvcController
     /**
      * Przejście pod adres: /user/orders/dashboard/orders
      */
-    public function dashboard_orders()
+    public function list()
     {
+        $this->protector->protect_only_user();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
+        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
+        $orders = $this->_service->dynamicOrdersList();
         $this->renderer->render('user/orders-list-view', array(
             'page_title' => 'Twoje zamówienia',
+            'data' => $orders,
+            'banner' => $banner_data,
         ));
     }
 
@@ -54,11 +60,28 @@ class OrdersController extends MvcController
     /**
      * Przejście pod adres: /user/orders/dashboard/single/order
      */
-    public function dashboard_single_order()
+    public function single_order()
     {
+        $this->protector->protect_only_user();
+        $service_data = $this->_service->dynamicSingleOrder();
         $this->renderer->render('user/single-order-view', array(
             'page_title' => 'Szczegóły zamówienia',
+            'data' => $service_data,
         ));
+    }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /user/orders/dashboard/single/order
+     */
+    public function cancel_order()
+    {
+        $this->protector->protect_only_user();
+        //$banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
+        //if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
+        $one_order = $this->_service->cancelOrder();
+        header('Location:' . __URL_INIT_DIR__ . 'user/orders/list', true, 301);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-08 01:12:51                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-10 20:33:36                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -32,6 +32,7 @@ class SessionHelper
     const USER_PROFILE_PAGE_BANNER = 'user_profile_page';
     const HOME_RESTAURANTS_LIST_PAGE_BANNER = 'home_restaurants_list_page';
     const ORDER_FINISH_PAGE = 'order_finish_page';
+    const CANCEL_ORDER = 'cancel_order';
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
