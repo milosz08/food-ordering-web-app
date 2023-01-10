@@ -15,7 +15,7 @@
                 <li><a href="{{base_dir}}{{logged_user.user_role.role_eng}}/dashboard" class="nav-link px-2 link-dark">Panel CMS</a></li>
             {{/is_normal_user}}
         </ul>
-        <div class="text-end">
+        <div class="text-end d-flex">
             <div class="dropdown">
                 <button class="d-flex align-items-center border-0 bg-transparent dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,6 +49,7 @@
                     </button></li>
                 </ul>
             </div>
+            {{> partials/cart-view.partial }}
         </div>
     </div>
 </header>
