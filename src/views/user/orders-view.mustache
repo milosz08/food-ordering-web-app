@@ -6,164 +6,121 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {{/banner.show_banner}}
-    <div class="container-fluid px-0">
-
-    </div>
-    <form class="row" action="" method="post" novalidate>
-        <div class="table-responsive-xxl">
-
-            <table class="table table-striped">
-
-                <thead>
-                    <tr>
-                        <br><br><br>
-                        <h4>Adres dostawy</h4>
-                        <div class="card p-3" style="width: 70%;">
-                            <div class="card-body">
-                                <div class="row p-2">
-                                    <div class="col-md-12 mb-4">
-                                        <label for="form-street" class="form-label">Ulica</label>
-                                        <input type="text" name="street"
-                                            class="form-control {{form.v_street.bts_class}}" id="form-street"
-                                            value="{{form.v_street.value}}" placeholder="np. Długa">
-                                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="form-building" class="form-label">Nr budynku</label>
-                                            <input type="text" name="building-number"
-                                                class="form-control {{form.v_building_no.bts_class}}" id="form-building"
-                                                value="{{form.v_building_no.value}}" placeholder="np. 65">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="form-locale" class="form-label">Nr mieszkania</label>
-                                            <input type="text" name="local-number"
-                                                class="form-control {{form.v_locale_no.bts_class}}" id="form-locale"
-                                                value="{{form.v_locale_no.value}}" placeholder="np. 12c">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="form-post-code" class="form-label">Kod pocztowy</label>
-                                            <input type="text" name="post-code"
-                                                class="form-control {{form.v_post_code.bts_class}}" id="form-post-code"
-                                                value="{{form.v_post_code.value}}" placeholder="np. 43-100">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="form-city" class="form-label">Miasto</label>
-                                            <input type="text" name="city"
-                                                class="form-control {{form.v_city.bts_class}}" id="form-city"
-                                                value="{{form.v_city.value}}" placeholder="np. Gliwice">
-                                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="row">
+        <form class="col-md-8" action="" method="post" novalidate>
+            <div class="card p-3 mb-3">
+                <div class="card-body py-2">
+                    <h2 class="fs-4">Adres dostawy</h2>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="form-street" class="form-label">Ulica</label>
+                            <input type="text" name="street" class="form-control {{form.v_street.bts_class}}" id="form-street"
+                                value="{{form.v_street.value}}" placeholder="np. Długa">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
-                    </tr>
-                    <br>
-                    <tr>
-                        <h4>Dostawa</h4>
-                        <div class="card p-3" style="width: 70%;">
-                            <div class="card-body">
-                                <div class="row p-2">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                    value="1">
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    Odbiór osobisty
-                                                </label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row p-2">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                    checked value="2">
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                    Dostawa kurierem
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </tr>
-                    <br>
-                    <tr>
-                        <h4>Rodzaj płatności</h4>
-                        <div class="card p-3" style="width: 70%;">
-                            <div class="card-body">
-                                <div class="row p-2">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault3"
-                                                    id="flexRadioDefault3" checked disabled>
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    Płatność przy odbiorze
-                                                </label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </tr>
-                    <br>
-                    <tr>
-                        <a href="{{base_dir}}home/general/user/orders" data-bs-toggle="modal"
-                            data-bs-target="#discount-code" class="btn btn-primary" type="button">Dodaj kupon</a>
-
-                            {{#form.is_discount_code_exist}}
-                            <div class="alert alert-success" role="alert" >
-                                Użyty kod: {{form.v_cookie}}  <button type="submit" name="delate-code" class="btn-close" aria-label="Close"></button>
-                              </div>
-                              {{/form.is_discount_code_exist}}
-                        <div class="modal fade" id="discount-code" data-bs-backdrop="static" data-bs-keyboard="false"
-                            tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Kod rabatowy</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="example" class="form-label">Kod rabatowy</label>
-                                            <input type="discound" name="discount" class="form-control"
-                                                id="exampleInput1" aria-describedby=""
-                                                placeholder="Podaj kod promocyjny">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-success" name="discount-button"
-                                                data-bs-dismiss="modal">Aktywuj</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </tr>
-
-                    <div class="row p-4 ms-5">
-                        <button type="submit" name="oder-button" class="btn btn-primary" style="width: 60%;">Przejdź do
-                            podsumowania (kwota 69.99zł)</button>
                     </div>
-                </thead>
-            </table>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="form-building" class="form-label">Nr budynku</label>
+                            <input type="text" name="building-number" class="form-control {{form.v_building_no.bts_class}}" id="form-building"
+                                value="{{form.v_building_no.value}}" placeholder="np. 65">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="form-locale" class="form-label">Nr mieszkania</label>
+                            <input type="text" name="local-number" class="form-control {{form.v_locale_no.bts_class}}" id="form-locale"
+                                value="{{form.v_locale_no.value}}" placeholder="np. 12c">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="form-post-code" class="form-label">Kod pocztowy</label>
+                            <input type="text" name="post-code" class="form-control {{form.v_post_code.bts_class}}" id="form-post-code"
+                                value="{{form.v_post_code.value}}" placeholder="np. 43-100">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="form-city" class="form-label">Miasto</label>
+                            <input type="text" name="city" class="form-control {{form.v_city.bts_class}}" id="form-city"
+                                value="{{form.v_city.value}}" placeholder="np. Gliwice">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3 mb-3">
+                <div class="card-body py-2">
+                    <h2 class="fs-4 mb-4">Dostawa</h2>
+                    <div class="row">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="delivery" id="form-delivery-self">
+                                    <label class="form-check-label ms-2" for="form-delivery-self">Odbiór osobisty</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="delivery" id="form-delivery-standard"
+                                        checked>
+                                    <label class="form-check-label ms-2" for="form-delivery-standard">Dostawa kurierem</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3 mb-3">
+                <div class="card-body py-2">
+                    <h2 class="fs-4 mb-4">Rodzaj płatności</h2>
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment-type" id="form-payment-type" disabled checked>
+                                    <label class="form-check-label ms-2" for="form-payment-type">Odbiór osobisty</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{{base_dir}}home/general/user/orders" data-bs-toggle="modal" data-bs-target="#discount-code" class="btn btn-primary" 
+                type="button">
+                Dodaj kupon
+            </a>
+            <button type="submit" name="oder-button" class="btn btn-primary w-100 my-4">
+                Przejdź do podsumowania (kwota 69.99zł)
+            </button>
+        </form>
+        <div class="col-md-4">
+            koszyk
         </div>
-    </form>
+    </div>
 </main>
-
+<div class="modal fade" id="discount-code" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Kod rabatowy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="post" class="modal-body">
+                <div class="mb-3">
+                    <label for="example" class="form-label">Kod rabatowy</label>
+                    <input type="discound" name="discount" class="form-control" id="exampleInput1" aria-describedby=""
+                        placeholder="Podaj kod promocyjny">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" name="discount-button" data-bs-dismiss="modal">Aktywuj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {{> partials/footer-view.partial }}
