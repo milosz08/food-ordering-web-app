@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-06, 19:58:50                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 22:42:42                   *
+ * Ostatnia modyfikacja: 2023-01-11 07:03:24                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,4 +26,9 @@ class ListRestaurantModel
     public $baner_url; // zdjęcie baneru restauracji
     public $profile_url; // zdjęcie profilu restauracji
     public $dish_types; // typy potraw oferowane przez restaurację
+    public $has_discounts; // posiada zniżki
+    public $avg_delivery_time; // średni czas dostawy na podstawie wcześniejszych zamówień
+    public $avg_grades; // średnia ocen restauracji
+    public $total_grades; // wszystkich ocen restauracji
+    public $is_closed; // jeśli zamknięta, mySQL zwraca 'zamknięta'
 }

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 02:33:33                   *
+ * Ostatnia modyfikacja: 2023-01-11 07:21:20                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -59,7 +59,7 @@ class PendingRestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = $_POST['search-res-name'] ?? '';
+            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::ADMIN_PENDING_RES_SEARCH);
 
             $redirect_url = 'admin/pending-restaurants';
             PaginationHelper::check_parameters($redirect_url);

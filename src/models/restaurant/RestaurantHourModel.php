@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 23:03:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 03:53:17                   *
+ * Ostatnia modyfikacja: 2023-01-09 19:12:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,6 +20,7 @@ namespace App\Models;
 class RestaurantHourModel
 {
     public $name; // nazwa dnia tygodnia
+    public $alias; // alias dnia tygodnia
     public $identifier; // nazwa dnia tygodnia po angielsku (do nazw atrybutów)
     public $active_default; // domyślnie otwarty akordeon (pierwsza wartość, poniedziałek)
     public $open_hour; // godzina otwarcia (wartość i błąd)
@@ -30,7 +31,7 @@ class RestaurantHourModel
 
     public function __construct()
     {
-        if ($this->name == 'poniedziałek') $this->active_default = array('bts_class' => 'show', 'aria' => 'true', 'collapse' => '');
+        if ($this->alias == 'pn') $this->active_default = array('bts_class' => 'show', 'aria' => 'true', 'collapse' => '');
         else $this->active_default = array('bts_class' => '', 'aria' => 'false', 'collapse' => 'collapsed');
         $this->is_closed = $this->is_closed ? 'checked' : '';
         $this->open_hour = array('value' => $this->open_hour, 'invl' => false, 'bts_class' => '');
@@ -49,6 +50,6 @@ class RestaurantHourModel
     public function format_to_details_view()
     {
         $hour_format = $this->open_hour['value'] . ' - ' . $this->close_hour['value'];
-        return array('day_of_week' => $this->name, 'status' => $this->is_closed ? '-' : $hour_format);
+        return array('day_of_week' => $this->alias, 'status' => $this->is_closed ? 'nieczynne' : $hour_format);
     }
 }

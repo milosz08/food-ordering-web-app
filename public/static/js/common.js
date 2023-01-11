@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-09 12:21:59                   *
+ * Ostatnia modyfikacja: 2023-01-11 07:00:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -113,12 +113,6 @@ function chooseSelectedDishType() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function selectFreeDeliveryPrice() {
-    const is_custom_type = $('#:selected').text() === 'Niestandardowy typ potrawy';
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function lightDarkFaviconIcon() {
     const lightSchemeIcon = $('link#light-scheme-icon');
     const darkSchemeIcon = $('link#dark-scheme-icon');
@@ -144,9 +138,8 @@ function onLoad() {
     imagePreview();
     disableInputsOnCheckedCheckbox();
     lightDarkFaviconIcon();
-
-    $('#form-type-dish').on('change', chooseSelectedDishType);
-
+    
+    $(".chb").on('change', function() { $(".chb").not(this).prop('checked', false); });
     $('[data-bs-toggle="tooltip"]').toArray().forEach(function(el) {
         new bootstrap.Tooltip(el);
     });

@@ -1,0 +1,58 @@
+<form action="" method="post">
+    <a class="d-block mb-3 fs-6" href="{{base_dir}}restaurants/clear-filters">Wyczyść filtry</a>
+    <p class="fs-6 text-secondary mb-3 lh-sm">Filtrowanie wyników wyszukiwania restauracji:</p>
+    <div class="form-check form-switch mb-2">
+        <input class="form-check-input" name="restaurant-open-now" type="checkbox" role="switch" 
+            id="form-restaurant-open-now-{{diff}}" {{data.filter.open_selected}}>
+        <label class="form-check-label" for="form-restaurant-open-now-{{diff}}">Otwarta teraz</label>
+    </div>
+    <div class="form-check form-switch mb-2">
+        <input class="form-check-input" name="restaurant-delivery-free" type="checkbox" role="switch" 
+            id="form-restaurant-delivery-free-{{diff}}" {{data.filter.delivery_free_selected}}>
+        <label class="form-check-label" for="form-restaurant-delivery-free-{{diff}}">Oferujące bezpłatną dostawę</label>
+    </div>
+    <div class="form-check form-switch mb-2">
+        <input class="form-check-input" name="restaurant-discounts" type="checkbox" role="switch"
+            id="form-restaurant-discounts-{{diff}}" {{data.filter.has_discounts_selected}}>
+        <label class="form-check-label" for="form-restaurant-discounts-{{diff}}">Posiadająca rabaty</label>
+    </div>
+    <div class="form-check form-switch mb-2">
+        <input class="form-check-input" name="restaurant-has-images" type="checkbox" role="switch"
+            id="form-restaurant-has-images-{{diff}}" {{data.filter.has_profile_selected}}>
+        <label class="form-check-label" for="form-restaurant-has-images-{{diff}}">Posiadająca zdjęcie profilowe</label>
+    </div>
+    <p class="fs-6 text-secondary mt-4 mb-2 lh-sm">Minimalna kwota zamówienia:</p>
+    {{#data.filter.min_delivery_price.data}}
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="restaurant-min-deliv-price" value="{{value}}"
+            id="form-restaurant-{{value}}-min-price-{{diff}}" {{checked}}>
+        <label class="form-check-label" for="form-restaurant-{{value}}-min-price-{{diff}}">{{text}}</label>
+    </div>
+    {{/data.filter.min_delivery_price.data}}
+    <div class="hstack mt-4">
+        <p class="fs-6 text-secondary mb-0 lh-sm">Ocena restauracji:</p>
+        <i type="button" class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-title="Filtrowanie ocen obejmuje wybraną ocenę i oceny wyższe od wybranej oceny.">
+        </i>
+    </div>
+    <div class="d-flex justify-content-end flex-row-reverse mt-2 fs-3 text-warning rating-container">
+        {{#data.filter.grade_stars.data}}
+        <input id="star{{value}}-{{diff}}" name="restaurant-grade-stars[]" type="checkbox" value="{{value}}"
+            class="radio-btn pe-1 chb position-absolute"{{checked}}>
+        <label for="star{{value}}-{{diff}}" class="position-relative grade-system-font pe-1 lh-1">&#xF588</label>
+        {{/data.filter.grade_stars.data}}
+    </div>
+    <p class="fs-6 text-secondary mt-4 mb-2 lh-sm">Sortuj według:</p>
+    <select class="form-select" name="restaurant-sort-properties">
+        {{#data.filter.sort_parameters.data}}
+        <option value="{{value}}" {{selected}}>{{text}}</option>
+        {{/data.filter.sort_parameters.data}}
+    </select>
+    <p class="fs-6 text-secondary mt-4 mb-2 lh-sm">Kolejność sortowania:</p>
+    <select class="form-select" name="restaurant-sort-direction">
+        {{#data.filter.sort_directions.data}}
+        <option value="{{value}}" {{selected}}>{{text}}</option>
+        {{/data.filter.sort_directions.data}}
+    </select>
+    <button type="submit" class="btn btn-primary btn-md mt-3 w-100" name="filter-change">Filtruj wyniki</button>
+</form>
