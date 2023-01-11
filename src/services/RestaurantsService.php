@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 02:46:08                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-11 13:42:32                   *
+ * Modyfikowany przez: cptn3m012                               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -181,13 +181,14 @@ class RestaurantsService extends MvcService
             }
 
             $shopping_card = array();
+            $restaurantArray = array();
             $dishesSum = 0;
             $deliverySum = 0;
             if (isset($_COOKIE['dishes'])) {
-                $cart = isset($_COOKIE['dishes']) ? $_COOKIE['dishes'] : '[]';
+                $cart = $_COOKIE['dishes'];
                 $cart = json_decode($cart);
                 foreach ($cart as $c) {
-                    $query = "SELECT d.name, d.description, d.price, r.delivery_price FROM dishes d INNER JOIN restaurants r 
+                    $query = "SELECT d.id, d.name, d.description, d.price, r.delivery_price, r.id AS res_id FROM dishes d INNER JOIN restaurants r 
                     ON d.restaurant_id = r.id WHERE d.id = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(
@@ -199,8 +200,16 @@ class RestaurantsService extends MvcService
                     $row->price = $row->price * $c->count;
                     array_push($shopping_card, array('list' => $row, 'il' => $c->count));
                     $dishesSum += $row->price;
-
-
+                    
+                    /*
+                    if (empty($restaurantArray))
+                        array_push($restaurantArray, array('id'$row->res_id);
+                    foreach ($restaurantArray as $res) {
+                        if ($res-> == $row->res_id) {
+                            $deliverySum += $c->delivery_price;
+                        }
+                    }
+*/
                 }
             }
 
@@ -261,28 +270,79 @@ class RestaurantsService extends MvcService
             if (!$dishidCheck)
                 header('Location:' . __URL_INIT_DIR__ . '/restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
 
-        
+
             // Obsługa koszyka
             $tempArray = array();
             $il = 1;
-            $flag = true;
+            // Flaga sprawdzająca czy dany element w tablicy już się tam znajduje. Gdy dany element jest w tablicy jego ilość zostaje 
+            // inkrementowana, a nie zostaje dodany jako nowy obiekt
+            $isElementInArray = true;
+            // Flaga sprawdzająca czy ilość danych elementów jest większa czy mniejsza niż 1, aby kolejno zinkrementować jego wartość
+            // bądź nie dodawać go do nowej tablicy 
+            $isCountHigherThan1 = true;
             if (isset($_COOKIE['dishes'])) {
                 $card = $_COOKIE['dishes'];
                 $tempArray = json_decode($card);
-                foreach($tempArray as $a)
-                {
-                    if($a->dishid == $dish_id)
-                    {
-                        $a->count += 1;
-                        $flag = false;
+
+                // Nowa tablica pomocnicza, do której element nie zostaje dodany, w momencie, gdy jego dekrementowana wartość 'il'
+                // będzie kolejno mniejsza niż 1.
+                $new_json_array = array();
+
+                // Sprawdzanie, czy została wykonana akcja odpowiadająca za dodaj/odejmij element z koszyka, bazowo ustawiona na 1
+                // powodująca dodanie do koszyka elementu 
+                $action = $_GET['act'] ?? 1;
+                // jeżeli wykonana została akcja odejmowania elementu z koszyka
+                if ($action == 0) {
+                    // Pętla iterująca elementy w koszyku
+                    foreach ($tempArray as $a) {
+                        // Jeżeli dany element pasuje po id, do wybranego elementu
+                        if ($a->dishid == $dish_id) {
+                            // Sprawdzenie, czy dany element jest większy od 1, gdy jest to po prostu odejmujemy od niego 1
+                            if($a->count > 1)
+                                $a->count -= 1;      
+                            // W przeciwnym wypadku flaga zostaje ustawiona na 'false', aby element nie został dodany do nowej tablicy                 
+                            else 
+                                $isCountHigherThan1 = false;
+                                // Element istnieje w koszyku, więc chcemy dodać nową tablice
+                            $isElementInArray = false;
+                        }
+                        // Jeżeli dany element nie jest mniejszy od 1, to włożymy go do nowej tablicy
+                        if($isCountHigherThan1 ==  true)
+                            array_push($new_json_array, $a);
+                        // jeżeli dany element jest mniejszy od 1, to nie dodajemy go do nowej tablicy i kasujemy flagę 
+                        // na następny element 
+                        else
+                            $isCountHigherThan1 = true;
+                    }
+                } else {
+                    // Pętla iteruje po elementach sprawdzając, który został wybrany, aby jego ilość została zinkrementowana
+                    foreach ($tempArray as $a) {
+                        if ($a->dishid == $dish_id) {
+                            $a->count += 1;
+                            $isElementInArray = false;
+                        }
+                        // Dodanie każdego z elementu do nowej tablicy.
+                        array_push($new_json_array, $a);
                     }
                 }
-                if($flag == true)
+
+                // Sprawdzanie, czy dany element istnieje w tablicy
+                if ($isElementInArray == true) {
+                    // Dodanie nowego elementu do tablicy i przypisanie mu kolejno wartości.
                     array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
-                    
+                    setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
+                }
+                else 
+                    setcookie('dishes', json_encode($new_json_array), time() + (86400 * 30), "/");
             }
-            else array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
-            setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
+            // Jeżeli plik cookies nie został jeszcze utworzony, dodajemy elementy do tablicy i tworzymy nowe cookies. 
+            else
+            {
+                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
+                setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
+            }
+
+               
 
         } catch (Exception $e) {
             $this->dbh->rollback();
