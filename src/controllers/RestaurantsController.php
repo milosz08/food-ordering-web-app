@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:20:53                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-10 23:51:34                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -44,13 +44,23 @@ class RestaurantsController extends MvcController
      */
 	public function restaurant_details()
     {
+        $res_details = $this->_service->getSingleRestaurantDetails();
         $this->renderer->render('restaurants/restaurant-details-view', array(
-            'page_title' => '[[nazwa restauracji]]',
+            'page_title' => $res_details['restaurantName']['name'],
+            'data' => $res_details,
         ));
 	}
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public function add_dish()
+    {
+        $res_id = $this->_service->addDishToShoppingCard();
+        header('Location:' . __URL_INIT_DIR__ . '/restaurants/restaurant-details?id=' . $res_id, true, 301);
+        
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Przejście pod adres: /restaurants
      */
