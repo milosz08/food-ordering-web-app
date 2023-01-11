@@ -1,0 +1,148 @@
+{{> partials/header-view.partial }}
+<main class="container-lg flex-grow-1 top-margin-header md-3 mb-4">
+    <div class="row">
+        <div class="col-lg-8">
+            {{#banner.show_banner}}
+            <div class="alert {{banner.banner_class}} mb-4 alert-dismissible fade show" role="alert">
+                {{{banner.banner_message}}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{/banner.show_banner}}
+            <form class="col-sm-12 mb-2 d-flex justify-content-end" action="" method="get">
+                <input type="search" name="search" placeholder="Wyszukaj po nazwie" class="form-control">
+                <button type="submit" class="btn btn-primary btn-md ms-1 py-1"><i class="bi bi-search"></i></button>
+            </form>
+            <h3 class="fs-6 text-secondary mt-3">Kategorie potraw:</h3>
+            <div class="hstack gap-2 mb-4 flex-wrap">
+                {{#data.dish_types}}
+                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.res_id}}#{{type.dish_type_nav}}"
+                    type="button" class="btn btn-outline-secondary btn-sm">
+                    {{type.dish_type_name}}
+                </a>
+                {{/data.dish_types}}
+            </div>
+            {{#data.dish_types}}
+            <pre id="{{type.dish_type_nav}}"></pre>
+            <h4 class="mt-4">{{type.dish_type_name}}</h4>
+            {{#dishes}}
+            <div class="card my-2">
+                <div class="row mx-0 p-3">
+                    <div class="col-auto p-0 position-relative d-flex align-items-center justify-content-md-start justify-content-center">
+                        {{#photo_url}}
+                        <img src="{{base_dir}}public/{{photo_url}}" alt="" class="rounded position-relative ms-1"
+                            width="100px" height="100px" />
+                        {{/photo_url}}
+                        {{^photo_url}}
+                        <img src="{{base_dir}}public/static/images/default-profile.jpg" alt=""
+                            class="rounded position-relative ms-1" width="100px" height="100px" />
+                        {{/photo_url}}
+                    </div>
+                    <div class="col p-0 ps-4 text-truncate">
+                        <h2 class="card-title fw-normal fs-4">{{dish_name}}</h2>
+                        <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{description}}"
+                            class="fs-6 text-secondary text-truncate">
+                            {{description}}
+                        </p>
+                        <div class="hstack gap-3">
+                            <div class="hstack gap-2"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
+                            <div class="hstack gap-2"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
+                        </div>
+                    </div>
+                    <div class="col-auto pe-0">
+                        <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{id}}"
+                            class="btn bg-secondary bg-opacity-25 btn-sm p-0">
+                            <i class="bi bi-plus text-dark fs-2 lh-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{/dishes}}
+            {{/data.dish_types}}
+            {{^data.dish_types}}
+            <div class="alert alert-warning mb-3 my-4" role="alert">
+                Nie znaleziono żadnych potraw przypisanych do wybranej restauracji. Jeśli uważasz, że to błąd, zgłoś to do Nas
+                przedząc pod <a href="{{base_dir}}contact-form" class="alert-link">ten adres</a> lub napisz do nas
+                na <a href="mailto:info@restaurants.miloszgilga.pl" class="alert-link">info@restaurants.miloszgilga.pl</a>
+            </div>
+            {{/data.dish_types}}
+            <hr class="my-4 d-block d-lg-none"/>
+        </div>
+        <div class="col-lg-4">
+            <div class="sticky-top panel-left-nav">
+                <h2 class="fs-4 mb-3">Koszyk</h2>
+                {{#data.cart_is_empty}}
+                <div class="card py-5 d-flex flex-column align-items-center">
+                    <i class="bi bi-basket icon-size text-secondary"></i>
+                    <p class="text-center lh-1 mt-2 mx-3 fw-normal text-secondary table-fixed-size">
+                        Nie masz jeszcze żadnych produktów w koszyku.
+                    </p>
+                </div>
+                {{/data.cart_is_empty}}
+                {{^data.cart_is_empty}}
+                <ul class="card list-unstyled p-3">
+                    {{#data.shopping_cart}}
+                    <li>
+                        <div class="rows">
+                            <div class="col mb-2 hstack justify-content-between align-items-start">
+                                <h4 class="card-title fs-5 mb-0">{{cart_dishes.name}}</h4>
+                                <p class="m-0">{{cart_dishes.total_dish_cost}}</p>
+                            </div>
+                            <div class="col mb-2 hstack justify-content-between align-items-start">
+                                <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{cart_dishes.description}}"
+                                    class="text-secondary text-truncate fw-normal fs-6 me-5">
+                                    {{cart_dishes.description}}
+                                </p>
+                                <div class="hstack d-flex justify-content-center align-items-center">
+                                    <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}&act=0">
+                                        <i class="bi bi-dash-circle fs-4 text-danger"></i>
+                                    </a>
+                                    <p class="mb-0 mx-3">{{count_of_dish}}</p>
+                                    <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}&act=1">
+                                        <i class="bi bi-plus-circle text-success diodess fs-4"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <hr class="my-3"/>
+                    {{/data.shopping_cart}}
+                    {{#data.not_enough_total_sum}}
+                    <li class="alert alert-warning p-2 lh-sm mb-2 px-3" role="alert">
+                        Do minimalnej wartości zamówienia brakuje jeszcze: <strong>{{data.diff_not_enough}} zł</strong>.
+                    </li>
+                    <li class="mt-0 text-secondary fw-normal small-font mb-3 lh-sm">
+                        Niestety nie możesz jeszcze zamówić. Restauracja <strong>{{data.res_name}}</strong> ustawiła wartość minimalnego 
+                        zamówienia na <strong>{{data.res_details.min_price}} zł</strong> (bez kosztów dostawy).
+                    </li>
+                    {{/data.not_enough_total_sum}}
+                    <li>
+                        <div class="d-flex justify-content-between mb-1">
+                            <p class="mb-0">Razem</p>
+                            <p class="mb-0">{{data.summary_prices.total}} zł</p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="mb-0">Koszt dostawy</p>
+                            <p class="mb-0">{{data.res_details.delivery_price}} zł</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-0 fw-bold">Kwota całkowita</p>
+                            <p class="mb-0 fw-bold">{{data.summary_prices.total_with_delivery}} zł</p>
+                        </div>
+                    </li>
+                </ul>
+                {{#data.not_enough_total_sum}}
+                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.res_id}}" class="btn btn-secondary w-100 disabled">
+                    Zbyt niska wartość ({{data.summary_prices.total_with_delivery}} zł)
+                </a>
+                {{/data.not_enough_total_sum}}
+                {{^data.not_enough_total_sum}}
+                <a href="{{base_dir}}user/orders/order-summary" class="btn btn-primary w-100">
+                    Przejdź do podsumowania ({{data.summary_prices.total_with_delivery}} zł)
+                </a>
+                {{/data.not_enough_total_sum}}
+                {{/data.cart_is_empty}}
+            </div>
+        </div>
+    </div>
+</main>
+{{> partials/footer-view.partial }}

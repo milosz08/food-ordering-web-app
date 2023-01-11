@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 23:39:35                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 18:08:53                   *
+ * Ostatnia modyfikacja: 2023-01-11 23:32:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -82,6 +82,7 @@ class MvcRenderer
             'logged_user' => $_SESSION['logged_user'] ?? '', // dane zalogowanego użytkownika przekazywane do widoku
             'base_dir' => __URL_INIT_DIR__, // bazowy katalog projektu, do linków
             'curr_date' => date("Y"), // aktualna data (używana do stopki)
+            'is_logged_and_normal_user' => isset($_SESSION['logged_user']) && $_SESSION['logged_user']['is_normal_user'],
         ));
         echo $template->render($extended_data); // wyrenderuj, sprarsuj i wyświetl szablon
     }

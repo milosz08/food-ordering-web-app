@@ -32,7 +32,7 @@
         </div>
         <div class="col-lg-8">
             {{#banner.show_banner}}
-            <div class="alert {{banner.banner_class}} mb-4 alert-dismissible fade show" role="alert">
+            <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
                 {{{banner.banner_message}}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -89,23 +89,39 @@
                         {{^dish_types}}
                         <p class="fs-6 text-secondary">Brak danych</p>
                         {{/dish_types}}
-                        <div class="hstack gap-3">
-                            <div class="hstack gap-2 text-warning small-font">
-                                <i class="bi bi-star-fill"></i>
-                                {{avg_grades}}
-                                <span class="text-secondary">{{total_grades}}</span>
+                        <div class="hstack gap-3 justify-content-between">
+                            <div class="d-flex flex-wrap">
+                                <div class="hstack gap-2 text-warning small-font me-3">
+                                    <i class="bi bi-star-fill"></i>
+                                    {{avg_grades}}
+                                    <span class="text-secondary">{{total_grades}}</span>
+                                </div>
+                                <div class="hstack gap-2 text-success small-font me-3">
+                                    <i class="bi bi-bicycle fs-4"></i>{{delivery_price}}
+                                </div>
+                                <div class="hstack gap-2 text-primary small-font">
+                                    <i class="bi bi-clock"></i>{{avg_delivery_time}}
+                                </div>
                             </div>
-                            <div class="hstack gap-2 text-success small-font"><i class="bi bi-bicycle fs-4"></i>{{delivery_price}}</div>
-                            <div class="hstack gap-2 text-primary small-font"><i class="bi bi-clock"></i>{{avg_delivery_time}}</div>
-                            <div class="ms-auto">
+                            <div class="text-end hstack gap-1 align-self-end">
                                 <button data-bs-toggle="modal" data-bs-target="#res-description-{{id}}" type="button" 
                                     class="btn btn-outline-primary btn-sm">
-                                    Opis restauracji
+                                    Informacje
                                 </button>
-                                <a type="button" href="{{base_dir}}restaurants/restaurant-details?id={{id}}" class="btn btn-sm btn-primary"
+                                {{#is_closed}}
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-title="Wybrana restauracja jest w tej chwili zamknięta i nie jest możliwe zamówienie potraw">
+                                    <a type="button" href="{{base_dir}}restaurants" class="btn btn-sm btn-primary disabled">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </span>
+                                {{/is_closed}}
+                                {{^is_closed}}
+                                <a type="button" href="{{base_dir}}restaurants/restaurant-dishes?id={{id}}" class="btn btn-sm btn-primary"
                                     data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Przejdź do strony restauracji">
                                     <i class="bi bi-arrow-right"></i>
                                 </a>
+                                {{/is_closed}}
                             </div>
                         </div>
                     </div>

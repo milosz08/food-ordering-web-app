@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 21:09:15                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-11 23:03:06                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -70,7 +70,7 @@ class OrdersController extends MvcController
         ));
     }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /user/orders/dashboard/single/order
@@ -87,9 +87,9 @@ class OrdersController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /user/orders/order-finish
+     * Przejście pod adres: /user/orders/order-summary
      */
-    public function order_finish()
+    public function order_summary()
     {
         $this->protector->protect_only_user();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);

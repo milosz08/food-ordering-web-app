@@ -9,13 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
-<<<<<<< HEAD
- * Ostatnia modyfikacja: 2023-01-11 15:45:54                   *
+ * Ostatnia modyfikacja: 2023-01-11 23:32:58                   *
  * Modyfikowany przez: Miłosz Gilga                            *
-=======
- * Ostatnia modyfikacja: 2023-01-11 15:45:54                   *
- * Modyfikowany przez: Miłosz Gilga                            *
->>>>>>> 02a4e0244e98cb3ef22b8b709dadf24f2b7c1d74
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -44,6 +39,7 @@ class SessionHelper
     const ADMIN_PENDING_RES_SEARCH          = 'admin_pending_res_search';
     const RES_MAIN_SEARCH                   = 'res_main_search';
     const CANCEL_ORDER                      = 'cancel_order';
+    const RES_DISH_CART_SEARCH              = 'res_dish_cart_search';
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

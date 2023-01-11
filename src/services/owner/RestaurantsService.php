@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 07:20:54                   *
+ * Ostatnia modyfikacja: 2023-01-11 22:47:00                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -534,7 +534,7 @@ class RestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::OWNER_RES_DETAILS_SEARCH);
+            $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_RES_DETAILS_SEARCH);
             
             $redirect_url = 'owner/restaurants/restaurant-details?id=' . $_GET['id'];
             PaginationHelper::check_parameters($redirect_url);
