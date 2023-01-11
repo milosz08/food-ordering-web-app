@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-08 19:55:21                   *
+ * Ostatnia modyfikacja: 2023-01-11 15:46:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,9 +20,13 @@ use Exception;
 use App\Core\Config;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
+use App\Models\ShowUserOrdersListModel;
 use App\Services\Helpers\SessionHelper;
+use App\Models\ShowUserSingleOrderModel;
 use App\Services\Helpers\ValidationHelper;
 
+ResourceLoader::load_model('ShowUserOrdersListModel', 'user');
+ResourceLoader::load_model('ShowUserSingleOrderModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
@@ -194,12 +198,14 @@ class OrdersService extends MvcService
                         )
                     );
                     $statement->closeCursor();
+                    $this->dbh->commit();
                     $this->_banner_message = 'Zamówienie zostało pomyślnie złożone';
                     SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
                     header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-finish', true, 301);
+                    die;
                 }
             }
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollback();
             $this->_banner_error = true;
@@ -215,5 +221,103 @@ class OrdersService extends MvcService
             'v_city' => $v_city,
             'v_street' => $v_street,
         );
+    }
+
+    public function dynamicOrdersList()
+    {
+        $all_orders = array();
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            $query = "
+                SELECT o.id, r.name, o.price, IF(o.status_id = 3, true, false) AS order_statement
+                FROM orders AS o
+                INNER JOIN restaurants AS r ON o.restaurant_id = r.id
+                WHERE o.user_id = :userid;
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->execute();
+
+            /* Pętla wypełniająca tablicę zamówieniami */
+            while ($row = $statement->fetchObject(ShowUserOrdersListModel::class)) array_push($all_orders, $row);
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+        }
+        return array(
+            'orders' => $all_orders,
+        );
+    }
+
+    public function dynamicSingleOrder()
+    {
+        $one_order = new ShowUserSingleOrderModel;
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            $query = "
+                SELECT o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, u.first_name AS first_name, 
+                u.last_name AS last_name, u.email AS email, o.date_order AS date_order, ua.street AS street,
+                ua.building_nr AS building_nr, ua.locale_nr AS locale_nr, ua.post_code AS post_code, ua.city AS city
+                FROM ((((orders AS o
+                INNER JOIN order_status AS os ON o.status_id = os.id)
+                INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
+                INNER JOIN users AS u ON o.user_id = u.id)
+                INNER JOIN user_address AS ua ON u.id = ua.user_id)
+                WHERE o.user_id = :userid AND o.id = :id;
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+
+            $one_order = $statement->fetchObject(ShowUserSingleOrderModel::class);
+
+            if ($one_order->status_id == 3) {
+                $validation = false;
+            } else
+                $validation = true;
+
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+        }
+        return array(
+            'one_order' => $one_order,
+            'validation' => $validation,
+        );
+    }
+
+    public function cancelOrder()
+    {
+        $redirect_url = 'user/orders/list';
+        if (!isset($_GET['id'])) return $redirect_url;
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "UPDATE orders SET status_id = 3 WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $this->_banner_message = 'Pomyślnie anulowano zamówienie o nr: ' . $_GET['id'];
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
+        }
+        SessionHelper::create_session_banner(SessionHelper::CANCEL_ORDER, $this->_banner_message, $this->_banner_error);
+        return $redirect_url;
     }
 }

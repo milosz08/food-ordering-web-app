@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 15:40:38                   *
+ * Ostatnia modyfikacja: 2023-01-11 15:42:29                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,13 +45,26 @@ class RestaurantsController extends MvcController
      */
 	public function restaurant_details()
     {
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
+        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
+        $res_details = $this->_service->getSingleRestaurantDetails();
         $this->renderer->render('restaurants/restaurant-details-view', array(
-            'page_title' => '[[nazwa restauracji]]',
+            'page_title' => $res_details['restaurantName']['name'],
+            'data' => $res_details,
+            'banner' => $banner_data
         ));
 	}
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public function add_dish()
+    {
+        $res_id = $this->_service->addDishToShoppingCard();
+        header('Location:' . __URL_INIT_DIR__ . '/restaurants/restaurant-details?id=' . $res_id, true, 301);
+        
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Przejście pod adres: /restaurants/clear-filters
      */
