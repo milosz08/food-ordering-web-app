@@ -8,14 +8,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {{/banner.show_banner}}
+            {{^is_logged_and_normal_user}}
+            <div class="alert alert-warning" role="alert">
+                Aby mieć możliwość zamówienia musisz być zalogowany na konto użytkownika. Aby zalogować się na konto, przejdź 
+                <a href="{{base_dir}}auth/login" class="alert-link">pod ten adres</a>. Jeśli nie posiadasz jeszcze konta, przejdź
+                <a href="{{base_dir}}auth/register" class="alert-link">pod ten adres</a>.
+            </div>
+            {{/is_logged_and_normal_user}}
             <form class="col-sm-12 mb-2 d-flex justify-content-end" action="" method="get">
-                <input type="search" name="search" placeholder="Wyszukaj po nazwie" class="form-control">
+                <input type="hidden" name="id" value="{{data.res_id}}"/>
+                <input type="search" name="search" placeholder="Wyszukaj po nazwie" class="form-control" value="{{data.search_text}}">
                 <button type="submit" class="btn btn-primary btn-md ms-1 py-1"><i class="bi bi-search"></i></button>
             </form>
             <h3 class="fs-6 text-secondary mt-3">Kategorie potraw:</h3>
-            <div class="hstack gap-2 mb-4 flex-wrap">
+            <div class="hstack gap-2 flex-wrap">
                 {{#data.dish_types}}
-                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.res_id}}#{{type.dish_type_nav}}"
+                <a href="{{base_dir}}restaurants/restaurant-dishes?id={{data.res_id}}#{{type.dish_type_nav}}"
                     type="button" class="btn btn-outline-secondary btn-sm">
                     {{type.dish_type_name}}
                 </a>
@@ -44,15 +52,23 @@
                             {{description}}
                         </p>
                         <div class="hstack gap-3">
-                            <div class="hstack gap-2"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
-                            <div class="hstack gap-2"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
+                            <div class="hstack gap-2 text-success"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
+                            <div class="hstack gap-2 text-primary"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
                         </div>
                     </div>
                     <div class="col-auto pe-0">
+                        {{#is_logged_and_normal_user}}
                         <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{id}}"
                             class="btn bg-secondary bg-opacity-25 btn-sm p-0">
                             <i class="bi bi-plus text-dark fs-2 lh-1"></i>
                         </a>
+                        {{/is_logged_and_normal_user}}
+                        {{^is_logged_and_normal_user}}
+                        <a href="{{base_dir}}restaurants/restaurant-dishes?id={{data.res_id}}"
+                            class="btn bg-secondary bg-opacity-25 disabled border-0 btn-sm p-0">
+                            <i class="bi bi-plus text-secondary fs-2 lh-1"></i>
+                        </a>
+                        {{/is_logged_and_normal_user}}                
                     </div>
                 </div>
             </div>

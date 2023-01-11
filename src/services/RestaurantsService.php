@@ -9,19 +9,20 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 15:45:24                   *
+ * Ostatnia modyfikacja: 2023-01-11 23:29:40                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
 
-use App\Models\RestaurantDetailsModel;
 use PDO;
 use Exception;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
 use App\Models\ListRestaurantModel;
 use App\Models\RestaurantFilterModel;
+use App\Models\DishDetailsCartModel;
+use App\Models\RestaurantDetailsModel;
 use App\Models\RestaurantPersistFilterModel;
 use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\SessionHelper;
@@ -30,8 +31,10 @@ use App\Services\Helpers\PaginationHelper;
 ResourceLoader::load_service_helper('CookieHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
+ResourceLoader::load_model('DishDetailsCartModel', 'cart');
 ResourceLoader::load_model('ListRestaurantModel', 'restaurant');
 ResourceLoader::load_model('RestaurantFilterModel', 'restaurant');
+ResourceLoader::load_model('RestaurantDetailsModel', 'restaurant');
 ResourceLoader::load_model('RestaurantPersistFilterModel', 'restaurant');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,174 +262,179 @@ class RestaurantsService extends MvcService
         );
     }
 
-    public function getSingleRestaurantDetails()
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function get_restaurant_dishes_with_cart()
     {
         $row = new RestaurantDetailsModel;
-        $dishTypes = array();
-        $restaurantDetails = array();
-        try {
+        $dish_types = array();
+        $res_details = array();
+        try
+        {
             $this->dbh->beginTransaction();
 
             // Walidacja $GET danej restauracji, w przeciwnym wypadku powróci do strony restauracji
-            if (isset($_GET['id']))
-                $restaurantId = $_GET['id'];
-            else
-                header('Location:' . __URL_INIT_DIR__ . '/restaurants', true, 301);
+            if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+            $search_dish_name = $_GET['search'] ?? '';
 
             // Pobranie nazwy pojedyńczej restauracji, do umieszczenia jej w zakładce
-            $query = "SELECT name FROM restaurants WHERE id = ?";
+            $query = "
+                SELECT r.name, REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
+                IFNULL(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), 0) AS min_price
+                FROM ((restaurants AS r
+                INNER JOIN restaurant_hours AS h ON r.id = h.restaurant_id)
+                INNER JOIN weekdays AS wk ON h.weekday_id = wk.id)
+                WHERE wk.name_eng = LOWER(DAYNAME(NOW())) AND h.open_hour <= CURTIME() AND h.close_hour >= CURTIME()
+                AND r.id = ? AND accept = 1
+            ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(
-                array(
-                    $restaurantId
-                )
-            );
-            $restaurantName = $statement->fetch(PDO::FETCH_ASSOC);
+            $statement->execute(array($_GET['id']));
+            $res_details = $statement->fetch(PDO::FETCH_ASSOC);
+            if (!$res_details)
+            {
+                $this->_banner_message = 'Wybrana restauracja nie istnieje, bądź nie jest otwarta.';
+                SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
+                //header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                die;
+            }
+            $min_price_num = (float)str_replace(',', '.', $res_details['min_price']) * 100;
 
-            if (!$restaurantName)
-                header('Location:' . __URL_INIT_DIR__ . '/restaurants', true, 301);
-
-            /* Zapytanie pobierające wszystkie kategorie podanej restauracji bez powtórzeń oraz tych samych kategorii bez powtórzeń
-             *   służących do przemieszczania się po stronie.
-             */
-            $query = "SELECT DISTINCT dt.name AS dishType_name, LOWER(REPLACE(dt.name,' ', '-')) AS dishType_nav FROM dishes d 
-                INNER JOIN  dish_types dt ON d.dish_type_id = dt.id WHERE restaurant_id = ?";
+            // Zapytanie pobierające wszystkie kategorie podanej restauracji bez powtórzeń oraz tych samych kategorii bez powtórzeń
+            // służących do przemieszczania się po stronie.
+            $query = "
+                SELECT DISTINCT CONCAT(UPPER(SUBSTRING(dt.name,1,1)), LOWER(SUBSTRING(dt.name,2))) AS dish_type_name,
+                LOWER(REPLACE(dt.name,' ', '-')) AS dish_type_nav FROM dishes d
+                INNER JOIN dish_types dt ON d.dish_type_id = dt.id WHERE restaurant_id = :resid AND
+                (d.name LIKE :search OR d.description LIKE :search) ORDER BY dt.name
+            ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(
-                array(
-                    $restaurantId
-                )
-            );
+            $statement->bindValue('resid', $_GET['id'], PDO::PARAM_INT);
+            $statement->bindValue('search', '%' . $search_dish_name . '%');
+            $statement->execute();
+
             // Pętla odpowiada za wpisywanie podanych dań wraz z pasującą do nich kategorią
-            while ($row = $statement->fetchObject()) {
-                $query2 = "SELECT d.id, d.name AS dish_name, d.description, d.photo_url, d.price, d.prepared_time FROM dishes d 
-                            INNER JOIN dish_types dt ON d.dish_type_id = dt.id WHERE d.restaurant_id = ? AND
-                            dt.name = ?";
-                $statement2 = $this->dbh->prepare($query2);
-                $statement2->execute(
-                    array(
-                        $restaurantId,
-                        $row->dishType_name
-                    )
-                );
+            while ($row = $statement->fetchObject())
+            {
+                $dishes = array();
+                $d_query = "
+                    SELECT d.id, d.name AS dish_name, d.description, d.photo_url, d.prepared_time,
+                    REPLACE(CAST(d.price AS DECIMAL(10,2)), '.', ',') AS price FROM dishes d 
+                    INNER JOIN dish_types dt ON d.dish_type_id = dt.id WHERE d.restaurant_id = ? AND
+                    dt.name = ?
+                ";
+                $d_statement = $this->dbh->prepare($d_query);
+                $d_statement->execute(array($_GET['id'], $row->dish_type_name));
                 // Wpisanie wszytstkich szczegółów znalezionych dań pasujących do kategorii.
-                while ($row2 = $statement2->fetchObject(RestaurantDetailsModel::class)) {
-                    array_push($restaurantDetails, $row2);
-                }
+                while ($d_row = $d_statement->fetchObject()) array_push($dishes, $d_row);
                 // Uzupełnienie tablicy $dishTypes podaną kategorią, wraz z wszystkimi znalezionymi daniami.
-                array_push($dishTypes, array('type' => $row, 'list' => $restaurantDetails));
+                array_push($dish_types, array('type' => $row, 'dishes' => $dishes));
                 // Wyczyszczenie tablicy, aby przy nastepnym powtórzeniu nie wpisywały się poprzednie wartości
-                $restaurantDetails = array();
+                $d_statement->closeCursor();
             }
 
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
-            $shopping_card = array();
-            $restaurantArray = array();
-            // Zmienne zliczające wartość dodanych dań oraz dostawy danej restauracji
-            $dishesSum = 0;
-            $deliverySum = 0;
+            $dish_details_not_founded = false;
+            $shopping_cart = array();
+            $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0);
             // Sprawdzanie, czy plik cookies został dodany.
-            if (isset($_COOKIE['dishes'])) {
-
-                $cart = $_COOKIE['dishes'];
-                $cart = json_decode($cart);
+            if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]))
+            {
+                $cart_cookie = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])], true);
                 // Pętla iterująca po otrzymanej tablicy zdekodowanego pliku json.
-                foreach ($cart as $c) {
+                foreach ($cart_cookie as $dish)
+                {
                     // Zapytanie pobierające potrzebne szczegóły dania
-                    $query = "SELECT d.id, d.name, d.description, d.price, r.delivery_price FROM dishes d 
-                    INNER JOIN restaurants r ON d.restaurant_id = r.id WHERE d.id = ?";
+                    $query = "
+                        SELECT d.id, d.name, d.description, REPLACE(CAST(r.delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
+                        REPLACE(CAST(d.price * :count AS DECIMAL(10,2)), '.', ',') AS total_dish_cost
+                        FROM dishes d
+                        INNER JOIN restaurants r ON d.restaurant_id = r.id WHERE d.id = :id
+                    ";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(
-                        array(
-                            $c->dishid
-                        )
-                    );
-                    $row = $statement->fetchObject();
-                    // Zliczenie ilości posiadanych danych dań w koszyku
-                    $row->price = $row->price * $c->count;
-                    // Uzupełnienie tablicy przechowującej szczegóły dania 
-                    array_push($shopping_card, array('list' => $row, 'il' => $c->count));
-                    // Zwiększenie sumy dodanych dań
-                    $dishesSum += $row->price;
-
-                    /*  If sprawdzający, czy w podanej tablicy pomocniczej występuje jakiekolwiek id restauracji, jeżeli jest ona pusta
-                    *   nastąpi dodanie pierwszego id, wraz z dodaniem wartości dostawy do zmiennej 'deliverySum'.
-                    */
-                    if (empty($restaurantArray)) {
-                        array_push($restaurantArray, $c->resid);
-                        $deliverySum += $row->delivery_price;
+                    $statement->bindValue('count', $dish['count'], PDO::PARAM_INT);
+                    $statement->bindValue('id', $dish['dishid']);
+                    $statement->execute();
+                    // sprawdź, czy podana potrawa z id odczytanym z jsona istnieje, jeśli nie, nie dodawaj do koszyka
+                    if ($dish_details = $statement->fetchObject(DishDetailsCartModel::class)) 
+                    {
+                        // Uzupełnienie tablicy przechowującej szczegóły dania 
+                        array_push($shopping_cart, array('cart_dishes' => $dish_details, 'count_of_dish' => $dish['count']));
+                        $summary_prices['total_num'] += (float)str_replace(',', '.', $dish_details->total_dish_cost) * 100;
                     }
-
-                    /*  Pętla przechodzi po wszystkich elementach tablicy, jeżeli natrafi się ID restauracji, której dostawa 
-                    *   nie została jeszcze uwzględniona, nastąpi jej dodanie do tablicy 'restaurantArray' oraz dodanie wartości 
-                    *   dostawy dania z podanej restauracji.
-                    */
-                    foreach ($restaurantArray as $singleID) {
-                        if ($singleID != $c->resid) {
-                            array_push($restaurantArray, $c->resid);
-                            $deliverySum += $row->delivery_price;
-                        }
-                    }
+                    else $dish_details_not_founded = true;
+                }
+                if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
+                else
+                {
+                    $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
+                    $summary_prices['total'] = number_format($summary_prices['total_num'] / 100, 2, ',');
+                    $summary_prices['total_with_delivery'] = number_format(($summary_prices['total_num'] + $delivery) / 100, 2, ',');
+                    $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
                 }
             }
             $statement->closeCursor();
             $this->dbh->commit();
-
-        } catch (Exception $e) {
+        }
+        catch (Exception $e)
+        {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
-            'restaurantName' => $restaurantName,
-            'dishTypes' => $dishTypes,
+            'res_details' => $res_details,
+            'dish_types' => $dish_types,
             'res_id' => $_GET['id'],
-            'shoppingCard' => $shopping_card,
-            'dishesSum' => $dishesSum,
-            'deliverySum' => $deliverySum
+            'search_text' => $search_dish_name,
+            'shopping_cart' => $shopping_cart,
+            'summary_prices' => $summary_prices,
+            'diff_not_enough' => number_format($summary_prices['diff_not_enough'] / 100, 2, ','),
+            'not_enough_total_sum' => $min_price_num > $summary_prices['total_num'],
+            'cart_is_empty' => !isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]),
         );
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function addDishToShoppingCard()
     {
-        try {
+        // Walidacja id restauracji w linku
+        if (isset($_GET['resid'])) $res_id = $_GET['resid'];
+        else header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+        try
+        {
             $this->dbh->beginTransaction();
-            //--------------------------------------------------------------------------------------------------------------------
-            // Walidacja id restauracji w linku
-            if (isset($_GET['resid']))
-                $res_id = $_GET['resid'];
-            else
-                header('Location:' . __URL_INIT_DIR__ . '/restaurants', true, 301);
-
-            $query = "SELECT id FROM restaurants WHERE id = ?";
+            $query = "
+                SELECT COUNT(*) > 0 FROM ((restaurants AS r
+                INNER JOIN restaurant_hours AS h ON r.id = h.restaurant_id)
+                INNER JOIN weekdays AS wk ON h.weekday_id = wk.id)
+                WHERE wk.name_eng = LOWER(DAYNAME(NOW())) AND h.open_hour <= CURTIME() AND h.close_hour >= CURTIME()
+                AND r.id = ? AND accept = 1
+            ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(
-                array(
-                    $res_id
-                )
-            );
-            $residCheck = $statement->fetch(PDO::FETCH_ASSOC);
-
-            if (!$residCheck)
+            $statement->execute(array($res_id));
+            $res_id_exist = $statement->fetchColumn();
+            if (!$res_id_exist)
+            {
+                $this->_banner_message = 'Wybrana restauracja nie istnieje, bądź nie jest otwarta.';
+                SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
                 header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
-
-
+                die;
+            }
             // Walidacja id dania dla podanej restauracji
-            if (isset($_GET['dishid']))
-                $dish_id = $_GET['dishid'];
-            else
-                header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
+            if (isset($_GET['dishid'])) $dish_id = $_GET['dishid'];
+            else header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id=' . $res_id_exist->id, true, 301);
 
-            $query = "SELECT id FROM dishes WHERE restaurant_id = ? AND id = ?";
+            $query = "SELECT COUNT(*) > 0 FROM dishes WHERE restaurant_id = ? AND id = ?";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(
-                array(
-                    $res_id,
-                    $dish_id
-                )
-            );
-            $dishidCheck = $statement->fetch(PDO::FETCH_ASSOC);
-            if (!$dishidCheck)
-                header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
-            //--------------------------------------------------------------------------------------------------------------------
+            $statement->execute(array($res_id, $dish_id));
+            $dish_id_exist = $statement->fetchColumn();
+            if (!$dish_id_exist)
+            {
+                $this->_banner_message = 'Wybrana potrawa nie istnieje, bądź nie jest przypisana do żadnej restauracji.';
+                SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                die;
+            }
 
             // Obsługa koszyka
             $tempArray = array();
@@ -437,9 +445,9 @@ class RestaurantsService extends MvcService
             // Flaga sprawdzająca czy ilość danych elementów jest większa czy mniejsza niż 1, aby kolejno zinkrementować jego wartość
             // bądź nie dodawać go do nowej tablicy 
             $isCountHigherThan1 = true;
-            if (isset($_COOKIE['dishes'])) {
-                $card = $_COOKIE['dishes'];
-                $tempArray = json_decode($card);
+            if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
+            {
+                $tempArray = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]);
 
                 // Nowa tablica pomocnicza, do której element nie zostaje dodany, w momencie, gdy jego dekrementowana wartość 'il'
                 // będzie kolejno mniejsza niż 1.
@@ -464,13 +472,12 @@ class RestaurantsService extends MvcService
                             $isElementInArray = false;
                         }
                         // Jeżeli dany element nie jest mniejszy od 1, to włożymy go do nowej tablicy
-                        if ($isCountHigherThan1 == true)
+                        if ($isCountHigherThan1)
                             array_push($new_json_array, $a);
                         // jeżeli dany element jest mniejszy od 1, to nie dodajemy go do nowej tablicy i kasujemy flagę 
                         // na następny element 
                         else
                             $isCountHigherThan1 = true;
-                            $this->_banner_message = 'Produkt został pomyślnie usunięty z koszyka';
                     }
                 } else {
                     // Pętla iteruje po elementach sprawdzając, który został wybrany, aby jego ilość została zinkrementowana
@@ -481,32 +488,30 @@ class RestaurantsService extends MvcService
                         }
                         // Dodanie każdego z elementu do nowej tablicy.
                         array_push($new_json_array, $a);
-                        $this->_banner_message = 'Produkt został pomyślnie dodany do koszyka';
                     }
                 }
-
                 // Sprawdzanie, czy dany element istnieje w tablicy
-                if ($isElementInArray == true) {
+                if ($isElementInArray)
+                {
                     // Dodanie nowego elementu do tablicy i przypisanie mu kolejno wartości.
-                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
-                    setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
-                } else
-                    setcookie('dishes', json_encode($new_json_array), time() + (86400 * 30), "/");
+                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il));
+                    CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
+                }
+                else CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
             }
             // Jeżeli plik cookies nie został jeszcze utworzony, dodajemy elementy do tablicy i tworzymy nowe cookies. 
-            else {
-                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
-                setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
-                $this->_banner_message = 'Produkt został pomyślnie dodany do koszyka';
+            else
+            {
+                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il));
+                CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
             }
-            
-            SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
-            header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id='. $res_id, true, 301);
-            
+            if (empty($new_json_array)) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']));
+
             $statement->closeCursor();
             $this->dbh->commit();
-
-        } catch (Exception $e) {
+        }
+        catch (Exception $e)
+        {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
         }

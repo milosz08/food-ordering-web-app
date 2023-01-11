@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 15:42:29                   *
+ * Ostatnia modyfikacja: 2023-01-11 22:42:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -41,17 +41,17 @@ class RestaurantsController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /restaurants/restaurant-details
+     * Przejście pod adres: /restaurants/restaurant-dishes
      */
-	public function restaurant_details()
+	public function restaurant_dishes()
     {
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
         if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
-        $res_details = $this->_service->getSingleRestaurantDetails();
-        $this->renderer->render('restaurants/restaurant-details-view', array(
-            'page_title' => $res_details['restaurantName']['name'],
+        $res_details = $this->_service->get_restaurant_dishes_with_cart();
+        $this->renderer->render('restaurants/restaurant-dishes-view', array(
+            'page_title' => $res_details['res_details']['name'] ?? 'Potrawy restauracji',
             'data' => $res_details,
-            'banner' => $banner_data
+            'banner' => $banner_data,
         ));
 	}
 
@@ -60,17 +60,19 @@ class RestaurantsController extends MvcController
     public function add_dish()
     {
         $res_id = $this->_service->addDishToShoppingCard();
-        header('Location:' . __URL_INIT_DIR__ . '/restaurants/restaurant-details?id=' . $res_id, true, 301);
-        
+        header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     /**
      * Przejście pod adres: /restaurants/clear-filters
      */
     public function clear_filters()
     {
         CookieHelper::delete_cookie(CookieHelper::RESTAURANT_FILTERS);
+        SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, 
+            'Filtry zostały pomyślnie wyczyszczone.', false);
         header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
     }
 
