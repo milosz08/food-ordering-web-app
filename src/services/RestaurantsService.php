@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 13:42:32                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2023-01-11 15:21:39                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -180,16 +180,22 @@ class RestaurantsService extends MvcService
                 $restaurantDetails = array();
             }
 
+            // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $shopping_card = array();
             $restaurantArray = array();
+            // Zmienne zliczające wartość dodanych dań oraz dostawy danej restauracji
             $dishesSum = 0;
             $deliverySum = 0;
+            // Sprawdzanie, czy plik cookies został dodany.
             if (isset($_COOKIE['dishes'])) {
+
                 $cart = $_COOKIE['dishes'];
                 $cart = json_decode($cart);
+                // Pętla iterująca po otrzymanej tablicy zdekodowanego pliku json.
                 foreach ($cart as $c) {
-                    $query = "SELECT d.id, d.name, d.description, d.price, r.delivery_price, r.id AS res_id FROM dishes d INNER JOIN restaurants r 
-                    ON d.restaurant_id = r.id WHERE d.id = ?";
+                    // Zapytanie pobierające potrzebne szczegóły dania
+                    $query = "SELECT d.id, d.name, d.description, d.price, r.delivery_price FROM dishes d 
+                    INNER JOIN restaurants r ON d.restaurant_id = r.id WHERE d.id = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(
                         array(
@@ -197,29 +203,39 @@ class RestaurantsService extends MvcService
                         )
                     );
                     $row = $statement->fetchObject();
+                    // Zliczenie ilości posiadanych danych dań w koszyku
                     $row->price = $row->price * $c->count;
+                    // Uzupełnienie tablicy przechowującej szczegóły dania 
                     array_push($shopping_card, array('list' => $row, 'il' => $c->count));
+                    // Zwiększenie sumy dodanych dań
                     $dishesSum += $row->price;
-                    
-                    /*
-                    if (empty($restaurantArray))
-                        array_push($restaurantArray, array('id'$row->res_id);
-                    foreach ($restaurantArray as $res) {
-                        if ($res-> == $row->res_id) {
-                            $deliverySum += $c->delivery_price;
+
+                    /*  If sprawdzający, czy w podanej tablicy pomocniczej występuje jakiekolwiek id restauracji, jeżeli jest ona pusta
+                    *   nastąpi dodanie pierwszego id, wraz z dodaniem wartości dostawy do zmiennej 'deliverySum'.
+                    */
+                    if (empty($restaurantArray)) {
+                        array_push($restaurantArray, $c->resid);
+                        $deliverySum += $row->delivery_price;
+                    }
+
+                    /*  Pętla przechodzi po wszystkich elementach tablicy, jeżeli natrafi się ID restauracji, której dostawa 
+                    *   nie została jeszcze uwzględniona, nastąpi jej dodanie do tablicy 'restaurantArray' oraz dodanie wartości 
+                    *   dostawy dania z podanej restauracji.
+                    */
+                    foreach ($restaurantArray as $singleID) {
+                        if ($singleID != $c->resid) {
+                            array_push($restaurantArray, $c->resid);
+                            $deliverySum += $row->delivery_price;
                         }
                     }
-*/
                 }
             }
-
             $statement->closeCursor();
             $this->dbh->commit();
 
         } catch (Exception $e) {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
-
         }
         return array(
             'restaurantName' => $restaurantName,
@@ -233,6 +249,8 @@ class RestaurantsService extends MvcService
     public function addDishToShoppingCard()
     {
         try {
+            $this->dbh->beginTransaction();
+            //--------------------------------------------------------------------------------------------------------------------
             // Walidacja id restauracji w linku
             if (isset($_GET['resid']))
                 $res_id = $_GET['resid'];
@@ -249,14 +267,14 @@ class RestaurantsService extends MvcService
             $residCheck = $statement->fetch(PDO::FETCH_ASSOC);
 
             if (!$residCheck)
-                header('Location:' . __URL_INIT_DIR__ . '/restaurants', true, 301);
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
 
 
             // Walidacja id dania dla podanej restauracji
             if (isset($_GET['dishid']))
                 $dish_id = $_GET['dishid'];
             else
-                header('Location:' . __URL_INIT_DIR__ . '/restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
 
             $query = "SELECT id FROM dishes WHERE restaurant_id = ? AND id = ?";
             $statement = $this->dbh->prepare($query);
@@ -268,8 +286,8 @@ class RestaurantsService extends MvcService
             );
             $dishidCheck = $statement->fetch(PDO::FETCH_ASSOC);
             if (!$dishidCheck)
-                header('Location:' . __URL_INIT_DIR__ . '/restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
-
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id=' . $residCheck->id, true, 301);
+            //--------------------------------------------------------------------------------------------------------------------
 
             // Obsługa koszyka
             $tempArray = array();
@@ -298,21 +316,22 @@ class RestaurantsService extends MvcService
                         // Jeżeli dany element pasuje po id, do wybranego elementu
                         if ($a->dishid == $dish_id) {
                             // Sprawdzenie, czy dany element jest większy od 1, gdy jest to po prostu odejmujemy od niego 1
-                            if($a->count > 1)
-                                $a->count -= 1;      
+                            if ($a->count > 1)
+                                $a->count -= 1;
                             // W przeciwnym wypadku flaga zostaje ustawiona na 'false', aby element nie został dodany do nowej tablicy                 
-                            else 
+                            else
                                 $isCountHigherThan1 = false;
-                                // Element istnieje w koszyku, więc chcemy dodać nową tablice
+                            // Element istnieje w koszyku, więc chcemy dodać nową tablice
                             $isElementInArray = false;
                         }
                         // Jeżeli dany element nie jest mniejszy od 1, to włożymy go do nowej tablicy
-                        if($isCountHigherThan1 ==  true)
+                        if ($isCountHigherThan1 == true)
                             array_push($new_json_array, $a);
                         // jeżeli dany element jest mniejszy od 1, to nie dodajemy go do nowej tablicy i kasujemy flagę 
                         // na następny element 
                         else
                             $isCountHigherThan1 = true;
+                            $this->_banner_message = 'Produkt został pomyślnie usunięty z koszyka';
                     }
                 } else {
                     // Pętla iteruje po elementach sprawdzając, który został wybrany, aby jego ilość została zinkrementowana
@@ -323,6 +342,7 @@ class RestaurantsService extends MvcService
                         }
                         // Dodanie każdego z elementu do nowej tablicy.
                         array_push($new_json_array, $a);
+                        $this->_banner_message = 'Produkt został pomyślnie dodany do koszyka';
                     }
                 }
 
@@ -331,26 +351,27 @@ class RestaurantsService extends MvcService
                     // Dodanie nowego elementu do tablicy i przypisanie mu kolejno wartości.
                     array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
                     setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
-                }
-                else 
+                } else
                     setcookie('dishes', json_encode($new_json_array), time() + (86400 * 30), "/");
             }
             // Jeżeli plik cookies nie został jeszcze utworzony, dodajemy elementy do tablicy i tworzymy nowe cookies. 
-            else
-            {
+            else {
                 array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'resid' => $res_id));
                 setcookie('dishes', json_encode($tempArray), time() + (86400 * 30), "/");
+                $this->_banner_message = 'Produkt został pomyślnie dodany do koszyka';
             }
-
-               
+            
+            SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
+            header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-details?id='. $res_id, true, 301);
+            
+            $statement->closeCursor();
+            $this->dbh->commit();
 
         } catch (Exception $e) {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
-
         }
         return $_GET['resid'];
-
     }
 
 }
