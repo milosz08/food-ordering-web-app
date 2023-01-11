@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:20:53                   *
+ * Ostatnia modyfikacja: 2023-01-11 15:40:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,6 +19,7 @@ use App\Core\MvcService;
 use App\Core\MvcController;
 use App\Core\ResourceLoader;
 use App\Services\RestaurantsService;
+use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('RestaurantsService'); // ładowanie serwisu przy użyciu require_once
@@ -48,6 +49,17 @@ class RestaurantsController extends MvcController
             'page_title' => '[[nazwa restauracji]]',
         ));
 	}
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /restaurants/clear-filters
+     */
+    public function clear_filters()
+    {
+        CookieHelper::delete_cookie(CookieHelper::RESTAURANT_FILTERS);
+        header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
