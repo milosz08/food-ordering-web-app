@@ -1,21 +1,30 @@
 {{> partials/header-view.partial }}
 <main class="container-lg flex-grow-1 top-margin-header">
+        {{#banner.show_banner}}
+    <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
+        {{{banner.banner_message}}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{/banner.show_banner}}
     <div class="container-flex mt-5 mb-5 mx-5">
         <div class="col d-center mt-5 mb-5 mx-5">
-
-
-
+            {{#data.orders}}
             <div class="card mb-3">
-                <h5 class="card-header">Mcdonald</h5>
+                <h5 class="card-header">{{name}}</h5>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
-                            <h5 class="card-title fw-bold fs-6">Big maczeq</h5>
+                            <h5 class="card-title fw-bold fs-6">Nr twojego zamówienia: {{id}}</h5>
+                            {{#order_statement}}
+                            <p class="text-danger fs-6 lh-sm">Zamówienie anulowane</p>
+                            {{/order_statement}}
+                            {{^order_statement}}
+                            {{/order_statement}}
                             <p class="card-text fs-6">
                                 <i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                                <i class="bi bi-cash-coin ms-3" style="color: darkgoldenrod;"></i> 37,43zł
+                                <i class="bi bi-cash-coin ms-3" style="color: darkgoldenrod;"></i> {{price}}zł
                             </p>
-                            <a href="#" class="btn btn-primary">Szczegóły zamówienia</a>
+                            <a href="{{base_dir}}user/orders/single-order?id={{id}}" class="btn btn-primary">Szczegóły zamówienia</a>
                         </div>
                         <div class="col-4">
                             <img src="{{base_dir}}public/static/images/default-profile.jpg" 
@@ -25,28 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-3">
-                <h5 class="card-header">Mcdonald</h5>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-8">
-                            <h5 class="card-title fw-bold fs-6">Big maczeq</h5>
-                            <p class="card-text fs-6"><i class="bi bi-clock" style="color: blue;"></i> 50-60min
-                                <i class="bi bi-cash-coin  ms-3" style="color: darkgoldenrod;"></i> 37,43zł
-                            </p>
-                            <a href="#" class="btn btn-primary">Szczegóły zamówienia</a>
-                        </div>
-                        <div class="col-4">
-                            <img src="{{base_dir}}public/static/images/default-profile.jpg" 
-                                    class="img-fluid"
-                                    style="border-radius: 50%;" width="100" height="100" alt="...">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
+            {{/data.orders}}
             <div class="d-grid mb-5 gap-2">
                 <button class="btn btn-primary" type="button"><i class="bi bi-bag-plus-fill"></i> Złóż zamówienie</button>
             </div>
