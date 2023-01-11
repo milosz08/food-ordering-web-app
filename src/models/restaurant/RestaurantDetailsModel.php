@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 01:33:30                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 03:53:55                   *
+ * Ostatnia modyfikacja: 2023-01-10 01:34:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -36,6 +36,7 @@ class RestaurantDetailsModel
     public $phone_number; // numer telefonu do restauracji
     public $profile_url; // link do zdjęcia profilowego restauracji
     public $banner_url; // link do zdjęcia w tle restauracji
+    public $min_price; // najniższa cena za jaką można kupić produkty
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     

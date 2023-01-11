@@ -159,10 +159,8 @@ class RestaurantsService extends MvcService
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                if (!isset($_POST['restaurant-delivery-free']))
-                    $res->delivery_price = ValidationHelper::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
-                else
-                    $res->delivery_price = array('value' => '', 'invl' => false, 'bts_class' => '');
+                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', '__REGEX_PRICE__');
+                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', '__REGEX_PRICE__');
                 $res->building_locale_nr = ValidationHelper::validate_field_regex('restaurant-building-no', Config::get('__REGEX_BUILDING_NO__'));
                 $res->post_code = ValidationHelper::validate_field_regex('restaurant-post-code', Config::get('__REGEX_POSTCODE__'));
                 $res->city = ValidationHelper::validate_field_regex('restaurant-city', Config::get('__REGEX_CITY__'));
@@ -193,14 +191,17 @@ class RestaurantsService extends MvcService
                     // Sekcja zapytań dodająca wprowadzone dane do tabeli restaurants
                     $query = "
                         INSERT INTO restaurants 
-                        (name, delivery_price, street, building_locale_nr, post_code, city, description, phone_number, user_id)
-                        VALUES (?,NULLIF(?,''),?,?,?,?,?,REPLACE(?,' ',''),?)
+                        (name, delivery_price, min_price street, building_locale_nr, post_code, city, description, phone_number, user_id)
+                        VALUES (?,
+                        NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''),
+                        NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''),
+                        ?,?,?,?,?,REPLACE(?,' ',''),?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
-                        $res->name['value'], $res->delivery_price['value'], $res->street['value'], $res->building_locale_nr['value'],
-                        $res->post_code['value'], $res->city['value'], $res->description['value'], $res->phone_number['value'],
-                        $_SESSION['logged_user']['user_id'],
+                        $res->name['value'], $res->delivery_price['value'], $res->min_price['value'], $res->street['value'],
+                        $res->building_locale_nr['value'], $res->post_code['value'], $res->city['value'], $res->description['value'],
+                        $res->phone_number['value'],$_SESSION['logged_user']['user_id'],
                     ));
 
                     // Sekcja zapytań zwracająca id ostatnio dodanej restauracji
@@ -264,6 +265,7 @@ class RestaurantsService extends MvcService
         return array(
             'res' => $res,
             'is_delivery_free' => isset($_POST['restaurant-delivery-free']) ? 'checked' : '',
+            'is_no_min_price' => isset($_POST['restaurant-no-min-price']) ? 'checked' : '',
             'res_hours' => $res_hours,
         );
     }
@@ -284,9 +286,11 @@ class RestaurantsService extends MvcService
 
             // Zapytanie zwracające aktualne wartości edytowanej restauracji z bazy danych
             $query = "
-                SELECT name, street, building_locale_nr, post_code, city, banner_url, profile_url,
-                CAST(delivery_price as DECIMAL(10,2)) AS delivery_price, description, IFNULL(delivery_price, '') AS delivery_free,
-                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number
+                SELECT name, street, building_locale_nr, post_code, city, banner_url, profile_url, description,
+                REPLACE(CAST(delivery_price as DECIMAL(10,2)), '.', ',') AS delivery_price,
+                IFNULL(delivery_price, '') AS delivery_free,
+                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
+                REPLACE(IFNULL(min_price, ''), '.', ',') AS min_price
                 FROM restaurants
                 WHERE id = ? AND user_id = ?
             ";
@@ -299,13 +303,12 @@ class RestaurantsService extends MvcService
 
             $res_hours = $this->get_restaurant_weekdays_and_hours();
             $is_delivery_free = empty($res->delivery_free) ? 'checked' : '';
+            $is_min_price = empty($res->min_price) ? 'checked' : '';
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                if (!isset($_POST['restaurant-delivery-free']))
-                    $res->delivery_price = ValidationHelper::validate_field_regex('restaurant-delivery-price', Config::get('__REGEX_PRICE__'));
-                else
-                    $res->delivery_price = array('value' => '', 'invl' => false, 'bts_class' => '');
+                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', '__REGEX_PRICE__');
+                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', '__REGEX_PRICE__');
                 $res->banner_url = ValidationHelper::validate_image_regex('restaurant-banner');
                 $res->profile_url = ValidationHelper::validate_image_regex('restaurant-profile');
                 $res->street = ValidationHelper::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
@@ -318,6 +321,7 @@ class RestaurantsService extends MvcService
                 $all_hours_valid = true; foreach ($res_hours as $res_hour) $all_hours_valid = $res_hour->all_hours_is_valid();
 
                 $is_delivery_free = isset($_POST['restaurant-delivery-free']) ? 'checked' : '';
+                $is_min_price = isset($_POST['restaurant-no-min-price']) ? 'checked' : '';
                 if ($res->all_is_valid() && $all_hours_valid)
                 {
                     // Zapytanie zwracające liczbę istniejących już restauracji o podanej nazwie
@@ -339,10 +343,10 @@ class RestaurantsService extends MvcService
                         // sprawdź, czy dzień tygodnia jest już wpisany do tabeli, jeśli tak zwróć id
                         $query = "
                             SELECT h.id FROM restaurant_hours AS h 
-                            INNER JOIN weekdays AS w ON h.weekday_id = w.id WHERE name = ? AND restaurant_id = ?
+                            INNER JOIN weekdays AS w ON h.weekday_id = w.id WHERE alias = ? AND restaurant_id = ?
                         ";
                         $statement = $this->dbh->prepare($query);
-                        $statement->execute(array($res_hour->name, $_GET['id']));
+                        $statement->execute(array($res_hour->alias, $_GET['id']));
                         $hour_id = $statement->fetchColumn();
                         // jeśli restauracja w danym dniu tygodnia ma status zamknięty, oraz jeśli rekord istnieje, usuń
                         if ($res_hour->is_closed == 'checked')
@@ -361,9 +365,9 @@ class RestaurantsService extends MvcService
                             }
                             else // dodaj nowy dzień tygodnia
                             {
-                                $query = "SELECT id FROM weekdays WHERE name = ?";
+                                $query = "SELECT id FROM weekdays WHERE alias = ?";
                                 $statement = $this->dbh->prepare($query);
-                                $statement->execute(array($res_hour->name));
+                                $statement->execute(array($res_hour->alias));
                                 $weekday_id = $statement->fetchColumn();
                                 
                                 $query = "INSERT INTO restaurant_hours (open_hour, close_hour, weekday_id, restaurant_id) VALUES (?,?,?,?)";
@@ -379,15 +383,18 @@ class RestaurantsService extends MvcService
                     );
                     // Sekcja zapytań aktualizujących pola w tabeli
                     $query = "
-                        UPDATE restaurants SET name = ?, delivery_price = NULLIF(?,''), street = ?, building_locale_nr = ?, post_code = ?, 
-                        city = ?, banner_url = NULLIF(?,''), profile_url = NULLIF(?,''), description = ?, phone_number = REPLACE(?,' ','')
+                        UPDATE restaurants SET name = ?,
+                        delivery_price = NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''), street = ?, 
+                        building_locale_nr = ?, post_code = ?, city = ?, banner_url = NULLIF(?,''), profile_url = NULLIF(?,''),
+                        description = ?, phone_number = REPLACE(?,' ',''),
+                        min_price = NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),'')
                         WHERE id = ?
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
                         $res->name['value'], $res->delivery_price['value'], $res->street['value'], $res->building_no['value'], 
                         $res->post_code['value'], $res->city['value'], $photos['banner'], $photos['profile'], $res->description['value'], 
-                        $res->phone_number['value'], $_GET['id'],
+                        $res->phone_number['value'], $res->min_price['value'], $_GET['id'],
                     ));
 
                     // aktulizowanie adresów profilu i banera w zmiennych po pobraniu zmienionych wartości w bazie danych
@@ -403,8 +410,8 @@ class RestaurantsService extends MvcService
                     $this->dbh->commit();
 
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
-                    //header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
-                    //die;
+                    header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
+                    die;
                 }
                 else
                 {
@@ -425,6 +432,7 @@ class RestaurantsService extends MvcService
             'res_id' => $_GET['id'],
             'res_hours' => $res_hours,
             'is_delivery_free' => $is_delivery_free,
+            'is_no_min_price' => $is_min_price,
             'has_profile' => !empty($res->profile_url['value']),
             'has_banner' => !empty($res->banner_url['value']),
             'hide_profile_preview_class' => $res->profile_url['invl'] ? 'display-none' : '',
@@ -512,9 +520,7 @@ class RestaurantsService extends MvcService
     {
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
 
-        $warning_modal_content = '';
         $restaurant_details = new RestaurantDetailsModel;
-        $not_empty = false;
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
         $restaurant_dishes = array();
         $res_hours = array();
@@ -533,11 +539,14 @@ class RestaurantsService extends MvcService
             PaginationHelper::check_parameters($redirect_url);
 
             $restaurant_query = "
-                SELECT r.id, CONCAT(first_name, ' ', last_name) AS full_name, name, accept, description, building_locale_nr,
-                IFNULL(delivery_price, 'za darmo') AS delivery_price, city, street, post_code,
+                SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city, r.profile_url, r.banner_url,
+                
+                CONCAT(first_name, ' ', last_name) AS full_name,
+                IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS delivery_price, 
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
-                (SELECT COUNT(*) FROM dishes WHERE restaurant_id = r.id) AS count_of_dishes, r.profile_url, r.banner_url,
-                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number
+                (SELECT COUNT(*) FROM dishes WHERE restaurant_id = r.id) AS count_of_dishes,
+                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
+                IF(min_price, CONCAT(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'brak najniższej ceny') AS min_price
                 FROM restaurants AS r
                 INNER JOIN users AS u ON r.user_id = u.id 
                 WHERE r.id = :id AND r.user_id = :userid
@@ -560,7 +569,8 @@ class RestaurantsService extends MvcService
 
             // zapytanie do bazy danych, które zwróci poszczególne dania dla obecnie wybranej restauracji
             $dishes_query = "
-                SELECT ROW_NUMBER() OVER(ORDER BY d.id) as it, d.id, d.name, t.name AS type, d.description, d.price
+                SELECT ROW_NUMBER() OVER(ORDER BY d.id) as it, d.id, d.name, t.name AS type, d.description,
+                CONCAT(REPLACE(CAST(d.price AS DECIMAL(10,2)), '.', ','), ' zł') AS price
                 FROM dishes AS d
                 INNER JOIN dish_types AS t ON dish_type_id = t.id
                 WHERE restaurant_id = :id AND d.name LIKE :search LIMIT :total OFFSET :page
@@ -573,28 +583,13 @@ class RestaurantsService extends MvcService
             $statement->execute();
 
             while ($row = $statement->fetchObject(DishModel::class)) array_push($restaurant_dishes, $row);
-            if (count($restaurant_dishes)) $not_empty = true;
-            else
-            {
-                $not_empty = false;
-                $warning_modal_content = '
-                    Wybrana restauracja nie posiada jeszcze w swojej ofercie żadnych potraw. Aby dodać pierwszą potrawę do restauracji, 
-                    kliknij w przycisk "Dodaj potrawę" lub w <a class="alert-link" href="' . __URL_INIT_DIR__ .'owner/dishes/add-dish?resid=' . 
-                    $restaurant_details->id . '">ten link</a> który przeniesie Cię do strony dodawania potraw.
-                ';
-            }
-            if (!$restaurant_details->accept)
-            {
-                $not_empty = false;
-                $warning_modal_content = '
-                    Wybrana restauracja nie została jeszcze zaakceptowana. Nowe potrawy do restauracji możesz dodawać tylko wówczas, jeśli
-                    restauracja ma status "aktywna".
-                ';
-            }
+            
             // zapytanie zliczające wszystkie dania przypisane do restauracji
-            $query = "SELECT count(*) FROM dishes WHERE restaurant_id = ?";
+            $query = "SELECT count(*) FROM dishes WHERE restaurant_id = :id AND name LIKE :search";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['id']));
+            $statement->bindValue('id', $_GET['id']);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->execute();
             $total_records = $statement->fetchColumn();
 
             $total_pages = ceil($total_records / $total_per_page);
@@ -625,8 +620,7 @@ class RestaurantsService extends MvcService
             'restaurant_dishes' => $restaurant_dishes,
             'search_text' => $search_text,
             'details' => $restaurant_details,
-            'not_empty' => $not_empty,
-            'warning_modal_content' => $warning_modal_content,
+            'not_empty' => count($restaurant_dishes),
             'res_hours' => $res_hours,
         );
     }
@@ -678,11 +672,11 @@ class RestaurantsService extends MvcService
         $ret_hours = array();
         // pobieranie danych na podstawie wszystkich dni tygodnia, kiedy restauracja jest czynna (zapytania złożone i podzapytania)
         $hours_query = "
-            SELECT w.name, w.name_eng AS identifier,
-            IFNULL((SELECT DATE_FORMAT(open_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),'') 
-            AS open_hour,
-            IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),'') 
-            AS close_hour,
+            SELECT w.alias AS alias, w.name AS name, w.name_eng AS identifier,
+            IFNULL((SELECT DATE_FORMAT(open_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
+            'nieczynne') AS open_hour,
+            IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
+            'nieczynne') AS close_hour,
             (SELECT NOT COUNT(*) > 0 FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id) AS is_closed
             FROM weekdays AS w
             ORDER BY w.id

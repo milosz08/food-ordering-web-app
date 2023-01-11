@@ -257,7 +257,8 @@ class DishesService extends MvcService
                     ');
                     $dish_type_id = $this->add_new_dish_type_or_select_exist($dish->custom_type['value'], $dish->type['value']);
                     $query = "
-                        INSERT INTO dishes (name, description, price, prepared_time, dish_type_id, restaurant_id) VALUES (?,?,?,?,?,?)
+                        INSERT INTO dishes (name, description, price, prepared_time, dish_type_id, restaurant_id)
+                        VALUES (?,?,NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''),?,?,?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
@@ -317,7 +318,8 @@ class DishesService extends MvcService
             $this->check_if_dish_is_valid();
 
             $query = "
-                SELECT d.name AS name, description, photo_url, price, prepared_time, t.name AS type
+                SELECT d.name AS name, description, photo_url, prepared_time, t.name AS type,
+                REPLACE(CAST(price as DECIMAL(10,2)), '.', ',') AS price
                 FROM dishes AS d
                 INNER JOIN dish_types AS t ON d.dish_type_id = t.id
                 WHERE d.id = ?
@@ -347,7 +349,8 @@ class DishesService extends MvcService
                     
                     $query = "
                         UPDATE dishes SET
-                        name = ?, description = ?, photo_url = NULLIF(?,''), price = ?, prepared_time = ?, dish_type_id = ?
+                        name = ?, description = ?, photo_url = NULLIF(?,''), price = NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''),
+                        prepared_time = ?, dish_type_id = ?
                         WHERE id = ?
                     ";
                     $statement = $this->dbh->prepare($query);
@@ -486,12 +489,13 @@ class DishesService extends MvcService
             $this->check_if_dish_is_valid();
             
             $query = "
-                SELECT d.name, t.name AS type, d.description AS description, price, r.name AS r_name, d.photo_url AS photo_url,
+                SELECT d.name, t.name AS type, d.description AS description, r.name AS r_name, d.photo_url AS photo_url,
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS r_address, 
-                IFNULL(delivery_price, 'za darmo') AS r_delivery_price,
+                IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price as DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS r_delivery_price,
+                CONCAT(REPLACE(CAST(price as DECIMAL(10,2)), '.', ','), ' zł') AS price,
                 CONCAT(u.first_name, ' ', u.last_name) AS r_full_name,
-                IFNULL(delivery_price, 0) + price AS total_price,
-                t.user_id IS NOT NULL AS is_custom_type, prepared_time
+                REPLACE(CONCAT(IFNULL(delivery_price, 0) + price, ' zł'), '.', ',') AS total_price,
+                t.user_id IS NOT NULL AS is_custom_type, CONCAT(prepared_time, ' minut') AS prepared_time
                 FROM (((dishes AS d
                 INNER JOIN restaurants AS r ON d.restaurant_id = r.id)
                 INNER JOIN dish_types AS t ON d.dish_type_id = t.id)
@@ -534,14 +538,17 @@ class DishesService extends MvcService
     {
         if (!isset($_GET['resid'])) header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
 
-        $query = "SELECT COUNT(*) FROM restaurants WHERE id = :id AND user_id = :userid";
+        $query = "SELECT COUNT(*) FROM restaurants WHERE id = :id AND user_id = :userid AND accept = 1";
         $statement = $this->dbh->prepare($query);
         $statement->bindValue('id', $_GET['resid'], PDO::PARAM_INT);
         $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
         $statement->execute();
         if ($statement->fetchColumn() != 0) return;
         
-        $this->_banner_message = 'Wybrana restauracja nie istnieje lub nie jest przypisana do Twojego konta.';
+        $this->_banner_message = '
+            Wybrana restauracja nie istnieje, nie jest przypisana do Twojego konta lub nie została jeszcze aktywowana przez jednego z
+            administratorów systemu.
+        ';
         SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, true);
         $statement->closeCursor();
         $this->dbh->commit();

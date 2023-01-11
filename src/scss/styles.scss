@@ -7,9 +7,11 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:17:27                   *
+ * Ostatnia modyfikacja: 2023-01-11 04:44:48                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 * {
     margin: 0;
@@ -153,6 +155,32 @@ body {
 .icon-size {
     font-size: 4rem;
 }
+
+.grade-system-font {
+    font-family:'Bootstrap-icons';
+}
+
+.radio-btn {
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+}
+
+.small-font {
+    font-size: .9rem;
+}
+
+.rating-container > label:hover::after,
+.rating-container > label:hover ~ label:after,
+.rating-container > input.radio-btn:checked ~ label:after,
+.rating-container > input.radio-btn:checked ~ label:after {
+    font-family:'Bootstrap-icons';  
+    content: '\F586';
+    position: absolute;
+    left: 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @media only screen and (max-width: 992px) {
     .add-content-button {

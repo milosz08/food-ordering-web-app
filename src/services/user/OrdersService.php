@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-08 01:05:40                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-08 19:55:21                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -64,6 +64,8 @@ class OrdersService extends MvcService
 
             $v_cookie = $_COOKIE['discount'];
 
+            $this->dbh->beginTransaction();
+            
             $query = "SELECT id, value FROM discount WHERE name = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(
@@ -79,8 +81,7 @@ class OrdersService extends MvcService
                 $is_discount_code_exist = true;
             }
 
-            $this->dbh->beginTransaction();
-
+            
             $query = "SELECT street, post_code, city, building_nr, locale_nr FROM user_address WHERE user_id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));

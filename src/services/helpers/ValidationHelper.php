@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:19:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 17:51:10                   *
+ * Ostatnia modyfikacja: 2023-01-10 02:16:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,6 +17,7 @@ namespace App\Services\Helpers;
 
 use DateTime;
 use Exception;
+use App\Core\Config;
 use App\Core\ResourceLoader;
 use App\Models\RestaurantHourModel;
 
@@ -114,5 +115,14 @@ class ValidationHelper
             Brak wartości godziny otwarcia i/lub zamknięcia w dniu <strong>' . $hour_obj->name . '</strong>. W przypadku braku zaznaczenia 
             opcji "Zamknięte w  tym dniu tygodnia" należy wprowadzić godzinę otwarcia i zamknięcia lokalu.
         ');
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static function check_optional($optional_name, $toggler_name, $pattern_config_name)
+    {
+        if (!isset($_POST[$toggler_name]))
+            return ValidationHelper::validate_field_regex($optional_name, Config::get($pattern_config_name));
+        return array('value' => '', 'invl' => false, 'bts_class' => '');
     }
 }
