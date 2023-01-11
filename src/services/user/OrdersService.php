@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 15:46:12                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-11 22:37:07                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -262,9 +262,11 @@ class OrdersService extends MvcService
             $this->dbh->beginTransaction();
 
             $query = "
-                SELECT o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, u.first_name AS first_name, 
-                u.last_name AS last_name, u.email AS email, o.date_order AS date_order, ua.street AS street,
-                ua.building_nr AS building_nr, ua.locale_nr AS locale_nr, ua.post_code AS post_code, ua.city AS city
+                SELECT IF((TIMESTAMPDIFF(SECOND, date_order, NOW())) > 300, true, false) AS time_statement,
+                o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, 
+                u.first_name AS first_name, u.last_name AS last_name, u.email AS email, o.date_order AS date_order, 
+                ua.street AS street, ua.building_nr AS building_nr, ua.locale_nr AS locale_nr, 
+                ua.post_code AS post_code, ua.city AS city
                 FROM ((((orders AS o
                 INNER JOIN order_status AS os ON o.status_id = os.id)
                 INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
@@ -279,7 +281,7 @@ class OrdersService extends MvcService
 
             $one_order = $statement->fetchObject(ShowUserSingleOrderModel::class);
 
-            if ($one_order->status_id == 3) {
+            if ($one_order->status_id == 3 || $one_order->time_statement == true) {
                 $validation = false;
             } else
                 $validation = true;
@@ -304,12 +306,30 @@ class OrdersService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $query = "UPDATE orders SET status_id = 3 WHERE id = ?";
+
+            $query = "
+                SELECT IF((TIMESTAMPDIFF(SECOND, date_order, NOW())) > 300, true, false) AS dif
+                FROM orders
+                WHERE user_id = :userid AND id = :id;
+            ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['id']));
-            $this->_banner_message = 'Pomyślnie anulowano zamówienie o nr: ' . $_GET['id'];
-            $statement->closeCursor();
-            $this->dbh->commit();
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+            $data = $statement->fetch(PDO::FETCH_ASSOC);
+
+            if ($data['dif'] == true) {
+                $this->_banner_message = 'Zamówienie o numerze ' . $_GET['id'] . ' nie może zostać już anulowane!';
+                $this->_banner_error = true;
+            } else {
+                $query = "UPDATE orders SET status_id = 3 WHERE id = ?";
+                $statement = $this->dbh->prepare($query);
+                $statement->execute(array($_GET['id']));
+                $this->_banner_message = 'Pomyślnie anulowano zamówienie o nr: ' . $_GET['id'];
+                $statement->closeCursor();
+                $this->dbh->commit();
+            }
+
         }
         catch (Exception $e)
         {

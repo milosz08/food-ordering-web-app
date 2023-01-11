@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 21:09:15                   *
+ * Ostatnia modyfikacja: 2023-01-11 22:22:49                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -78,8 +78,6 @@ class OrdersController extends MvcController
     public function cancel_order()
     {
         $this->protector->protect_only_user();
-        //$banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
-        //if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
         $one_order = $this->_service->cancelOrder();
         header('Location:' . __URL_INIT_DIR__ . 'user/orders/list', true, 301);
     }
