@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:02:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 17:45:07                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-11 21:10:19                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -44,6 +44,7 @@ class DashboardController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_owner();
+        $info = $this->_service->graph();
         $this->renderer->render_embed('owner-wrapper-view', 'owner/dashboard-view', array(
             'page_title' => 'Panel główny',
             'charts_owner_loadable_content' => true,

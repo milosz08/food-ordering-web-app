@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-10, 17:31:09                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 20:50:36                   *
+ * Ostatnia modyfikacja: 2023-01-11 22:34:50                   *
  * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -33,6 +33,7 @@
     public $date_order;
     public $id;
     public $status_id;
+    public $time_statement;
     //public $finish_order;
     //public $dish_name;
     //public $dish_amount;
