@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-09 18:32:07                   *
+ * Ostatnia modyfikacja: 2023-01-11 15:30:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -71,8 +71,8 @@ class DishesService extends MvcService
             $curr_page = $_GET['page'] ?? 1;
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = $_POST['search-dish-name'] ?? '';
-
+            $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_DISHES_SEARCH);
+            
             $redirect_url = 'owner/dishes';
             PaginationHelper::check_parameters($redirect_url);
 
@@ -94,9 +94,14 @@ class DishesService extends MvcService
             while ($row = $statement->fetchObject(DishRestaurantModel::class)) array_push($all_dishes, $row);
             $not_empty = count($all_dishes);
 
-            $query = "SELECT count(*) FROM dishes AS d INNER JOIN restaurants AS r ON d.restaurant_id = r.id WHERE user_id = ?";
+            $query = "
+                SELECT count(*) FROM dishes AS d INNER JOIN restaurants AS r ON d.restaurant_id = r.id WHERE user_id = :userid
+                AND d.name LIKE :search
+            ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->execute();
             $total_records = $statement->fetchColumn();
             
             $total_pages = ceil($total_records / $total_per_page);
@@ -152,7 +157,7 @@ class DishesService extends MvcService
             $curr_page = $_GET['page'] ?? 1;
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = $_POST['search-restaurant-name'] ?? '';
+            $search_text = SessionHelper::persist_search_text('search-restaurant-name', SessionHelper::OWNER_DISHES_RES_SEARCH);
 
             $redirect_url = 'owner/dishes/add-dish-to-restaurant';
             PaginationHelper::check_parameters($redirect_url);
@@ -174,9 +179,11 @@ class DishesService extends MvcService
             while ($row = $statement->fetchObject(ActiveRestaurantModel::class)) array_push($active_restaurants, $row);
             $not_empty = count($active_restaurants);
             
-            $query = "SELECT count(*) FROM restaurants WHERE accept = 1 AND user_id = ?";
+            $query = "SELECT count(*) FROM restaurants WHERE accept = 1 AND user_id = :userid AND name LIKE :search";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->execute();
             $total_records = $statement->fetchColumn();
 
             $total_pages = ceil($total_records / $total_per_page);

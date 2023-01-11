@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-09 18:35:45                   *
+ * Ostatnia modyfikacja: 2023-01-11 07:20:54                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -77,8 +77,8 @@ class RestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = $_POST['search-res-name'] ?? '';
-
+            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::OWNER_RES_SEARCH);
+            
             $redirect_url = 'owner/restaurants';
             PaginationHelper::check_parameters('owner/restaurants');
 
@@ -99,9 +99,10 @@ class RestaurantsService extends MvcService
             $not_empty = count($user_restaurants);
             
             // zapytanie zliczające wszystkie restauracje przypisane do użytkownika
-            $query = "SELECT count(*) FROM restaurants WHERE user_id = :id";
+            $query = "SELECT count(*) FROM restaurants WHERE user_id = :id AND name LIKE :search";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('id', $_SESSION['logged_user']['user_id']);
+            $statement->bindValue('search', '%' . $search_text . '%');
             $statement->execute();
             $total_records = $statement->fetchColumn();
 
@@ -533,8 +534,8 @@ class RestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = $_POST['search-dish-name'] ?? '';
-
+            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::OWNER_RES_DETAILS_SEARCH);
+            
             $redirect_url = 'owner/restaurants/restaurant-details?id=' . $_GET['id'];
             PaginationHelper::check_parameters($redirect_url);
 
