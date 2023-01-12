@@ -23,119 +23,28 @@
         </ul>
     </div>
     <div class="d-flex flex-row-reverse">
-    <div class="dropdown">
-        <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
-            <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
-            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/profile">
-                <i class="bi bi-person me-2"></i>Profil
-            </a></li>
-            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/settings">
-                <i class="bi bi-gear me-2"></i>Ustawienia
-            </a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{base_dir}}">
-                <i class="bi bi-house-up me-2"></i>Strona główna
-            </a></li>
-            <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
-                <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
-            </a></li>
-        </ul>
-    </div>
-    <div class="dropdown mt-1">
-        <button class="d-flex align-items-center border-0 text-white bg-transparent me-4" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            <h5><i class="bi bi-cart4"></i></h5>
-            <span class="mx-1 d-none d-sm-block"></span>
-        </button>
-        <ul class="nav nav-pills mr-auto justify-content-center text-small">
-            <li class="nav-item dropdown-menu-lg-start">
-                <ul class="dropdown-menu p-1 " style="width: 250px;">
-                    <li>
-                        <div class="row">
-                            <h6 class="card-title p-3 mb-2">Restauracja testowa dluga nazwa</h6>
-                            <div class="d-flex flex-row">                      
-                                <div class="def-number-input number-input safari_only mt-1">
-                                    <input class="quantity fw-bold text-black" min="1" name="quantity" value="1"
-                                      type="number" style="width: 39px;">
-                                </div>
-                                <p class="card-text p-1">przykładowe danie tez dluga nazwa nawet</p>
-                                <button class="d-flex align-items-top border-0 text-danger bg-transparent mt-1">
-                                    <i class="bi bi-trash3"></i>
-                                    <span class="mx-1 d-none d-sm-block"></span>
-                                </button>
-                            </div>
-                            <p class="card-text text-center">Cena</p>
-                        </div>
-                    </li>
-                    <div class="d-flex flex-column justify-content-center dropdown-item">
-                        <a href="#" class="link-danger p-1 mt-1 mb-1 text-center">Wyczyść Koszyk</a>
-                        <a href="#" class="btn btn-success p-1 mt-1 mb-1 ">Zamow</a>
-                    </div>   
-                </ul> 
-            </li>
-        </ul>
-    </div>
-    <div class="dropdown mt-1">
-        <button class="d-flex-column align-items-center border-0 text-white bg-transparent me-4" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <h5><i class="bi bi-bell"></i></h5>
-            <span class="mx-1 d-none d-sm-block"></span>
-        </button>
-        <ul class="nav nav-pills mr-auto justify-content-center text-small">
-            <li class="nav-item dropdown-menu-lg-start">
-                <ul class="dropdown-menu p-1">
-                    <li class="notification-box">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3 text-center">
-                                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32"
-                                    height="32" class="rounded-circle me-2">
-                            </div>
-                            <div class="col-lg-8 col-sm-8 col-8">
-                                <strong class="text-info">David John</strong>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                </div>
-                                <small class="text-warning">21.11.2022, 14:02</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="notification-box">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3 text-center">
-                                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32"
-                                    height="32" class="rounded-circle me-2">
-                            </div>
-                            <div class="col-lg-8 col-sm-8 col-8">
-                                <strong class="text-info">David John</strong>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                </div>
-                                <small class="text-warning">25.11.2021, 11:40</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="notification-box">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3 text-center">
-                                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32"
-                                    height="32" class="rounded-circle me-2">
-                            </div>
-                            <div class="col-lg-8 col-sm-8 col-8">
-                                <strong class="text-info">David John</strong>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                </div>
-                                <small class="text-warning">17.11.2022, 11:00</small>
-                            </div>
-                        </div>
-                    </li>
-                </li>        
+        <div class="dropdown">
+            <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
+                <li><a class="dropdown-item" href="{{base_dir}}admin/panel/profile">
+                    <i class="bi bi-person me-2"></i>Profil
+                </a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}admin/panel/settings">
+                    <i class="bi bi-gear me-2"></i>Ustawienia
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{base_dir}}">
+                    <i class="bi bi-house-up me-2"></i>Strona główna
+                </a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
+                    <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+                </a></li>
             </ul>
-        </div>  
+        </div>
     </div>
 </div>
 </nav>
@@ -245,7 +154,7 @@
             <main class="px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
                 {{{ embed_rendering_section }}}
             </main>
-            {{> partials/panel-footer-view.partial }}
+            {{> partials/cms-panel-footer-view.partial }}
         </div>
     </div>
 </div>
