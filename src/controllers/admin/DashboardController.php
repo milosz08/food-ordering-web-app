@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:02:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 17:43:53                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-12 03:01:13                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -39,6 +39,16 @@ class DashboardController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
     /**
+     * Przejście pod adres: /admin/dashboard/graph
+     */
+    public function graph()
+    {
+        $this->protector->protect_only_admin();
+        header('Content-Type: application/json; charset=UTF-8');
+        echo $this->_service->graph();
+    }
+
+    /**
      * Przejście pod adres: /admin/dashboard
      */
     public function index()
@@ -46,6 +56,7 @@ class DashboardController extends MvcController
         $this->protector->protect_only_admin();
         $this->renderer->render_embed('admin-wrapper-view', 'admin/dashboard-view', array(
             'page_title' => 'Panel główny',
+            'charts_admin_loadable_content' => true,
         ));
     }
 }

@@ -9,8 +9,13 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:27:49                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+<<<<<<< HEAD
+ * Ostatnia modyfikacja: 2023-01-12 16:00:29                   *
+ * Modyfikowany przez: patrick012016                           *
+=======
+ * Ostatnia modyfikacja: 2023-01-12 16:00:29                   *
+ * Modyfikowany przez: patrick012016                           *
+>>>>>>> c2d562aa3e3533fc4a4dedb7afc42a09016e3715
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -40,7 +45,7 @@ class DashboardService extends MvcService
      */
     public function graph()
     {
-        $result = array();
+        $result_owner = array();
         for ($i = 0; $i < 7; $i++) 
         {
             $date = strtotime("-" . $i . " day", time());
@@ -48,10 +53,14 @@ class DashboardService extends MvcService
             try
             {
                 $this->dbh->beginTransaction();
-
-                $query = "SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date ORDER BY date_order DESC";
+                $query = "
+                    SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date AND user_id = :userid 
+                    AND NOT status_id = 3
+                    ORDER BY date_order DESC
+                ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue('date', $time, PDO::PARAM_STR);
+                $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
                 $statement->execute();
                 $plot_data = $statement->fetch(PDO::FETCH_ASSOC);
                 array_push($result, array('day' => $plot_data['day'], 'amount' => $plot_data['number']));
@@ -64,6 +73,6 @@ class DashboardService extends MvcService
                 $this->dbh->rollback();
             }
         }
-        return json_encode($result);
+        return json_encode($result_owner);
     }
 }
