@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:02:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 21:10:19                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-12 01:07:53                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -39,12 +39,23 @@ class DashboardController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Przejście pod adres: /owner/dashboard/graph
+     */
+    public function graph()
+    {
+        $this->protector->protect_only_owner();
+        header('Content-Type: application/json; charset=UTF-8');
+        echo $this->_service->graph();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
      * Przejście pod adres: /owner/dashboard
      */
 	public function index()
     {
         $this->protector->protect_only_owner();
-        $info = $this->_service->graph();
         $this->renderer->render_embed('owner-wrapper-view', 'owner/dashboard-view', array(
             'page_title' => 'Panel główny',
             'charts_owner_loadable_content' => true,

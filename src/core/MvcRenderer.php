@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 23:39:35                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 23:32:25                   *
+ * Ostatnia modyfikacja: 2023-01-12 00:33:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -83,6 +83,7 @@ class MvcRenderer
             'base_dir' => __URL_INIT_DIR__, // bazowy katalog projektu, do linków
             'curr_date' => date("Y"), // aktualna data (używana do stopki)
             'is_logged_and_normal_user' => isset($_SESSION['logged_user']) && $_SESSION['logged_user']['is_normal_user'],
+            'init_path' => Config::get('__DEF_APP_HOST__'),
         ));
         echo $template->render($extended_data); // wyrenderuj, sprarsuj i wyświetl szablon
     }
