@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-auto pe-0">
                         {{#is_logged_and_normal_user}}
-                        <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{id}}"
+                        <a href="{{base_dir}}shoppingcart/add-dish?resid={{data.res_id}}&dishid={{id}}"
                             class="btn bg-secondary bg-opacity-25 btn-sm p-0">
                             <i class="bi bi-plus text-dark fs-2 lh-1"></i>
                         </a>
@@ -104,11 +104,11 @@
                                     {{cart_dishes.description}}
                                 </p>
                                 <div class="hstack d-flex justify-content-center align-items-center">
-                                    <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}&act=0">
+                                    <a href="{{base_dir}}shoppingcart/remove-dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}">
                                         <i class="bi bi-dash-circle fs-4 text-danger"></i>
                                     </a>
                                     <p class="mb-0 mx-3">{{count_of_dish}}</p>
-                                    <a href="{{base_dir}}restaurants/add_dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}&act=1">
+                                    <a href="{{base_dir}}shoppingcart/add-dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}">
                                         <i class="bi bi-plus-circle text-success diodess fs-4"></i>
                                     </a>
                                 </div>
