@@ -47,84 +47,27 @@
         </ul>
     </div>
     <div class="d-flex flex-row-reverse">
-    <div class="dropdown">
-        <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
-            <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/profile">
-                <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/settings">
-                <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
-            </a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
-                <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
-            </a></li>
-            <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
-                <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-            </button></li>
-        </ul>
-    </div>
-    <div class="dropdown mt-1">
-        <button class="d-flex align-items-center border-0 text-white bg-transparent me-4" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <h5><i class="bi bi-bell"></i></h5>
-            <span class="mx-1 d-none d-sm-block"></span>
-        </button>
-        <div class="nav nav-pills mr-auto justify-content-center text-small">
-            <div class="nav-item dropdown-menu-lg-start">
-                <ul class="dropdown-menu dropdown-menu-end p-1">
-                    <li class="notification-box">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3 text-center">
-                                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32"
-                                    height="32" class="rounded-circle me-2">
-                            </div>
-                            <div class="col-lg-8 col-sm-8 col-8">
-                                <strong class="text-info">David John</strong>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                </div>
-                                <small class="text-warning">21.11.2022, 14:02</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="notification-box">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3 text-center">
-                                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32"
-                                    height="32" class="rounded-circle me-2">
-                            </div>
-                            <div class="col-lg-8 col-sm-8 col-8">
-                                <strong class="text-info">David John</strong>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                </div>
-                                <small class="text-warning">25.11.2021, 11:40</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="notification-box">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3 text-center">
-                                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32"
-                                    height="32" class="rounded-circle me-2">
-                            </div>
-                            <div class="col-lg-8 col-sm-8 col-8">
-                                <strong class="text-info">David John</strong>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                </div>
-                                <small class="text-warning">17.11.2022, 11:00</small>
-                            </div>
-                        </div>
-                    </li>
-                </ul>        
-            </div>
+        <div class="dropdown">
+            <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
+                <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/profile">
+                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/settings">
+                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
+                    <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+                </a></li>
+                <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+                    <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+                </button></li>
+            </ul>
         </div>
     </div>
 </nav>

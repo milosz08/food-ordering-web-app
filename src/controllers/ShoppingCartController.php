@@ -10,8 +10,8 @@
  * Data utworzenia: 2023-01-11, 22:15:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 22:59:02                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-12 23:13:13                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -40,6 +40,7 @@ class ShoppingCartController extends MvcController
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // /shoppingcart/add-dish
     public function add_dish()
     {
         $res_id = $this->_service->add_dish_to_shopping_cart();
@@ -48,6 +49,7 @@ class ShoppingCartController extends MvcController
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // /shoppingcart/remove-dish
     public function remove_dish()
     {
         $res_id = $this->_service->remove_dish_from_shopping_cart();

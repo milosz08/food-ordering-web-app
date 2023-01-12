@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 19:06:53                   *
+ * Ostatnia modyfikacja: 2023-01-13 00:36:12                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,10 +26,12 @@ use App\Models\ShowUserSingleOrderModel;
 use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\ValidationHelper;
 use App\Models\DishDetailsCartModel;
+use App\Models\UserAddressModel;
 
 ResourceLoader::load_model('ShowUserOrdersListModel', 'user');
 ResourceLoader::load_model('ShowUserSingleOrderModel', 'user');
 ResourceLoader::load_model('DishDetailsCartModel', 'cart');
+ResourceLoader::load_model('UserAddressModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 ResourceLoader::load_service_helper('CookieHelper');
@@ -87,7 +89,7 @@ class OrdersService extends MvcService
                     }
                 }
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, $this->_banner_error);
         }
         return $resid;
@@ -122,7 +124,18 @@ class OrdersService extends MvcService
     public function fillShoppingCard()
     {
         try {
+            $adres = array();
             $this->dbh->beginTransaction();
+
+            $query = "SELECT street, building_nr, locale_nr, post_code, city FROM user_address WHERE user_id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(
+                array(
+                    $_SESSION['logged_user']['user_id']
+                )
+            );
+            while ($row = $statement->fetchObject(UserAddressModel::class))
+                array_push($adres, $row);
 
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
@@ -130,7 +143,7 @@ class OrdersService extends MvcService
             $min_price_num = 0;
             $code_found = false;
             $shopping_cart = array();
-            
+
             if (isset($_GET['resid'])) {
                 $resid = $_GET['resid'];
                 // Sprawdzenie czy podane id restauracji w linku znajduje się w bazie danych 
@@ -143,13 +156,12 @@ class OrdersService extends MvcService
                 );
                 if (!($statement->fetchObject())) {
                     header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
-                }
-                else {
+                } else {
                     // Walidacja czy podane id w podsumowaniu znajduje się w cookies
-                    if(!isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
+                    if (!isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
                         header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
                 }
-                
+
             } else
                 header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
             $summary_prices = array(
@@ -238,6 +250,7 @@ class OrdersService extends MvcService
             SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, $this->_banner_error);
         }
         return array(
+            'adres' => $adres,
             'codeName' => $codeName,
             'resid' => $resid,
             'shopping_cart' => $shopping_cart,
