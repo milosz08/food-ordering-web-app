@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 12:54:44                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-13 00:18:01                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -33,6 +33,7 @@ class SessionHelper
     const DISCOUNTS_RES_PAGE_BANNER                     = 'discounts_res_page_banner';
     const LOGOUT_PAGE_BANNER                            = 'logout_page_banner';
     const EDIT_USER_PROFILE_PAGE_BANNER                 = 'edit_user_profile_page';
+    const ADD_USER_NEW_ADDRESS_PAGE_BANNER              = 'edit_user_profile_page';
     const USER_PROFILE_PAGE_BANNER                      = 'user_profile_page';
     const HOME_RESTAURANTS_LIST_PAGE_BANNER             = 'home_restaurants_list_page';
     const ORDER_FINISH_PAGE                             = 'order_finish_page';
