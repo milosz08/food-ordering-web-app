@@ -9,15 +9,14 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 21:12:27                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-12 01:10:43                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
 
 use PDO;
 use Exception;
-use App\Core\Config;
 use App\Core\MvcService;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,11 +37,12 @@ class DashboardService extends MvcService
     public function graph()
     {
         $result = array();
-        for ($i = 0; $i < 6; $i++) 
+        for ($i = 0; $i < 7; $i++) 
         {
             $date = strtotime("-" . $i . " day", time());
             $time = date("Y-m-d", $date);
-            try {
+            try
+            {
                 $this->dbh->beginTransaction();
                 $query = "
                     SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date ORDER BY date_order DESC
@@ -55,19 +55,14 @@ class DashboardService extends MvcService
                 array_push($result, $first);
                 $statement->closeCursor();
                 $this->dbh->commit();
-            } catch (Exception $e) {
+            }
+            catch (Exception $e)
+            {
                 $this->_banner_error = true;
                 $this->_banner_message = $e->getMessage();
                 $this->dbh->rollback();
             }
         }
-        ?>
-        <script type="text/javascript">var jArray =<?php echo json_encode($result); ?>;</script>
-        <script type="text/javascript" src="owner-charts.js"></script>
-        <?php
-        return array(
-            'banner_active' => !empty($this->_banner_message),
-            'banner_message' => $this->_banner_message,
-        );
+        return json_encode($result);
     }
 }
