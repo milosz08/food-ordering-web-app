@@ -7,17 +7,23 @@
                 <h2 class="fs-4 mb-4">Dostawa</h2>
                 <div class="container overflow-hidden text-start">
                     <div class="row gy-3">
-                      <div class="col-lg-6">
-                        <div class="card-body card">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="delivery" id="form-delivery-self">
-                                <p class="card-text">Ulica i nr</p>
-                                <p class="card-text">Kod pocztowy i miasto</p>
-                                <p class="card-text">Telefon</p>
+                        {{#data.adres}}
+                        <div class="col-lg-6">
+                            <div class="card-body card">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="delivery"
+                                        id="form-delivery-self">
+                                    {{#locale_nr}}
+                                    <p class="card-text">{{street}} {{building_nr}} / {{locale_nr}}</p>
+                                    {{/locale_nr}}
+                                    {{^locale_nr}}
+                                    <p class="card-text">{{street}} {{building_nr}} </p>
+                                    {{/locale_nr}}
+                                    <p class="card-text">{{post_code}} {{city}}</p>
+                                </div>
                             </div>
                         </div>
-                      </div>
-                      </div>
+                        {{/data.adres}}
                     </div>
                 </div>
             </div>
@@ -28,8 +34,10 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="delivery" id="form-delivery-self">
-                                    <label class="form-check-label ms-2" for="form-delivery-self">Odbiór osobisty</label>
+                                    <input class="form-check-input" type="radio" name="delivery"
+                                        id="form-delivery-self">
+                                    <label class="form-check-label ms-2" for="form-delivery-self">Odbiór
+                                        osobisty</label>
                                 </div>
                             </div>
                         </div>
@@ -38,9 +46,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="delivery" id="form-delivery-standard"
-                                        checked>
-                                    <label class="form-check-label ms-2" for="form-delivery-standard">Dostawa kurierem</label>
+                                    <input class="form-check-input" type="radio" name="delivery"
+                                        id="form-delivery-standard" checked>
+                                    <label class="form-check-label ms-2" for="form-delivery-standard">Dostawa
+                                        kurierem</label>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +63,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment-type" id="form-payment-type" disabled checked>
+                                    <input class="form-check-input" type="radio" name="payment-type"
+                                        id="form-payment-type" disabled checked>
                                     <label class="form-check-label ms-2" for="form-payment-type">Odbiór osobisty</label>
                                 </div>
                             </div>
@@ -66,7 +76,7 @@
         <div class="col-md-4">
             <div class="sticky-top panel-left-nav">
                 <a href="{{base_dir}}home/general/user/orders-summary?resid={{data.resid}}" data-bs-toggle="modal"
-                data-bs-target="#discount-code" class="btn btn-primary mb-3 w-100" type="button">Dodaj kupon</a>
+                    data-bs-target="#discount-code" class="btn btn-primary mb-3 w-100" type="button">Dodaj kupon</a>
                 <ul class="card list-unstyled p-3">
                     {{#data.shopping_cart}}
                     <li>
@@ -76,21 +86,23 @@
                                 <p class="m-0">{{cart_dishes.total_dish_cost}} zł </p>
                             </div>
                             <div class="col mb-2 hstack justify-content-between align-items-start">
-                                <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{cart_dishes.description}}"
+                                <p type="button" data-bs-toggle="tooltip" data-bs-placement="left"
+                                    data-bs-title="{{cart_dishes.description}}"
                                     class="text-secondary text-truncate fw-normal fs-6 me-5">
                                     {{cart_dishes.description}}
                                 </p>
                             </div>
                         </div>
                     </li>
-                    <hr class="my-3"/>
+                    <hr class="my-3" />
                     {{/data.shopping_cart}}
                     {{#data.not_enough_total_sum}}
                     <li class="alert alert-warning p-2 lh-sm mb-2 px-3" role="alert">
                         Do minimalnej wartości zamówienia brakuje jeszcze: <strong>{{data.diff_not_enough}} zł</strong>.
                     </li>
                     <li class="mt-0 text-secondary fw-normal small-font mb-3 lh-sm">
-                        Niestety nie możesz jeszcze zamówić. Restauracja <strong>{{data.res_name}}</strong> ustawiła wartość minimalnego 
+                        Niestety nie możesz jeszcze zamówić. Restauracja <strong>{{data.res_name}}</strong> ustawiła
+                        wartość minimalnego
                         zamówienia na <strong>{{data.res_details.min_price}} zł</strong> (bez kosztów dostawy).
                     </li>
                     {{/data.not_enough_total_sum}}
@@ -118,15 +130,16 @@
                 {{#data.codeName}}
                 <div class="card mb-3">
                     <div class="card-body" id="newsHeading">
-                      <h6 class="fs-6 text-start float-start mt-1">Kod rabatowy:&nbsp </h6>
-                        <a href="{{base_dir}}user/orders/delete-code?resid={{data.resid}}"class="btn-close js-close float-end" 
-                            aria-label="Close"> </a>
-                      <h6 class="fs-6 text-end text-success float-end mt-1">{{data.codeName}}</h6>
+                        <h6 class="fs-6 text-start float-start mt-1">Kod rabatowy:&nbsp </h6>
+                        <a href="{{base_dir}}user/orders/delete-code?resid={{data.resid}}"
+                            class="btn-close js-close float-end" aria-label="Close"> </a>
+                        <h6 class="fs-6 text-end text-success float-end mt-1">{{data.codeName}}</h6>
                     </div>
                 </div>
                 {{/data.codeName}}
                 {{#data.not_enough_total_sum}}
-                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.resid}}" class="btn btn-secondary w-100 disabled">
+                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.resid}}"
+                    class="btn btn-secondary w-100 disabled">
                     Zbyt niska wartość ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}
@@ -139,7 +152,8 @@
         </div>
     </div>
 </main>
-<div class="modal fade" id="discount-code" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="discount-code" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -153,7 +167,8 @@
                         placeholder="Podaj kod promocyjny">
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" name="discount-button" data-bs-dismiss="modal">Aktywuj</button>
+                    <button type="submit" class="btn btn-success" name="discount-button"
+                        data-bs-dismiss="modal">Aktywuj</button>
                 </div>
             </form>
         </div>

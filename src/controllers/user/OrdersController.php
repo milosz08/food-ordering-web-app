@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 19:07:11                   *
+ * Ostatnia modyfikacja: 2023-01-13 00:28:26                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -38,8 +38,8 @@ class OrdersController extends MvcController
 		$this->_service = MvcService::get_instance(OrdersService::class); // stworzenie instancji serwisu
     }
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Przejście pod adres: /user/orders/dashboard/orders
      */
