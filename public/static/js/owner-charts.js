@@ -7,7 +7,7 @@
  * Data utworzenia: 2023-01-06, 04:16:09                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 00:42:44                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:27:03                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,11 +23,11 @@ function generateOwnerCharData() {
             new Chart('restaurantDashbaordChart', {
                 type: 'bar',
                 data: {
-                    labels: res.map(v => new Date(v.Day).toLocaleDateString('pl', { weekday: 'long' })).reverse(),
+                    labels: res.map(v => new Date(v.day).toLocaleDateString('pl', { weekday: 'long' })).reverse(),
                     datasets: [
                         {
                             backgroundColor: [ '#03045e', '#0077b6', '#00b4d8', '#90e0ef', '#b5d1e2' , '#caf0f8', '#ffffff' ],
-                            data: res.map(v => v.Amount).reverse()
+                            data: res.map(v => v.amount).reverse()
                         },
                     ],
                 },

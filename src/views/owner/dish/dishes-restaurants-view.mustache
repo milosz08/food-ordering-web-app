@@ -6,18 +6,13 @@
         <li class="breadcrumb-item active" aria-current="page">Dodaj potrawę do restauracji</li>
     </ol>
 </nav>
-<hr class="mb-3"/>
-<div class="alert alert-primary mb-3" role="alert">
+<hr/>
+<div class="alert alert-primary" role="alert">
     Poniżej widoczne są jedynie te restauracje, które są przypisane do Twojego konta i zostały zaakceptowane przez administratora systemu.
     Jeśli chcesz zobaczyć status wszystkich stworzonych przez siebie restauracji, przejdź <a class="alert-link" 
     href="{{base_dir}}owner/restaurants">pod ten link</a>.
 </div>
-{{#data.banner_active}}
-<div class="alert alert-danger mb-3 alert-dismissible fade show" role="alert">
-    {{{data.banner_message}}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{{/data.banner_active}}
+{{> partials/dynamic-banner-view.partial}}
 <div class="container-fluid px-0">
     <div class="row justify-content-between align-items-center">
         <form class="col-lg-4 mb-3 d-flex" action="" method="post">

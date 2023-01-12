@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:49:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:47:48                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:12:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -69,9 +69,8 @@ class PendingRestaurantsController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_admin();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER);
         $details_restaurant_data = $this->_service->get_pending_restaurants();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER);
         $this->renderer->render_embed('admin-wrapper-view', 'admin/pending-restaurants-view', array(
             'page_title' => 'Oczekujące restauracje',
             'banner' => $banner_data,

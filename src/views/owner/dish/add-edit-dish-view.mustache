@@ -11,13 +11,8 @@
         <li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} potrawę</li>
     </ol>
 </nav>
-<hr class="mb-3"/>
-{{#banner.show_banner}}
-<div class="alert {{banner.banner_class}} mb-2 alert-dismissible fade show" role="alert">
-    {{{banner.banner_message}}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{{/banner.show_banner}}
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
 <form action="" method="post" enctype="multipart/form-data" novalidate>
     <div class="container-fluid pt-3 px-0">
         <div class="row px-4 g-5">

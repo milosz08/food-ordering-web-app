@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 22:47:00                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:18:17                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -120,12 +120,10 @@ class RestaurantsService extends MvcService
         }
         catch (Exception $e)
         {
-            $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
+            $pagination_visible = false;
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/restaurants?',
@@ -608,10 +606,8 @@ class RestaurantsService extends MvcService
         {
             $this->dbh->rollback();
             $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/restaurants/restaurant-details?id=' . $_GET['id'] . '&',

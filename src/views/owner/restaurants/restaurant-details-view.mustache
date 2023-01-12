@@ -144,13 +144,8 @@
     </div>
 </div>
 <h3 class="text-secondary fw-normal mb-3">Potrawy restauracji <span class="text-primary">#{{data.details.id}}</span></h3>
-<hr class="mb-3"/>
-{{#banner.show_banner}}
-<div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
-    {{{banner.banner_message}}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{{/banner.show_banner}}
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
 {{^data.details.add_button_class}}
 <div class="container-fluid px-0">
     <div class="row justify-content-between align-items-center">

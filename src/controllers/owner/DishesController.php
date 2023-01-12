@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:20:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:48:08                   *
+ * Ostatnia modyfikacja: 2023-01-12 02:50:58                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -40,15 +40,17 @@ class DishesController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /owner/dishes/add-dish-to-restaurant
+     * Przejście pod adres: /owner/dishes/dishes-with-restaurants
      */
-	public function add_dish_to_restaurant()
+	public function dishes_with_restaurants()
     {
         $this->protector->protect_only_owner();
         $restaurants_with_dishes = $this->_service->get_all_restaurants_with_dishes();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::DISHES_WITH_RES_PAGE_BANNER);
         $this->renderer->render_embed('owner-wrapper-view', 'owner/dish/dishes-restaurants-view', array(
             'page_title' => 'Dodaj potrawę do restauracji',
             'data' => $restaurants_with_dishes,
+            'banner' => $banner_data,
         ));
 	}
 

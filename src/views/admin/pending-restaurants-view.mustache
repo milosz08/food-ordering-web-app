@@ -5,14 +5,9 @@
         <li class="breadcrumb-item active" aria-current="page">Oczekujące restauracje</li>
     </ol>
 </nav>
-<hr class="mb-3"/>
-{{#banner.show_banner}}
-<div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
-    {{{banner.banner_message}}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{{/banner.show_banner}}
-<div class="row justify-content-between align-items-center">
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
+<div class="row justify-content-between align-items-center mt-3">
     <form class="col-lg-4 mb-3 d-flex justify-content-end" action="" method="post">
         <input type="search" name="search-res-name" placeholder="Szukaj po nazwie" class="form-control" value="{{data.search_text}}">
         <button type="submit" name="search-res-button" class="btn btn-primary btn-md ms-2 py-2">

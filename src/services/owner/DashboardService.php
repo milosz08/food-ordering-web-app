@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 01:10:43                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:27:49                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,13 +26,17 @@ class DashboardService extends MvcService
     private $_banner_message = '';
     private $_banner_error = false;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     protected function __construct()
     {
         parent::__construct();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     * Metoda zwracająca dane do pliku js aby wygenerować wykres w głównym widoku panelu restauratora.
+     * Metoda zwracająca dane do pliku js aby wygenerować wykres w głównym widoku panelu właściciela restauracji.
      */
     public function graph()
     {
@@ -44,22 +48,19 @@ class DashboardService extends MvcService
             try
             {
                 $this->dbh->beginTransaction();
-                $query = "
-                    SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date ORDER BY date_order DESC
-                ";
+
+                $query = "SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date ORDER BY date_order DESC";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue('date', $time, PDO::PARAM_STR);
                 $statement->execute();
-                $test = $statement->fetch(PDO::FETCH_ASSOC);
-                $first = array('Day' => $test['day'], 'Amount' => $test['number']);
-                array_push($result, $first);
+                $plot_data = $statement->fetch(PDO::FETCH_ASSOC);
+                array_push($result, array('day' => $plot_data['day'], 'amount' => $plot_data['number']));
+
                 $statement->closeCursor();
                 $this->dbh->commit();
             }
             catch (Exception $e)
             {
-                $this->_banner_error = true;
-                $this->_banner_message = $e->getMessage();
                 $this->dbh->rollback();
             }
         }

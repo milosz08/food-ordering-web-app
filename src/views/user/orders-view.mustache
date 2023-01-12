@@ -1,12 +1,7 @@
 {{> partials/header-view.partial }}
 <main class="container-lg flex-grow-1 top-margin-header">
-    {{#banner.show_banner}}
-    <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
-        {{{banner.banner_message}}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {{/banner.show_banner}}
-    <div class="row">
+    {{> partials/dynamic-banner-view.partial}}
+    <div class="row mt-3">
         <form class="col-md-8" action="" method="post" novalidate>
             <div class="card p-3 mb-3">
                 <div class="card-body py-2">

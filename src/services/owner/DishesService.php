@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 15:30:37                   *
+ * Ostatnia modyfikacja: 2023-01-12 02:52:07                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -200,15 +200,12 @@ class DishesService extends MvcService
         }
         catch (Exception $e)
         {
-            $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
+            $pagination_visible = false;
+            SessionHelper::create_session_banner(SessionHelper::DISHES_WITH_RES_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'active_restaurants' => $active_restaurants,
-            'banner_active' => !empty($this->_banner_message),
-            'banner_message' => $this->_banner_message,
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/dishes/add-dish-to-restaurant?',
             'pagination' => $pagination,
