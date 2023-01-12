@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:19:45                   *
+ * Ostatnia modyfikacja: 2023-01-12 21:10:40                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -36,16 +36,35 @@ class DashboardService extends MvcService
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Metoda zwracająca dane do pliku js aby wygenerować wykres w głównym widoku panelu administratora.
+     * Metoda zwracająca dane do pliku js aby wygenerować wykresy w głównym widoku panelu administratora.
      */
     public function graph()
     {
         $result_one = array();
         $result_two = array();
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "
+            SELECT code AS Name, usages AS Uses FROM discounts ORDER BY code DESC
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();
+            $data_graph = $statement->fetchall(PDO::FETCH_ASSOC);
+            $result_two = $data_graph;
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->_banner_error = true;
+            $this->_banner_message = $e->getMessage();
+            $this->dbh->rollback();
+        }
         for ($i = 0; $i < 7; $i++) 
         {
-            $date = strtotime("-" . $i . " day", time());
-            $time = date("Y-m-d", $date);
+            $date_1 = strtotime("-" . $i . " day", time());
+            $time_1 = date("Y-m-d", $date_1);
             try
             {
                 $this->dbh->beginTransaction();
@@ -54,15 +73,11 @@ class DashboardService extends MvcService
                 AND NOT status_id = 3 ORDER BY date_order DESC
                 ";
                 $statement = $this->dbh->prepare($query);
-                $statement->bindValue('date', $time, PDO::PARAM_STR);
+                $statement->bindValue('date', $time_1, PDO::PARAM_STR);
                 $statement->execute();
-                $test = $statement->fetch(PDO::FETCH_ASSOC);
-                $first = array('Day' => $test['day'], 'Amount' => $test['number']);
+                $data_graph = $statement->fetch(PDO::FETCH_ASSOC);
+                $first = array('Day' => $data_graph['day'], 'Amount' => $data_graph['number']);
                 array_push($result_one, $first);
-
-               // $second = array('Day' => $test['day'], 'Time' => $test['time']);
-             //   array_push($result_two, $second);
-                
                 $statement->closeCursor();
                 $this->dbh->commit();
             }
@@ -73,6 +88,6 @@ class DashboardService extends MvcService
                 $this->dbh->rollback();
             }
         }
-        return json_encode(array("orders" =>$result_one, "time" =>$result_two));
+        return json_encode(array("orders" =>$result_one, "coupons" =>$result_two));
     }
 }
