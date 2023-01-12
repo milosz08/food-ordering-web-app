@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 00:35:41                   *
+ * Ostatnia modyfikacja: 2023-01-12 19:07:11                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -74,13 +74,23 @@ class OrdersController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /user/orders/dashboard/single/order
+     * Przejście pod adres: /user/orders/dashboard/single-order
      */
     public function cancel_order()
     {
         $this->protector->protect_only_user();
         $one_order = $this->_service->cancelOrder();
         header('Location:' . __URL_INIT_DIR__ . 'user/orders/list', true, 301);
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /user/orders/delete-code
+     */
+    public function delete_code()
+    {
+        $this->protector->protect_only_user();
+        $this->_service->deleteDiscountCode();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,13 +103,12 @@ class OrdersController extends MvcController
         $this->protector->protect_only_user();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
         if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
-        $adress = $this->_service->fillAdress();
-        $delete_discount_code = $this->_service->deleteDiscountCode();
+        $fillShoppingCard = $this->_service->fillShoppingCard();
+        $this->_service->addDiscountCode();
         $this->renderer->render('user/orders-view', array(
             'page_title' => 'Składanie zamówienia',
-            'data' => $adress,
+            'data' => $fillShoppingCard,
             'banner' => $banner_data,
-            'discount' => $delete_discount_code
         ));
     }
 
