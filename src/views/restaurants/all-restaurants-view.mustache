@@ -49,8 +49,8 @@
                         <div class="restaurant-banner-image gradient-left" 
                             style="background-image: url({{base_dir}}public/static/images/default-banner.jpg);"></div>
                         {{/banner_url}}
-                        <div class="row mx-0 w-100 h-100 py-3 position-relative position-lg-absolute">
-                            <div class="col-lg-auto">
+                        <div class="row mx-0 w-100 h-100 p-3 position-relative position-lg-absolute">
+                            <div class="col-lg-auto px-0">
                                 {{#profile_url}}
                                 <img src="{{base_dir}}public/{{profile_url}}" alt="" class="rounded" 
                                     width="80px" height="80px"/>
@@ -60,15 +60,15 @@
                                     class="rounded" width="80px" height="80px"/>
                                 {{/profile_url}}
                             </div>
-                            <div class="col-lg-auto flex-grow-1 d-flex flex-column align-items-end justify-content-end">
+                            <div class="col-lg-auto flex-grow-1 d-flex flex-column align-items-end justify-content-end px-0">
                                 {{#is_closed}}
-                                <span class="badge text-bg-danger fw-normal mb-1">Zamknięte</span>
+                                <span class="badge text-bg-danger fw-normal mt">Zamknięte</span>
                                 {{/is_closed}}
                                 {{#delivery_free}}
-                                <span class="badge text-bg-success fw-normal mb-1">Darmowa dostawa</span>
+                                <span class="badge text-bg-success fw-normal mt-1">Darmowa dostawa</span>
                                 {{/delivery_free}}
                                 {{#has_discounts}}
-                                <span class="badge text-bg-warning fw-normal">Kody promocyjne</span>
+                                <span class="badge text-bg-primary fw-normal mt-1">Kody rabatowe</span>
                                 {{/has_discounts}}
                             </div>
                         </div>
@@ -84,18 +84,21 @@
                         {{^dish_types}}
                         <p class="fs-6 text-secondary">Brak danych</p>
                         {{/dish_types}}
-                        <div class="hstack gap-3 justify-content-between">
-                            <div class="d-flex flex-wrap">
-                                <div class="hstack gap-2 text-warning small-font me-3">
+                        <div class="hstack justify-content-between align-items-end">
+                            <div class="d-flex flex-wrap align-items-end me-3">
+                                <div class="text-warning small-font mt-2 me-3">
                                     <i class="bi bi-star-fill"></i>
                                     {{avg_grades}}
                                     <span class="text-secondary">{{total_grades}}</span>
                                 </div>
-                                <div class="hstack gap-2 text-success small-font me-3">
-                                    <i class="bi bi-bicycle fs-4"></i>{{delivery_price}}
+                                <div class="text-success small-font mt-2 me-3">
+                                    <i class="bi bi-bicycle me-1"></i>{{delivery_price}}
                                 </div>
-                                <div class="hstack gap-2 text-primary small-font">
-                                    <i class="bi bi-clock"></i>{{avg_delivery_time}}
+                                <div class="text-body small-font mt-2 me-3">
+                                    <i class="bi bi-bag-check-fill me-1"></i>{{min_delivery_price}}
+                                </div>
+                                <div class="text-primary mt-2 small-font">
+                                    <i class="bi bi-clock me-1"></i>{{avg_delivery_time}}
                                 </div>
                             </div>
                             <div class="text-end hstack gap-1 align-self-end">

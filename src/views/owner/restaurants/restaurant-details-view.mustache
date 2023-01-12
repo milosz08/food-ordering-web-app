@@ -48,6 +48,7 @@
         </div>
     </div>
     <hr class="mb-3"/>
+    {{> partials/dynamic-banner-view.partial}}
     <div class="row mb-4">
         <div class="col-auto mb-2">
             <a href="{{base_dir}}owner/restaurants/edit-restaurant?id={{data.details.id}}" class="btn btn-primary">Edytuj restaurację</a>
@@ -108,6 +109,20 @@
                         <p class="text-dark fs-5 lh-sm">{{data.details.city}}</p>
                     </div>
                 </div>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Ilość oferowanych rabatów:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.discounts_count}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Status restauracji:</p>
+                        <p class="{{data.details.status.color_bts}} fs-5 lh-sm">{{data.details.status.text}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Numer telefonu:</p>
+                        <p class="text-dark fs-5 lh-sm">+48 {{data.details.phone_number}}</p>
+                    </div>
+                </div>
             </div>
             <div class="col-md-4 mb-4">
                 <p class="text-secondary lh-sm mb-2">Restauracja czynna w dniach i godzinach:</p>
@@ -123,29 +138,14 @@
                 {{/data.res_hours}}
             </div>
             <div class="col-md-8">
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <p class="text-secondary lh-sm mb-1">Status restauracji:</p>
-                        <p class="{{data.details.status.color_bts}} fs-5 lh-sm">{{data.details.status.text}}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="text-secondary lh-sm mb-1">Numer telefonu:</p>
-                        <p class="text-dark fs-5 lh-sm">+48 {{data.details.phone_number}}</p>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-12">
                         <p class="text-secondary lh-sm mb-1">Opis restauracji:</p>
                         <p class="text-dark fs-5 lh-sm text-wrap">{{data.details.description}}</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 <h3 class="text-secondary fw-normal mb-3">Potrawy restauracji <span class="text-primary">#{{data.details.id}}</span></h3>
 <hr/>
-{{> partials/dynamic-banner-view.partial}}
 {{^data.details.add_button_class}}
 <div class="container-fluid px-0">
     <div class="row justify-content-between align-items-center">
@@ -241,7 +241,7 @@
 <div class="container-fluid px-0">
     <div class="row justify-content-end align-items-center">
         <div class="col-lg-3 mb-3 d-flex justify-content-end">
-            <a href="{{base_url}}owner/dishes/add-dish?resid={{data.details.id}}"
+            <a href="{{base_url}}owner/restaurants/restaurant-details?id={{data.details.id}}"
                 class="btn btn-primary add-content-button d-flex align-items-center {{data.details.add_button_class}}">
                 <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj potrawę
             </a>

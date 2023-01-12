@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-09, 23:24:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 06:58:02                   *
+ * Ostatnia modyfikacja: 2023-01-12 14:11:58                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -90,22 +90,6 @@ class RestaurantFilterModel
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public function on_exist_filter_append($post_name, $query, &$field)
-    {
-        if (isset($_POST[$post_name]) || $field == 'checked')
-        {
-            $this->filter_query .= $query;
-            $field = 'checked';
-        }
-        else
-        {
-            $this->filter_query = str_replace($query, '', $this->filter_query);
-            $field = '';
-        }
-    }
-    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function combined_filter_query()

@@ -64,5 +64,5 @@ Config::set('__REGEX_LOGIN__', '/^[a-zA-Z0-9]{5,30}$/');
 Config::set('__REGEX_LOGINEMAIL__', '/^[a-zA-Z0-9@.]{5,100}$/');
 Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
 Config::set('__REGEX_OTA__', '/^[0-9A-Za-z]{10,}$/');
-Config::set('__REGEX_DESCRIPTION__', '/^.{10,1000}$/');
+Config::set('__REGEX_DESCRIPTION__', '/^.{10,600}$/');
 Config::set('__REGEX_PHONE_PL__', '/^[0-9]{3} [0-9]{3} [0-9]{3}$/');

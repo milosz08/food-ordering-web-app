@@ -4,7 +4,7 @@
         <div class="col-lg-8">
             {{> partials/dynamic-banner-view.partial}}
             {{^is_logged_and_normal_user}}
-            <div class="alert alert-warning mt-3" role="alert">
+            <div class="alert alert-warning" role="alert">
                 Aby mieć możliwość zamówienia musisz być zalogowany na konto użytkownika. Aby zalogować się na konto, przejdź 
                 <a href="{{base_dir}}auth/login" class="alert-link">pod ten adres</a>. Jeśli nie posiadasz jeszcze konta, przejdź
                 <a href="{{base_dir}}auth/register" class="alert-link">pod ten adres</a>.
@@ -47,8 +47,8 @@
                             {{description}}
                         </p>
                         <div class="hstack gap-3">
-                            <div class="hstack gap-2 text-success"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
-                            <div class="hstack gap-2 text-primary"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
+                            <div class="hstack gap-2 text-success small-font"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
+                            <div class="hstack gap-2 text-primary small-font"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
                         </div>
                     </div>
                     <div class="col-auto pe-0">

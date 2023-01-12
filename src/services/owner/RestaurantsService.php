@@ -160,8 +160,8 @@ class RestaurantsService extends MvcService
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', '__REGEX_PRICE__');
-                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', '__REGEX_PRICE__');
+                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', Config::get('__REGEX_PRICE__'));
+                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', Config::get('__REGEX_PRICE__'));
                 $res->building_locale_nr = ValidationHelper::validate_field_regex('restaurant-building-no', Config::get('__REGEX_BUILDING_NO__'));
                 $res->post_code = ValidationHelper::validate_field_regex('restaurant-post-code', Config::get('__REGEX_POSTCODE__'));
                 $res->city = ValidationHelper::validate_field_regex('restaurant-city', Config::get('__REGEX_CITY__'));
@@ -308,8 +308,8 @@ class RestaurantsService extends MvcService
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', '__REGEX_PRICE__');
-                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', '__REGEX_PRICE__');
+                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', Config::get('__REGEX_PRICE__'));
+                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', Config::get('__REGEX_PRICE__'));
                 $res->banner_url = ValidationHelper::validate_image_regex('restaurant-banner');
                 $res->profile_url = ValidationHelper::validate_image_regex('restaurant-profile');
                 $res->street = ValidationHelper::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
