@@ -1,0 +1,111 @@
+<h2 class="text-secondary fw-normal mb-3">{{add_edit_text}} restauracji <span class="text-primary">#{{data.res_id}}</span></h2>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{base_dir}}owner/restaurants/restaurant-details?id={{data.res_id}}">
+                Szczegóły restauracji #{{data.res_id}}
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} restauracji #{{data.res_id}}</li>
+    </ol>
+</nav>
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
+<form action="" method="post" novalidate>
+    <div class="container-fluid pt-3 px-0">
+        <div class="row px-4 mx-0 g-5">
+            <div class="col-xl-8">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="col-md-12 mb-3">
+                            <label for="form-disc-code" class="form-label">Kod rabatowy:</label>
+                            <input type="text" name="disc-code" id="form-disc-code" value="{{data.disc.code.value}}"
+                                class="form-control control-dis {{data.disc.code.bts_class}}" placeholder="np. rabat321"
+                                {{disable_edit_code.bts_class}}>
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            <div class="mt-2">
+                                <input class="form-check-input {{disable_edit_code.trigger_class}}" type="checkbox" id="form-disc-auto-generated" 
+                                    {{data.code_is_auto_generated}} name="disc-auto-generated" {{disable_edit_code.bts_class}}>
+                                <label class="form-check-label ms-1" for="form-disc-auto-generated">Wygeneruj automatycznie losowy</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="col-md-12 mb-3">
+                            <label for="form-disc-max-usages" class="form-label">Maksymalna ilość wykorzystań:</label>
+                            <input type="number" min="1" max="9999999" name="disc-max-usages" id="form-disc-max-usages" 
+                                class="form-control control-dis {{data.disc.max_usages.bts_class}}" placeholder="np. 5000"
+                                value="{{data.disc.max_usages.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                            <div class="mt-2">
+                                <input class="form-check-input disable-checkbox" type="checkbox" id="form-disc-no-max-usages" 
+                                    {{data.no_max_usages}} name="disc-no-max-usages">
+                                <label class="form-check-label ms-1" for="form-disc-no-max-usages">Nieskończona liczba wykorzystań</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-disc-description" class="form-label">Opis kodu rabatowego (opcjonalny):</label>
+                        <textarea name="disc-description" class="form-control {{data.disc.description.bts_class}}" rows="3"
+                            placeholder="Krótki opis kodu rabatowego, maksymalnie 200 znaków." id="form-disc-description" maxlength="200"
+                        >{{data.disc.description.value}}</textarea>
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-disc-percentage" class="form-label">Zniżka procentowa:</label>
+                        <div class="input-group has-validation">
+                            <input type="text" name="disc-percentage" id="form-disc-percentage"
+                                class="form-control control-dis {{data.disc.percentage_discount.bts_class}}" placeholder="np. 8.00 lub 8,00"
+                                value="{{data.disc.percentage_discount.value}}">
+                            <span class="input-group-text">%</span>
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-disc-expired-date" class="form-label">Czas po jakim kod ulega przedawnieniu:</label>
+                        <input type="date" name="disc-expired-date" id="form-disc-expired-date" 
+                            class="form-control control-dis {{data.disc.expired_date.bts_class}}" placeholder="np. 5000"
+                            value="{{data.disc.expired_date.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        <div class="mt-2">
+                            <input class="form-check-input disable-checkbox" type="checkbox" id="form-disc-no-expired-date" 
+                                {{data.no_time_expired}} name="disc-no-expired-date">
+                            <label class="form-check-label ms-1" for="form-disc-no-expired-date">Nieskończony czas wykorzystania</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="mb-3"/>
+    <div class="d-flex justify-content-end hgroup gap-3">
+        <button class="btn btn-secondary mb-2 add-content-button" data-bs-toggle="modal" data-bs-target="#discard-changes" type="button">
+            <i class="bi bi-arrow-return-left me-2"></i>Odrzuć zmiany
+        </button>
+        <button type="submit" name="add-edit-discount-code" class="btn btn-primary btn-md mb-2 add-content-button">
+            {{add_edit_button}} kod rabatowy
+        </button>
+    </div>
+    <div class="modal fade" id="discard-changes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">Czy na pewno chcesz odrzucić zmiany i powrócić do poprzedniej strony?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <a class="btn btn-outline-danger" href="{{base_dir}}owner/restaurants/restaurant-details?id={{data.res_id}}">
+                        Odrzuć
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,28 @@
+<div class="modal fade" id="delete-discount-modal-{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie kodu rabatowego</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Czy napewno chcesz usunąć wybrany kod rabatowy:</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Kod: <strong>{{code}}</strong></li>
+                    <li class="list-group-item">Procent obniżania: <strong>{{percentage_discount}}</strong></li>
+                    <li class="list-group-item">Użycia: <strong>{{total_usages}}</strong></li>
+                    <li class="list-group-item">Wygaśnięcie: <strong>{{expired_date}}</strong></li>
+                    <li class="list-group-item">Opis: <strong>{{description}}</strong></li>
+                </ul>
+                <p class="mt-3">Wybrany kod rabatowy zostanie usunięty jedynie z wybranej restauracji. Operacji nie można cofnąć.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <a class="btn btn-outline-danger"
+                    href="{{base_dir}}owner/discounts/delete-discount?id={{id}}&resid={{res_id}}{{data.redir}}">
+                    Usuń
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

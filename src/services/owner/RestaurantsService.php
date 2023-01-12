@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 04:35:33                   *
+ * Ostatnia modyfikacja: 2023-01-12 14:13:03                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -25,6 +25,7 @@ use App\Models\RestaurantModel;
 use App\Models\RestaurantHourModel;
 use App\Models\RestaurantDetailsModel;
 use App\Models\AddEditRestaurantModel;
+use App\Models\DiscountResDetailsModel;
 use App\Services\Helpers\ImagesHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
@@ -36,6 +37,7 @@ ResourceLoader::load_model('RestaurantModel', 'restaurant');
 ResourceLoader::load_model('RestaurantHourModel', 'restaurant');
 ResourceLoader::load_model('RestaurantDetailsModel', 'restaurant');
 ResourceLoader::load_model('AddEditRestaurantModel', 'restaurant');
+ResourceLoader::load_model('DiscountResDetailsModel', 'discount');
 ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
@@ -522,7 +524,8 @@ class RestaurantsService extends MvcService
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
 
         $restaurant_details = new RestaurantDetailsModel;
-        $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
+        $pagination = array();
+        $restaurant_discounts = array();
         $restaurant_dishes = array();
         $res_hours = array();
         $pages_nav = array();
@@ -534,6 +537,8 @@ class RestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
+    
+            $search_code = SessionHelper::persist_search_text('search-discount-code', SessionHelper::DISCOUNT_SEARCH);
             $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_RES_DETAILS_SEARCH);
             
             $redirect_url = 'owner/restaurants/restaurant-details?id=' . $_GET['id'];
@@ -541,15 +546,15 @@ class RestaurantsService extends MvcService
 
             $restaurant_query = "
                 SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city, r.profile_url, r.banner_url,
-                
                 CONCAT(first_name, ' ', last_name) AS full_name,
                 IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS delivery_price, 
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
                 (SELECT COUNT(*) FROM dishes WHERE restaurant_id = r.id) AS count_of_dishes,
                 CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
-                IF(min_price, CONCAT(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'brak najniższej ceny') AS min_price
+                IF(min_price, CONCAT(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'brak najniższej ceny') AS min_price,
+                IFNULL(NULLIF((SELECT COUNT(*) FROM discounts WHERE restaurant_id = r.id), 0), 'brak rabatów') AS discounts_count
                 FROM restaurants AS r
-                INNER JOIN users AS u ON r.user_id = u.id 
+                INNER JOIN users AS u ON r.user_id = u.id
                 WHERE r.id = :id AND r.user_id = :userid
             ";
             $statement = $this->dbh->prepare($restaurant_query);
@@ -582,7 +587,6 @@ class RestaurantsService extends MvcService
             $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
-
             while ($row = $statement->fetchObject(DishModel::class)) array_push($restaurant_dishes, $row);
             
             // zapytanie zliczające wszystkie dania przypisane do restauracji
@@ -602,13 +606,31 @@ class RestaurantsService extends MvcService
 
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
+            
+            $discounts_query = "
+                SELECT ROW_NUMBER() OVER(ORDER BY id) as it, id, code, description,
+                CONCAT(REPLACE(CAST(percentage_discount as DECIMAL(10,2)), '.', ','), '%') AS percentage_discount,
+                CONCAT(usages, '/', IFNULL(max_usages, '∞')) AS total_usages,
+                IF(max_usages, '', 'disabled') AS increase_usages_active, IF(expired_date, '', 'disabled') AS increase_time_active, 
+                IFNULL(expired_date, '∞') AS expired_date, restaurant_id AS res_id, CONCAT(SUBSTRING(code, 1, 3), '********') AS hide_code,
+                IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = d.restaurant_id AND ((expired_date > NOW() OR 
+                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'table-success', 'table-warning') 
+                AS expired_bts_class
+                FROM discounts AS d WHERE restaurant_id = :id AND code LIKE :search
+            ";
+            $statement = $this->dbh->prepare($discounts_query);
+            $statement->bindValue('id', $_GET['id']);
+            $statement->bindValue('search', '%' . $search_code . '%');
+            $statement->execute();
+            while ($row = $statement->fetchObject(DiscountResDetailsModel::class)) array_push($restaurant_discounts, $row);
+
             $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
             $pagination_visible = false;
-            SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
@@ -621,6 +643,9 @@ class RestaurantsService extends MvcService
             'details' => $restaurant_details,
             'not_empty' => count($restaurant_dishes),
             'res_hours' => $res_hours,
+            'res_discounts' => $restaurant_discounts,
+            'search_code' => $search_code,
+            'discounts_not_empty' => count($restaurant_discounts),
         );
     }
 

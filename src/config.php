@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 01:55:22                   *
+ * Ostatnia modyfikacja: 2023-01-12 12:44:50                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,3 +66,4 @@ Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
 Config::set('__REGEX_OTA__', '/^[0-9A-Za-z]{10,}$/');
 Config::set('__REGEX_DESCRIPTION__', '/^.{10,600}$/');
 Config::set('__REGEX_PHONE_PL__', '/^[0-9]{3} [0-9]{3} [0-9]{3}$/');
+Config::set('__REGEX_DATE__', '/^((?:19|20)\\d\\d)-(0?[1-9]|1[012])-([12][0-9]|3[01]|0?[1-9])$/');

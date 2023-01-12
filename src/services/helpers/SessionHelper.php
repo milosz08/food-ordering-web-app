@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 02:49:51                   *
+ * Ostatnia modyfikacja: 2023-01-12 12:54:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,6 +29,7 @@ class SessionHelper
     const RESTAURANT_DETAILS_PAGE_BANNER                = 'restaurant_details_page_banner';
     const RESTAURANTS_PAGE_BANNER                       = 'restaurants_page_banner';
     const ADD_EDIT_RESTAURANT_PAGE_BANNER               = 'add_edit_restaurant_page_banner';
+    const DISCOUNTS_PAGE_BANNER                         = 'discounts_page_banner';
     const DISCOUNTS_RES_PAGE_BANNER                     = 'discounts_res_page_banner';
     const LOGOUT_PAGE_BANNER                            = 'logout_page_banner';
     const EDIT_USER_PROFILE_PAGE_BANNER                 = 'edit_user_profile_page';
@@ -43,8 +44,11 @@ class SessionHelper
     const RES_MAIN_SEARCH                               = 'res_main_search';
     const CANCEL_ORDER                                  = 'cancel_order';
     const RES_DISH_CART_SEARCH                          = 'res_dish_cart_search';
+    const DISCOUNT_SEARCH                               = 'discount_search';
+    const DISCOUNT_RES_SEARCH                           = 'discount_res_search';
     const DISH_DETAILS_PAGE_BANNER                      = 'dish_details_page_banner';
     const DISHES_PAGE_BANNER                            = 'dishes_page_banner';
+    const DISCOUNT_ADD_EDIT_PAGE_BANNER                 = 'discount_add_edit_page_banner';
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
