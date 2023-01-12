@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 23:29:40                   *
+ * Ostatnia modyfikacja: 2023-01-12 14:17:17                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -68,7 +68,7 @@ class RestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
-            $search_text = SessionHelper::persist_search_text('search', SessionHelper::RES_MAIN_SEARCH);
+            $search_text = $_GET['search'] ?? '';
 
             $with_search = empty($search_text) ? '?' : '?search=' . $search_text . '&';
             $redirect_url = $with_search == '?' ? 'restaurants' : 'restaurants' . $with_search;
@@ -79,7 +79,6 @@ class RestaurantsService extends MvcService
                 $persist_assoc = json_decode($_COOKIE[CookieHelper::RESTAURANT_FILTERS], true);
                 $filter = RestaurantPersistFilterModel::decode_to_filter_model($persist_assoc);
             }
-           
             $restaurant_open_query = "
                 AND (SELECT COUNT(*) > 0 FROM restaurant_hours AS h INNER JOIN weekdays AS wk ON h.weekday_id = wk.id
                 WHERE wk.name_eng = LOWER(DAYNAME(NOW())) AND h.open_hour <= CURTIME() AND h.close_hour >= CURTIME()
@@ -89,22 +88,33 @@ class RestaurantsService extends MvcService
             $restaurant_has_discounts_query = " AND (SELECT COUNT(*) > 0 FROM discounts AS dsc WHERE dsc.restaurant_id = r.id)";
             $restaurant_has_images_query = " AND r.profile_url IS NOT NULL";
 
-            // filtrowanie tylko otwartych restauracji
-            $filter->on_exist_filter_append('restaurant-open-now', $restaurant_open_query, $filter->open_selected);
-            // filtrowanie tylko tych restauracji co oferują darmową dostawę
-            $filter->on_exist_filter_append('restaurant-delivery-free', $delivery_free_query, $filter->delivery_free_selected);
-            // filtrowanie tylko tych restauracji co posiadają kody rabatowe
-            $filter->on_exist_filter_append('restaurant-discounts', $restaurant_has_discounts_query, $filter->has_discounts_selected);
-            // filtrowanie tylko tych restauracji co posiadają zdjęcie profilowe
-            $filter->on_exist_filter_append('restaurant-has-images', $restaurant_has_images_query, $filter->has_profile_selected);
-
-            if (isset($_POST['restaurant-grade-stars'])) // filtrowanie po ilości ocen
+            if (isset($_POST['filter-change']))
             {
-                $grade_stars = filter_var($_POST['restaurant-grade-stars'][0], FILTER_SANITIZE_NUMBER_INT);
+                // filtrowanie tylko otwartych restauracji
+                $filter->open_selected = isset($_POST['restaurant-open-now']) ? 'checked' : '';
+                // filtrowanie tylko tych restauracji co oferują darmową dostawę
+                $filter->delivery_free_selected = isset($_POST['restaurant-delivery-free']) ? 'checked' : '';
+                // filtrowanie tylko tych restauracji co posiadają kody rabatowe
+                $filter->has_discounts_selected = isset($_POST['restaurant-discounts']) ? 'checked' : '';
+                // filtrowanie tylko tych restauracji co posiadają zdjęcie profilowe
+                $filter->has_profile_selected = isset($_POST['restaurant-has-images']) ? 'checked' : '';
+            }
+            if (empty($filter->open_selected)) $filter->filter_query = str_replace($restaurant_open_query, '', $filter->filter_query);
+            else $filter->filter_query .= $restaurant_open_query;
+            if (empty($filter->delivery_free_selected)) $filter->filter_query = str_replace($delivery_free_query, '', $filter->filter_query);
+            else $filter->filter_query .= $delivery_free_query;
+            if (empty($filter->has_discounts_selected)) $filter->filter_query = str_replace($restaurant_has_discounts_query, '', $filter->filter_query);
+            else $filter->filter_query .= $restaurant_has_discounts_query;
+            if (empty($filter->has_profile_selected)) $filter->filter_query = str_replace($restaurant_has_images_query, '', $filter->filter_query);
+            else $filter->filter_query .= $restaurant_has_images_query;
+
+            if (isset($_POST['filter-change'])) // filtrowanie po ilości ocen
+            {
+                $grade_stars = isset($_POST['restaurant-grade-stars']) 
+                    ? filter_var($_POST['restaurant-grade-stars'][0], FILTER_SANITIZE_NUMBER_INT) : '';
                 $filter->grade_stars['stars'] = $grade_stars;
             }
             else $grade_stars = $filter->grade_stars['stars'];
-            
             if (!empty($grade_stars)) $filter->grade_stars['query'] = " AND
                 (SELECT AVG(rg.grade) FROM restaurants_grades AS rg INNER JOIN orders AS o ON rg.order_id = o.id 
                 WHERE restaurant_id = r.id) >= $grade_stars
@@ -117,9 +127,10 @@ class RestaurantsService extends MvcService
             }
             $filter->grade_stars['data'] = array_reverse($filter->grade_stars['data']);
             
-            if (isset($_POST['restaurant-min-deliv-price'])) // filtrowanie po minimalnej kwocie zamówienia
+            if (isset($_POST['filter-change'])) // filtrowanie po minimalnej kwocie zamówienia
             {
-                $min_delivery_price = filter_var($_POST['restaurant-min-deliv-price'], FILTER_SANITIZE_NUMBER_INT);
+                $min_delivery_price = isset($_POST['restaurant-min-deliv-price']) ? 
+                    filter_var($_POST['restaurant-min-deliv-price'], FILTER_SANITIZE_NUMBER_INT) : '-';
                 $filter->min_delivery_price['price'] = $min_delivery_price;
             }
             else $min_delivery_price = $filter->min_delivery_price['price'];
@@ -132,9 +143,9 @@ class RestaurantsService extends MvcService
             }
             $filter->find_parameter_and_fill($min_delivery_price, $filter->min_delivery_price['data'], 'checked');
 
-            if (isset($_POST['restaurant-sort-properties'])) // sortowanie po dodatkowych parametrach
+            if (isset($_POST['filter-change'])) // sortowanie po dodatkowych parametrach
             {
-                $sorting_param = $_POST['restaurant-sort-properties'];
+                $sorting_param = $_POST['restaurant-sort-properties'] ?? '-';
                 $filter->sort_parameters['sortedby'] = $sorting_param;
             }
             else $sorting_param = $filter->sort_parameters['sortedby'];
@@ -168,9 +179,9 @@ class RestaurantsService extends MvcService
             if ($sorting_param != '-') $filter->sorting_query = 'ORDER BY ' . $filter->sorting_query;
             $filter->find_parameter_and_fill($sorting_param, $filter->sort_parameters['data']);
                 
-            if (isset($_POST['restaurant-sort-direction'])) // ustawienie dodatkowego kierunku sortowania (rosnące/malejące)
+            if (isset($_POST['filter-change'])) // ustawienie dodatkowego kierunku sortowania (rosnące/malejące)
             {
-                $sorting_dir = $_POST['restaurant-sort-direction'];
+                $sorting_dir = $_POST['restaurant-sort-direction'] ?? 'ASC';
                 $filter->sort_directions['dir'] = $sorting_dir;
             }
             else $sorting_dir = $filter->sort_directions['dir'];
@@ -188,6 +199,7 @@ class RestaurantsService extends MvcService
             $query = "
                 SELECT r.id, r.name, IF(delivery_price, CONCAT(REPLACE(delivery_price, '.', ','), ' zł'), 'darmowa') AS delivery_price,
                 description, banner_url, profile_url, delivery_price IS NULL AS delivery_free,
+                IF(min_price, CONCAT(REPLACE(min_price, '.', ','), ' zł'), '-') AS min_delivery_price,
                 (SELECT CONCAT(
                     IFNULL(NULLIF(CONCAT(HOUR(SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(finish_order, date_order))))), 'h '), 0), ''),
                     IFNULL(NULLIF(CONCAT(MINUTE(SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(finish_order, date_order))))), 'min'), 0), '-')
@@ -334,6 +346,7 @@ class RestaurantsService extends MvcService
 
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
+            $code_not_found = false;
             $shopping_cart = array();
             $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0);
             // Sprawdzanie, czy plik cookies został dodany.
@@ -362,13 +375,32 @@ class RestaurantsService extends MvcService
                         $summary_prices['total_num'] += (float)str_replace(',', '.', $dish_details->total_dish_cost) * 100;
                     }
                     else $dish_details_not_founded = true;
+                    if(!empty($dish['code']))
+                    {
+                        $codeName = $dish['code']; 
+                        $code_not_found = true;
+                    }
+                }
+                if($code_not_found)
+                {
+                    $query = "SELECT REPLACE(CAST(percentage_discount AS DECIMAL(10,2)), '.', ',') AS percentage_discount 
+                    FROM discounts WHERE code = ?";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->execute(
+                        array(
+                            $codeName
+                        )
+                    );
+                    $discountPercentage = $statement->fetch(PDO::FETCH_ASSOC);
                 }
                 if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
                 else
                 {
                     $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
-                    $summary_prices['total'] = number_format($summary_prices['total_num'] / 100, 2, ',');
-                    $summary_prices['total_with_delivery'] = number_format(($summary_prices['total_num'] + $delivery) / 100, 2, ',');
+                    $percent = 100 - (float)str_replace(',', '.', $discountPercentage['percentage_discount'] ?? 1);
+                    $calculate = ($summary_prices['total_num']/100) * $percent;
+                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100) ) / 100, 2, ',');
+                    $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
                     $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
                 }
             }
@@ -494,7 +526,7 @@ class RestaurantsService extends MvcService
                 if ($isElementInArray)
                 {
                     // Dodanie nowego elementu do tablicy i przypisanie mu kolejno wartości.
-                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il));
+                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => ""));
                     CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
                 }
                 else CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
@@ -502,7 +534,7 @@ class RestaurantsService extends MvcService
             // Jeżeli plik cookies nie został jeszcze utworzony, dodajemy elementy do tablicy i tworzymy nowe cookies. 
             else
             {
-                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il));
+                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => ""));
                 CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
             }
             if (empty($new_json_array)) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']));

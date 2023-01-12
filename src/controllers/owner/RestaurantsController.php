@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:48:31                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:15:49                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,9 +45,8 @@ class RestaurantsController extends MvcController
     public function add_restaurant()
     {
         $this->protector->protect_only_owner();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER);
         $add_restaurant_data = $this->_service->add_restaurant();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER);
         $this->renderer->render_embed('owner-wrapper-view', 'owner/restaurants/add-edit-restaurant-view', array(
             'page_title' => 'Dodaj restaurację',
             'add_edit_text' => 'Dodaj',
@@ -64,9 +63,8 @@ class RestaurantsController extends MvcController
     public function edit_restaurant()
     {
         $this->protector->protect_only_owner();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER);
         $edit_restaurant_data = $this->_service->edit_restaurant();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER);
         $this->renderer->render_embed('owner-wrapper-view', 'owner/restaurants/add-edit-restaurant-view', array(
             'page_title' => 'Edytuj restaurację',
             'add_edit_text' => 'Edytuj',
@@ -96,7 +94,6 @@ class RestaurantsController extends MvcController
     {
         $this->protector->protect_only_owner();
         $redirect_url = $this->_service->delete_restaurant_image('banner_url', 'zdjęcie w tle');
-        var_dump($redirect_url);
         header('Location:' . __URL_INIT_DIR__ . $redirect_url,  true, 301);
     }
 
@@ -120,9 +117,8 @@ class RestaurantsController extends MvcController
     public function restaurant_details()
     {
         $this->protector->protect_only_owner();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER);
         $restaurant_details = $this->_service->get_restaurant_details();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER);
         $this->renderer->render_embed('owner-wrapper-view', 'owner/restaurants/restaurant-details-view', array(
             'page_title' => 'Szczegóły restauracji',
             'is_details_subpage' => true,
@@ -139,9 +135,8 @@ class RestaurantsController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_owner();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANTS_PAGE_BANNER);
         $restaurant_table = $this->_service->get_user_restaurants();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANTS_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANTS_PAGE_BANNER);
         $this->renderer->render_embed('owner-wrapper-view', 'owner/restaurants/restaurants-view', array(
             'page_title' => 'Moje restauracje',
             'banner' => $banner_data,

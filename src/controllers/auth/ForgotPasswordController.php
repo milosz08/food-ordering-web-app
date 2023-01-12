@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:42:14                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 20:17:31                   *
+ * Ostatnia modyfikacja: 2023-01-12 02:58:49                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -46,9 +46,11 @@ class ForgotPasswordController extends MvcController
     {
         $this->protector->redirect_when_logged();
         $form_data = $this->_service->forgot_password_change();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::FORGOT_PASSWORD_CHANGE_PAGE_BANNER);
         $this->renderer->render('auth/renew-password-change-view', array(
             'page_title' => 'Zmień hasło',
             'form' => $form_data,
+            'banner' => $banner_data,
         ));
     }
 
@@ -60,7 +62,6 @@ class ForgotPasswordController extends MvcController
     public function index()
     {
         $this->protector->redirect_when_logged();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER);
         $form_data = $this->_service->forgot_password_request();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER);
         $this->renderer->render('auth/renew-password-email-view', array(

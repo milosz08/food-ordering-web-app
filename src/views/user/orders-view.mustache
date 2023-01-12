@@ -1,12 +1,7 @@
 {{> partials/header-view.partial }}
 <main class="container-lg flex-grow-1 top-margin-header">
-    {{#banner.show_banner}}
-    <div class="alert {{banner.banner_class}} mb-3 alert-dismissible fade show" role="alert">
-        {{{banner.banner_message}}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {{/banner.show_banner}}
-    <div class="row">
+    {{> partials/dynamic-banner-view.partial}}
+    <div class="row mt-3">
         <form class="col-md-8" action="" method="post" novalidate>
             <div class="card p-3 mb-3">
                 <div class="card-body py-2">
@@ -90,16 +85,66 @@
                     </div>
                 </div>
             </div>
-            <a href="{{base_dir}}home/general/user/orders" data-bs-toggle="modal" data-bs-target="#discount-code" class="btn btn-primary" 
+            <a href="{{base_dir}}home/general/user/orders-summary?resid={{data.res_id}}" data-bs-toggle="modal" data-bs-target="#discount-code" class="btn btn-primary" 
                 type="button">
                 Dodaj kupon
             </a>
-            <button type="submit" name="oder-button" class="btn btn-primary w-100 my-4">
-                Przejdź do podsumowania (kwota 69.99zł)
-            </button>
         </form>
         <div class="col-md-4">
-            koszyk
+            <div class="sticky-top panel-left-nav">
+                <ul class="card list-unstyled p-3">
+                    {{#data.shopping_cart}}
+                    <li>
+                        <div class="rows">
+                            <div class="col mb-2 hstack justify-content-between align-items-start">
+                                <h4 class="card-title fs-5 mb-0">{{cart_dishes.name}}</h4>
+                                <p class="m-0">{{cart_dishes.total_dish_cost}} zł </p>
+                            </div>
+                            <div class="col mb-2 hstack justify-content-between align-items-start">
+                                <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{cart_dishes.description}}"
+                                    class="text-secondary text-truncate fw-normal fs-6 me-5">
+                                    {{cart_dishes.description}}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <hr class="my-3"/>
+                    {{/data.shopping_cart}}
+                    {{#data.not_enough_total_sum}}
+                    <li class="alert alert-warning p-2 lh-sm mb-2 px-3" role="alert">
+                        Do minimalnej wartości zamówienia brakuje jeszcze: <strong>{{data.diff_not_enough}} zł</strong>.
+                    </li>
+                    <li class="mt-0 text-secondary fw-normal small-font mb-3 lh-sm">
+                        Niestety nie możesz jeszcze zamówić. Restauracja <strong>{{data.res_name}}</strong> ustawiła wartość minimalnego 
+                        zamówienia na <strong>{{data.res_details.min_price}} zł</strong> (bez kosztów dostawy).
+                    </li>
+                    {{/data.not_enough_total_sum}}
+                    <li>
+                        <div class="d-flex justify-content-between mb-1">
+                            <p class="mb-0">Razem</p>
+                            <p class="mb-0">{{data.summary_prices.total}} zł</p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="mb-0">Koszt dostawy</p>
+                            <p class="mb-0">{{data.summary_prices.delivery_price}} zł</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-0 fw-bold">Kwota całkowita</p>
+                            <p class="mb-0 fw-bold">{{data.summary_prices.total_with_delivery}} zł</p>
+                        </div>
+                    </li>
+                </ul>
+                {{#data.not_enough_total_sum}}
+                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.res_id}}" class="btn btn-secondary w-100 disabled">
+                    Zbyt niska wartość ({{data.summary_prices.total_with_delivery}} zł)
+                </a>
+                {{/data.not_enough_total_sum}}
+                {{^data.not_enough_total_sum}}
+                <a href="{{base_dir}}user/orders/order-summary?resid={{data.res_id}}" class="btn btn-primary w-100">
+                    Złóż zamówienie ({{data.summary_prices.total_with_delivery}} zł)
+                </a>
+                {{/data.not_enough_total_sum}}
+            </div>
         </div>
     </div>
 </main>

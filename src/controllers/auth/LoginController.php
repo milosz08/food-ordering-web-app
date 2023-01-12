@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 18:31:08                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:48:30                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:10:40                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,9 +45,8 @@ class LoginController extends MvcController
 	public function index()
     {
 		$this->protector->redirect_when_logged();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::LOGIN_PAGE_BANNER); 
         $form_data = $this->_service->login_user();
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::LOGIN_PAGE_BANNER); 
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::LOGIN_PAGE_BANNER); 
         $this->renderer->render('auth/login-view', array(
             'page_title' => 'Logowanie',
             'data' => $form_data,

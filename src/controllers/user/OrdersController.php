@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 23:37:59                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-12 00:35:41                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -20,6 +20,7 @@ use App\Core\MvcController;
 use App\Core\ResourceLoader;
 use App\User\Services\OrdersService;
 use App\Services\Helpers\SessionHelper;
+use App\Services\Helpers\CookieHelper;
 
 ResourceLoader::load_service('OrdersService', 'user'); // ładowanie serwisu przy użyciu require_once
 
@@ -96,7 +97,7 @@ class OrdersController extends MvcController
         $delete_discount_code = $this->_service->deleteDiscountCode();
         $this->renderer->render('user/orders-view', array(
             'page_title' => 'Składanie zamówienia',
-            'form' => $adress,
+            'data' => $adress,
             'banner' => $banner_data,
             'discount' => $delete_discount_code
         ));

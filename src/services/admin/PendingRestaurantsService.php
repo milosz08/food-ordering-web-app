@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 07:21:20                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:13:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -103,10 +103,8 @@ class PendingRestaurantsService extends MvcService
         {
             $this->dbh->rollback();
             $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
+            SessionHelper::create_session_banner(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'admin/pending-restaurants?',

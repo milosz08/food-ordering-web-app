@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:19:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 02:16:32                   *
+ * Ostatnia modyfikacja: 2023-01-12 12:43:16                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -119,10 +119,10 @@ class ValidationHelper
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static function check_optional($optional_name, $toggler_name, $pattern_config_name)
+    public static function check_optional($optional_name, $toggler_name, $pattern)
     {
         if (!isset($_POST[$toggler_name]))
-            return ValidationHelper::validate_field_regex($optional_name, Config::get($pattern_config_name));
+            return ValidationHelper::validate_field_regex($optional_name, $pattern);
         return array('value' => '', 'invl' => false, 'bts_class' => '');
     }
 }

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:44:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 20:16:30                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:05:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -90,21 +90,18 @@ class ForgotPasswordService extends MvcService
                 $statement->closeCursor();
                 $this->dbh->commit();
                 $this->_banner_message = 'Na adres email ' . $user_data['email'] . ' została wysłana wiadomość z linkiem autoryzacyjnym.';
-
                 SessionHelper::create_session_banner(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
-                header('Location:' . __URL_INIT_DIR__ .  'auth/forgot-password', true, 301);
+                header('Location:' . __URL_INIT_DIR__ . 'auth/forgot-password', true, 301);
+                die;
             }
             catch (Exception $e)
             {
-                $this->_banner_message = $e->getMessage();
-                $this->_banner_error = true;
                 $this->dbh->rollback();
+                SessionHelper::create_session_banner(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER, $e->getMessage(), true);
             }
         }
         return array(
             'v_login_email' => $login_email,
-            'banner_message' => $this->_banner_message,
-            'banner_error' => $this->_banner_error,
         );
     }
 
@@ -164,6 +161,7 @@ class ForgotPasswordService extends MvcService
 
                     SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                     header('Location: ' . __URL_INIT_DIR__ . 'auth/login', true, 301);
+                    die;
                 }
             }
             $statement->closeCursor();
@@ -171,12 +169,10 @@ class ForgotPasswordService extends MvcService
         }
         catch (Exception $e)
         {
-            $this->_banner_message = $e->getMessage();
-            $this->_banner_error = true;
             $this->dbh->rollback();
             $show_change_password = false;
+            SessionHelper::create_session_banner(SessionHelper::FORGOT_PASSWORD_CHANGE_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return array(
             'v_password' => $v_password,
             'v_password_rep' => $v_password_rep,

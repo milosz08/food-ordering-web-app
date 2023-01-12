@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 22:47:00                   *
+ * Ostatnia modyfikacja: 2023-01-12 14:13:03                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -25,20 +25,24 @@ use App\Models\RestaurantModel;
 use App\Models\RestaurantHourModel;
 use App\Models\RestaurantDetailsModel;
 use App\Models\AddEditRestaurantModel;
+use App\Models\DiscountResDetailsModel;
 use App\Services\Helpers\ImagesHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
 use App\Services\Helpers\ValidationHelper;
+use App\Services\Helpers\RestaurantsHelper;
 
 ResourceLoader::load_model('DishModel', 'dish');
 ResourceLoader::load_model('RestaurantModel', 'restaurant');
 ResourceLoader::load_model('RestaurantHourModel', 'restaurant');
 ResourceLoader::load_model('RestaurantDetailsModel', 'restaurant');
 ResourceLoader::load_model('AddEditRestaurantModel', 'restaurant');
+ResourceLoader::load_model('DiscountResDetailsModel', 'discount');
 ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
+ResourceLoader::load_service_helper('RestaurantsHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -120,12 +124,10 @@ class RestaurantsService extends MvcService
         }
         catch (Exception $e)
         {
-            $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
+            $pagination_visible = false;
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/restaurants?',
@@ -160,8 +162,8 @@ class RestaurantsService extends MvcService
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', '__REGEX_PRICE__');
-                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', '__REGEX_PRICE__');
+                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', Config::get('__REGEX_PRICE__'));
+                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', Config::get('__REGEX_PRICE__'));
                 $res->building_locale_nr = ValidationHelper::validate_field_regex('restaurant-building-no', Config::get('__REGEX_BUILDING_NO__'));
                 $res->post_code = ValidationHelper::validate_field_regex('restaurant-post-code', Config::get('__REGEX_POSTCODE__'));
                 $res->city = ValidationHelper::validate_field_regex('restaurant-city', Config::get('__REGEX_CITY__'));
@@ -308,8 +310,8 @@ class RestaurantsService extends MvcService
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
-                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', '__REGEX_PRICE__');
-                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', '__REGEX_PRICE__');
+                $res->delivery_price = ValidationHelper::check_optional('restaurant-delivery-price', 'restaurant-delivery-free', Config::get('__REGEX_PRICE__'));
+                $res->min_price = ValidationHelper::check_optional('restaurant-min-price', 'restaurant-no-min-price', Config::get('__REGEX_PRICE__'));
                 $res->banner_url = ValidationHelper::validate_image_regex('restaurant-banner');
                 $res->profile_url = ValidationHelper::validate_image_regex('restaurant-profile');
                 $res->street = ValidationHelper::validate_field_regex('restaurant-street', Config::get('__REGEX_STREET__'));
@@ -453,7 +455,7 @@ class RestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $this->check_if_restaurant_exist();
+            RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '');
 
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
@@ -489,7 +491,7 @@ class RestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $image_url = $this->check_if_restaurant_exist($image_column_name);
+            $image_url = RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '', $image_column_name);
 
             $query = "UPDATE restaurants SET $image_column_name = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
@@ -522,7 +524,8 @@ class RestaurantsService extends MvcService
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
 
         $restaurant_details = new RestaurantDetailsModel;
-        $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
+        $pagination = array();
+        $restaurant_discounts = array();
         $restaurant_dishes = array();
         $res_hours = array();
         $pages_nav = array();
@@ -534,6 +537,8 @@ class RestaurantsService extends MvcService
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
             $page = ($curr_page - 1) * 5;
             $total_per_page = $_GET['total'] ?? 5;
+    
+            $search_code = SessionHelper::persist_search_text('search-discount-code', SessionHelper::DISCOUNT_SEARCH);
             $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_RES_DETAILS_SEARCH);
             
             $redirect_url = 'owner/restaurants/restaurant-details?id=' . $_GET['id'];
@@ -541,15 +546,15 @@ class RestaurantsService extends MvcService
 
             $restaurant_query = "
                 SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city, r.profile_url, r.banner_url,
-                
                 CONCAT(first_name, ' ', last_name) AS full_name,
                 IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS delivery_price, 
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
                 (SELECT COUNT(*) FROM dishes WHERE restaurant_id = r.id) AS count_of_dishes,
                 CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
-                IF(min_price, CONCAT(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'brak najniższej ceny') AS min_price
+                IF(min_price, CONCAT(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'brak najniższej ceny') AS min_price,
+                IFNULL(NULLIF((SELECT COUNT(*) FROM discounts WHERE restaurant_id = r.id), 0), 'brak rabatów') AS discounts_count
                 FROM restaurants AS r
-                INNER JOIN users AS u ON r.user_id = u.id 
+                INNER JOIN users AS u ON r.user_id = u.id
                 WHERE r.id = :id AND r.user_id = :userid
             ";
             $statement = $this->dbh->prepare($restaurant_query);
@@ -582,7 +587,6 @@ class RestaurantsService extends MvcService
             $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
-
             while ($row = $statement->fetchObject(DishModel::class)) array_push($restaurant_dishes, $row);
             
             // zapytanie zliczające wszystkie dania przypisane do restauracji
@@ -602,16 +606,32 @@ class RestaurantsService extends MvcService
 
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
+            
+            $discounts_query = "
+                SELECT ROW_NUMBER() OVER(ORDER BY id) as it, id, code, description,
+                CONCAT(REPLACE(CAST(percentage_discount as DECIMAL(10,2)), '.', ','), '%') AS percentage_discount,
+                CONCAT(usages, '/', IFNULL(max_usages, '∞')) AS total_usages,
+                IF(max_usages, '', 'disabled') AS increase_usages_active, IF(expired_date, '', 'disabled') AS increase_time_active, 
+                IFNULL(expired_date, '∞') AS expired_date, restaurant_id AS res_id, CONCAT(SUBSTRING(code, 1, 3), '********') AS hide_code,
+                IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = d.restaurant_id AND ((expired_date > NOW() OR 
+                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'table-success', 'table-warning') 
+                AS expired_bts_class
+                FROM discounts AS d WHERE restaurant_id = :id AND code LIKE :search
+            ";
+            $statement = $this->dbh->prepare($discounts_query);
+            $statement->bindValue('id', $_GET['id']);
+            $statement->bindValue('search', '%' . $search_code . '%');
+            $statement->execute();
+            while ($row = $statement->fetchObject(DiscountResDetailsModel::class)) array_push($restaurant_discounts, $row);
+
             $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
             $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/restaurants/restaurant-details?id=' . $_GET['id'] . '&',
@@ -623,26 +643,10 @@ class RestaurantsService extends MvcService
             'details' => $restaurant_details,
             'not_empty' => count($restaurant_dishes),
             'res_hours' => $res_hours,
+            'res_discounts' => $restaurant_discounts,
+            'search_code' => $search_code,
+            'discounts_not_empty' => count($restaurant_discounts),
         );
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Metoda sprawdzająca, czy restauracja istnieje w systemie i jest przypisana do aktualnie zalogowanego użytkownika. Jeśli istnieje,
-     * zwraca wartość z kolumny przekazywanej w parametrze. Domyślnie zwraca liczbę wierszy.
-     */
-    private function check_if_restaurant_exist($result_column = 'COUNT(*)')
-    {
-        $query = "SELECT $result_column FROM restaurants WHERE id = ? AND user_id = ?";
-        $statement = $this->dbh->prepare($query);
-        $statement->execute(array($_GET['id'], $_SESSION['logged_user']['user_id']));
-        $result = $statement->fetchColumn();
-        if (empty($result)) throw new Exception(
-            'Podana resturacja nie istnieje w systemie, została już usunięta lub nie jest przypisana do Twojego konta.'
-        );
-        $statement->closeCursor();
-        return $result;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

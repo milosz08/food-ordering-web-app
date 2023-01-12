@@ -1,9 +1,8 @@
-<h2 class="mb-3 text-secondary fw-normal">Dodaj potrawę do restauracji</h2>
+<h2 class="text-secondary fw-normal mb-3">Dodaj kod rabatowy do restauracji</h2>
 <nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
-        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dishes">Moje Potrawy</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Dodaj potrawę do restauracji</li>
+        <li class="breadcrumb-item active" aria-current="page">Dodaj kod rabatowy do restauracji</li>
     </ol>
 </nav>
 <hr/>
@@ -31,34 +30,35 @@
                 <th>Lp</th>
                 <th>Nazwa restauracji</th>
                 <th>Dane adresowe</th>
-                <th>Liczba potraw</th>
+                <th>Aktywne kody</th>
+                <th>Nieaktywne kody</th>
                 <th class="fit">Akcja</th>
             </tr>
         </thead>
         <tbody>
-            {{#data.active_restaurants}}
+            {{#data.res_discounts}}
             <tr>
                 <td class="align-middle">{{it}}</td>
                 <td class="align-middle">{{name}}</td>
                 <td class="align-middle">{{address}}</td>
-                <td class="align-middle">{{count_of_dishes}}</td>
+                <td class="align-middle">{{count_of_active_discounts}}</td>
+                <td class="align-middle">{{count_of_inactive_discounts}}</td>
                 <td class="align-middle fit flex-nowrap">
-                    <a href="{{base_dir}}owner/dishes/add-dish?resid={{id}}" 
-                        class="btn btn-outline-primary btn-sm" type="button">
-                        Dodaj potrawę
+                    <a href="{{base_dir}}owner/discounts/add-discount?resid={{id}}" class="btn btn-outline-primary btn-sm ms-2">
+                        Dodaj nowy kod
                     </a>
                     <a href="{{base_dir}}owner/restaurants/restaurant-details?id={{id}}" class="btn btn-primary btn-sm ms-2" 
-                        type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Wszystkie potrawy restauracji">
+                        type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Wyświetl szczegóły">
                         <i class="bi bi-arrow-right"></i>
                     </a>
                 </td>
             </tr>
-            {{/data.active_restaurants}}
+            {{/data.res_discounts}}
         </tbody>
     </table>
 </div>
 {{#data.pagination_visible}}
-    {{> partials/pagination-view.partial}}
+{{> partials/pagination-view.partial}}
 {{/data.pagination_visible}}
 {{/data.not_empty}}
 {{^data.not_empty}}

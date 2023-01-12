@@ -9,8 +9,13 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 02:10:44                   *
+<<<<<<< HEAD
+ * Ostatnia modyfikacja: 2023-01-12 16:00:29                   *
  * Modyfikowany przez: patrick012016                           *
+=======
+ * Ostatnia modyfikacja: 2023-01-12 16:00:29                   *
+ * Modyfikowany przez: patrick012016                           *
+>>>>>>> c2d562aa3e3533fc4a4dedb7afc42a09016e3715
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -36,7 +41,7 @@ class DashboardService extends MvcService
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Metoda zwracająca dane do pliku js aby wygenerować wykres w głównym widoku panelu restauratora.
+     * Metoda zwracająca dane do pliku js aby wygenerować wykres w głównym widoku panelu właściciela restauracji.
      */
     public function graph()
     {
@@ -57,16 +62,14 @@ class DashboardService extends MvcService
                 $statement->bindValue('date', $time, PDO::PARAM_STR);
                 $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
                 $statement->execute();
-                $test = $statement->fetch(PDO::FETCH_ASSOC);
-                $first = array('Day' => $test['day'], 'Amount' => $test['number']);
-                array_push($result_owner, $first);
+                $plot_data = $statement->fetch(PDO::FETCH_ASSOC);
+                array_push($result, array('day' => $plot_data['day'], 'amount' => $plot_data['number']));
+
                 $statement->closeCursor();
                 $this->dbh->commit();
             }
             catch (Exception $e)
             {
-                $this->_banner_error = true;
-                $this->_banner_message = $e->getMessage();
                 $this->dbh->rollback();
             }
         }

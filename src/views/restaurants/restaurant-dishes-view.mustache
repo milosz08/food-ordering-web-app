@@ -2,12 +2,7 @@
 <main class="container-lg flex-grow-1 top-margin-header md-3 mb-4">
     <div class="row">
         <div class="col-lg-8">
-            {{#banner.show_banner}}
-            <div class="alert {{banner.banner_class}} mb-4 alert-dismissible fade show" role="alert">
-                {{{banner.banner_message}}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {{/banner.show_banner}}
+            {{> partials/dynamic-banner-view.partial}}
             {{^is_logged_and_normal_user}}
             <div class="alert alert-warning" role="alert">
                 Aby mieć możliwość zamówienia musisz być zalogowany na konto użytkownika. Aby zalogować się na konto, przejdź 
@@ -52,8 +47,8 @@
                             {{description}}
                         </p>
                         <div class="hstack gap-3">
-                            <div class="hstack gap-2 text-success"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
-                            <div class="hstack gap-2 text-primary"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
+                            <div class="hstack gap-2 text-success small-font"><i class="bi bi-bicycle fs-4 text-success"></i>{{price}} zł</div>
+                            <div class="hstack gap-2 text-primary small-font"><i class="bi bi-clock text-primary"></i>{{prepared_time}} min</div>
                         </div>
                     </div>
                     <div class="col-auto pe-0">
@@ -101,7 +96,7 @@
                         <div class="rows">
                             <div class="col mb-2 hstack justify-content-between align-items-start">
                                 <h4 class="card-title fs-5 mb-0">{{cart_dishes.name}}</h4>
-                                <p class="m-0">{{cart_dishes.total_dish_cost}}</p>
+                                <p class="m-0">{{cart_dishes.total_dish_cost}} zł </p>
                             </div>
                             <div class="col mb-2 hstack justify-content-between align-items-start">
                                 <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{cart_dishes.description}}"
@@ -152,7 +147,7 @@
                 </a>
                 {{/data.not_enough_total_sum}}
                 {{^data.not_enough_total_sum}}
-                <a href="{{base_dir}}user/orders/order-summary" class="btn btn-primary w-100">
+                <a href="{{base_dir}}user/orders/order-summary?resid={{data.res_id}}" class="btn btn-primary w-100">
                     Przejdź do podsumowania ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 18:56:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:48:05                   *
+ * Ostatnia modyfikacja: 2023-01-12 03:09:40                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -99,12 +99,10 @@ class LoginService extends MvcService
                 header('Location:' . __URL_INIT_DIR__ . $redir_url, true, 301); // jeśli wszystko się powiedzie, przejdź do strony
                 die;
             }
-            catch (Exception $e)
+            catch (Exception $e) 
             {
-                $this->_banner_message = $e->getMessage();
-                $this->_banner_error = true;
+                SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $e->getMessage(), true);
             }
-            SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
             return array(
                 'login_email' => $login_email,
                 'password' => $password,
