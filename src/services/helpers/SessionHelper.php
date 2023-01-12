@@ -43,6 +43,8 @@ class SessionHelper
     const RES_MAIN_SEARCH                               = 'res_main_search';
     const CANCEL_ORDER                                  = 'cancel_order';
     const RES_DISH_CART_SEARCH                          = 'res_dish_cart_search';
+    const DISH_DETAILS_PAGE_BANNER                      = 'dish_details_page_banner';
+    const DISHES_PAGE_BANNER                            = 'dishes_page_banner';
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

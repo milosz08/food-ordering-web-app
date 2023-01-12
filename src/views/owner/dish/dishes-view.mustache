@@ -5,13 +5,8 @@
         <li class="breadcrumb-item active" aria-current="page">Moje potrawy</li>
     </ol>
 </nav>
-<hr class="mb-3"/>
-{{#data.banner_active}}
-<div class="alert alert-danger mb-3 alert-dismissible fade show" role="alert">
-    {{{data.banner_message}}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{{/data.banner_active}}
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
 <div class="container-fluid px-0">
     <div class="row justify-content-between align-items-center">
         <form class="col-lg-4 mb-3 d-flex" action="" method="post">

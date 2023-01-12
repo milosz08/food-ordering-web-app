@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:18:17                   *
+ * Ostatnia modyfikacja: 2023-01-12 04:35:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,6 +29,7 @@ use App\Services\Helpers\ImagesHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
 use App\Services\Helpers\ValidationHelper;
+use App\Services\Helpers\RestaurantsHelper;
 
 ResourceLoader::load_model('DishModel', 'dish');
 ResourceLoader::load_model('RestaurantModel', 'restaurant');
@@ -39,6 +40,7 @@ ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
+ResourceLoader::load_service_helper('RestaurantsHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -451,7 +453,7 @@ class RestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $this->check_if_restaurant_exist();
+            RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '');
 
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
@@ -487,7 +489,7 @@ class RestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $image_url = $this->check_if_restaurant_exist($image_column_name);
+            $image_url = RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '', $image_column_name);
 
             $query = "UPDATE restaurants SET $image_column_name = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
@@ -620,25 +622,6 @@ class RestaurantsService extends MvcService
             'not_empty' => count($restaurant_dishes),
             'res_hours' => $res_hours,
         );
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Metoda sprawdzająca, czy restauracja istnieje w systemie i jest przypisana do aktualnie zalogowanego użytkownika. Jeśli istnieje,
-     * zwraca wartość z kolumny przekazywanej w parametrze. Domyślnie zwraca liczbę wierszy.
-     */
-    private function check_if_restaurant_exist($result_column = 'COUNT(*)')
-    {
-        $query = "SELECT $result_column FROM restaurants WHERE id = ? AND user_id = ?";
-        $statement = $this->dbh->prepare($query);
-        $statement->execute(array($_GET['id'], $_SESSION['logged_user']['user_id']));
-        $result = $statement->fetchColumn();
-        if (empty($result)) throw new Exception(
-            'Podana resturacja nie istnieje w systemie, została już usunięta lub nie jest przypisana do Twojego konta.'
-        );
-        $statement->closeCursor();
-        return $result;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

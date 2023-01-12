@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 02:52:07                   *
+ * Ostatnia modyfikacja: 2023-01-12 05:07:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -28,6 +28,7 @@ use App\Services\Helpers\ImagesHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
 use App\Services\Helpers\ValidationHelper;
+use App\Services\Helpers\RestaurantsHelper;
 
 ResourceLoader::load_model('AddEditDishModel', 'dish');
 ResourceLoader::load_model('DishDetailsModel', 'dish');
@@ -37,6 +38,7 @@ ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
+ResourceLoader::load_service_helper('RestaurantsHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -119,16 +121,13 @@ class DishesService extends MvcService
         catch (Exception $e)
         {
             $pagination_visible = false;
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::DISHES_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'dishes' => $all_dishes,
-            'banner_active' => !empty($this->_banner_message),
-            'banner_message' => $this->_banner_message,
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'owner/dishes?',
+            'pagination_url' => $redirect_url . '?',
             'pagination' => $pagination,
             'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
@@ -146,9 +145,7 @@ class DishesService extends MvcService
     public function get_all_restaurants_with_dishes()
     {
         $active_restaurants = array();
-        $not_empty = false;
-        $pagination = array();
-        $pages_nav = array();
+        $pagination_data = array('pagination' => array(), 'pages_nav' => array());
         $pagination_visible = true;
         try
         {
@@ -159,7 +156,7 @@ class DishesService extends MvcService
             $total_per_page = $_GET['total'] ?? 5;
             $search_text = SessionHelper::persist_search_text('search-restaurant-name', SessionHelper::OWNER_DISHES_RES_SEARCH);
 
-            $redirect_url = 'owner/dishes/add-dish-to-restaurant';
+            $redirect_url = 'owner/dishes/dishes-with-restaurants';
             PaginationHelper::check_parameters($redirect_url);
 
             $query = "
@@ -175,26 +172,9 @@ class DishesService extends MvcService
             $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
-
             while ($row = $statement->fetchObject(ActiveRestaurantModel::class)) array_push($active_restaurants, $row);
-            $not_empty = count($active_restaurants);
-            
-            $query = "SELECT count(*) FROM restaurants WHERE accept = 1 AND user_id = :userid AND name LIKE :search";
-            $statement = $this->dbh->prepare($query);
-            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
-            $statement->bindValue('search', '%' . $search_text . '%');
-            $statement->execute();
-            $total_records = $statement->fetchColumn();
 
-            $total_pages = ceil($total_records / $total_per_page);
-            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
-                'it' => $i,
-                'url' => 'owner/dishes/add-dish-to-restaurant?page=' . $i . '&total=' . $total_per_page, 
-                'selected' => $curr_page ==  $i ? 'active' : '',
-            ));
-
-            PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
-            $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
+            $pagination_data = RestaurantsHelper::get_total_res_pages($this->dbh, $search_text, $total_per_page, $curr_page, $redirect_url);
             $statement->closeCursor();
             $this->dbh->commit();
         }
@@ -207,12 +187,12 @@ class DishesService extends MvcService
         return array(
             'active_restaurants' => $active_restaurants,
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'owner/dishes/add-dish-to-restaurant?',
-            'pagination' => $pagination,
+            'pagination_url' => $redirect_url . '?',
+            'pagination' => $pagination_data['pagination'],
             'pagination_visible' => $pagination_visible,
-            'pages_nav' => $pages_nav,
+            'pages_nav' => $pagination_data['pages_nav'],
             'search_text' => $search_text,
-            'not_empty' => $not_empty,
+            'not_empty' => count($active_restaurants),
         );
     }
 
@@ -518,12 +498,11 @@ class DishesService extends MvcService
         }
         catch (Exception $e)
         {
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
             $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::DISH_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+            header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid'], true, 301);
+            die;
         }
-        SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
-        if ($this->_banner_error) header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid'], true, 301);
         return array(
             'error_redirect' => $this->_banner_error,
             'restaurant_id' => $_GET['resid'],
