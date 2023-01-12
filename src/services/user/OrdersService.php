@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 22:37:07                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-12 11:25:52                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -23,12 +23,16 @@ use App\Core\ResourceLoader;
 use App\Models\ShowUserOrdersListModel;
 use App\Services\Helpers\SessionHelper;
 use App\Models\ShowUserSingleOrderModel;
+use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\ValidationHelper;
+use App\Models\DishDetailsCartModel;
 
 ResourceLoader::load_model('ShowUserOrdersListModel', 'user');
 ResourceLoader::load_model('ShowUserSingleOrderModel', 'user');
+ResourceLoader::load_model('DishDetailsCartModel', 'cart');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
+ResourceLoader::load_service_helper('CookieHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,135 +67,136 @@ class OrdersService extends MvcService
     public function fillAdress()
     {
         try {
-            if (!(isset($_COOKIE['discount'])))
-                setcookie("discount", time() - 3600);
-
-            $v_cookie = $_COOKIE['discount'];
-
             $this->dbh->beginTransaction();
-            
-            $query = "SELECT id, value FROM discount WHERE name = ?";
-            $statement = $this->dbh->prepare($query);
-            $statement->execute(
-                array(
-                    $v_cookie
-                )
-            );
-            $value_discount = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            $is_discount_code_exist = false;
+            // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
+            $dish_details_not_founded = false;
+            $code_not_found = false;
+            $discountPercentage = 0;
+            $shopping_cart = array();
+            $resid = $_GET['resid'];
+            $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0, 
+                                        'delivery_price' => '0,00');
+            if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
+            {
+                $cart_cookie = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])], true);
+                // Pętla iterująca po otrzymanej tablicy zdekodowanego pliku json.
+                foreach ($cart_cookie as $dish)
+                {
+                    
+                    
+                    // Zapytanie pobierające potrzebne szczegóły dania
+                    $query = "
+                        SELECT d.id, d.name, d.description, REPLACE(CAST(r.delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
+                        REPLACE(CAST(d.price * :count AS DECIMAL(10,2)), '.', ',') AS total_dish_cost, 
+                        IFNULL(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), 0) AS min_price
+                        FROM dishes d
+                        INNER JOIN restaurants r ON d.restaurant_id = r.id WHERE d.id = :id
+                    ";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->bindValue('count', $dish['count'], PDO::PARAM_INT);
+                    $statement->bindValue('id', $dish['dishid']);
+                    $statement->execute();
+                    // sprawdź, czy podana potrawa z id odczytanym z jsona istnieje, jeśli nie, nie dodawaj do koszyka
+                    if ($dish_details = $statement->fetchObject(DishDetailsCartModel::class)) 
+                    {
+                        // Uzupełnienie tablicy przechowującej szczegóły dania 
+                        array_push($shopping_cart, array('cart_dishes' => $dish_details, 'count_of_dish' => $dish['count']));
+                        $summary_prices['total_num'] += (float)str_replace(',', '.', $dish_details->total_dish_cost) * 100;
+                        $min_price_num = (float)str_replace(',', '.', $dish_details->min_price) * 100;
+                        $summary_prices['delivery_price'] = $dish_details->delivery_price;
+                        
+                    }
+                    else $dish_details_not_founded = true;
 
-            if ($v_cookie != null && count($value_discount) > 0) {
-                $is_discount_code_exist = true;
+                    if(!empty($dish['code']))
+                    {
+                        $codeName = $dish['code']; 
+                        $code_not_found = true;
+                    }
+                }
+                if($code_not_found)
+                {
+                    $query = "SELECT REPLACE(CAST(percentage_discount AS DECIMAL(10,2)), '.', ',') AS percentage_discount 
+                    FROM discounts WHERE code = ?";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->execute(
+                        array(
+                            $codeName
+                        )
+                    );
+                    $discountPercentage = $statement->fetch(PDO::FETCH_ASSOC);
+                }
+
+                if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']));
+                else
+                {
+                    $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
+                    $percent = 100 - (float)str_replace(',', '.', $discountPercentage['percentage_discount'] ?? 1);
+                    $calculate = ($summary_prices['total_num']/100) * $percent;
+                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100) ) / 100, 2, ',');
+                    $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
+                    $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
+                }
+                
             }
-
             
-            $query = "SELECT street, post_code, city, building_nr, locale_nr FROM user_address WHERE user_id = ?";
-            $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_SESSION['logged_user']['user_id']));
-            $user = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            $v_post_code = array('value' => $user[0]['post_code'], 'invl' => false, 'bts_class' => '');
-            $v_city = array('value' => $user[0]['city'], 'invl' => false, 'bts_class' => '');
-            $v_street = array('value' => $user[0]['street'], 'invl' => false, 'bts_class' => '');
-            $v_building_no = array('value' => $user[0]['building_nr'], 'invl' => false, 'bts_class' => '');
-            $v_locale_no = array('value' => $user[0]['locale_nr'], 'invl' => false, 'bts_class' => '');
-
             // Obsługa dodawania kodu rabatowego do plików cookies
             if (isset($_POST['discount-button'])) {
+                
                 $discount = ValidationHelper::validate_field_regex('discount', '/^[\w]+$/');
                 // Pobranie ID kodu promocyjnego jeżeli istnieje
-                $query = "SELECT id, value FROM discount WHERE name = ?";
+                $query = "SELECT id FROM discounts WHERE code = ?";
                 $statement = $this->dbh->prepare($query);
                 $statement->execute(
                     array(
                         $discount['value']
                     )
                 );
-                if ($statement->fetchColumn() == 0) {
+                if($statement->fetchColumn() == 0) {
                     $this->_banner_message = 'Podany kod rabatowy nie istnieje';
                     SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, true, 'alert-danger');
-                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-finish', true, 301);
-                } else {
-                    setcookie("discount", $discount['value']);
+                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
+                }
+                 else {
+                    $tempArray = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]);
+                    $isCodeExist = false;
+                    $new_json_array = array();
+                    foreach($tempArray as $cookieElements)
+                    {
+                        $cookieElements->code = $discount['value'];
+                        array_push($new_json_array, $cookieElements);
+                    }
+                    if($isCodeExist == false)
+                    {
+                        //Dodać obiekt do jsona z kodem
+                        //array_push($tempArray, array('dishid' => '', 'count' => '', 'code' => $discount));
+                        CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
+                        
+                    }
                     $this->_banner_message = 'Poprawnie dodano rabat ' . $discount['value'];
                     SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
-                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-finish', true, 301);
+                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
+                    
                 }
             }
 
+            /* work in progress
             if (isset($_POST['oder-button'])) {
-                $v_building_no = ValidationHelper::validate_field_regex('building-number', Config::get('__REGEX_BUILDING_NO__'));
-                if (!empty($_POST['local-number']))
-                    $v_locale_no = ValidationHelper::validate_field_regex('local-number', Config::get('__REGEX_BUILDING_NO__'));
-                else
-                    $v_locale_no = array('value' => $_POST['local-number'], 'invl' => false, 'bts_class' => '');
-                $v_post_code = ValidationHelper::validate_field_regex('post-code', Config::get('__REGEX_POSTCODE__'));
-                $v_city = ValidationHelper::validate_field_regex('city', Config::get('__REGEX_CITY__'));
-                $v_street = ValidationHelper::validate_field_regex('street', Config::get('__REGEX_STREET__'));
-
-                if (!($v_building_no['invl'] || $v_locale_no['invl'] || $v_post_code['invl'] || $v_city['invl'] || $v_street['invl'])) {
-                    // Sprawdzanie czy podany adres jest przypisany do jakiegoś użytkownika, bądź istnieje w bazie danych 
-                    $query = "SELECT id FROM user_address WHERE street = ? AND building_nr = ? AND locale_nr = ? AND 
-                    post_code = ? AND city = ?";
-                    $statement = $this->dbh->prepare($query);
-                    $statement->execute(
-                        array(
-                            $v_street['value'],
-                            $v_building_no['value'],
-                            $v_locale_no['value'],
-                            $v_post_code['value'],
-                            $v_city['value'],
-                        )
-                    );
-
-                    // Jeżeli podany adres nie istnieje w bazie, to utwórz
-                    if ($statement->fetchColumn() == 0) {
-                        $query = "INSERT INTO user_address (street, building_nr, locale_nr, post_code, city) VALUES (?,?,?,?,?)";
-                        $statement = $this->dbh->prepare($query);
-                        $statement->execute(
-                            array(
-                                $v_street['value'],
-                                $v_building_no['value'],
-                                $v_locale_no['value'],
-                                $v_post_code['value'],
-                                $v_city['value'],
-                            )
-                        );
-                    }
-                    // Pobranie ID wybranego adresu dostawy
-                    $query = "SELECT id FROM user_address WHERE street = ? AND building_nr = ? AND locale_nr = ? AND 
-                    post_code = ? AND city = ?	";
-                    $statement = $this->dbh->prepare($query);
-                    $statement->execute(
-                        array(
-                            $v_street['value'],
-                            $v_building_no['value'],
-                            $v_locale_no['value'],
-                            $v_post_code['value'],
-                            $v_city['value'],
-                        )
-                    );
                     $adress_id = $statement->fetchAll(PDO::FETCH_ASSOC);
                     $price = 69.99;
 
-                    $int_value = (int) $value_discount[0]['value'];
-
-                    if (count($value_discount) > 0 && $price > $int_value) {
-                        $price = $price - $int_value;
-                    }
 
                     // Pobranie opcji dostawy przy pomocy radioButton
                     $delivery_type = $_POST["flexRadioDefault"];
 
-                    $query = "INSERT INTO orders (user_id, status_id, discount_id, order_adress, delivery_type, price) VALUES (?,?,?,?,?,?)";
+                    $query = "INSERT INTO orders (user_id, status_id, order_adress, delivery_type, price) VALUES (?,?,?,?,?)";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(
                         array(
                             $_SESSION['logged_user']['user_id'],
                             // Status zamówienia z założenia ustawiony na "W trakcie realizacji" 
                             1,
-                            $value_discount[0]['id'],
                             $adress_id[0]['id'],
                             $delivery_type,
                             $price
@@ -204,8 +209,9 @@ class OrdersService extends MvcService
                     header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-finish', true, 301);
                     die;
                 }
-            }
+            */
             if ($this->dbh->inTransaction()) $this->dbh->commit();
+
         } catch (Exception $e) {
             $this->dbh->rollback();
             $this->_banner_error = true;
@@ -213,13 +219,11 @@ class OrdersService extends MvcService
             SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, $this->_banner_error);
         }
         return array(
-            'is_discount_code_exist' => $is_discount_code_exist,
-            'v_cookie' => $v_cookie,
-            'v_building_no' => $v_building_no,
-            'v_locale_no' => $v_locale_no,
-            'v_post_code' => $v_post_code,
-            'v_city' => $v_city,
-            'v_street' => $v_street,
+            'shopping_cart' => $shopping_cart,
+            'summary_prices' => $summary_prices,
+            'diff_not_enough' => number_format($summary_prices['diff_not_enough'] / 100, 2, ','),
+            'not_enough_total_sum' => $min_price_num > $summary_prices['total_num'],
+            'cart_is_empty' => !isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]),
         );
     }
 

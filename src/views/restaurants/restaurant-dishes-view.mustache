@@ -101,7 +101,7 @@
                         <div class="rows">
                             <div class="col mb-2 hstack justify-content-between align-items-start">
                                 <h4 class="card-title fs-5 mb-0">{{cart_dishes.name}}</h4>
-                                <p class="m-0">{{cart_dishes.total_dish_cost}}</p>
+                                <p class="m-0">{{cart_dishes.total_dish_cost}} zł </p>
                             </div>
                             <div class="col mb-2 hstack justify-content-between align-items-start">
                                 <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{cart_dishes.description}}"
@@ -152,7 +152,7 @@
                 </a>
                 {{/data.not_enough_total_sum}}
                 {{^data.not_enough_total_sum}}
-                <a href="{{base_dir}}user/orders/order-summary" class="btn btn-primary w-100">
+                <a href="{{base_dir}}user/orders/order-summary?resid={{data.res_id}}" class="btn btn-primary w-100">
                     Przejdź do podsumowania ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}
