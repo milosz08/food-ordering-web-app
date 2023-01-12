@@ -88,7 +88,7 @@
         </form>
         <div class="col-md-4">
             <div class="sticky-top panel-left-nav">
-                <a href="{{base_dir}}home/general/user/orders-summary?resid={{data.res_id}}" data-bs-toggle="modal"
+                <a href="{{base_dir}}home/general/user/orders-summary?resid={{data.resid}}" data-bs-toggle="modal"
                 data-bs-target="#discount-code" class="btn btn-primary mb-3 w-100" type="button">Dodaj kupon</a>
                 <ul class="card list-unstyled p-3">
                     {{#data.shopping_cart}}
@@ -118,6 +118,12 @@
                     </li>
                     {{/data.not_enough_total_sum}}
                     <li>
+                        {{#data.summary_prices.saving}}
+                        <div class="d-flex justify-content-between mb-1 text-success">
+                            <p class="mb-0">Oszczędzasz</p>
+                            <p class="mb-0">{{data.summary_prices.saving}} zł</p>
+                        </div>
+                        {{/data.summary_prices.saving}}
                         <div class="d-flex justify-content-between mb-1">
                             <p class="mb-0">Razem</p>
                             <p class="mb-0">{{data.summary_prices.total}} zł</p>
@@ -132,20 +138,23 @@
                         </div>
                     </li>
                 </ul>
+                {{#data.codeName}}
                 <div class="card mb-3">
                     <div class="card-body" id="newsHeading">
                       <h6 class="fs-6 text-start float-start mt-1">Kod rabatowy:&nbsp </h6>
-                      <a type="button" class="btn-close js-close float-end" aria-label="Close"> </a>
-                      <h6 class="fs-6 text-end text-success float-end mt-1">hBuRy4t6TV</h6>
+                        <a href="{{base_dir}}user/orders/delete-code?resid={{data.resid}}"class="btn-close js-close float-end" 
+                            aria-label="Close"> </a>
+                      <h6 class="fs-6 text-end text-success float-end mt-1">{{data.codeName}}</h6>
                     </div>
                 </div>
+                {{/data.codeName}}
                 {{#data.not_enough_total_sum}}
-                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.res_id}}" class="btn btn-secondary w-100 disabled">
+                <a href="{{base_dir}}restaurants/restaurant-details?id={{data.resid}}" class="btn btn-secondary w-100 disabled">
                     Zbyt niska wartość ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}
                 {{^data.not_enough_total_sum}}
-                <a href="{{base_dir}}user/orders/order-summary?resid={{data.res_id}}" class="btn btn-primary w-100">
+                <a href="{{base_dir}}user/orders/order-summary?resid={{data.resid}}" class="btn btn-primary w-100">
                     Złóż zamówienie ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}
