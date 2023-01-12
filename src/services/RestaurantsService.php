@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 14:03:45                   *
+ * Ostatnia modyfikacja: 2023-01-12 14:17:17                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -346,6 +346,7 @@ class RestaurantsService extends MvcService
 
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
+            $code_not_found = false;
             $shopping_cart = array();
             $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0);
             // Sprawdzanie, czy plik cookies został dodany.
@@ -374,13 +375,32 @@ class RestaurantsService extends MvcService
                         $summary_prices['total_num'] += (float)str_replace(',', '.', $dish_details->total_dish_cost) * 100;
                     }
                     else $dish_details_not_founded = true;
+                    if(!empty($dish['code']))
+                    {
+                        $codeName = $dish['code']; 
+                        $code_not_found = true;
+                    }
+                }
+                if($code_not_found)
+                {
+                    $query = "SELECT REPLACE(CAST(percentage_discount AS DECIMAL(10,2)), '.', ',') AS percentage_discount 
+                    FROM discounts WHERE code = ?";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->execute(
+                        array(
+                            $codeName
+                        )
+                    );
+                    $discountPercentage = $statement->fetch(PDO::FETCH_ASSOC);
                 }
                 if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
                 else
                 {
                     $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
-                    $summary_prices['total'] = number_format($summary_prices['total_num'] / 100, 2, ',');
-                    $summary_prices['total_with_delivery'] = number_format(($summary_prices['total_num'] + $delivery) / 100, 2, ',');
+                    $percent = 100 - (float)str_replace(',', '.', $discountPercentage['percentage_discount'] ?? 1);
+                    $calculate = ($summary_prices['total_num']/100) * $percent;
+                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100) ) / 100, 2, ',');
+                    $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
                     $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
                 }
             }
@@ -506,7 +526,7 @@ class RestaurantsService extends MvcService
                 if ($isElementInArray)
                 {
                     // Dodanie nowego elementu do tablicy i przypisanie mu kolejno wartości.
-                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il));
+                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => ""));
                     CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
                 }
                 else CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
@@ -514,7 +534,7 @@ class RestaurantsService extends MvcService
             // Jeżeli plik cookies nie został jeszcze utworzony, dodajemy elementy do tablicy i tworzymy nowe cookies. 
             else
             {
-                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il));
+                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => ""));
                 CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
             }
             if (empty($new_json_array)) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']));
