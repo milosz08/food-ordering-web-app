@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 11:25:52                   *
+ * Ostatnia modyfikacja: 2023-01-12 17:42:56                   *
  * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -51,17 +51,26 @@ class OrdersService extends MvcService
         try {
             if (isset($_POST['delate-code'])) {
 
-                setcookie("discount", time() - 3600);
-
-                $this->_banner_message = 'Kod rabatowy został usunięty';
-                SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
-                header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-finish', true, 301);
+                if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                else
+                    $resid = $_GET['id'];
+                    
+                $shopping_cart = array();
+                if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])])) {
+                    $cart_cookie = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])], true);
+                    foreach ($cart_cookie as $dish) {
+                        $dish['code'] = "";
+                        array_push($shopping_cart, $dish);
+                    }
+                    $this->_banner_message = 'Usunięto rabat';
+                    SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
+                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
+                }
             }
         } catch (Exception $e) {
             SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, $this->_banner_error);
         }
-        return array(
-        );
+        return 1;
     }
 
     public function fillAdress()
@@ -71,20 +80,18 @@ class OrdersService extends MvcService
 
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
-            $code_not_found = false;
-            $discountPercentage = 0;
+            $min_price_num = 0;
+            $code_found = false;
             $shopping_cart = array();
             $resid = $_GET['resid'];
             $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0, 
-                                        'delivery_price' => '0,00');
+                                        'delivery_price' => '0,00', 'percentage_discount' => '1');
             if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
             {
                 $cart_cookie = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])], true);
                 // Pętla iterująca po otrzymanej tablicy zdekodowanego pliku json.
                 foreach ($cart_cookie as $dish)
                 {
-                    
-                    
                     // Zapytanie pobierające potrzebne szczegóły dania
                     $query = "
                         SELECT d.id, d.name, d.description, REPLACE(CAST(r.delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
@@ -112,10 +119,10 @@ class OrdersService extends MvcService
                     if(!empty($dish['code']))
                     {
                         $codeName = $dish['code']; 
-                        $code_not_found = true;
+                        $code_found = true;
                     }
                 }
-                if($code_not_found)
+                if($code_found)
                 {
                     $query = "SELECT REPLACE(CAST(percentage_discount AS DECIMAL(10,2)), '.', ',') AS percentage_discount 
                     FROM discounts WHERE code = ?";
@@ -125,59 +132,61 @@ class OrdersService extends MvcService
                             $codeName
                         )
                     );
-                    $discountPercentage = $statement->fetch(PDO::FETCH_ASSOC);
+                    if ($percentage_discount = $statement->fetchObject()) {
+                        $summary_prices['percentage_discount'] = $percentage_discount->percentage_discount;
+                    }
                 }
-
-                if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']));
+                if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
                 else
                 {
                     $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
-                    $percent = 100 - (float)str_replace(',', '.', $discountPercentage['percentage_discount'] ?? 1);
-                    $calculate = ($summary_prices['total_num']/100) * $percent;
-                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100) ) / 100, 2, ',');
+
+                    if ($summary_prices['percentage_discount'] == 1)
+                        $percent = 100;
+                    else  
+                        $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));
+
+                    $calculate = (($summary_prices['total_num']/100) * $percent);
+                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100)) / 100, 2, ',');
                     $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
                     $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
                 }
-                
             }
             
             // Obsługa dodawania kodu rabatowego do plików cookies
             if (isset($_POST['discount-button'])) {
-                
-                $discount = ValidationHelper::validate_field_regex('discount', '/^[\w]+$/');
-                // Pobranie ID kodu promocyjnego jeżeli istnieje
-                $query = "SELECT id FROM discounts WHERE code = ?";
-                $statement = $this->dbh->prepare($query);
-                $statement->execute(
-                    array(
-                        $discount['value']
-                    )
-                );
-                if($statement->fetchColumn() == 0) {
-                    $this->_banner_message = 'Podany kod rabatowy nie istnieje';
-                    SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, true, 'alert-danger');
-                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
-                }
-                 else {
-                    $tempArray = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]);
-                    $isCodeExist = false;
-                    $new_json_array = array();
-                    foreach($tempArray as $cookieElements)
-                    {
-                        $cookieElements->code = $discount['value'];
-                        array_push($new_json_array, $cookieElements);
+                if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
+                {
+                    $discount = ValidationHelper::validate_field_regex('discount', '/^[\w]+$/');
+                    // Pobranie ID kodu promocyjnego jeżeli istnieje
+                    $query = "SELECT id FROM discounts WHERE code = ?";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->execute(
+                        array(
+                            $discount['value']
+                        )
+                    );
+                    if($statement->fetchColumn() == 0) {
+                        $this->_banner_message = 'Podany kod rabatowy nie istnieje';
+                        SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, true, 'alert-danger');
+                        header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
                     }
-                    if($isCodeExist == false)
-                    {
-                        //Dodać obiekt do jsona z kodem
-                        //array_push($tempArray, array('dishid' => '', 'count' => '', 'code' => $discount));
-                        CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
-                        
+                     else {
+                        $tempArray = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]);
+                        $isCodeExist = false;
+                        $new_json_array = array();
+                        foreach($tempArray as $cookieElements)
+                        {
+                            $cookieElements->code = $discount['value'];
+                            array_push($new_json_array, $cookieElements);
+                        }
+                        if($isCodeExist == false)
+                            CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
+    
+                        $this->_banner_message = 'Poprawnie dodano rabat ' . $discount['value'];
+                        SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
+                        header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
                     }
-                    $this->_banner_message = 'Poprawnie dodano rabat ' . $discount['value'];
-                    SessionHelper::create_session_banner(SessionHelper::ORDER_FINISH_PAGE, $this->_banner_message, false);
-                    header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-summary?resid=' . $resid, true, 301);
-                    
                 }
             }
 

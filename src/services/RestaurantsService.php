@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 14:17:17                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-12 16:56:27                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -348,7 +348,8 @@ class RestaurantsService extends MvcService
             $dish_details_not_founded = false;
             $code_not_found = false;
             $shopping_cart = array();
-            $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0);
+            $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0, 
+                'percentage_discount' => '1');
             // Sprawdzanie, czy plik cookies został dodany.
             if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]))
             {
@@ -391,15 +392,22 @@ class RestaurantsService extends MvcService
                             $codeName
                         )
                     );
-                    $discountPercentage = $statement->fetch(PDO::FETCH_ASSOC);
+                    if ($percentage_discount = $statement->fetchObject()) {
+                        $summary_prices['percentage_discount'] = $percentage_discount->percentage_discount;
+                    }
                 }
                 if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
                 else
                 {
                     $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
-                    $percent = 100 - (float)str_replace(',', '.', $discountPercentage['percentage_discount'] ?? 1);
-                    $calculate = ($summary_prices['total_num']/100) * $percent;
-                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100) ) / 100, 2, ',');
+
+                    if ($summary_prices['percentage_discount'] == 1)
+                        $percent = 100;
+                    else  
+                        $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));
+
+                    $calculate = (($summary_prices['total_num']/100) * $percent);
+                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100)) / 100, 2, ',');
                     $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
                     $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
                 }
@@ -470,6 +478,7 @@ class RestaurantsService extends MvcService
 
             // Obsługa koszyka
             $tempArray = array();
+            $codeName = ""; 
             $il = 1;
             // Flaga sprawdzająca czy dany element w tablicy już się tam znajduje. Gdy dany element jest w tablicy jego ilość zostaje 
             // inkrementowana, a nie zostaje dodany jako nowy obiekt
@@ -492,6 +501,14 @@ class RestaurantsService extends MvcService
                 if ($action == 0) {
                     // Pętla iterująca elementy w koszyku
                     foreach ($tempArray as $a) {
+                        // Przypisanie kodu rabatowego jeżeli ten istnieje do świeżo dodanego dania
+                        if(!empty($a->code))
+                        {
+                            $codeName = $a->code;
+                            foreach ($tempArray as $pom) {
+                                $pom->code = $codeName;
+                            }
+                        }
                         // Jeżeli dany element pasuje po id, do wybranego elementu
                         if ($a->dishid == $dish_id) {
                             // Sprawdzenie, czy dany element jest większy od 1, gdy jest to po prostu odejmujemy od niego 1
@@ -526,7 +543,7 @@ class RestaurantsService extends MvcService
                 if ($isElementInArray)
                 {
                     // Dodanie nowego elementu do tablicy i przypisanie mu kolejno wartości.
-                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => ""));
+                    array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => $codeName));
                     CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
                 }
                 else CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
@@ -534,7 +551,7 @@ class RestaurantsService extends MvcService
             // Jeżeli plik cookies nie został jeszcze utworzony, dodajemy elementy do tablicy i tworzymy nowe cookies. 
             else
             {
-                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => ""));
+                array_push($tempArray, array('dishid' => $dish_id, 'count' => $il, 'code' => $codeName));
                 CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($tempArray));
             }
             if (empty($new_json_array)) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']));
