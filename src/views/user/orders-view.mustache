@@ -8,21 +8,15 @@
                 <div class="container overflow-hidden text-start">
                     <div class="row gy-3">
                         {{#data.adres}}
-                        <div class="col-lg-6">
+                        <label for="user-address-{{id}}" class="col-lg-6">
                             <div class="card-body card">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="delivery"
-                                        id="form-delivery-self">
-                                    {{#locale_nr}}
-                                    <p class="card-text">{{street}} {{building_nr}} / {{locale_nr}}</p>
-                                    {{/locale_nr}}
-                                    {{^locale_nr}}
-                                    <p class="card-text">{{street}} {{building_nr}} </p>
-                                    {{/locale_nr}}
-                                    <p class="card-text">{{post_code}} {{city}}</p>
+                                    <input class="form-check-input" type="radio" name="address" id="user-address-{{id}}" {{checked}}>
+                                    <p class="card-text">{{address}} </p>
+                                    <p class="card-text">{{post_city}}</p>
                                 </div>
                             </div>
-                        </div>
+                        </label>
                         {{/data.adres}}
                     </div>
                 </div>
@@ -31,28 +25,24 @@
                 <div class="card-body py-2">
                     <h2 class="fs-4 mb-4">Dostawa</h2>
                     <div class="row">
-                        <div class="card mb-3">
+                        <label class="card mb-3" for="form-delivery-self">
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="delivery"
-                                        id="form-delivery-self">
-                                    <label class="form-check-label ms-2" for="form-delivery-self">Odbiór
-                                        osobisty</label>
+                                    <input class="form-check-input" type="radio" name="delivery" id="form-delivery-self">
+                                    <span class="form-check-label ms-2" >Odbiór osobisty</span>
                                 </div>
                             </div>
-                        </div>
+                        </label>
                     </div>
                     <div class="row">
-                        <div class="card">
+                        <label class="card" for="form-delivery-standard">
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="delivery"
-                                        id="form-delivery-standard" checked>
-                                    <label class="form-check-label ms-2" for="form-delivery-standard">Dostawa
-                                        kurierem</label>
+                                    <input class="form-check-input" type="radio" name="delivery" id="form-delivery-standard" checked>
+                                    <spab class="form-check-label ms-2" >Dostawa kurierem</spab>
                                 </div>
                             </div>
-                        </div>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -60,15 +50,14 @@
                 <div class="card-body py-2">
                     <h2 class="fs-4 mb-4">Rodzaj płatności</h2>
                     <div class="row">
-                        <div class="card">
+                        <label class="card"  for="form-payment-type">
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment-type"
-                                        id="form-payment-type" disabled checked>
-                                    <label class="form-check-label ms-2" for="form-payment-type">Odbiór osobisty</label>
+                                    <input class="form-check-input" type="radio" name="payment-type" id="form-payment-type" disabled checked>
+                                    <span class="form-check-label ms-2">Odbiór osobisty</span>
                                 </div>
                             </div>
-                        </div>
+                        </label>
                     </div>
                 </div>
             </div>
