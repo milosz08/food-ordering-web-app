@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 01:44:00                   *
+ * Ostatnia modyfikacja: 2023-01-13 02:42:34                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,12 +19,14 @@ use PDO;
 use Exception;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
+use App\Models\UserAddressModel;
 use App\Models\DishDetailsCartModel;
 use App\Models\ShowUserOrdersListModel;
 use App\Models\ShowUserSingleOrderModel;
 use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\SessionHelper;
 
+ResourceLoader::load_model('UserAddressModel', 'user');
 ResourceLoader::load_model('DishDetailsCartModel', 'cart');
 ResourceLoader::load_model('ShowUserOrdersListModel', 'user');
 ResourceLoader::load_model('ShowUserSingleOrderModel', 'user');
@@ -50,15 +52,19 @@ class OrdersService extends MvcService
 
     public function fillShoppingCard()
     {
-        try {
+        try
+        {
             $adres = array();
             $this->dbh->beginTransaction();
 
-            $query = "SELECT street, building_nr, locale_nr, post_code, city FROM user_address WHERE user_id = ?";
+            $query = "
+                SELECT id, CONCAT('ul. ', street, ' ', building_nr, '/', IFNULL(locale_nr, '')) AS address, CONCAT(post_code, ' ', city)
+                AS post_city, IF(ROW_NUMBER() OVER(ORDER BY id) = 1, 'checked', '') AS checked FROM user_address WHERE user_id = ?
+            ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
             while ($row = $statement->fetchObject(UserAddressModel::class)) array_push($adres, $row);
-
+            
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
             $codeName = "";
@@ -256,7 +262,7 @@ class OrdersService extends MvcService
             $this->dbh->beginTransaction();
             $query = "
                 SELECT IF((TIMESTAMPDIFF(SECOND, date_order, NOW())) > 300, true, false) AS dif FROM orders
-                WHERE user_id = :userid AND id = :id;
+                WHERE user_id = :userid AND id = :id
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
