@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-11, 22:15:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:03:16                   *
+ * Ostatnia modyfikacja: 2023-01-13 08:50:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -110,12 +110,6 @@ class ShoppingCartService extends MvcService
                 // Pętla iterująca elementy w koszyku
                 foreach ($temp_array['dishes'] as $a)
                 {
-                    // Przypisanie kodu rabatowego jeżeli ten istnieje do świeżo dodanego dania
-                    //if (!empty($a['code']))
-                    //{
-                    //    $codeName = $a->code;
-                    //    foreach ($temp_array as $pom) $pom->code = $codeName;
-                    //}
                     // Jeżeli dany element pasuje po id, do wybranego elementu
                     if ($a['dishid'] == $_GET['dishid'])
                     {
