@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 00:30:17                   *
+ * Ostatnia modyfikacja: 2023-01-13 01:44:00                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -50,9 +50,15 @@ class OrdersService extends MvcService
 
     public function fillShoppingCard()
     {
-        try
-        {
+        try {
+            $adres = array();
             $this->dbh->beginTransaction();
+
+            $query = "SELECT street, building_nr, locale_nr, post_code, city FROM user_address WHERE user_id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            while ($row = $statement->fetchObject(UserAddressModel::class)) array_push($adres, $row);
+
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
             $codeName = "";
@@ -67,9 +73,9 @@ class OrdersService extends MvcService
                 $statement = $this->dbh->prepare($query);
                 $statement->execute(array($resid));
                 if (!($statement->fetchObject())) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
-                else {
-                    // Walidacja czy podane id w podsumowaniu znajduje się w cookies
-                    if(!isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
+                else // Walidacja czy podane id w podsumowaniu znajduje się w cookies
+                {
+                    if (!isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
                         header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
                 }
             }
@@ -156,6 +162,7 @@ class OrdersService extends MvcService
             SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE, $e->getMessage(), true);
         }
         return array(
+            'adres' => $adres,
             'codeName' => $codeName,
             'resid' => $resid,
             'shopping_cart' => $shopping_cart,

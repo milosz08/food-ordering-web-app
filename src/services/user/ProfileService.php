@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:12:35                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 00:55:31                   *
+ * Ostatnia modyfikacja: 2023-01-13 01:46:29                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,10 +20,12 @@ use App\Core\Config;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
 use App\Models\EditUserProfileModel;
+use App\Models\AddNewAddresUserModel;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\ValidationHelper;
 
 ResourceLoader::load_model('EditUserProfileModel', 'user');
+ResourceLoader::load_model('AddNewAddresUserModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
@@ -122,6 +124,78 @@ class ProfileService extends MvcService
         {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::EDIT_USER_PROFILE_PAGE_BANNER, $e->getMessage(), true);
+        }
+        return array(
+            'user' => $user,
+        );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda odpowiadająca za obsługę dodawania nowych adresów użytkownika do bazy danych.
+     */
+    public function add_new_addres()
+    {
+        $user = new AddNewAddresUserModel;
+        $number_of_address = 4;
+        try
+        {
+            $this->dbh->beginTransaction();
+            
+            if (isset($_POST['save-changes-add']))
+            {
+                $query = "
+                    SELECT count(*) FROM user_address WHERE user_id = ?
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->execute(array($_SESSION['logged_user']['user_id']));
+                $total_records_of_address = $statement->fetchColumn();
+
+                if ($number_of_address <= $total_records_of_address)
+                {
+                    throw new Exception('Posiadasz już maksymalną ilość adresów w bazie danych.');
+                }
+            
+                $user->building_nr = ValidationHelper::validate_field_regex('building-number', Config::get('__REGEX_BUILDING_NO__'));
+                if (!empty($_POST['local-number']))
+                    $user->locale_nr = ValidationHelper::validate_field_regex('local-number', Config::get('__REGEX_BUILDING_NO__'));
+                else
+                    $user->locale_nr = array('value' => $_POST['local-number'], 'invl' => false, 'bts_class' => '');
+                $user->post_code = ValidationHelper::validate_field_regex('post-code', Config::get('__REGEX_POSTCODE__'));
+                $user->city = ValidationHelper::validate_field_regex('city', Config::get('__REGEX_CITY__'));
+                $user->street = ValidationHelper::validate_field_regex('street', Config::get('__REGEX_STREET__'));
+
+                if ($user->all_is_valid())
+                {
+                    // Sekcja zapytań dodająca wprowadzone dane do tabel users i user_address
+                    $query = "
+                        INSERT INTO user_address (street, building_nr, locale_nr, post_code, city, user_id)
+                        VALUES (?,?,NULLIF(?,''),?,?,?)
+                    ";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->execute(array(
+                        $user->street['value'],
+                        $user->building_nr['value'],
+                        $user->locale_nr['value'],
+                        $user->post_code['value'],
+                        $user->city['value'],
+                        $_SESSION['logged_user']['user_id'],
+                    ));
+                    $this->dbh->commit();
+                    $statement->closeCursor();
+                    $this->_banner_message = 'Twój nowy adres został dodany do bazy danych.';
+                    SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+                    header('Location:' . __URL_INIT_DIR__ . 'user/profile', true, 301);
+                    die;
+                }
+                if ($this->dbh->inTransaction())$this->dbh->commit();
+            }
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::ADD_USER_NEW_ADDRESS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'user' => $user,

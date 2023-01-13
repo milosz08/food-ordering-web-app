@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:22:13                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:21:37                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-13 00:18:49                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -56,6 +56,24 @@ class ProfileController extends MvcController
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Przejście pod adres: /user/profile/add-new-address
+     */
+    public function add_new_address()
+    {
+        $this->protector->protect_only_user();
+        $add_address = $this->_service->add_new_addres();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_USER_NEW_ADDRESS_PAGE_BANNER);
+        $this->renderer->render('user/add-new-address-view', array(
+            'page_title' => 'Dodaj nowy adres',
+            'data' => $add_address,
+            'banner' => $banner_data,
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
     /**
      * Przejście pod adres: /user/profile
      */
