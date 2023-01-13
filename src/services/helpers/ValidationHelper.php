@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:19:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 12:43:16                   *
+ * Ostatnia modyfikacja: 2023-01-13 03:03:49                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -67,7 +67,7 @@ class ValidationHelper
         }
         if (strpos($value, 'profile'))
         {
-            if ($image_info[0] != $image_info[1]  || $image_size > 5000000)
+            if ($image_info[0] != $image_info[1] || $image_size > 5000000)
                 return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid', 'path' => $path, 'ext' => $ext);
         }
         return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '', 'path' => $path, 'ext' => $ext);
