@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 21:10:40                   *
+ * Ostatnia modyfikacja: 2023-01-13 02:27:46                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -83,8 +83,6 @@ class DashboardService extends MvcService
             }
             catch (Exception $e)
             {
-                $this->_banner_error = true;
-                $this->_banner_message = $e->getMessage();
                 $this->dbh->rollback();
             }
         }

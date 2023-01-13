@@ -9,13 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
-<<<<<<< HEAD
- * Ostatnia modyfikacja: 2023-01-12 16:00:29                   *
+ * Ostatnia modyfikacja: 2023-01-13 03:06:53                   *
  * Modyfikowany przez: patrick012016                           *
-=======
- * Ostatnia modyfikacja: 2023-01-12 16:00:29                   *
- * Modyfikowany przez: patrick012016                           *
->>>>>>> c2d562aa3e3533fc4a4dedb7afc42a09016e3715
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -41,11 +36,34 @@ class DashboardService extends MvcService
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Metoda zwracająca dane do pliku js aby wygenerować wykres w głównym widoku panelu właściciela restauracji.
+     * Metoda zwracająca dane do pliku js aby wygenerować wykresy w głównym widoku panelu właściciela restauracji.
      */
     public function graph()
     {
-        $result_owner = array();
+        $result_one = array();
+        $result_two = array();
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "
+            SELECT d.code AS Name, d.usages AS Uses FROM 
+            ((discounts d INNER JOIN restaurants r ON d.restaurant_id = r.id)
+            INNER JOIN users u ON r.user_id = u.id) WHERE u.id = :userid ORDER BY code DESC
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->execute();
+            $data_graph = $statement->fetchall(PDO::FETCH_ASSOC);
+            $result_two = $data_graph;
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->_banner_error = true;
+            $this->_banner_message = $e->getMessage();
+            $this->dbh->rollback();
+        }
         for ($i = 0; $i < 7; $i++) 
         {
             $date = strtotime("-" . $i . " day", time());
@@ -55,15 +73,15 @@ class DashboardService extends MvcService
                 $this->dbh->beginTransaction();
                 $query = "
                     SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date AND user_id = :userid 
-                    AND NOT status_id = 3
-                    ORDER BY date_order DESC
+                    AND NOT status_id = 3 ORDER BY date_order DESC
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue('date', $time, PDO::PARAM_STR);
                 $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
                 $statement->execute();
-                $plot_data = $statement->fetch(PDO::FETCH_ASSOC);
-                array_push($result, array('day' => $plot_data['day'], 'amount' => $plot_data['number']));
+                $data_graph = $statement->fetch(PDO::FETCH_ASSOC);
+                $first = array('Day' => $data_graph['day'], 'Amount' => $data_graph['number']);
+                array_push($result_one, $first);
 
                 $statement->closeCursor();
                 $this->dbh->commit();
@@ -73,6 +91,6 @@ class DashboardService extends MvcService
                 $this->dbh->rollback();
             }
         }
-        return json_encode($result_owner);
+        return json_encode(array("orders" =>$result_one, "coupons" =>$result_two));
     }
 }

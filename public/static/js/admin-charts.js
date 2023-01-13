@@ -7,7 +7,7 @@
  * Data utworzenia: 2023-01-06, 04:16:09                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 21:09:38                   *
+ * Ostatnia modyfikacja: 2023-01-13 02:20:51                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,8 +20,6 @@ function generateAdminCharData() {
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            console.log(res);
-        
             new Chart('adminDashbaordChart', {
                 type: 'bar',
                 data: {
@@ -44,6 +42,8 @@ function generateAdminCharData() {
         }
     });
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function generateAdminCharv2Data() {
     var barColors = ['#03045e', '#0077b6', '#00b4d8', '#90e0ef', '#b5d1e2' , '#caf0f8', '#27ffef', '#03045e', '#0077b6', '#00b4d8',];
