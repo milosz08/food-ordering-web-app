@@ -71,25 +71,21 @@
             <div class="col-md-3">
                 <h6 class="fw-bold pt-2">Zamówione produkty:</h6>
                 <hr class="mb-3"/>
-
-
-
                 <div class="my-4">
                     <p class="text-secondary lh-sm mb-1">2 szt.:</p>
                     <p class="text-dark fs-6 lh-sm">ziemniak</p>
                 </div>
-
-
-
             </div>
         </div>
         <div class="row mx-5 text-center">
             <div class="col mx-5 mb-3">
-                <a type="button" href="{{base_dir}}user/orders/list" class="btn btn-secondary">Powrót do lisy zamówień</a>
+                <a type="button" href="{{base_dir}}user/orders" class="btn btn-secondary">Powrót do lisy zamówień</a>
             </div>
             {{#data.validation}}
             <div class="col mx-5 mb-3">
-                <a type="button" href="{{base_dir}}user/orders/cancel-order?id={{id}}" name="cancel" class="btn btn-danger">Anuluj zamówienie</a>
+                <a type="button" href="{{base_dir}}user/orders/cancel-order?id={{id}}" name="cancel" class="btn btn-danger">
+                    Anuluj zamówienie
+                </a>
             </div>
             {{/data.validation}}
         </div>

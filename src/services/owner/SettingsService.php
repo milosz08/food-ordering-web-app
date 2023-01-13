@@ -9,14 +9,14 @@
  * Data utworzenia: 2023-01-02, 22:32:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 22:37:53                   *
+ * Ostatnia modyfikacja: 2023-01-13 08:34:45                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
 
 use App\Core\MvcService;
-  
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SettingsService extends MvcService

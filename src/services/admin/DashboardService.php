@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 02:27:46                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-13 08:26:36                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Admin\Services;
@@ -45,32 +45,18 @@ class DashboardService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $query = "
-            SELECT code AS Name, usages AS Uses FROM discounts ORDER BY code DESC
-            ";
+            $query = "SELECT code AS Name, usages AS Uses FROM discounts ORDER BY code DESC";
             $statement = $this->dbh->prepare($query);
             $statement->execute();
             $data_graph = $statement->fetchall(PDO::FETCH_ASSOC);
             $result_two = $data_graph;
-            $statement->closeCursor();
-            $this->dbh->commit();
-        }
-        catch (Exception $e)
-        {
-            $this->_banner_error = true;
-            $this->_banner_message = $e->getMessage();
-            $this->dbh->rollback();
-        }
-        for ($i = 0; $i < 7; $i++) 
-        {
-            $date_1 = strtotime("-" . $i . " day", time());
-            $time_1 = date("Y-m-d", $date_1);
-            try
+            for ($i = 0; $i < 7; $i++)
             {
-                $this->dbh->beginTransaction();
+                $date_1 = strtotime("-" . $i . " day", time());
+                $time_1 = date("Y-m-d", $date_1);
                 $query = "
-                SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date 
-                AND NOT status_id = 3 ORDER BY date_order DESC
+                    SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date 
+                    AND NOT status_id = 3 ORDER BY date_order DESC
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue('date', $time_1, PDO::PARAM_STR);
@@ -78,13 +64,13 @@ class DashboardService extends MvcService
                 $data_graph = $statement->fetch(PDO::FETCH_ASSOC);
                 $first = array('Day' => $data_graph['day'], 'Amount' => $data_graph['number']);
                 array_push($result_one, $first);
-                $statement->closeCursor();
-                $this->dbh->commit();
             }
-            catch (Exception $e)
-            {
-                $this->dbh->rollback();
-            }
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
         }
         return json_encode(array("orders" =>$result_one, "coupons" =>$result_two));
     }

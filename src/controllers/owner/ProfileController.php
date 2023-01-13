@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:38:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 17:45:33                   *
+ * Ostatnia modyfikacja: 2023-01-13 04:14:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,7 +29,7 @@ class ProfileController extends MvcController
     private $_service; // instancja serwisu
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
     public function __construct()
     {
         parent::__construct();

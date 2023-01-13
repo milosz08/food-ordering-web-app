@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 20:18:07                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 20:16:19                   *
+ * Ostatnia modyfikacja: 2023-01-13 08:30:50                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -32,14 +32,14 @@ class ActivateAccountService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
- 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
+
     protected function __construct()
     {
         parent::__construct();
     }
- 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**

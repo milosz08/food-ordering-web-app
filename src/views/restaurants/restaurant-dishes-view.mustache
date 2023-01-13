@@ -10,6 +10,16 @@
                 <a href="{{base_dir}}auth/register" class="alert-link">pod ten adres</a>.
             </div>
             {{/is_logged_and_normal_user}}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{base_dir}}restaurants/restaurant-dishes?id={{data.res_id}}" class="text-secondary text-decoration-none">
+                            <i class="bi bi-arrow-return-left me-1"></i>
+                            Powrót do strony ze wszystkimi restauracjami
+                        </a>
+                    </li>
+                </ol>
+            </nav>
             <form class="col-sm-12 mb-2 d-flex justify-content-end" action="" method="get">
                 <input type="hidden" name="id" value="{{data.res_id}}"/>
                 <input type="search" name="search" placeholder="Wyszukaj po nazwie" class="form-control" value="{{data.search_text}}">
@@ -24,9 +34,10 @@
                 </a>
                 {{/data.dish_types}}
             </div>
+            <hr class="mb-2 mt-4"/>
             {{#data.dish_types}}
             <pre id="{{type.dish_type_nav}}"></pre>
-            <h4 class="mt-4">{{type.dish_type_name}}</h4>
+            <h4 class="mt-3">{{type.dish_type_name}}</h4>
             {{#dishes}}
             <div class="card my-2">
                 <div class="row mx-0 p-3">
@@ -80,7 +91,7 @@
         </div>
         <div class="col-lg-4">
             <div class="sticky-top panel-left-nav">
-                <h2 class="fs-4 mb-3">Koszyk</h2>
+                <h2 class="fs-4 mb-2">Koszyk</h2>
                 {{#data.cart_is_empty}}
                 <div class="card py-5 d-flex flex-column align-items-center">
                     <i class="bi bi-basket icon-size text-secondary"></i>
@@ -104,7 +115,7 @@
                                     {{cart_dishes.description}}
                                 </p>
                                 <div class="hstack d-flex justify-content-center align-items-center">
-                                    <a href="{{base_dir}}shoppingcart/remove-dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}">
+                                    <a href="{{base_dir}}shoppingcart/delete-dish?resid={{data.res_id}}&dishid={{cart_dishes.id}}">
                                         <i class="bi bi-dash-circle fs-4 text-danger"></i>
                                     </a>
                                     <p class="mb-0 mx-3">{{count_of_dish}}</p>
@@ -129,25 +140,28 @@
                     <li>
                         <div class="d-flex justify-content-between mb-1">
                             <p class="mb-0">Razem</p>
-                            <p class="mb-0">{{data.summary_prices.total}} zł</p>
+                            <p class="mb-0 text-end">{{data.summary_prices.total}} zł</p>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <p class="mb-0">Koszt dostawy</p>
-                            <p class="mb-0">{{data.res_details.delivery_price}} zł</p>
+                            <p class="mb-0 text-end">{{data.res_details.delivery_price}} zł</p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p class="mb-0 fw-bold">Kwota całkowita</p>
-                            <p class="mb-0 fw-bold">{{data.summary_prices.total_with_delivery}} zł</p>
+                            <p class="mb-0 fw-bold text-end">{{data.summary_prices.total_with_delivery}} zł</p>
                         </div>
                     </li>
                 </ul>
+                <button data-bs-toggle="modal" data-bs-target="#clear-cart" class="btn btn-danger mb-2 w-100" type="button">
+                    Wyczyść koszyk
+                </button>
                 {{#data.not_enough_total_sum}}
                 <a href="{{base_dir}}restaurants/restaurant-details?id={{data.res_id}}" class="btn btn-secondary w-100 disabled">
                     Zbyt niska wartość ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}
                 {{^data.not_enough_total_sum}}
-                <a href="{{base_dir}}user/orders/order-summary?resid={{data.res_id}}" class="btn btn-primary w-100">
+                <a href="{{base_dir}}order/summary?resid={{data.res_id}}" class="btn btn-primary w-100">
                     Przejdź do podsumowania ({{data.summary_prices.total_with_delivery}} zł)
                 </a>
                 {{/data.not_enough_total_sum}}
@@ -156,4 +170,23 @@
         </div>
     </div>
 </main>
+<div class="modal fade" id="clear-cart" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Czyszczenie koszyka</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Czy na pewno chcesz usunąć wszystkie produkty zapisane w koszyku? Operacji nie można cofnąć.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <a href="{{base_dir}}shopping-cart/delete-all?id={{data.res_id}}" type="button" class="btn btn-outline-danger">
+                    Usuń
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {{> partials/footer-view.partial }}

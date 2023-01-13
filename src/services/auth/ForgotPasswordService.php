@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:44:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:05:44                   *
+ * Ostatnia modyfikacja: 2023-01-13 08:30:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,16 +34,16 @@ class ForgotPasswordService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
- 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
+
     protected function __construct()
     {
         parent::__construct();
     }
- 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
+
     /**
      * Metoda odpowiadająca za wysłanie rządania zmiany zapomnianego hasła. Metoda na podstawie podanego adresu email/loginu wysyłana na
      * skorelowany z nim adres email wiadomość z linkiem i tokenem umożliwiającym zmianę hasła.
