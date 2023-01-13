@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 01:18:15                   *
+ * Ostatnia modyfikacja: 2023-01-13 08:23:15                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,7 +20,6 @@ use App\Core\MvcController;
 use App\Core\ResourceLoader;
 use App\User\Services\OrdersService;
 use App\Services\Helpers\SessionHelper;
-use App\Services\Helpers\CookieHelper;
 
 ResourceLoader::load_service('OrdersService', 'user'); // ładowanie serwisu przy użyciu require_once
 
@@ -41,31 +40,14 @@ class OrdersController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /user/orders/dashboard/orders
+     * Przejście pod adres: /user/orders/order-details
      */
-    public function list()
+    public function order_details()
     {
         $this->protector->protect_only_user();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::CANCEL_ORDER);
-        $orders = $this->_service->dynamicOrdersList();
-        $this->renderer->render('user/orders-list-view', array(
-            'page_title' => 'Twoje zamówienia',
-            'data' => $orders,
-            'banner' => $banner_data,
-        ));
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Przejście pod adres: /user/orders/dashboard/single/order
-     */
-    public function single_order()
-    {
-        $this->protector->protect_only_user();
-        $service_data = $this->_service->dynamicSingleOrder();
-        $this->renderer->render('user/single-order-view', array(
+        $service_data = $this->_service->get_user_order_details();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::USER_ORDER_DETAILS_PAGE_BANNER);
+        $this->renderer->render('user/order-details-view', array(
             'page_title' => 'Szczegóły zamówienia',
             'data' => $service_data,
         ));
@@ -74,30 +56,13 @@ class OrdersController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /user/orders/dashboard/single-order
+     * Przejście pod adres: /user/orders/cancel-order
      */
     public function cancel_order()
     {
         $this->protector->protect_only_user();
-        $one_order = $this->_service->cancelOrder();
-        header('Location:' . __URL_INIT_DIR__ . 'user/orders/list', true, 301);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Przejście pod adres: /user/orders/order-summary
-     */
-    public function order_summary()
-    {
-        $this->protector->protect_only_user();
-        $fillShoppingCard = $this->_service->fillShoppingCard();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_SUMMARY_PAGE);
-        $this->renderer->render('user/orders-view', array(
-            'page_title' => 'Składanie zamówienia',
-            'data' => $fillShoppingCard,
-            'banner' => $banner_data,
-        ));
+        $this->_service->cancel_order();
+        header('Location:' . __URL_INIT_DIR__ . 'user/orders', true, 301);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,8 +73,12 @@ class OrdersController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_user();
-        $this->renderer->render('user/orders-view', array(
-            'page_title' => 'Zamówienia',
+        $orders = $this->_service->get_all_user_orders();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::USER_ORDERS_PAGE_BANNER);
+        $this->renderer->render('user/orders-list-view', array(
+            'page_title' => 'Moje zamówienia',
+            'data' => $orders,
+            'banner' => $banner_data,
         ));
 	}
 }

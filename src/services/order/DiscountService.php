@@ -4,16 +4,16 @@
  * Copyright (c) 2023 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
- * Nazwa pliku: DiscountCodeService.php                        *
+ * Nazwa pliku: DiscountService.php                            *
  * Projekt: restaurant-project-php-si                          *
  * Data utworzenia: 2023-01-12, 23:35:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 00:16:37                   *
+ * Ostatnia modyfikacja: 2023-01-13 07:55:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-namespace App\User\Services;
+namespace App\Order\Services;
 
 use PDO;
 use Exception;
@@ -29,7 +29,7 @@ ResourceLoader::load_service_helper('ValidationHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class DiscountCodeService extends MvcService
+class DiscountService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
@@ -54,7 +54,8 @@ class DiscountCodeService extends MvcService
             if (!isset($_GET['resid'])) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
 
             // Obsługa dodawania kodu rabatowego do plików cookies
-            if (isset($_POST['discount-button']) && isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]))
+            $cookie = $_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])] ?? null;
+            if (isset($_POST['discount-button']) && isset($cookie))
             {
                 $discount = ValidationHelper::validate_field_regex('discount', '/^[\w]+$/');
                 // Pobranie ID kodu promocyjnego jeżeli istnieje
@@ -72,25 +73,20 @@ class DiscountCodeService extends MvcService
                     Podany kod rabatowy nie istnieje, nie jest przypisany do podanej restauracji bądź uległ już wygaśnięciu.
                 ');
 
-                $tempArray = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])]);
-                $new_json_array = array();
-                foreach ($tempArray as $cookieElements)
-                {
-                    $cookieElements->code = $discount['value'];
-                    array_push($new_json_array, $cookieElements);
-                }
-                CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($new_json_array));
+                $temp_array = json_decode($cookie, true);
+                $temp_array['code'] = $discount['value'];
+                CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($temp_array));
 
                 $this->_banner_message = '
                     Poprawnie dodano kod rabatowy <strong>' . $discount['value'] . '</strong> obniżający wartość zamówienia o <strong>' 
                     . $percentage_discount . '</strong>.
                 ';
-                SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE, $this->_banner_message, false);
+                SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE_BANNER, $this->_banner_message, false);
             }
         }
         catch (Exception $e)
         {
-            SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE_BANNER, $e->getMessage(), true);
         }
         return $_GET['resid'];
     }
@@ -102,19 +98,15 @@ class DiscountCodeService extends MvcService
      */
     public function delete_discount()
     {
-        $shopping_cart = array();
-        $cookie = $_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])];
+        $cookie = $_COOKIE[CookieHelper::get_shopping_cart_name($_GET['resid'])] ?? null;
         if (!isset($_GET['resid']) || !isset($cookie)) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
 
-        foreach (json_decode($cookie, true) as $dish)
-        {
-            $dish['code'] = '';
-            array_push($shopping_cart, $dish);
-        }
-        CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($shopping_cart));
+        $temp_array = json_decode($cookie, true);
+        $temp_array['code'] = '';
+        CookieHelper::set_non_expired_cookie(CookieHelper::get_shopping_cart_name($_GET['resid']), json_encode($temp_array));
 
         $this->_banner_message = 'Pomyślnie usunięto kod rabatowy z zamówienia.';
-        SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE, $this->_banner_message, false);
+        SessionHelper::create_session_banner(SessionHelper::ORDER_SUMMARY_PAGE_BANNER, $this->_banner_message, false);
         return $_GET['resid'];
     }
 }

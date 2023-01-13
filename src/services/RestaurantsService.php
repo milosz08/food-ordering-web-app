@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 23:08:36                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-13 07:47:33                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services;
@@ -279,6 +279,7 @@ class RestaurantsService extends MvcService
     public function get_restaurant_dishes_with_cart()
     {
         $row = new RestaurantDetailsModel;
+        $cookie = $_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])] ?? null;
         $dish_types = array();
         $res_details = array();
         try
@@ -346,16 +347,16 @@ class RestaurantsService extends MvcService
 
             // Tablice pomocnicze kolejno uzupełniająca koszyk oraz obsługująca wartość dostawy restauracji
             $dish_details_not_founded = false;
-            $code_not_found = false;
             $shopping_cart = array();
-            $summary_prices = array('total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0, 
-                'percentage_discount' => '1');
-            // Sprawdzanie, czy plik cookies został dodany.
-            if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]))
+            $summary_prices = array(
+                'total' => '0', 'total_num' => 0, 'total_with_delivery' => '0', 'diff_not_enough' => 0, 
+                'percentage_discount' => '1'
+            );
+            if (isset($cookie))
             {
-                $cart_cookie = json_decode($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])], true);
+                $cart_cookie = json_decode($cookie, true);
                 // Pętla iterująca po otrzymanej tablicy zdekodowanego pliku json.
-                foreach ($cart_cookie as $dish)
+                foreach ($cart_cookie['dishes'] as $dish)
                 {
                     // Zapytanie pobierające potrzebne szczegóły dania
                     $query = "
@@ -376,35 +377,22 @@ class RestaurantsService extends MvcService
                         $summary_prices['total_num'] += (float)str_replace(',', '.', $dish_details->total_dish_cost) * 100;
                     }
                     else $dish_details_not_founded = true;
-                    if(!empty($dish['code']))
-                    {
-                        $codeName = $dish['code']; 
-                        $code_not_found = true;
-                    }
                 }
-                if($code_not_found)
+                if(!empty($cart_cookie['code']))
                 {
                     $query = "SELECT REPLACE(CAST(percentage_discount AS DECIMAL(10,2)), '.', ',') AS percentage_discount 
                     FROM discounts WHERE code = ?";
                     $statement = $this->dbh->prepare($query);
-                    $statement->execute(
-                        array(
-                            $codeName
-                        )
-                    );
-                    if ($percentage_discount = $statement->fetchObject()) {
-                        $summary_prices['percentage_discount'] = $percentage_discount->percentage_discount;
-                    }
+                    $statement->execute(array($cart_cookie['code']));
+                    if ($perc = $statement->fetch(PDO::FETCH_ASSOC)) $summary_prices['percentage_discount'] = $perc['percentage_discount'];
                 }
                 if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
                 else
                 {
-                    $delivery = (float)str_replace(',', '.', $dish_details->delivery_price) * 100;
+                    $delivery = (float)str_replace(',', '.', $res_details['delivery_price']) * 100;
 
-                    if ($summary_prices['percentage_discount'] == 1)
-                        $percent = 100;
-                    else  
-                        $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));
+                    if ($summary_prices['percentage_discount'] == 1) $percent = 100;
+                    else $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));
 
                     $calculate = (($summary_prices['total_num']/100) * $percent);
                     $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100)) / 100, 2, ',');
@@ -418,7 +406,7 @@ class RestaurantsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'res_details' => $res_details,
@@ -429,7 +417,7 @@ class RestaurantsService extends MvcService
             'summary_prices' => $summary_prices,
             'diff_not_enough' => number_format($summary_prices['diff_not_enough'] / 100, 2, ','),
             'not_enough_total_sum' => $min_price_num > $summary_prices['total_num'],
-            'cart_is_empty' => !isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]),
+            'cart_is_empty' => !isset($cookie),
         );
     }
 }

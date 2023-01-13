@@ -10,8 +10,8 @@
  * Data utworzenia: 2023-01-11, 22:15:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 23:13:13                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-13 07:03:11                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -27,7 +27,6 @@ ResourceLoader::load_service('ShoppingCartService');
 
 class ShoppingCartController extends MvcController
 {
- 
     private $_service; // instancja serwisu
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,9 @@ class ShoppingCartController extends MvcController
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // /shoppingcart/add-dish
+    /**
+     * Przekierowanie na adres: /shopping-cart/add-dish
+     */
     public function add_dish()
     {
         $res_id = $this->_service->add_dish_to_shopping_cart();
@@ -49,10 +50,23 @@ class ShoppingCartController extends MvcController
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // /shoppingcart/remove-dish
-    public function remove_dish()
+    /**
+     * Przekierowanie na adres: /shopping-cart/delete-dish
+     */
+    public function delete_dish()
     {
-        $res_id = $this->_service->remove_dish_from_shopping_cart();
+        $res_id = $this->_service->delete_dish_from_shopping_cart();
+        header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przekierowanie na adres: /shopping-cart/delete-all
+     */
+    public function delete_all()
+    {
+        $res_id = $this->_service->delete_all_dishes_from_shopping_cart();
         header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
 
