@@ -1,6 +1,5 @@
 <?php
 
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  * Copyright (c) 2023 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
@@ -10,7 +9,7 @@
  * Data utworzenia: 2023-01-11, 22:15:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 07:03:11                   *
+ * Ostatnia modyfikacja: 2023-01-13 08:58:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
