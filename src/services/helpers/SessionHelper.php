@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 12:54:44                   *
+ * Ostatnia modyfikacja: 2023-01-13 00:01:13                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -35,7 +35,7 @@ class SessionHelper
     const EDIT_USER_PROFILE_PAGE_BANNER                 = 'edit_user_profile_page';
     const USER_PROFILE_PAGE_BANNER                      = 'user_profile_page';
     const HOME_RESTAURANTS_LIST_PAGE_BANNER             = 'home_restaurants_list_page';
-    const ORDER_FINISH_PAGE                             = 'order_finish_page';
+    const ORDER_SUMMARY_PAGE                             = 'order_finish_page';
     const OWNER_RES_SEARCH                              = 'owner_restaurant_search';
     const OWNER_RES_DETAILS_SEARCH                      = 'owner_restaurant_details_search';
     const OWNER_DISHES_SEARCH                           = 'owner_dishes_search';

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 22:42:43                   *
+ * Ostatnia modyfikacja: 2023-01-13 01:07:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -45,8 +45,7 @@ class RestaurantsController extends MvcController
      */
 	public function restaurant_dishes()
     {
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_SUMMARY_PAGE);
         $res_details = $this->_service->get_restaurant_dishes_with_cart();
         $this->renderer->render('restaurants/restaurant-dishes-view', array(
             'page_title' => $res_details['res_details']['name'] ?? 'Potrawy restauracji',

@@ -2,12 +2,12 @@
 <main class="container-lg flex-grow-1 top-margin-header">
     {{> partials/dynamic-banner-view.partial}}
     <div class="row mt-3">
-        <form class="col-md-8" action="" method="post" novalidate>
+        <form class="col-lg-8" action="" method="post" novalidate>
             <div class="card p-3 mb-3">
                 <h2 class="fs-4 mb-4">Dostawa</h2>
                 <div class="container overflow-hidden text-start">
                     <div class="row gy-3">
-                      <div class="col-lg-6">
+                    <div class="col-lg-6">
                         <div class="card-body card">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="delivery" id="form-delivery-self">
@@ -16,8 +16,7 @@
                                 <p class="card-text">Telefon</p>
                             </div>
                         </div>
-                      </div>
-                      </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -63,10 +62,9 @@
                 </div>
             </div>
         </form>
-        <div class="col-md-4">
+        <div class="col-lg-4 mb-4">
             <div class="sticky-top panel-left-nav">
-                <a href="{{base_dir}}home/general/user/orders-summary?resid={{data.resid}}" data-bs-toggle="modal"
-                data-bs-target="#discount-code" class="btn btn-primary mb-3 w-100" type="button">Dodaj kupon</a>
+                <a data-bs-toggle="modal" data-bs-target="#discount-code" class="btn btn-primary mb-3 w-100" type="button">Dodaj kupon</a>
                 <ul class="card list-unstyled p-3">
                     {{#data.shopping_cart}}
                     <li>
@@ -117,11 +115,13 @@
                 </ul>
                 {{#data.codeName}}
                 <div class="card mb-3">
-                    <div class="card-body" id="newsHeading">
-                      <h6 class="fs-6 text-start float-start mt-1">Kod rabatowy:&nbsp </h6>
-                        <a href="{{base_dir}}user/orders/delete-code?resid={{data.resid}}"class="btn-close js-close float-end" 
-                            aria-label="Close"> </a>
-                      <h6 class="fs-6 text-end text-success float-end mt-1">{{data.codeName}}</h6>
+                    <div class="card-body d-flex align-items-center justify-content-between" id="newsHeading">
+                        <h6 class="fs-6 mb-0 text-start float-start">Kod rabatowy:</h6>
+                        <div class="d-flex align-items-center">
+                            <h6 class="fs-6 mb-0 text-success me-2">{{data.codeName}}</h6>
+                            <a href="{{base_dir}}user/discount-code/delete?resid={{data.resid}}" class="btn-close js-close" aria-label="Close">
+                            </a>
+                        </div>
                     </div>
                 </div>
                 {{/data.codeName}}
@@ -146,7 +146,7 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Kod rabatowy</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="" method="post" class="modal-body">
+            <form action="{{base_dir}}user/discount-code/add?resid={{data.resid}}" method="post" class="modal-body">
                 <div class="mb-3">
                     <label for="example" class="form-label">Kod rabatowy</label>
                     <input type="discound" name="discount" class="form-control" id="exampleInput1" aria-describedby=""

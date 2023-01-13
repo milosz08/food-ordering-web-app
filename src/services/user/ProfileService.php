@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:12:35                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:24:34                   *
+ * Ostatnia modyfikacja: 2023-01-13 00:55:31                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,7 +26,7 @@ use App\Services\Helpers\ValidationHelper;
 ResourceLoader::load_model('EditUserProfileModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
- 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ProfileService extends MvcService
@@ -82,7 +82,6 @@ class ProfileService extends MvcService
                     $query = "SELECT COUNT(id) FROM users WHERE email = ? AND NOT id = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array($user->email['value'], $_SESSION['logged_user']['user_id']));
-
                     if ($statement->fetchColumn() > 0) throw new Exception('Podany email istnieje już w systemie.');
 
                     // Sekcja zapytań dodająca wprowadzone dane do tabel users i user_address
@@ -108,14 +107,15 @@ class ProfileService extends MvcService
                         $user->city['value'],
                         $_SESSION['logged_user']['user_id'],
                     ));
-                    $statement->closeCursor();
 
+                    $statement->closeCursor();
+                    $this->dbh->commit();
                     $this->_banner_message = 'Twoje dane profilu zostały pomyślnie zmienione.';
                     SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                     header('Location:' . __URL_INIT_DIR__ . 'user/profile', true, 301);
                     die;
                 }
-                $this->dbh->commit();
+                if ($this->dbh->inTransaction()) $this->dbh->commit();
             }
         }
         catch (Exception $e)

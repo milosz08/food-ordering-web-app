@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 19:07:11                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2023-01-13 00:15:36                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -82,16 +82,6 @@ class OrdersController extends MvcController
         $one_order = $this->_service->cancelOrder();
         header('Location:' . __URL_INIT_DIR__ . 'user/orders/list', true, 301);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Przejście pod adres: /user/orders/delete-code
-     */
-    public function delete_code()
-    {
-        $this->protector->protect_only_user();
-        $this->_service->deleteDiscountCode();
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,10 +91,8 @@ class OrdersController extends MvcController
     public function order_summary()
     {
         $this->protector->protect_only_user();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
-        if (!$banner_data) $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_FINISH_PAGE);
         $fillShoppingCard = $this->_service->fillShoppingCard();
-        $this->_service->addDiscountCode();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ORDER_SUMMARY_PAGE);
         $this->renderer->render('user/orders-view', array(
             'page_title' => 'Składanie zamówienia',
             'data' => $fillShoppingCard,
