@@ -1,11 +1,11 @@
 {{> partials/header-view.partial }}
-<main class="d-flex flex-column justify-content-center container-xl flex-grow-1">
+<main class="container-lg flex-grow-1 top-margin-header md-3 mb-4">
     <div class="row d-flex justify-content-center align-items-center w-100 mx-auto media-large-form-size-box">
         {{> partials/dynamic-banner-view.partial}}
-        <div class="card my-3 rounded-3 p-4">
+        <div class="card my-2 rounded-3 p-4">
             <form class="row" action="" method="post" novalidate>
-                <h3 class="fw-normal mb-4 text-center text-secondary">Edycja danych osobowych</h3>
-                <hr class="mb-4">
+                <h3 class="fw-normal mb-2 text-center text-secondary">Edycja danych osobowych</h3>
+                <hr class="mb-3">
                 <div class="col-lg-6 px-4">
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -70,6 +70,34 @@
                     <button type="submit" name="save-changes-button" class="btn btn-primary btn-md w-100">
                         Zaaktualizuj dane
                     </button>
+                </div>
+            </form>
+        </div>
+        <div class="card my-2 rounded-3 p-4 mb-3">
+            <form class="row" action="" method="post" novalidate>
+                <h3 class="fw-normal text-center text-secondary">Alternatywne adresy dostawy</h3>
+                <hr class="mb-3">
+                <div class="container mt-3">
+                    <div class="row gy-3 d-flex justify-content-center align-items-center">
+                        <div class="col-sm-3 card p-3 mx-1 my-2" style="width: 32%;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="address" id="user-address-{{id}}" {{checked}}>
+                                <p class="card-text">{{address}}  ulica i nr</p>
+                                <p class="card-text">{{post_city}} miasto i kod</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 card p-3 mx-1 my-2 alert alert-warning border-secondary" style="width: 32%; height: 100px;">
+                            <div class="text-center">
+                                Chcesz dodać adres?
+                                <h3><a href="">
+                                    <i class="bi bi bi-plus-circle fs-4 text-secondary"></i>
+                                </a></h3>
+                            </div>
+                        </div>  
+                        <button type="submit" name="change-address-button" class="btn btn-primary btn-md w-100">
+                            Zaaktualizuj dane
+                        </button>            
+                    </div>
                 </div>
             </form>
         </div>
