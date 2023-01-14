@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:26:36                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-14 21:02:19                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Admin\Services;
@@ -45,7 +45,9 @@ class DashboardService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $query = "SELECT code AS Name, usages AS Uses FROM discounts ORDER BY code DESC";
+            $query = "
+                SELECT r.name AS Name, count(d.restaurant_id) AS Uses FROM discounts d
+                INNER JOIN restaurants r ON d.restaurant_id = r.id GROUP BY d.restaurant_id ORDER BY d.id DESC LIMIT 7";
             $statement = $this->dbh->prepare($query);
             $statement->execute();
             $data_graph = $statement->fetchall(PDO::FETCH_ASSOC);
