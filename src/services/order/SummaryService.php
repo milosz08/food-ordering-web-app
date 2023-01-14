@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 07:52:37                   *
+ * Ostatnia modyfikacja: 2023-01-14 07:17:10                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -85,7 +85,8 @@ class SummaryService extends MvcService
             {
                 // Zapytanie pobierające potrzebne szczegóły dania
                 $query = "
-                    SELECT d.id, d.name, d.description, REPLACE(CAST(r.delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
+                    SELECT d.id, d.name, d.description, IFNULL(REPLACE(CAST(r.delivery_price AS DECIMAL(10,2)), '.', ','), '0,00')
+                    AS delivery_price,
                     REPLACE(CAST(d.price * :count AS DECIMAL(10,2)), '.', ',') AS total_dish_cost, 
                     IFNULL(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), 0) AS min_price
                     FROM dishes d

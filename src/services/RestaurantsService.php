@@ -198,18 +198,19 @@ class RestaurantsService extends MvcService
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich zaakceptowanych restauracji
             $query = "
                 SELECT r.id, r.name, IF(delivery_price, CONCAT(REPLACE(delivery_price, '.', ','), ' zł'), 'darmowa') AS delivery_price,
-                description, banner_url, profile_url, delivery_price IS NULL AS delivery_free,
-                IF(min_price, CONCAT(REPLACE(min_price, '.', ','), ' zł'), '-') AS min_delivery_price,
+                IFNULL(banner_url, 'static/images/default-banner.jpg') AS banner_url,
+                IFNULL(profile_url, 'static/images/default-profile.jpg') AS profile_url,
+                IF(min_price, CONCAT(REPLACE(min_price, '.', ','), ' zł'), 'brak') AS min_delivery_price,
                 (SELECT CONCAT(
                     IFNULL(NULLIF(CONCAT(HOUR(SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(finish_order, date_order))))), 'h '), 0), ''),
-                    IFNULL(NULLIF(CONCAT(MINUTE(SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(finish_order, date_order))))), 'min'), 0), '-')
+                    IFNULL(NULLIF(CONCAT(MINUTE(SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(finish_order, date_order))))), 'min'), 0), '?')
                 ) FROM orders WHERE restaurant_id = r.id) AS avg_delivery_time,
                 (SELECT COUNT(*) > 0 FROM discounts AS dsc WHERE dsc.restaurant_id = r.id) AS has_discounts,
                 (SELECT GROUP_CONCAT(
                     DISTINCT(t.name) SEPARATOR ', ') FROM dishes AS d INNER JOIN dish_types AS t ON d.dish_type_id = t.id 
                     WHERE restaurant_id = r.id ORDER BY t.name
                 ) AS dish_types,
-                (SELECT IFNULL(NULLIF(REPLACE(ROUND(AVG(rg.grade), 1), '.', ','), 0), '-')
+                (SELECT IFNULL(NULLIF(REPLACE(ROUND(AVG((restaurant_grade + delivery_grade) / 2), 1), '.', ','), 0), '?')
                     FROM restaurants_grades AS rg INNER JOIN orders AS o ON rg.order_id = o.id
                     WHERE restaurant_id = r.id
                 ) AS avg_grades,
@@ -302,12 +303,12 @@ class RestaurantsService extends MvcService
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-            $res_details = $statement->fetch(PDO::FETCH_ASSOC);
+            $res_details = $statement->fetchObject(RestaurantWithDishesPageModel::class);
             if (!$res_details)
             {
                 $this->_banner_message = 'Wybrana restauracja nie istnieje, bądź nie jest otwarta.';
                 SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
-                //header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
                 die;
             }
             $min_price_num = (float)str_replace(',', '.', $res_details['min_price']) * 100;
@@ -360,10 +361,8 @@ class RestaurantsService extends MvcService
                 {
                     // Zapytanie pobierające potrzebne szczegóły dania
                     $query = "
-                        SELECT d.id, d.name, d.description, REPLACE(CAST(r.delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
-                        REPLACE(CAST(d.price * :count AS DECIMAL(10,2)), '.', ',') AS total_dish_cost
-                        FROM dishes d
-                        INNER JOIN restaurants r ON d.restaurant_id = r.id WHERE d.id = :id
+                        SELECT d.id, d.name, d.description, REPLACE(CAST(d.price * :count AS DECIMAL(10,2)), '.', ',') AS total_dish_cost
+                        FROM dishes d INNER JOIN restaurants r ON d.restaurant_id = r.id WHERE d.id = :id
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->bindValue('count', $dish['count'], PDO::PARAM_INT);
@@ -389,7 +388,7 @@ class RestaurantsService extends MvcService
                 if ($dish_details_not_founded) CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
                 else
                 {
-                    $delivery = (float)str_replace(',', '.', $res_details['delivery_price']) * 100;
+                    $delivery = (float)str_replace(',', '.', $res_details->delivery_price_no) * 100;
 
                     if ($summary_prices['percentage_discount'] == 1) $percent = 100;
                     else $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));

@@ -41,35 +41,22 @@
             <div class="card mb-3">
                 <div class="row h-100 mx-0">
                     <div class="col-lg-4 p-0 position-relative">
-                        {{#banner_url}}
                         <div class="restaurant-banner-image gradient-left"
                             style="background-image: url({{base_dir}}public/{{banner_url}});"></div>
-                        {{/banner_url}}
-                        {{^banner_url}}
-                        <div class="restaurant-banner-image gradient-left" 
-                            style="background-image: url({{base_dir}}public/static/images/default-banner.jpg);"></div>
-                        {{/banner_url}}
                         <div class="row mx-0 w-100 h-100 p-3 position-relative position-lg-absolute">
                             <div class="col-lg-auto px-0">
-                                {{#profile_url}}
-                                <img src="{{base_dir}}public/{{profile_url}}" alt="" class="rounded" 
-                                    width="80px" height="80px"/>
-                                {{/profile_url}}
-                                {{^profile_url}}
-                                <img src="{{base_dir}}public/static/images/default-profile.jpg" alt="" 
-                                    class="rounded" width="80px" height="80px"/>
-                                {{/profile_url}}
+                                <img src="{{base_dir}}public/{{profile_url}}" alt="" class="rounded" width="80px" height="80px"/>
                             </div>
                             <div class="col-lg-auto flex-grow-1 d-flex flex-column align-items-end justify-content-end px-0">
                                 {{#is_closed}}
                                 <span class="badge text-bg-danger fw-normal mt">Zamknięte</span>
                                 {{/is_closed}}
-                                {{#delivery_free}}
-                                <span class="badge text-bg-success fw-normal mt-1">Darmowa dostawa</span>
-                                {{/delivery_free}}
                                 {{#has_discounts}}
                                 <span class="badge text-bg-primary fw-normal mt-1">Kody rabatowe</span>
                                 {{/has_discounts}}
+                                {{#delivery_free}}
+                                <span class="badge text-bg-success fw-normal mt-1">Darmowa dostawa</span>
+                                {{/delivery_free}}
                             </div>
                         </div>
                     </div>
@@ -104,7 +91,7 @@
                             <div class="text-end hstack gap-1 align-self-end">
                                 <button data-bs-toggle="modal" data-bs-target="#res-description-{{id}}" type="button" 
                                     class="btn btn-outline-primary btn-sm">
-                                    Informacje
+                                    Szczegóły
                                 </button>
                                 {{#is_closed}}
                                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom"

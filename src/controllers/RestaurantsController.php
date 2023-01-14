@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 05:38:18                   *
+ * Ostatnia modyfikacja: 2023-01-14 04:27:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -48,7 +48,7 @@ class RestaurantsController extends MvcController
         $res_details = $this->_service->get_restaurant_dishes_with_cart();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER);
         $this->renderer->render('restaurants/restaurant-dishes-view', array(
-            'page_title' => $res_details['res_details']['name'] ?? 'Potrawy restauracji',
+            'page_title' => $res_details['res_details']->name ?? 'Potrawy restauracji',
             'data' => $res_details,
             'banner' => $banner_data,
         ));
