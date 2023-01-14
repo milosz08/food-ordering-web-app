@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 02:41:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-05 17:39:51                   *
+ * Ostatnia modyfikacja: 2023-01-14 01:32:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -51,5 +51,20 @@ class ImagesHelper
             move_uploaded_file($v_profile['path'], $profile);
         }
         return $profile;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static function generate_stars_definitions($avg_grades, $is_integer = false)
+    {
+        if ($is_integer) $grade_n = intval($avg_grades);
+        else $grade_n = floatval(str_replace(',', '.', $avg_grades));
+        $grades_bts = array(array('star' => ''), array('star' => ''), array('star' => ''), array('star' => ''), array('star' => ''));
+        for ($i = 0; $i < 5; $i++)
+        {
+            if ($grade_n < $i + 1 && $grade_n > $i) $grades_bts[$i]['star'] = '-half';
+            else if ($grade_n >= $i + 1) $grades_bts[$i]['star'] = '-fill';
+        }
+        return $grades_bts;
     }
 }

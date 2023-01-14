@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 07:47:33                   *
+ * Ostatnia modyfikacja: 2023-01-14 07:15:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,11 +19,13 @@ use PDO;
 use Exception;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
+use App\Models\OpinionModel;
 use App\Models\ListRestaurantModel;
 use App\Models\RestaurantFilterModel;
 use App\Models\DishDetailsCartModel;
 use App\Models\RestaurantDetailsModel;
 use App\Models\RestaurantPersistFilterModel;
+use App\Models\RestaurantWithDishesPageModel;
 use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
@@ -31,11 +33,13 @@ use App\Services\Helpers\PaginationHelper;
 ResourceLoader::load_service_helper('CookieHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
+ResourceLoader::load_model('OpinionModel', 'restaurant');
 ResourceLoader::load_model('DishDetailsCartModel', 'cart');
 ResourceLoader::load_model('ListRestaurantModel', 'restaurant');
 ResourceLoader::load_model('RestaurantFilterModel', 'restaurant');
 ResourceLoader::load_model('RestaurantDetailsModel', 'restaurant');
 ResourceLoader::load_model('RestaurantPersistFilterModel', 'restaurant');
+ResourceLoader::load_model('RestaurantWithDishesPageModel', 'restaurant');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +61,7 @@ class RestaurantsService extends MvcService
     {
         $pagination = array();
         $res_list = array();
+        $opinions_list = array();
         $pages_nav = array();
         $with_search = '?';
         $total_records = 0;
@@ -198,6 +203,8 @@ class RestaurantsService extends MvcService
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich zaakceptowanych restauracji
             $query = "
                 SELECT r.id, r.name, IF(delivery_price, CONCAT(REPLACE(delivery_price, '.', ','), ' zł'), 'darmowa') AS delivery_price,
+                CONCAT('ul. ', street, ' ', building_locale_nr) AS street_number, CONCAT(post_code, ' ', city) AS city_post_code,
+                CONCAT('+48 ', phone_number) AS phone_number, description, delivery_price IS NULL AS delivery_free,
                 IFNULL(banner_url, 'static/images/default-banner.jpg') AS banner_url,
                 IFNULL(profile_url, 'static/images/default-profile.jpg') AS profile_url,
                 IF(min_price, CONCAT(REPLACE(min_price, '.', ','), ' zł'), 'brak') AS min_delivery_price,
@@ -232,7 +239,55 @@ class RestaurantsService extends MvcService
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
             while ($row = $statement->fetchObject(ListRestaurantModel::class)) array_push($res_list, $row);
-            
+
+            $restaurants_ids_impl = '';
+            $this->dbh->prepare("SET lc_time_names = 'pl_PL'")->execute();
+            $query = "
+                SELECT restaurant_id AS res_id, restaurant_grade, delivery_grade, description,
+                IF(anonymously = 1, 'Anonimowy', CONCAT(first_name, ' ', last_name)) AS signature,
+                CONCAT(DAYNAME(give_on), ', ', DAY(give_on), ' ', MONTHNAME(give_on), ' ', YEAR(give_on)) AS give_on
+                FROM ((restaurants_grades AS rg
+                INNER JOIN orders AS o ON rg.order_id = o.id)
+                INNER JOIN users AS u ON o.user_id = u.id)
+                ORDER BY give_on DESC
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();
+            foreach ($res_list as $res)
+            {
+                $restaurants_ids_impl .= $res->id . ',';
+                while ($row = $statement->fetchObject(OpinionModel::class))
+                {
+                    if ($row->res_id == $res->id) array_unshift($res->opinions, array('opinion' => $row));
+                }
+            }
+            $query = "
+                SELECT r.id AS res_id, w.name AS name,
+                CONCAT(IF((SELECT DATE_FORMAT(open_hour, '%H:%i') 
+                    FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id) IS NULL,'',
+                    CONCAT((SELECT DATE_FORMAT(open_hour, '%H:%i')
+                    FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id), ' - ')),
+                    IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id),
+                    'nieczynne')
+                ) AS hours
+                FROM weekdays AS w
+                LEFT OUTER JOIN restaurants AS r ON r.id IN(" . rtrim($restaurants_ids_impl, ',') . ")
+                ORDER BY w.id DESC
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();
+            $all_hours_from_all_restaurants = $statement->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($res_list as $res)
+            {
+                foreach ($all_hours_from_all_restaurants as $row)
+                {
+                    if ($row['res_id'] == $res->id)
+                    {
+                        $res_hours = array('day' => $row['name'], 'hours' => $row['hours']);
+                        array_unshift($res->delivery_hours, array('hour' => $res_hours));
+                    }
+                }
+            }
             // zapytanie zliczające wszystkie aktywne restauracje
             $query = "
                 SELECT count(*) FROM restaurants AS r WHERE accept = 1 " . $filter->combined_filter_query() . " AND name LIKE :search
@@ -293,8 +348,22 @@ class RestaurantsService extends MvcService
 
             // Pobranie nazwy pojedyńczej restauracji, do umieszczenia jej w zakładce
             $query = "
-                SELECT r.name, REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price,
-                IFNULL(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), 0) AS min_price
+                SELECT r.id, r.name, REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ',') AS delivery_price_no, description,
+                IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), '0,00') AS delivery_price,
+                CONCAT('ul. ', street, ' ', building_locale_nr) AS street_number, CONCAT(post_code, ' ', city) AS city_post_code,
+                CONCAT('+48 ', phone_number) AS phone_number, delivery_price IS NULL AS delivery_free,
+                IF(min_price, CONCAT(REPLACE(min_price, '.', ','), ' zł'), 'brak') AS min_delivery_price,
+                IFNULL(banner_url, 'static/images/default-banner.jpg') AS banner_url,
+                IFNULL(profile_url, 'static/images/default-profile.jpg') AS profile_url,
+                (SELECT COUNT(*) > 0 FROM discounts AS dsc WHERE dsc.restaurant_id = r.id) AS has_discounts,
+                IFNULL(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), 0) AS min_price,
+                (SELECT IFNULL(NULLIF(REPLACE(ROUND(AVG((restaurant_grade + delivery_grade) / 2), 1), '.', ','), 0), '?')
+                    FROM restaurants_grades AS rg INNER JOIN orders AS o ON rg.order_id = o.id
+                    WHERE restaurant_id = r.id
+                ) AS avg_grades,
+                (SELECT IF(COUNT(*) > 0, CONCAT('(', COUNT(*), ')'), '')
+                    FROM restaurants_grades AS rg INNER JOIN orders AS o ON rg.order_id = o.id WHERE restaurant_id = r.id
+                ) AS total_grades
                 FROM ((restaurants AS r
                 INNER JOIN restaurant_hours AS h ON r.id = h.restaurant_id)
                 INNER JOIN weekdays AS wk ON h.weekday_id = wk.id)
@@ -311,7 +380,40 @@ class RestaurantsService extends MvcService
                 header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
                 die;
             }
-            $min_price_num = (float)str_replace(',', '.', $res_details['min_price']) * 100;
+            $this->dbh->prepare("SET lc_time_names = 'pl_PL'")->execute();
+            $query = "
+                SELECT restaurant_id AS res_id, restaurant_grade, delivery_grade, description,
+                IF(anonymously = 1, 'Anonimowy', CONCAT(first_name, ' ', last_name)) AS signature,
+                CONCAT(DAYNAME(give_on), ', ', DAY(give_on), ' ', MONTHNAME(give_on), ' ', YEAR(give_on)) AS give_on
+                FROM ((restaurants_grades AS rg
+                INNER JOIN orders AS o ON rg.order_id = o.id)
+                INNER JOIN users AS u ON o.user_id = u.id)
+                WHERE restaurant_id = ?
+                ORDER BY give_on DESC
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            while ($row = $statement->fetchObject(OpinionModel::class)) array_unshift($res_details->opinions, array('opinion' => $row));
+            $query = "
+                SELECT w.name AS name, CONCAT(IF((SELECT DATE_FORMAT(open_hour, '%H:%i') 
+                    FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id) IS NULL,'',
+                    CONCAT((SELECT DATE_FORMAT(open_hour, '%H:%i')
+                    FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id), ' - ')),
+                    IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
+                    'nieczynne')
+                ) AS hours
+                FROM weekdays AS w
+                ORDER BY w.id DESC
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('resid', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+            foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row)
+            {
+                $res_hours = array('day' => $row['name'], 'hours' => $row['hours']);
+                array_unshift($res_details->delivery_hours, array('hour' => $res_hours));
+            }
+            $min_price_num = (float)str_replace(',', '.', $res_details->min_price) * 100;
 
             // Zapytanie pobierające wszystkie kategorie podanej restauracji bez powtórzeń oraz tych samych kategorii bez powtórzeń
             // służących do przemieszczania się po stronie.
