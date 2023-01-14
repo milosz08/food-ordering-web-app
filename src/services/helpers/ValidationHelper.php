@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:19:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 03:03:49                   *
+ * Ostatnia modyfikacja: 2023-01-14 08:01:02                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,7 +17,6 @@ namespace App\Services\Helpers;
 
 use DateTime;
 use Exception;
-use App\Core\Config;
 use App\Core\ResourceLoader;
 use App\Models\RestaurantHourModel;
 

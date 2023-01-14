@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 07:15:37                   *
+ * Ostatnia modyfikacja: 2023-01-14 11:26:16                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -61,7 +61,6 @@ class RestaurantsService extends MvcService
     {
         $pagination = array();
         $res_list = array();
-        $opinions_list = array();
         $pages_nav = array();
         $with_search = '?';
         $total_records = 0;
