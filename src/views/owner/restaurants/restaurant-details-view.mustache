@@ -49,11 +49,14 @@
     </div>
     <hr class="mb-3"/>
     {{> partials/dynamic-banner-view.partial}}
-    <div class="row mb-4">
-        <div class="col-auto mb-2">
+    <div class="row mb-4 px-3 gap-2 mb-2">
+        <div class="col-auto px-0">
             <a href="{{base_dir}}owner/restaurants/edit-restaurant?id={{data.details.id}}" class="btn btn-primary">Edytuj restaurację</a>
         </div>
-        <div class="col-auto mb-2">
+        <div class="col-auto px-0">
+            <a href="{{base_dir}}owner/ratings?restaurant={{data.details.id}}" class="btn btn-success">Oceny restauracji</a>
+        </div>
+        <div class="col-auto px-0">
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-res-modal">
                 Usuń restaurację
             </button>
@@ -291,13 +294,14 @@
                 <th>Procent obniżania</th>
                 <th class="d-none d-lg-table-cell table-fixed-size">Opis</th>
                 <th>Użycia</th>
+                <th>Status</th>
                 <th>Wygaśnięcie</th>
                 <th class="fit">Akcja</th>
             </tr>
         </thead>
         <tbody>
             {{#data.res_discounts}}
-            <tr class="{{expired_bts_class}}">
+            <tr>
                 <td class="align-middle">{{it}}</td>
                 <td class="align-middle">{{hide_code}}</td>
                 <td class="align-middle">{{percentage_discount}}</td>
@@ -306,6 +310,7 @@
                 </td>
                 <td class="align-middle">{{total_usages}}</td>
                 <td class="align-middle">{{expired_date}}</td>
+                <td class="align-middle {{expired_bts_class}}">{{status}}</td>
                 <td class="align-middle fit flex-nowrap">
                     <a href="{{base_dir}}owner/discounts/edit-discount?id={{id}}&resid={{data.details.id}}" class="btn btn-primary btn-sm"
                         type="button">

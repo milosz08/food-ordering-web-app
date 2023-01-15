@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 07:30:47                   *
+ * Ostatnia modyfikacja: 2023-01-15 09:02:56                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -166,10 +166,13 @@ body {
     max-width: 250px;
 }
 
-.table td.fit,
-.table th.fit {
+.fit {
     white-space: nowrap;
     width: 1%;
+}
+
+.col-table-small {
+    width: 70px;
 }
 
 .icon-size {

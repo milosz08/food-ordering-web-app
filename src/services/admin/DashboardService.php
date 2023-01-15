@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:26:36                   *
+ * Ostatnia modyfikacja: 2023-01-15 02:07:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,11 +23,6 @@ use App\Core\MvcService;
 
 class DashboardService extends MvcService
 {
-    private $_banner_message = '';
-    private $_banner_error = false;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();

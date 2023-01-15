@@ -32,18 +32,20 @@
                 <th>Procent obniżania</th>
                 <th>Użycia</th>
                 <th>Wygaśnięcie</th>
+                <th>Status</th>
                 <th>Nazwa i ID restauracji</th>
                 <th class="fit">Akcja</th>
             </tr>
         </thead>
         <tbody>
             {{#data.discounts}}
-            <tr class="{{expired_bts_class}}">
+            <tr>
                 <td class="align-middle">{{it}}</td>
                 <td class="align-middle">{{hide_code}}</td>
                 <td class="align-middle">{{percentage_discount}}</td>
                 <td class="align-middle">{{total_usages}}</td>
                 <td class="align-middle">{{expired_date}}</td>
+                <td class="align-middle {{expired_bts_class}}">{{status}}</td>
                 <td class="align-middle">{{res_name}}#{{res_id}}</td>
                 <td class="align-middle fit flex-nowrap">
                     <a href="{{base_dir}}owner/discounts/edit-discount?id={{id}}&resid={{res_id}}" class="btn btn-primary btn-sm"

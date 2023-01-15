@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-09, 21:18:35                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 20:57:46                   *
+ * Ostatnia modyfikacja: 2023-01-15 08:05:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace App\Models;
@@ -24,6 +24,7 @@ class RestaurantModel
     public $address; // adres lokalu 
     public $accept; //czy zatwierdzona przez administratora
     public $status; // status
+    public $full_name; // pełna nazwa (imię i nazwisko właściciela restauracji)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     

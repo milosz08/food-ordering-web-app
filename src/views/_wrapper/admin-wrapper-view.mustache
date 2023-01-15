@@ -1,12 +1,12 @@
 <nav class="d-flex justify-content-between navbar fixed-top bg-dark">
-    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}admin/panel/dashboard">
+    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}admin/dashboard">
         CMS | <span class="text-white-50">Panel administratora</span>
     </a>
     <div class="dropdown d-block d-md-none">
         <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle"
             data-bs-toggle="dropdown" aria-expanded="false">
             <span class="text-light fs-5 fw-normal ms-3 me-1">
-                CMS | <span class="text-white-50">Panel restauratora</span>
+                CMS | <span class="text-white-50">Panel administratora</span>
             </span>
         </button>
         <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
@@ -15,10 +15,10 @@
             </li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{base_dir}}">
-                <i class="bi bi-house-up me-2"></i>Strona główna
+                <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
             </a></li>
             <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
-                <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+                <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
             </a></li>
         </ul>
     </div>
@@ -30,18 +30,18 @@
                 <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
-                <li><a class="dropdown-item" href="{{base_dir}}admin/panel/profile">
-                    <i class="bi bi-person me-2"></i>Profil
+                <li><a class="dropdown-item" href="{{base_dir}}admin/profile">
+                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
                 </a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}admin/panel/settings">
-                    <i class="bi bi-gear me-2"></i>Ustawienia
+                <li><a class="dropdown-item" href="{{base_dir}}admin/settings">
+                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
                 </a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{{base_dir}}">
-                    <i class="bi bi-house-up me-2"></i>Strona główna
+                    <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
                 </a></li>
                 <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
-                    <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+                    <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
                 </a></li>
             </ul>
         </div>
@@ -61,9 +61,9 @@
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{base_dir}}admin/pending-restaurants"
+                        <a href="{{base_dir}}admin/dish-types"
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Oczekujące restauracje
+                            <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Typy potraw
                         </a>
                     </li>
                     <li class="mb-1">
@@ -71,6 +71,8 @@
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
                             <span class="bi bi-house-dash me-2 ms-1 fs-6"></span>Restauracje do usunięcia
                         </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="border-top my-3"></li>
                     <li class="mb-3">
@@ -82,25 +84,25 @@
                             <li class="mb-2">
                                 <a href="{{base_dir}}admin/profile" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <i class="bi bi-person me-2"></i>Profil
+                                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
                                 </a>
                             </li>
                             <li class="mb-2">
                                 <a href="{{base_dir}}admin/settings" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <i class="bi bi-gear me-2"></i>Ustawienia
+                                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="mb-2">
                         <a href="{{base_dir}}" class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
-                            <i class="bi bi-house-up me-2"></i>Strona główna
+                            <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
                         </a>
                     </li>
                     <li class="mb-2">
                         <a href="{{base_dir}}auth/logout" class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100">
-                            <i class="bi bi-box-arrow-left me-2"></i>Wyloguj
+                            <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
                         </a>
                     </li>
                 </ul>
@@ -109,7 +111,7 @@
         <div class="col-fixed-panel-nav d-none d-md-block d-xl-none">
             <nav class="sticky-top panel-left-nav">
                 <ul class="list-unstyled">
-                    <li class="border-top my-3"></li>
+                    <li class="border-top my-1"></li>
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/dashboard" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
@@ -117,34 +119,34 @@
                             <i class="bi bi-house-door fs-5"></i>
                         </a>
                     </li>
-                    <li class="border-top my-3"></li>
+                    <li class="border-top my-1"></li>
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/profile" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <i class="bi bi-person fs-5"></i>
+                            <span class="material-symbols-outlined me-2 fs-5">person</span>
                         </a>
                     </li>
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/settings" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Ustawienia"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <i class="bi bi-gear fs-5"></i>
+                            <span class="material-symbols-outlined me-2 fs-5">settings</span>
                         </a>
                     </li>
-                    <li class="border-top my-3"></li>
+                    <li class="border-top my-1"></li>
                     <li class="mb-1">
                         <a href="{{base_dir}}" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Strona główna"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm mb-3">
-                            <i class="bi bi-house-up fs-5"></i>
+                            <span class="material-symbols-outlined me-2 fs-5">door_open</span>
                         </a>
                     </li>
                     <li class="mb-1">
                         <a href="{{base_dir}}auth/logout" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj"
                             class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3">
-                            <i class="bi bi-box-arrow-left fs-5"></i>
+                            <span class="material-symbols-outlined me-2 fs-5">logout</span>
                         </a>
                     </li>
                 </ul>

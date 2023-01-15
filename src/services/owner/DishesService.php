@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 08:28:42                   *
+ * Ostatnia modyfikacja: 2023-01-15 05:58:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -70,8 +70,8 @@ class DishesService extends MvcService
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1;
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_DISHES_SEARCH);
             
             $redirect_url = 'owner/dishes';
@@ -150,8 +150,8 @@ class DishesService extends MvcService
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1;
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-restaurant-name', SessionHelper::OWNER_DISHES_RES_SEARCH);
 
             $redirect_url = 'owner/dishes/dishes-with-restaurants';

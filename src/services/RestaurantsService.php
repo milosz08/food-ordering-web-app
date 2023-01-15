@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 11:26:16                   *
+ * Ostatnia modyfikacja: 2023-01-15 06:00:24                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -33,7 +33,7 @@ use App\Services\Helpers\PaginationHelper;
 ResourceLoader::load_service_helper('CookieHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
-ResourceLoader::load_model('OpinionModel', 'restaurant');
+ResourceLoader::load_model('OpinionModel', 'rating');
 ResourceLoader::load_model('DishDetailsCartModel', 'cart');
 ResourceLoader::load_model('ListRestaurantModel', 'restaurant');
 ResourceLoader::load_model('RestaurantFilterModel', 'restaurant');
@@ -70,8 +70,8 @@ class RestaurantsService extends MvcService
         {
             $this->dbh->beginTransaction();
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = $_GET['search'] ?? '';
 
             $with_search = empty($search_text) ? '?' : '?search=' . $search_text . '&';

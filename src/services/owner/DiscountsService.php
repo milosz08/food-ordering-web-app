@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 01:26:00                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 14:12:40                   *
+ * Ostatnia modyfikacja: 2023-01-15 05:58:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,8 +66,8 @@ class DiscountsService extends MvcService
         try
         {
             $curr_page = $_GET['page'] ?? 1;
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-discount-code', SessionHelper::DISCOUNT_SEARCH);
             
             $redirect_url = 'owner/discounts';
@@ -81,9 +81,10 @@ class DiscountsService extends MvcService
                 IF(max_usages, '', 'disabled') AS increase_usages_active, IF(expired_date, '', 'disabled') AS increase_time_active, 
                 IFNULL(expired_date, '∞') AS expired_date, r.name AS res_name, r.id AS res_id,
                 CONCAT(SUBSTRING(code, 1, 3), '*******') AS hide_code,
-                IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = ds.restaurant_id AND ((expired_date > NOW() OR 
-                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'table-success', 'table-warning') 
-                AS expired_bts_class
+                IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = r.id AND ((expired_date > NOW() OR 
+                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'aktywny', 'wygasły') AS status,
+                IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = r.id AND ((expired_date > NOW() OR 
+                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'text-success', 'text-danger') AS expired_bts_class
                 FROM discounts AS ds INNER JOIN restaurants AS r ON ds.restaurant_id = r.id
                 WHERE r.accept = 1 AND r.user_id = :userid AND ds.code LIKE :search LIMIT :total OFFSET :page
             ";
@@ -148,8 +149,8 @@ class DiscountsService extends MvcService
         try
         {
             $curr_page = $_GET['page'] ?? 1;
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-discount-code', SessionHelper::DISCOUNT_RES_SEARCH);
 
             $redirect_url = 'owner/discounts/discounts-with-restaurants';

@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:29:31                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 22:54:48                   *
+ * Ostatnia modyfikacja: 2023-01-14 22:31:19                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -105,10 +105,14 @@ function showModal() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function chooseSelectedDishType() {
-    const is_custom_type = $('#form-type-dish option:selected').text() === 'Niestandardowy typ potrawy';
-    $('#form-new-type-dish').prop('disabled', !is_custom_type);
-    if (!is_custom_type) $('#form-new-type-dish').prop('value', '');
+function chooseSelectedDisabled(select, text, area) {
+    function disableTextarea() {
+        const is_custom_type = $(select + ' option:selected').text() === text;
+        $(area).prop('disabled', !is_custom_type);
+        if (!is_custom_type) $(area).prop('value', '');
+    };
+    disableTextarea();
+    $(select).on('change', disableTextarea);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +142,7 @@ function onLoad() {
     imagePreview();
     disableInputsOnCheckedCheckbox();
     lightDarkFaviconIcon();
+    chooseSelectedDisabled('#form-type-dish', 'Niestandardowy typ potrawy', '#form-new-type-dish');
     
     $('.js-close').click(function () { $('#newsHeading').parent().fadeOut(); });
     $(".chb").on('change', function() { $(".chb").not(this).prop('checked', false); });
