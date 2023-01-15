@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 07:17:10                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-15 12:45:54                   *
+ * Modyfikowany przez: cptn3m012                               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Order\Services;
@@ -60,7 +60,7 @@ class SummaryService extends MvcService
         {
             $this->dbh->beginTransaction();
             $query = "
-                SELECT id, CONCAT('ul. ', street, ' ', building_nr, '/', IFNULL(locale_nr, '')) AS address, CONCAT(post_code, ' ', city)
+                SELECT id, CONCAT('ul. ', street, ' ', building_nr, IF(locale_nr, CONCAT('/', locale_nr), '')) AS address, CONCAT(post_code, ' ', city)
                 AS post_city, IF(ROW_NUMBER() OVER(ORDER BY id) = 1, 'checked', '') AS checked FROM user_address WHERE user_id = ?
             ";
             $statement = $this->dbh->prepare($query);
