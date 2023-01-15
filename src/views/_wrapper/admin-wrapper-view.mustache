@@ -10,8 +10,26 @@
             </span>
         </button>
         <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
-            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/dashboard">
-                <i class="bi bi-house-door me-2"></i>Panel główny</a>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/dashboard">
+                <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/dish-types">
+                <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Typy potraw</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Wszystkie restauracje</a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/pending-restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">playlist_add_check</span>Oczekujące na zaakceptowanie</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/ratings">
+                <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji</a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/ratings/pending-to-delete">
+                <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oczekujące na usunięcie</a>
             </li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{base_dir}}">
@@ -67,10 +85,42 @@
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{base_dir}}admin/delete-restaurants"
-                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="bi bi-house-dash me-2 ms-1 fs-6"></span>Restauracje do usunięcia
-                        </a>
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#restaurants-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Restauracje
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="restaurants-collapse">
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/restaurants"
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Wszystkie restauracje
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/pending-restaurants" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">playlist_add_check</span>Oczekujące na zaakceptowanie
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mb-1">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#ratings-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Oceny
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="ratings-collapse">
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/ratings"
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/ratings/pending-to-delete" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oczekujące na usunięcie
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -116,7 +166,45 @@
                         <a href="{{base_dir}}admin/dashboard" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <i class="bi bi-house-door fs-5"></i>
+                            <span class="material-symbols-outlined me-2 fs-5">home</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/dish-types" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Typy potraw"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">fastfood</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wszystkie restauracje"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">food_bank</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/pending-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące na zaakceptowanie"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">playlist_add_check</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/ratings" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Opinie użytkowników"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/ratings/pending-to-delete" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące na usunięcie"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>
                         </a>
                     </li>
                     <li class="border-top my-1"></li>

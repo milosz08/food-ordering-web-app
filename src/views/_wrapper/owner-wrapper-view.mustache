@@ -25,7 +25,10 @@
             </li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dishes">
-                <span class="material-symbols-outlined me-2 fs-5">lunch_dining</span></i>Moje potrawy</a>
+                <span class="material-symbols-outlined me-2 fs-5">fastfood</span></i>Moje potrawy</a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dish-types">
+                <span class="material-symbols-outlined me-2 fs-5">emoji_food_beverage</span>Moje typy potraw</a>
             </li>
             <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dishes/dishes-with-restaurants">
                 <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj potrawę</a>
@@ -36,6 +39,13 @@
             </li>
             <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/discounts/discounts-with-restaurants">
                 <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj kod rabatowy</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/ratings">
+                <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji</a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/ratings/pending-to-delete">
+                <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oceny do usunięcia</a>
             </li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
@@ -118,9 +128,15 @@
                             <li class="mb-2">
                                 <a href="{{base_dir}}owner/dishes" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">lunch_dining</span>Moje potrawy
+                                    <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Moje potrawy
                                 </a>
-                            </li> 
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{base_dir}}owner/dish-types" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">emoji_food_beverage</span>Moje typy potraw
+                                </a>
+                            </li>
                             <li class="mb-2">
                                 <a href="{{base_dir}}owner/dishes/dishes-with-restaurants" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
@@ -145,6 +161,26 @@
                                 <a href="{{base_dir}}owner/discounts/discounts-with-restaurants" 
                                     class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
                                     <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj kod rabatowy
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mb-1">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#res-grades-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Oceny
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="res-grades-collapse">
+                            <li class="mb-2">
+                                <a href="{{base_dir}}owner/ratings"
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji
+                                </a>
+                            </li> 
+                            <li class="mb-2">
+                                <a href="{{base_dir}}owner/ratings/pending-to-delete"
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Zgłoszone do usunięcia
                                 </a>
                             </li>
                         </ul>
@@ -222,7 +258,14 @@
                         <a href="{{base_dir}}owner/dishes" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje potrawy"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">lunch_dining</span>
+                            <span class="material-symbols-outlined fs-5">fastfood</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}owner/dish-types" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje typy potraw"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined fs-5">emoji_food_beverage</span>
                         </a>
                     </li>
                     <li class="mb-1">
@@ -247,7 +290,22 @@
                             <span class="material-symbols-outlined fs-5">add</span>
                         </a>
                     </li>
-                    <li class="border-top my-3"></li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}owner/ratings" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oceny"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined fs-5">thumb_up</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}owner/ratings/pending-to-delete" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oceny do usunięcia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined fs-5">delete_sweep</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
                     <li class="mb-1">
                         <a href="{{base_dir}}owner/profile" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
