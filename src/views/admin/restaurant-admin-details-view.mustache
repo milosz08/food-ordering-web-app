@@ -1,0 +1,144 @@
+<div class="modal fade" id="delete-res-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Czy napewno chcesz usunąć restaurację:</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Nazwa restauracji: <strong>{{data.details.name}}</strong></li>
+                    <li class="list-group-item">Adres: <strong>{{data.details.address}}</strong></li>
+                    <li class="list-group-item">
+                        Status: <strong class="{{data.details.status.color_bts}}">{{data.details.status.text}}</strong>
+                    </li>
+                </ul>
+                <p class="mt-3">
+                    Po usunięciu restauracji, dodane przez Ciebie potrawy skojarzone z tą restauracją również ulegną usunięciu. Operacji 
+                    usunięcia restauracji nie można cofnąć.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <a class="btn btn-outline-danger" href="{{base_dir}}admin/delete-restaurants/remove?id={{data.details.id}}">Usuń</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="position-relative min-z-index">
+    <div class="d-flex align-items-center">
+        <div class="me-4">
+            {{#data.details.profile_url}}
+                <img src="{{base_dir}}public/{{data.details.profile_url}}" alt="" class="rounded" width="80px" height="80px"/>
+            {{/data.details.profile_url}}
+            {{^data.details.profile_url}}
+                <img src="{{base_dir}}public/static/images/default-profile.jpg" alt="" class="rounded" width="80px" height="80px"/>
+            {{/data.details.profile_url}}
+        </div>
+        <div>
+            
+            <h2 class="mb-3 text-secondary fw-normal">Szczegóły restauracji <span class="text-primary">#{{data.details.id}}</span></h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
+                    <li class="breadcrumb-item"><a href="{{base_dir}}admin/delete-restaurants">Restauracje do usunięcia</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Szczegóły restauracji #{{data.details.id}}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <hr class="mb-3"/>
+    {{> partials/dynamic-banner-view.partial}}
+    <div class="row mb-4">
+        <div class="col-auto mb-2">
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-res-modal">
+                Usuń restaurację
+            </button>
+        </div>
+    </div>
+    <div class="container-fluid mb-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Nazwa restauracji:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.name}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Imię i nazwisko właściciela:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.full_name}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Cena za dostawę:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.delivery_price}}</p>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Ulica restauracji:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.street}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Numer lokalu restauracji:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.building_locale_nr}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-1">
+                            <p class="text-secondary lh-sm mb-0">Minimalna cena zamówienia:</p>
+                            <i type="button" class="bi bi-info-circle mt-1 ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" 
+                                data-bs-title="Minimalna cena wszystkich produktów nie wliczając kosztów dostawy.">
+                            </i>
+                        </div>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.min_price}}</p>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Liczba potraw przypisanych do restauracji:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.count_of_dishes}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Kod pocztowy miejscowości restauracji:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.post_code}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Miejscowość restauracji:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.city}}</p>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Ilość oferowanych rabatów:</p>
+                        <p class="text-dark fs-5 lh-sm">{{data.details.discounts_count}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Status restauracji:</p>
+                        <p class="{{data.details.status.color_bts}} fs-5 lh-sm">{{data.details.status.text}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Numer telefonu:</p>
+                        <p class="text-dark fs-5 lh-sm">+48 {{data.details.phone_number}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <p class="text-secondary lh-sm mb-2">Restauracja czynna w dniach i godzinach:</p>
+                {{#data.res_hours}}
+                    <div class="row mb-2 mb-xl-0">
+                        <div class="col-3">
+                            <p class="text-dark text-capitalize fs-5 lh-sm mb-1">{{day_of_week}}:</p>
+                        </div>
+                        <div class="col-9">
+                            <p class="text-dark fs-5 lh-sm mb-1">{{status}}</p>
+                        </div>
+                    </div>
+                {{/data.res_hours}}
+            </div>
+            <div class="col-md-8">
+                <p class="text-secondary lh-sm mb-1">Opis restauracji:</p>
+                <p class="text-dark fs-5 lh-sm text-wrap">{{data.details.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>

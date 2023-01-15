@@ -1,8 +1,8 @@
-<h2 class="text-secondary fw-normal mb-3">Lista restauracji</h2>
+<h2 class="text-secondary fw-normal mb-3">Restauracje do usunięcia</h2>
 <nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Lista restauracji</li>
+        <li class="breadcrumb-item active" aria-current="page">Restauracje do usunięcia</li>
     </ol>
 </nav>
 <hr/>
@@ -46,7 +46,7 @@
                             <i class="bi bi-x-lg"></i>
                         </span>
                     </button>
-                    <a href="{{base_dir}}admin/restaurants/restaurant-details?id={{id}}" class="btn btn-primary btn-sm ms-2"
+                        <a href="{{base_dir}}admin/delete-restaurants/details?id={{id}}" class="btn btn-primary btn-sm ms-2"
                         type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Szczegóły restauracji">
                         <i class="bi bi-arrow-right"></i>
                     </a>

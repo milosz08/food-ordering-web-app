@@ -277,8 +277,16 @@
                 </ul>
             </nav>
         </div>
-        <div class="col pt-5 px-0 mt-5 mh-100 shadow d-flex flex-column bg-white justify-content-between">
-            <main class="px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
+        <div class="col px-0 mt-5 mh-100 shadow d-flex flex-column justify-content-between bg-white position-relative">
+            {{#is_details_subpage}}
+            {{#data.details.banner_url}}
+                <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/{{data.details.banner_url}});"></div>            
+            {{/data.details.banner_url}}
+            {{^data.details.banner_url}}
+                <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/static/images/default-banner.jpg);"></div>            
+            {{/data.details.banner_url}}
+            {{/is_details_subpage}}
+            <main class="pt-5 px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
                 {{{ embed_rendering_section }}}
             </main>
             {{> partials/cms-panel-footer-view.partial }}
