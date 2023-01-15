@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:22:13                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 00:18:49                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-15 23:39:25                   *
+ * Modyfikowany przez: Lukasz Krawczyk                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -36,24 +36,7 @@ class ProfileController extends MvcController
         parent::__construct();
 		$this->_service = MvcService::get_instance(ProfileService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Przejście pod adres: /user/profile/edit-profile
-     */
-    public function edit_profile()
-    {
-        $this->protector->protect_only_user();
-        $edit_login_profile = $this->_service->edit_user_profile();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::EDIT_USER_PROFILE_PAGE_BANNER);
-        $this->renderer->render('user/edit-profile-view', array(
-            'page_title' => 'Edytuj profil',
-            'data' => $edit_login_profile,
-            'banner' => $banner_data,
-        ));
-    }
-
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
@@ -64,10 +47,40 @@ class ProfileController extends MvcController
         $this->protector->protect_only_user();
         $add_address = $this->_service->add_new_addres();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_USER_NEW_ADDRESS_PAGE_BANNER);
-        $this->renderer->render('user/add-new-address-view', array(
+        $this->renderer->render('user/add-edit-new-address-view', array(
             'page_title' => 'Dodaj nowy adres',
             'data' => $add_address,
             'banner' => $banner_data,
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Przejście pod adres: /user/profile/delete-address
+     */
+    public function delete_address()
+    {
+        $this->protector->protect_only_user();
+        $this->_service->delete_address();       
+    }
+
+
+        
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Przejście pod adres: /user/profile/edit-alternativ-address
+     */
+    public function edit_alternativ_address()
+    {
+        $this->protector->protect_only_user();
+        $edit_alternativ_address = $this->_service->edit_alternativ_address();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_USER_NEW_ADDRESS_PAGE_BANNER);
+        $this->renderer->render('user/add-edit-new-address-view', array(
+            'page_title' => 'Edytuj adres',
+            'banner' => $banner_data,
+            'data' => $edit_alternativ_address
         ));
     }
 
@@ -80,9 +93,11 @@ class ProfileController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_user();
+        $edit_user_profile = $this->_service->edit_user_profile();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::USER_PROFILE_PAGE_BANNER);
         $this->renderer->render('user/profile-view', array(
             'page_title' => 'Profil',
+            'data' => $edit_user_profile,
             'banner' => $banner_data,
         ));
 	}
