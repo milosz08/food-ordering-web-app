@@ -7,7 +7,7 @@
  * Data utworzenia: 2023-01-06, 04:16:09                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 02:20:51                   *
+ * Ostatnia modyfikacja: 2023-01-14 21:04:20                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,7 +66,7 @@ function generateAdminCharv2Data() {
                 },
                 options: {
                     legend: { display: false },
-                    title: { display: true, fontSize: 18, text: 'Dane statystyczne użyć poszczególnych kuponów wszystkich restauracji' },
+                    title: { display: true, fontSize: 18, text: 'Dane statystyczne posiadanych kuponów przez daną restaurację' },
                     responsive: true,
                     maintainAspectRatio: false,
                 },

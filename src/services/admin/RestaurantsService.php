@@ -29,7 +29,7 @@ ResourceLoader::load_service_helper('PaginationHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class DeleteRestaurantsService extends MvcService
+class RestaurantsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
@@ -43,39 +43,39 @@ class DeleteRestaurantsService extends MvcService
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Metoda pobierające dane wszystkich restauracji z możliwością ich usunięcia.
+     */
     public function get_restaurants()
     {
-        $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
+        $pagination = array();
         $restaurants = array();
         $pages_nav = array();
-        $pagination_visible = true; // widoczność paginacji
         try
         {
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
-            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::OWNER_RES_SEARCH);
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
+            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::ADMIN_RES_SEARCH);
 
-            $redirect_url = 'admin/delete-restaurants';
-            PaginationHelper::check_parameters('admin/delete-restaurants');
+            $redirect_url = 'admin/restaurants';
+            PaginationHelper::check_parameters($redirect_url);
 
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji z bazy
             $query = "
-                SELECT ROW_NUMBER() OVER(ORDER BY id) as it, name, accept, id,
+                SELECT ROW_NUMBER() OVER(ORDER BY r.id) as it, name, accept, r.id, CONCAT(first_name, ' ', last_name) AS full_name,
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address
-                FROM restaurants WHERE name LIKE :search LIMIT :total OFFSET :page
+                FROM restaurants AS r INNER JOIN users AS u ON r.user_id = u.id WHERE name LIKE :search LIMIT :total OFFSET :page
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('search', '%' . $search_text . '%');
             $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
-
             while ($row = $statement->fetchObject(RestaurantModel::class)) array_push($restaurants, $row);
 
-            // zapytanie zliczające wszystkie restauracje z bazy
             $query = "SELECT count(*) FROM restaurants WHERE name LIKE :search";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('search', '%' . $search_text . '%');
@@ -97,14 +97,12 @@ class DeleteRestaurantsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $pagination_visible = false;
-            SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'admin/delete-restaurants?',
+            'pagination_url' => $redirect_url . '?',
             'pagination' => $pagination,
-            'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
             'user_restaurants' => $restaurants,
             'search_text' => $search_text,
@@ -114,21 +112,56 @@ class DeleteRestaurantsService extends MvcService
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public function delete_restaurant()
+    /**
+     * Metoda odpowiadająca za pobranie szczegółów wybranej restauracji na podstawie id restauracji pobieranego z parametru GET. Jeśli
+     * parametru nie ma, bądź restauracja nie istnieje, przekierowanie do strony z restauracjami.
+     */
+    public function get_restaurant_details()
     {
-        if (!isset($_GET['id'])) return;
+        if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants', true, 301);
         try
         {
             $this->dbh->beginTransaction();
-            
-            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ?";
-            $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['id']));
-            $result = $statement->fetchColumn();
-            if (empty($result)) throw new Exception(
-                'Podana resturacja nie istnieje w systemie lub została wcześniej usunięta.'
-            );
 
+            // tutaj kod
+
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+        }
+        return array(
+            'res_id' => $_GET['id'],
+        );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda odpowiadająca za usuwanie wybranej restauracji z systemu. Metoda sprawdza, czy nie ma żadnych aktywnych zamówień związanych z
+     * tą restauracją. Jeśli nie, administratora może opcjonalnie wysłać wiadomość do właściciela restauracji z powodem usunięcia.
+     */
+    public function delete_restaurant()
+    {
+        if (!isset($_GET['id'])) return;
+        $additional_comment = $_POST['delete-restaurant-comment'] ?? 'brak komentarza';
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "
+                SELECT COUNT(*) FROM restaurants WHERE id = :resid AND
+                (SELECT COUNT(*) FROM orders WHERE restaurant_id = :resid AND status_id IS NOT 1) = 0
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('resid', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+            $result = $statement->fetchColumn();
+            if (empty($result)) throw new Exception('
+                Podana resturacja nie istnieje w systemie, została wcześniej usunięta lub posiada aktywne zamówienia. Tylko restaurację
+                które nie posiadają aktywnych zamówień można usunąć z systemu.
+            ');
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
@@ -147,6 +180,6 @@ class DeleteRestaurantsService extends MvcService
             $this->_banner_message = $e->getMessage();
             $this->_banner_error = true;
         }
-        SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 }

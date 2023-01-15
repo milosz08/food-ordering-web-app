@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:22:23                   *
+ * Ostatnia modyfikacja: 2023-01-15 12:13:23                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,7 +23,6 @@ class SessionHelper
     const FORGOT_PASSWORD_PAGE_BANNER                   = 'forgot_password_page_banner';
     const FORGOT_PASSWORD_CHANGE_PAGE_BANNER            = 'forgot_password_change_page_banner';
     const REGISTER_PAGE_BANNER                          = 'register_page_banner';
-    const PENDING_RESTAURANT_PAGE_BANNER                = 'pending_restaurant_page_banner';
     const DISHES_WITH_RES_PAGE_BANNER                   = 'dishes_with_res_page_banner';
     const ADD_EDIT_DISH_PAGE_BANNER                     = 'edit_dish_page_banner';
     const RESTAURANT_DETAILS_PAGE_BANNER                = 'restaurant_details_page_banner';
@@ -42,7 +41,6 @@ class SessionHelper
     const OWNER_DISHES_SEARCH                           = 'owner_dishes_search';
     const OWNER_DISHES_RES_SEARCH                       = 'owner_dishes_res_search';
     const ADMIN_PENDING_RES_SEARCH                      = 'admin_pending_res_search';
-    const CANCEL_ORDER                                  = 'cancel_order';
     const DISCOUNT_SEARCH                               = 'discount_search';
     const DISCOUNT_RES_SEARCH                           = 'discount_res_search';
     const DISH_DETAILS_PAGE_BANNER                      = 'dish_details_page_banner';
@@ -52,7 +50,23 @@ class SessionHelper
     const NEW_ORDER_DETAILS_PAGE_BANNER                 = 'new_order_details_page_banner';
     const USER_ORDERS_PAGE_BANNER                       = 'user_orders_page_banner';
     const USER_ORDER_DETAILS_PAGE_BANNER                = 'user_order_details_page_banner';
-
+    const OWNER_RATINGS_PAGE_BANNER                     = 'owner_ratings_page_banner';
+    const OWNER_RATINGS_PENDING_TO_DELETE               = 'owner_ratings_pending_to_delete';
+    const OWNER_ORDERS_PAGE_BANNER                      = 'owner_orders_page_banner';
+    const OWNER_ORDER_DETAILS_PAGE_BANNER               = 'owner_order_details_page_banner';
+    const ADMIN_RATINGS_PAGE_BANNER                     = 'admin_ratings_page_banner';
+    const ADMIN_RATINGS_PENDING_TO_DELETE               = 'admin_ratings_pending_to_delete';
+    const ADMIN_RESTAURANTS_PAGE_BANNER                 = 'admin_restaurants_page_banner';
+    const ADMIN_RESTAURANT_DETAILS_PAGE_BANNER          = 'admin_restaurant_details_page_banner';
+    const ADMIN_PENDING_RESTAURANTS_PAGE_BANNER         = 'admin_pending_restaurants_page_banner';
+    const ADMIN_DISH_TYPES_PAGE_BANNER                  = 'admin_dish_types_page_banner';
+    const ADMIN_RES_SEARCH                              = 'admin_res_search';
+    const ADMIN_DISH_TYPES_SEARCH                       = 'admin_dish_types_search';
+    const OWNER_DISH_TYPES_SEARCH                       = 'admin_dish_types_search';
+    const OWNER_DISH_TYPES_PAGE_BANNER                  = 'owner_dish_types_page_banner';
+    const ADMIN_MANAGED_USERS_PAGE_BANNER               = 'admin_managed_users_banner';
+    const ADMIN_MANAGED_USERS_SEARCH                    = 'admin_managed_users_search';
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function check_session_and_unset($session_value_key)

@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:34:01                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-14 21:24:24                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -48,7 +48,7 @@ class DashboardService extends MvcService
             $query = "
                 SELECT d.code AS Name, d.usages AS Uses FROM 
                 ((discounts d INNER JOIN restaurants r ON d.restaurant_id = r.id)
-                INNER JOIN users u ON r.user_id = u.id) WHERE u.id = :userid ORDER BY code DESC
+                INNER JOIN users u ON r.user_id = u.id) WHERE u.id = :userid ORDER BY d.id DESC LIMIT 7
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
@@ -62,8 +62,10 @@ class DashboardService extends MvcService
                 $time = date("Y-m-d", $date);
 
                 $query = "
-                    SELECT :date AS day, count(*) AS number FROM orders WHERE DATE(date_order) = :date AND user_id = :userid 
-                    AND NOT status_id = 3 ORDER BY date_order DESC
+                    SELECT :date AS day, count(*) AS number FROM 
+                    ((orders o INNER JOIN restaurants r ON o.restaurant_id = r.id)
+                    INNER JOIN users u ON r.user_id = u.id) WHERE DATE(o.date_order) = :date AND u.id = :userid 
+                    AND NOT o.status_id = 3 ORDER BY o.date_order DESC
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->bindValue('date', $time, PDO::PARAM_STR);

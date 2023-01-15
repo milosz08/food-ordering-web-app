@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 05:07:43                   *
+ * Ostatnia modyfikacja: 2023-01-15 05:58:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -62,7 +62,6 @@ class DishesService extends MvcService
     public function get_all_dishes()
     {
         $all_dishes = array();
-        $not_empty = false;
         $pagination = array();
         $pages_nav = array();
         $pagination_visible = true;
@@ -71,8 +70,8 @@ class DishesService extends MvcService
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1;
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_DISHES_SEARCH);
             
             $redirect_url = 'owner/dishes';
@@ -94,7 +93,6 @@ class DishesService extends MvcService
             $statement->execute();
 
             while ($row = $statement->fetchObject(DishRestaurantModel::class)) array_push($all_dishes, $row);
-            $not_empty = count($all_dishes);
 
             $query = "
                 SELECT count(*) FROM dishes AS d INNER JOIN restaurants AS r ON d.restaurant_id = r.id WHERE user_id = :userid
@@ -132,7 +130,7 @@ class DishesService extends MvcService
             'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
             'search_text' => $search_text,
-            'not_empty' => $not_empty,
+            'not_empty' => count($all_dishes),
         );
     }
 
@@ -152,8 +150,8 @@ class DishesService extends MvcService
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1;
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-restaurant-name', SessionHelper::OWNER_DISHES_RES_SEARCH);
 
             $redirect_url = 'owner/dishes/dishes-with-restaurants';

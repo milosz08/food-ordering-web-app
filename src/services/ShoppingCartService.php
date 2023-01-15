@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-11, 22:15:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:50:06                   *
+ * Ostatnia modyfikacja: 2023-01-14 12:24:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,6 +17,7 @@ namespace App\Services;
 
 use Exception;
 use App\Core\MvcService;
+use App\Core\MvcProtector;
 use App\Core\ResourceLoader;
 use App\Services\Helpers\CookieHelper;
 use App\Services\Helpers\SessionHelper;
@@ -44,6 +45,7 @@ class ShoppingCartService extends MvcService
     {
         try
         {
+            MvcProtector::check_if_user_is_user();
             $this->check_if_restaurant_exist();
             // Obsługa koszyka
             $temp_array = array('code' => '', 'dishes' => array());
@@ -86,8 +88,8 @@ class ShoppingCartService extends MvcService
         }
         catch (Exception $e)
         {
-            $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
+            if ($this->dbh->inTransaction()) $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, $e->getMessage(), true);
         }
         return $_GET['resid'];
     }
@@ -98,6 +100,7 @@ class ShoppingCartService extends MvcService
     {
         try
         {
+            MvcProtector::check_if_user_is_user();
             $this->check_if_restaurant_exist();
             // Flaga sprawdzająca czy ilość danych elementów jest większa czy mniejsza niż 1, aby kolejno zinkrementować jego wartość
             // bądź nie dodawać go do nowej tablicy 
@@ -130,8 +133,8 @@ class ShoppingCartService extends MvcService
         }
         catch (Exception $e)
         {
-            $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
+            if ($this->dbh->inTransaction()) $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, $e->getMessage(), true);
         }
         return $_GET['resid'];
     }
@@ -141,11 +144,21 @@ class ShoppingCartService extends MvcService
     public function delete_all_dishes_from_shopping_cart()
     {
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
-        if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]))
+        try
         {
-            CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
-            SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, 'Koszyk został wyczyszczony.', false);
+            MvcProtector::check_if_user_is_user();
+            if (isset($_COOKIE[CookieHelper::get_shopping_cart_name($_GET['id'])]))
+            {
+                CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_GET['id']));
+                $this->_banner_message = 'Koszyk został wyczyszczony.';
+            }
         }
+        catch (Exception $e)
+        {
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
+        }
+        SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return $_GET['id'];
     }
 

@@ -9,11 +9,13 @@
  * Data utworzenia: 2022-12-17, 15:54:57                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 23:51:22                   *
+ * Ostatnia modyfikacja: 2023-01-14 12:18:00                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
+
+use Exception;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -105,6 +107,20 @@ class MvcProtector
             else if ($role['role_name'] == self::ADMIN) header('Location: ' . __URL_INIT_DIR__ . 'admin/dashboard', true, 301);
         }
     }    
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda sprawdzająca, czy zalogowany użytkownik to użytkownik. Jeśli nie, wyrzuci wyjątek który zostanie wyłapany w serwisach.
+     */
+    public static function check_if_user_is_user()
+    {
+        $logged_user = $_SESSION['logged_user'] ?? null;
+        if (!isset($logged_user) || $logged_user['user_role']['role_name'] != self::USER) throw new Exception('
+            Wybrana akcja wymaga zalogowania się na konto użytkownika. Jeśli jeszcze nie posiadasz konta, możesz się zarejestrować
+            <a href="' . __URL_INIT_DIR__ . 'auth/register" class="alert-link">pod tym linkiem</a>.
+        ');
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:14:47                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 02:37:57                   *
+ * Ostatnia modyfikacja: 2023-01-15 06:01:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,7 +19,7 @@ namespace App\Services\Helpers;
 
 class PaginationHelper
 {
-    private const AVAILABLE_PAGING = array(5, 10, 15, 20, 50);
+    private const AVAILABLE_PAGING = array(10, 15, 20, 50, 100);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

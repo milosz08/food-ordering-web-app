@@ -21,7 +21,7 @@
             {{/is_logged_and_normal_user}}
             <div class="position-relative restaurant-dishes-banner-margin">
                 <div style="background-image: url({{base_dir}}public/{{data.res_details.banner_url}});"
-                class="restaurant-dishes-banner w-100 rounded"></div>
+                class="restaurant-dishes-banner w-100 rounded border border-secondary"></div>
                 <div class="position-absolute end-0 bottom-0 p-3 d-flex flex-column">
                     {{#data.res_details.delivery_free}}
                     <span class="badge text-bg-success fw-normal mt-1">Darmowa dostawa</span>
@@ -33,11 +33,11 @@
                 <div class="position-absolute restaurant-profile-image d-flex w-100">
                     <div class="ps-3">
                         <img src="{{base_dir}}public/{{data.res_details.profile_url}}" alt=""  width="100px" height="100px"
-                        class="rounded restaurant-profile-image"/>
+                        class="rounded restaurant-profile-image border border-secondary"/>
                     </div>
                     <div class="d-flex align-items-end mb-0 justify-content-between w-100 flex-wrap">
                         <h2 class="fs-2 ms-3 mb-0">{{data.res_details.name}}</h2>
-                        <div class="hstack align-items-end d-none d-sm-flex">
+                        <div class="hstack align-items-end d-none d-sm-flex mb-2">
                             <div class="me-2">
                                 {{#data.res_details.grades_bts}}
                                 <i class="bi bi-star{{star}} fs-6 text-warning"></i>

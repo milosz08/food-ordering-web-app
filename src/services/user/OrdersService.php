@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:23:08                   *
+ * Ostatnia modyfikacja: 2023-01-15 13:11:16                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -52,9 +52,7 @@ class OrdersService extends MvcService
             $this->dbh->beginTransaction();
             $query = "
                 SELECT o.id, r.name, o.price, IF(o.status_id = 3, true, false) AS order_statement
-                FROM orders AS o
-                INNER JOIN restaurants AS r ON o.restaurant_id = r.id
-                WHERE o.user_id = ?;
+                FROM orders AS o INNER JOIN restaurants AS r ON o.restaurant_id = r.id WHERE o.user_id = ?
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
