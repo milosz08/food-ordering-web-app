@@ -22,6 +22,7 @@
             <tr>
                 <th>Lp</th>
                 <th>Nazwa Restauracji</th>
+                <th>Właściciel</th>
                 <th class="d-none d-lg-table-cell">Dane adresowe</th>
                 <th>Status</th>
                 <th class="fit">Akcja</th>
@@ -32,6 +33,7 @@
             <tr>
                 <td class="align-middle">{{it}}</td>
                 <td class="align-middle">{{name}}</td>
+                <td class="align-middle">{{res_owner}}</td>
                 <td class="align-middle d-none d-lg-table-cell">{{address}}</td>
                 <td class="align-middle {{status.color_bts}}">
                     <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{status.tooltip_text}}" type="button">
@@ -58,24 +60,30 @@
                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie restauracji</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <p>Czy napewno chcesz usunąć restaurację:</p>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Nazwa restauracji: <strong>{{name}}</strong></li>
-                                <li class="list-group-item">Adres: <strong>{{address}}</strong></li>
-                                <li class="list-group-item">Status: <strong class="{{status.color_bts}}">{{status.text}}</strong></li>
-                            </ul>
-                            <p class="mt-3">
-                                Po usunięciu restauracji, potrawy skojarzone z tą restauracją również ulegną usunięciu.
-                                Operacji usunięcia restauracji nie można cofnąć.
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                            <a class="btn btn-outline-danger" href="{{base_dir}}admin/delete-restaurants/remove?id={{id}}">
-                                Usuń
-                            </a>
-                        </div>
+                        <form action="{{base_dir}}admin/restaurants/delete-restaurant?id={{id}}" method="post">
+                            <div class="modal-body">
+                                <p>Czy napewno chcesz usunąć restaurację:</p>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Nazwa restauracji: <strong>{{name}}</strong></li>
+                                    <li class="list-group-item">Właściciel: <strong>{{full_name}}</strong></li>
+                                    <li class="list-group-item">Adres: <strong>{{address}}</strong></li>
+                                </ul>
+                                <p class="mt-3 lh-sm">
+                                    Po jej usunięciu na adres email właściciela zostanie wysłana wiadomość z informacją o usunięciu
+                                    restauracji.
+                                </p>
+                                <div class="mb-2">
+                                    <label for="form-delete-restaurant-comment" class="form-label">Komentarz wysyłany na adres email:</label>
+                                    <textarea name="delete-restaurant-comment" class="form-control" maxlength="350" minlength="20" rows="4" 
+                                        placeholder="Dodatowy komentarz, maksymalnie 350 znaków." id="form-delete-restaurant-comment" required
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                                <button type="sumit" class="btn btn-outline-danger">Usuń</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -83,9 +91,7 @@
         </tbody>
     </table>
 </div>
-{{#data.pagination_visible}}
-    {{> partials/pagination-view.partial}}
-{{/data.pagination_visible}}
+{{> partials/pagination-view.partial}}
 {{/data.not_empty}}
 {{^data.not_empty}}
 <div class="alert alert-warning mb-3" role="alert">

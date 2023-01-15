@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:20:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 05:07:23                   *
+ * Ostatnia modyfikacja: 2023-01-14 11:12:21                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -47,7 +47,7 @@ class DishesController extends MvcController
         $this->protector->protect_only_owner();
         $restaurants_with_dishes = $this->_service->get_all_restaurants_with_dishes();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::DISHES_WITH_RES_PAGE_BANNER);
-        $this->renderer->render_embed('owner-wrapper-view', 'owner/dish/dishes-restaurants-view', array(
+        $this->renderer->render_embed('owner-wrapper-view', 'owner/dishes/dishes-restaurants-view', array(
             'page_title' => 'Dodaj potrawę do restauracji',
             'data' => $restaurants_with_dishes,
             'banner' => $banner_data,
@@ -64,7 +64,7 @@ class DishesController extends MvcController
         $this->protector->protect_only_owner();
         $add_dish_data = $this->_service->add_dish_to_restaurant();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER);
-        $this->renderer->render_embed('owner-wrapper-view', 'owner/dish/add-edit-dish-view', array(
+        $this->renderer->render_embed('owner-wrapper-view', 'owner/dishes/add-edit-dish-view', array(
             'page_title' => 'Dodaj potrawę',
             'add_edit_text' => 'Dodaj',
             'data' => $add_dish_data,
@@ -82,7 +82,7 @@ class DishesController extends MvcController
         $this->protector->protect_only_owner();
         $edit_dish_data = $this->_service->edit_dish_from_restaurant();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER);
-        $this->renderer->render_embed('owner-wrapper-view', 'owner/dish/add-edit-dish-view', array(
+        $this->renderer->render_embed('owner-wrapper-view', 'owner/dishes/add-edit-dish-view', array(
             'page_title' => 'Edytuj potrawę',
             'add_edit_text' => 'Edytuj',
             'data' => $edit_dish_data,
@@ -100,7 +100,7 @@ class DishesController extends MvcController
         $this->protector->protect_only_owner();
         $dish_details = $this->_service->get_dish_details();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::DISH_DETAILS_PAGE_BANNER);
-        $this->renderer->render_embed('owner-wrapper-view', 'owner/dish/dish-details-view', array(
+        $this->renderer->render_embed('owner-wrapper-view', 'owner/dishes/dish-details-view', array(
             'page_title' => 'Szczegóły potrawy',
             'data' => $dish_details,
             'banner' => $banner_data,
@@ -141,7 +141,7 @@ class DishesController extends MvcController
         $this->protector->protect_only_owner();
         $all_dishes = $this->_service->get_all_dishes();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::DISHES_PAGE_BANNER);
-        $this->renderer->render_embed('owner-wrapper-view', 'owner/dish/dishes-view', array(
+        $this->renderer->render_embed('owner-wrapper-view', 'owner/dishes/dishes-view', array(
             'page_title' => 'Moje potrawy',
             'data' => $all_dishes,
             'banner' => $banner_data,

@@ -4,12 +4,12 @@
  * Copyright (c) 2023 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
- * Nazwa pliku: DiscountResDetailsModel.php                    *
+ * Nazwa pliku: OwnerPendingToDeleteRatingModel.php            *
  * Projekt: restaurant-project-php-si                          *
- * Data utworzenia: 2023-01-12, 06:44:09                       *
+ * Data utworzenia: 2023-01-14, 22:44:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 01:41:16                   *
+ * Ostatnia modyfikacja: 2023-01-15 06:47:56                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,17 +17,13 @@ namespace App\Models;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class DiscountResDetailsModel
+class OwnerPendingToDeleteRatingModel
 {
+    public $it;
     public $id;
-    public $res_id;
-    public $code;
+    public $opinion_id;
+    public $type;
     public $description;
-    public $percentage_discount;
-    public $total_usages;
-    public $expired_date;
-    public $increase_time_active;
-    public $increase_usages_active;
-    public $expired_bts_class;
-    public $status;
+    public $send_date;
+    public $signature;
 }

@@ -4,30 +4,26 @@
  * Copyright (c) 2023 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
- * Nazwa pliku: DiscountResDetailsModel.php                    *
+ * Nazwa pliku: DishOrderModel.php                             *
  * Projekt: restaurant-project-php-si                          *
- * Data utworzenia: 2023-01-12, 06:44:09                       *
+ * Data utworzenia: 2023-01-14, 10:31:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 01:41:16                   *
+ * Ostatnia modyfikacja: 2023-01-14 10:50:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
 
+use App\Core\ResourceLoader;
+
+ResourceLoader::load_model('DishModel', 'dish');
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class DiscountResDetailsModel
+class DishOrderModel extends DishModel
 {
-    public $id;
     public $res_id;
-    public $code;
-    public $description;
-    public $percentage_discount;
-    public $total_usages;
-    public $expired_date;
-    public $increase_time_active;
-    public $increase_usages_active;
-    public $expired_bts_class;
-    public $status;
+    public $dishes_count;
+    public $total_dish_cost;
 }

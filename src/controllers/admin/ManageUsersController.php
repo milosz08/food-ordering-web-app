@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-14, 22:59:50                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 23:31:31                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-15 12:14:38                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -45,7 +45,7 @@ class ManageUsersController extends MvcController
     public function delete()
     {
         $this->protector->protect_only_admin();
-        $this->_service->remove();
+        $this->_service->delete_user();
         header('Location:' . __URL_INIT_DIR__ . '/admin/manage-users', true, 301);
     }
 
@@ -58,7 +58,7 @@ class ManageUsersController extends MvcController
     {
         $this->protector->protect_only_admin();
         $users_list = $this->_service->get_users();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_DELETE_USER_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_MANAGED_USERS_PAGE_BANNER);
         $this->renderer->render_embed('admin-wrapper-view', 'admin/manage-users-view', array(
             'page_title' => 'Zarządzaj użytkownikami',
             'banner' => $banner_data,

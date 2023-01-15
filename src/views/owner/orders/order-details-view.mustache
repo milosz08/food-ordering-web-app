@@ -1,0 +1,10 @@
+<h2 class="text-secondary fw-normal mb-3">Szczegóły zamówienia <span class="text-primary">#{{data.order_id}}</span></h2>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/orders">Zamówienia</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Szczegóły zamówienia #{{data.order_id}}</li>
+    </ol>
+</nav>
+<hr/>
+{{> partials/dynamic-banner-view.partial}}

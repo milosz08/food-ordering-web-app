@@ -1,0 +1,40 @@
+<div class="modal fade" id="edit-dish-type-{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edytowanie typu potrawy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{base_dir}}{{redir_link}}/dish-types/edit-dish-type?id={{id}}" method="post">
+                <div class="modal-body">
+                    <div class="col-md-12 mb-3">
+                        <label for="form-dish-type-name" class="form-label">Nazwa typu potrawy:</label>
+                        <input type="text" name="dish-type-name" class="form-control" maxlength="50"
+                            value="{{name}}" placeholder="np. Pizza" id="form-dish-type-name" required minlength="3">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="sumit" class="btn btn-outline-success">Edytuj typ potrawy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-dish-type-{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie typu potrawy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Czy na pewno chcesz usunąć typ potrawy <strong>{{name}}</strong>? Operacji nie można cofnąć.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <a href="{{base_dir}}{{redir_link}}/dish-types/delete-dish-type?id={{id}}" class="btn btn-outline-danger">Usuń</a>
+            </div>
+        </div>
+    </div>
+</div>

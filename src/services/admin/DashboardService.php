@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 21:02:19                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-15 12:08:31                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Admin\Services;
@@ -23,11 +23,6 @@ use App\Core\MvcService;
 
 class DashboardService extends MvcService
 {
-    private $_banner_message = '';
-    private $_banner_error = false;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();

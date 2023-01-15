@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:13:11                   *
+ * Ostatnia modyfikacja: 2023-01-15 12:25:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -51,14 +51,13 @@ class PendingRestaurantsService extends MvcService
         $pending_restaurants = array();
         $pagination = array();
         $pages_nav = array();
-        $pagination_visible = true; // widoczność paginacji
         try
         {
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::ADMIN_PENDING_RES_SEARCH);
 
             $redirect_url = 'admin/pending-restaurants';
@@ -102,14 +101,12 @@ class PendingRestaurantsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $pagination_visible = false;
-            SessionHelper::create_session_banner(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_PENDING_RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'admin/pending-restaurants?',
+            'pagination_url' => $redirect_url . '?',
             'pagination' => $pagination,
-            'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
             'pending_restaurants' => $pending_restaurants,
             'search_text' => $search_text,
@@ -145,7 +142,7 @@ class PendingRestaurantsService extends MvcService
             $this->_banner_message = $e->getMessage();
             $this->_banner_error = true;
         }
-        SessionHelper::create_session_banner(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_PENDING_RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,6 +153,7 @@ class PendingRestaurantsService extends MvcService
     public function reject_restaurant()
     {
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'admin/panel/restaurant/accept', true, 301);
+        $additional_comment = $_POST['reject-restaurant-comment'] ?? 'brak komentarza';
         try
         {
             $this->dbh->beginTransaction();
@@ -182,6 +180,6 @@ class PendingRestaurantsService extends MvcService
             $this->_banner_message = $e->getMessage();
             $this->_banner_error = true;
         }
-        SessionHelper::create_session_banner(SessionHelper::PENDING_RESTAURANT_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_PENDING_RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 }
