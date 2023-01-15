@@ -1,5 +1,5 @@
 <nav class="d-flex justify-content-between navbar fixed-top bg-dark bg-gradient">
-    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}admin/panel/dashboard">
+    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}admin/dashboard">
         CMS | <span class="text-white-50">Panel administratora</span>
     </a>
     <div class="dropdown d-block d-md-none">
@@ -10,9 +10,19 @@
             </span>
         </button>
         <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
-            <li><a class="dropdown-item" href="{{base_dir}}admin/panel/dashboard">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/dashboard">
                 <i class="bi bi-house-door me-2"></i>Panel główny</a>
             </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/pending-restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Oczekujące restauracje
+            </a></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/delete-restaurants">
+                <span class="bi bi-house-dash me-2 fs-6"></span> Restauracje do usunięcia
+            </a></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/manage-users">
+                <span class="material-symbols-outlined me-2 fs-5">group</span>Zarządzaj użytkownikami
+            </a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{base_dir}}">
                 <i class="bi bi-house-up me-2"></i>Strona główna
@@ -30,10 +40,10 @@
                 <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
-                <li><a class="dropdown-item" href="{{base_dir}}admin/panel/profile">
+                <li><a class="dropdown-item" href="{{base_dir}}admin/profile">
                     <i class="bi bi-person me-2"></i>Profil
                 </a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}admin/panel/settings">
+                <li><a class="dropdown-item" href="{{base_dir}}admin/settings">
                     <i class="bi bi-gear me-2"></i>Ustawienia
                 </a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -52,7 +62,6 @@
     <div class="row flex-fill flex-nowrap">
         <div class="col-2 d-none d-xl-block">
             <nav class="sticky-top panel-left-nav">
-                <div class="border-top my-3"></div>
                 <ul class="list-unstyled">
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/dashboard"
@@ -60,6 +69,7 @@
                             <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny
                         </a>
                     </li>
+                    <div class="border-top my-3"></div>
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/pending-restaurants"
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
@@ -70,6 +80,12 @@
                         <a href="{{base_dir}}admin/delete-restaurants"
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
                             <span class="bi bi-house-dash me-2 ms-1 fs-6"></span>Restauracje do usunięcia
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 ms-1 fs-5">group</span>Zarządzaj użytkownikami
                         </a>
                     </li>
                     <li class="border-top my-3"></li>
@@ -115,6 +131,28 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
                             <i class="bi bi-house-door fs-5"></i>
+                        </a>
+                    </li>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/pending-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące restauracje"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">food_bank</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/delete-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Restauracje do usunięcia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="bi bi-house-dash me-2 ms-1 fs-6">
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Zarządzaj użytkownikami"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 ms-1 fs-5">group</span>
                         </a>
                     </li>
                     <li class="border-top my-3"></li>

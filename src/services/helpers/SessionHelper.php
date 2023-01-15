@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:22:23                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-14 23:37:18                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -42,6 +42,8 @@ class SessionHelper
     const OWNER_DISHES_SEARCH                           = 'owner_dishes_search';
     const OWNER_DISHES_RES_SEARCH                       = 'owner_dishes_res_search';
     const ADMIN_PENDING_RES_SEARCH                      = 'admin_pending_res_search';
+    const ADMIN_USER_SEARCH                             = 'admin_user_search';
+    const ADMIN_DELETE_USER_BANNER                      = 'admin_delete_user_banner';
     const CANCEL_ORDER                                  = 'cancel_order';
     const DISCOUNT_SEARCH                               = 'discount_search';
     const DISCOUNT_RES_SEARCH                           = 'discount_res_search';
