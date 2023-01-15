@@ -1,0 +1,185 @@
+<?php
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Copyright (c) 2023 by multiple authors                      *
+* Politechnika Śląska | Silesian University of Technology     *
+*                                                             *
+* Nazwa pliku: DeleteRestaurantsService.php                   *
+* Projekt: restaurant-project-php-si                          *
+* Data utworzenia: 2023-01-12, 17:39:46                       *
+* Autor: BubbleWaffle                                         *
+*                                                             *
+* Ostatnia modyfikacja: 2023-01-12 18:53:28                   *
+* Modyfikowany przez: BubbleWaffle                            *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+namespace App\Admin\Services;
+
+use PDO;
+use Exception;
+use App\Core\MvcService;
+use App\Core\ResourceLoader;
+use App\Models\RestaurantModel;
+use App\Services\Helpers\SessionHelper;
+use App\Services\Helpers\PaginationHelper;
+
+ResourceLoader::load_model('RestaurantModel', 'restaurant');
+ResourceLoader::load_service_helper('SessionHelper');
+ResourceLoader::load_service_helper('PaginationHelper');
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class RestaurantsService extends MvcService
+{
+    private $_banner_message = '';
+    private $_banner_error = false;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    protected function __construct()
+    {
+        parent::__construct();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda pobierające dane wszystkich restauracji z możliwością ich usunięcia.
+     */
+    public function get_restaurants()
+    {
+        $pagination = array();
+        $restaurants = array();
+        $pages_nav = array();
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
+            $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::ADMIN_RES_SEARCH);
+
+            $redirect_url = 'admin/restaurants';
+            PaginationHelper::check_parameters($redirect_url);
+
+            // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji z bazy
+            $query = "
+                SELECT ROW_NUMBER() OVER(ORDER BY r.id) as it, name, accept, r.id, CONCAT(first_name, ' ', last_name) AS full_name,
+                CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address
+                FROM restaurants AS r INNER JOIN users AS u ON r.user_id = u.id WHERE name LIKE :search LIMIT :total OFFSET :page
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
+            $statement->bindValue('page', $page, PDO::PARAM_INT);
+            $statement->execute();
+            while ($row = $statement->fetchObject(RestaurantModel::class)) array_push($restaurants, $row);
+
+            $query = "SELECT count(*) FROM restaurants WHERE name LIKE :search";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->execute();
+            $total_records = $statement->fetchColumn();
+
+            $total_pages = ceil($total_records / $total_per_page);
+            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
+                'it' => $i,
+                'url' => $redirect_url . '?page=' . $i . '&total=' . $total_per_page,
+                'selected' => $curr_page == $i ? 'active' : '',
+            ));
+
+            $statement->closeCursor();
+            PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
+            $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
+        }
+        return array(
+            'total_per_page' => $total_per_page,
+            'pagination_url' => $redirect_url . '?',
+            'pagination' => $pagination,
+            'pages_nav' => $pages_nav,
+            'user_restaurants' => $restaurants,
+            'search_text' => $search_text,
+            'not_empty' => count($restaurants),
+        );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda odpowiadająca za pobranie szczegółów wybranej restauracji na podstawie id restauracji pobieranego z parametru GET. Jeśli
+     * parametru nie ma, bądź restauracja nie istnieje, przekierowanie do strony z restauracjami.
+     */
+    public function get_restaurant_details()
+    {
+        if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants', true, 301);
+        try
+        {
+            $this->dbh->beginTransaction();
+
+            // tutaj kod
+
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+        }
+        return array(
+            'res_id' => $_GET['id'],
+        );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda odpowiadająca za usuwanie wybranej restauracji z systemu. Metoda sprawdza, czy nie ma żadnych aktywnych zamówień związanych z
+     * tą restauracją. Jeśli nie, administratora może opcjonalnie wysłać wiadomość do właściciela restauracji z powodem usunięcia.
+     */
+    public function delete_restaurant()
+    {
+        if (!isset($_GET['id'])) return;
+        $additional_comment = $_POST['delete-restaurant-comment'] ?? 'brak komentarza';
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "
+                SELECT COUNT(*) FROM restaurants WHERE id = :resid AND
+                (SELECT COUNT(*) FROM orders WHERE restaurant_id = :resid AND status_id IS NOT 1) = 0
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('resid', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+            $result = $statement->fetchColumn();
+            if (empty($result)) throw new Exception('
+                Podana resturacja nie istnieje w systemie, została wcześniej usunięta lub posiada aktywne zamówienia. Tylko restaurację
+                które nie posiadają aktywnych zamówień można usunąć z systemu.
+            ');
+            $query = "DELETE FROM restaurants WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+
+            // wysyłanie wiadomości email do tego co usunął restaurację i do administratorów systemu z informacją o usunięciu restauracji
+            // i jej aktualnym statusie (aktywna/w oczekiwaniu)
+
+            rmdir('uploads/restaurants/' . $_GET['id']);
+            $this->_banner_message = 'Pomyślnie usunięto wybraną restaurację z systemu.';
+            $statement->closeCursor();
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
+        }
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+    }
+}

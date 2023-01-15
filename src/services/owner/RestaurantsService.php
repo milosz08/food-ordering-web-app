@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 14:13:03                   *
+ * Ostatnia modyfikacja: 2023-01-15 05:59:28                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -79,8 +79,8 @@ class RestaurantsService extends MvcService
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::OWNER_RES_SEARCH);
             
             $redirect_url = 'owner/restaurants';
@@ -446,7 +446,7 @@ class RestaurantsService extends MvcService
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Metoda odpowiadająca za usuwanie obecnej restauracji.
+     * Metoda odpowiadająca za usuwanie obecnej restauracji. Można usunąć jedynie restaurację, która nie posiada aktywnych zamówień.
      * Jeśli restauracja została pomyślnie usunięta następuje przekierowanie do strony z restauracjami.
      */
     public function delete_restaurant()
@@ -456,7 +456,13 @@ class RestaurantsService extends MvcService
         {
             $this->dbh->beginTransaction();
             RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '');
-
+            $query = "SELECT COUNT(*) FROM orders WHERE restaurant_id = ? AND status_id IS NOT 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            if ($statement->fetchColumn() != 0) throw new Exception('
+                Wybrana restauracja nie istnieje bądź posiada aktywne zamówienia. Z systemu możesz usunąć jednynie te resturacje, które
+                nie mają w obecnej chwili aktywnych zamówień
+            ');
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
@@ -535,8 +541,8 @@ class RestaurantsService extends MvcService
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
     
             $search_code = SessionHelper::persist_search_text('search-discount-code', SessionHelper::DISCOUNT_SEARCH);
             $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::OWNER_RES_DETAILS_SEARCH);
@@ -614,8 +620,9 @@ class RestaurantsService extends MvcService
                 IF(max_usages, '', 'disabled') AS increase_usages_active, IF(expired_date, '', 'disabled') AS increase_time_active, 
                 IFNULL(expired_date, '∞') AS expired_date, restaurant_id AS res_id, CONCAT(SUBSTRING(code, 1, 3), '********') AS hide_code,
                 IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = d.restaurant_id AND ((expired_date > NOW() OR 
-                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'table-success', 'table-warning') 
-                AS expired_bts_class
+                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'aktywny', 'wygasły') AS status,
+                IF((SELECT COUNT(*) > 0 FROM discounts WHERE restaurant_id = d.restaurant_id AND ((expired_date > NOW() OR 
+                expired_date IS NULL) AND (usages < max_usages OR max_usages IS NULL))), 'text-success', 'text-danger') AS expired_bts_class
                 FROM discounts AS d WHERE restaurant_id = :id AND code LIKE :search
             ";
             $statement = $this->dbh->prepare($discounts_query);
