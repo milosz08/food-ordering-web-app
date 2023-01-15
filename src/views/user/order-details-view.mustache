@@ -72,8 +72,10 @@
                 <h6 class="fw-bold pt-2">Zamówione produkty:</h6>
                 <hr class="mb-3"/>
                 <div class="my-4">
-                    <p class="text-secondary lh-sm mb-1">2 szt.:</p>
-                    <p class="text-dark fs-6 lh-sm">ziemniak</p>
+                    {{#data.one_order.dishes_value}}
+                    <p class="text-secondary lh-sm mb-1">{{dish_amount}} szt.:</p>
+                    <p class="text-dark fs-6 lh-sm">{{dish_name}}</p>
+                    {{/data.one_order.dishes_value}}
                 </div>
             </div>
         </div>

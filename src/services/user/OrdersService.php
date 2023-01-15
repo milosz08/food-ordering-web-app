@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 13:11:16                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-15 22:52:38                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -85,7 +85,7 @@ class OrdersService extends MvcService
                 SELECT IF((TIMESTAMPDIFF(SECOND, date_order, NOW())) > 300, true, false) AS time_statement,
                 o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, 
                 u.first_name AS first_name, u.last_name AS last_name, u.email AS email, o.date_order AS date_order, 
-                ua.street AS street, ua.building_nr AS building_nr, ua.locale_nr AS locale_nr, 
+                ua.street AS street, ua.building_nr AS building_nr, ua.locale_nr AS locale_nr,
                 ua.post_code AS post_code, ua.city AS city
                 FROM ((((orders AS o
                 INNER JOIN order_status AS os ON o.status_id = os.id)
@@ -99,9 +99,28 @@ class OrdersService extends MvcService
             $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
             $statement->execute();
             $one_order = $statement->fetchObject(ShowUserSingleOrderModel::class);
+
             if (!$one_order) header('Location:' . __URL_INIT_DIR__ . 'user/orders');
 
             $validation = !($one_order->status_id == 3 || $one_order->time_statement);
+
+            $query = "
+            SELECT COUNT(owd.dish_id) AS dish_amount, d.name AS dish_name
+            FROM (((orders_with_dishes AS owd
+            INNER JOIN orders AS o ON owd.order_id = o.id)
+            INNER JOIN dishes AS d ON owd.dish_id = d.id)
+            INNER JOIN users AS u ON o.user_id = u.id)
+            WHERE o.user_id = :userid AND owd.order_id = :id AND owd.dish_id = d.id
+            GROUP BY owd.dish_id;
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+
+            // Pętla wypełniająca tablicę daniami
+            while ($row = $statement->fetchObject(ShowUserSingleOrderModel::class)) array_push($one_order->dishes_value, $row);
+
             $statement->closeCursor();
             $this->dbh->commit();
         }
