@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-12, 17:38:57                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:39:14                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-15 15:43:08                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -39,12 +39,35 @@ class DeleteRestaurantsController extends MvcController
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Przejście pod adres: /admin/delete-restaurants/details
+     */
+    public function details()
+    {
+        $this->protector->protect_only_admin();
+        $restaurant_details = $this->_service->get_details();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER);
+        $this->renderer->render_embed('admin-wrapper-view', 'admin/restaurant-admin-details-view', array(
+            'page_title' => 'Szczegóły restauracji',
+            'is_details_subpage' => true,
+            'banner' => $banner_data,
+            'data' => $restaurant_details,
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /admin/delete-restaurants/remove
+     */
     public function remove()
     {
         $this->protector->protect_only_admin();
         $this->_service->delete_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'admin/delete-restaurants', true, 301);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/delete-restaurants
@@ -53,7 +76,7 @@ class DeleteRestaurantsController extends MvcController
     {
         $this->protector->protect_only_admin();
         $restaurant_table = $this->_service->get_restaurants();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::RESTAURANTS_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_DELETE_RESTAURANT_BANNER);
         $this->renderer->render_embed('admin-wrapper-view', 'admin/delete-restaurants-view', array(
             'page_title' => 'Usuwanie restauracji',
             'banner' => $banner_data,

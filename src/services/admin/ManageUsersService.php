@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 22:06:12                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 02:14:17                   *
+ * Ostatnia modyfikacja: 2023-01-15 16:21:50                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -53,12 +53,22 @@ class ManageUsersService extends MvcService
         {
             $this->dbh->beginTransaction();
 
+            $query = "SELECT COUNT(*) FROM users WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $result = $statement->fetchColumn();
+            if (empty($result))
+                throw new Exception(
+                    'Podany użytkownik nie istnieje w systemie lub została wcześniej usunięty.'
+                );
+
             $query = "DELETE FROM users WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
             // wysyłanie wiadomości email do użytkownika z informacją o usunięciu jego konta z serwisu
 
+            //rmdir('uploads/users/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybranego użytkownika z systemu.';
             $statement->closeCursor();
             $this->dbh->commit();

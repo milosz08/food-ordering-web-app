@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 23:37:18                   *
+ * Ostatnia modyfikacja: 2023-01-15 15:03:33                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -41,6 +41,8 @@ class SessionHelper
     const OWNER_RES_DETAILS_SEARCH                      = 'owner_restaurant_details_search';
     const OWNER_DISHES_SEARCH                           = 'owner_dishes_search';
     const OWNER_DISHES_RES_SEARCH                       = 'owner_dishes_res_search';
+    const ADMIN_RESTAURANTS_SEARCH                      = 'admin_restaurants_search';
+    const ADMIN_DELETE_RESTAURANT_BANNER                = 'admin_delete_restaurant_banner';
     const ADMIN_PENDING_RES_SEARCH                      = 'admin_pending_res_search';
     const ADMIN_USER_SEARCH                             = 'admin_user_search';
     const ADMIN_DELETE_USER_BANNER                      = 'admin_delete_user_banner';
