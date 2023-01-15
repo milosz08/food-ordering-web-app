@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 05:59:28                   *
+ * Ostatnia modyfikacja: 2023-01-15 13:09:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -72,7 +72,6 @@ class RestaurantsService extends MvcService
         $pagination = array(); // tablica przechowująca liczby przekazywane do dynamicznego tworzenia elementów paginacji
         $user_restaurants = array();
         $pages_nav = array();
-        $pagination_visible = true; // widoczność paginacji
         $not_empty = false;
         try
         {
@@ -125,14 +124,12 @@ class RestaurantsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $pagination_visible = false;
             SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/restaurants?',
             'pagination' => $pagination,
-            'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
             'user_restaurants' => $user_restaurants,
             'search_text' => $search_text,
@@ -535,7 +532,6 @@ class RestaurantsService extends MvcService
         $restaurant_dishes = array();
         $res_hours = array();
         $pages_nav = array();
-        $pagination_visible = true; // widoczność paginacji
         try
         {
             $this->dbh->beginTransaction();
@@ -636,14 +632,12 @@ class RestaurantsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $pagination_visible = false;
             SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'owner/restaurants/restaurant-details?id=' . $_GET['id'] . '&',
             'pagination' => $pagination,
-            'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
             'restaurant_dishes' => $restaurant_dishes,
             'search_text' => $search_text,

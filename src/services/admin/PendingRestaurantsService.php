@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 05:56:44                   *
+ * Ostatnia modyfikacja: 2023-01-15 12:25:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -105,7 +105,7 @@ class PendingRestaurantsService extends MvcService
         }
         return array(
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'admin/pending-restaurants?',
+            'pagination_url' => $redirect_url . '?',
             'pagination' => $pagination,
             'pages_nav' => $pages_nav,
             'pending_restaurants' => $pending_restaurants,

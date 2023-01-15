@@ -32,6 +32,16 @@
                 <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oczekujące na usunięcie</a>
             </li>
             <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/pending-restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Oczekujące restauracje
+            </a></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/delete-restaurants">
+                <span class="bi bi-house-dash me-2 fs-6"></span> Restauracje do usunięcia
+            </a></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/manage-users">
+                <span class="material-symbols-outlined me-2 fs-5">group</span>Zarządzaj użytkownikami
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{base_dir}}">
                 <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
             </a></li>
@@ -70,7 +80,6 @@
     <div class="row flex-fill flex-nowrap">
         <div class="col-2 d-none d-xl-block">
             <nav class="sticky-top panel-left-nav">
-                <div class="border-top my-3"></div>
                 <ul class="list-unstyled">
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/dashboard"
@@ -82,6 +91,12 @@
                         <a href="{{base_dir}}admin/dish-types"
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
                             <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Typy potraw
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 ms-1 fs-5">group</span>Zarządzaj użytkownikami
                         </a>
                     </li>
                     <li class="mb-1">
@@ -208,6 +223,28 @@
                         </a>
                     </li>
                     <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/pending-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące restauracje"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">food_bank</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/delete-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Restauracje do usunięcia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="bi bi-house-dash me-2 ms-1 fs-6">
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Zarządzaj użytkownikami"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 ms-1 fs-5">group</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-3"></li>
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/profile" type="button"
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"

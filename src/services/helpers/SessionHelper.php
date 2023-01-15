@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 10:09:09                   *
+ * Ostatnia modyfikacja: 2023-01-15 12:13:23                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -64,6 +64,8 @@ class SessionHelper
     const ADMIN_DISH_TYPES_SEARCH                       = 'admin_dish_types_search';
     const OWNER_DISH_TYPES_SEARCH                       = 'admin_dish_types_search';
     const OWNER_DISH_TYPES_PAGE_BANNER                  = 'owner_dish_types_page_banner';
+    const ADMIN_MANAGED_USERS_PAGE_BANNER               = 'admin_managed_users_banner';
+    const ADMIN_MANAGED_USERS_SEARCH                    = 'admin_managed_users_search';
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

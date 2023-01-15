@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 06:00:24                   *
+ * Ostatnia modyfikacja: 2023-01-15 13:12:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -64,7 +64,6 @@ class RestaurantsService extends MvcService
         $pages_nav = array();
         $with_search = '?';
         $total_records = 0;
-        $pagination_visible = true;
         $filter = new RestaurantFilterModel;
         try
         {
@@ -310,14 +309,12 @@ class RestaurantsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $pagination_visible = false;
             SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
             'pagination_url' => 'restaurants' . $with_search,
             'pagination' => $pagination,
-            'pagination_visible' => $pagination_visible,
             'pages_nav' => $pages_nav,
             'res_list' => $res_list,
             'search_text' => $search_text,

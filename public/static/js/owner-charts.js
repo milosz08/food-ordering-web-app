@@ -7,7 +7,7 @@
  * Data utworzenia: 2023-01-06, 04:16:09                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 02:36:58                   *
+ * Ostatnia modyfikacja: 2023-01-14 21:26:40                   *
  * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -33,7 +33,7 @@ function generateOwnerCharData() {
                 },
                 options: {
                     legend: { display: false },
-                    title: { display: true, fontSize: 18, text: 'Dane statystyczne zamówień wszystkich restauracji' },
+                    title: { display: true, fontSize: 18, text: 'Dane statystyczne wszystkich zamówień posiadanych restauracji' },
                     responsive: true,
                     maintainAspectRatio: false,
                 },
