@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 16:44:39                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-16 02:24:34                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -59,8 +59,6 @@ class SessionHelper
     const OWNER_ORDER_DETAILS_PAGE_BANNER               = 'owner_order_details_page_banner';
     const ADMIN_RATINGS_PAGE_BANNER                     = 'admin_ratings_page_banner';
     const ADMIN_RATINGS_PENDING_TO_DELETE               = 'admin_ratings_pending_to_delete';
-    const ADMIN_RESTAURANTS_PAGE_BANNER                 = 'admin_restaurants_page_banner';
-    const ADMIN_RESTAURANT_DETAILS_PAGE_BANNER          = 'admin_restaurant_details_page_banner';
     const ADMIN_PENDING_RESTAURANTS_PAGE_BANNER         = 'admin_pending_restaurants_page_banner';
     const ADMIN_DISH_TYPES_PAGE_BANNER                  = 'admin_dish_types_page_banner';
     const ADMIN_RES_SEARCH                              = 'admin_res_search';
@@ -69,6 +67,9 @@ class SessionHelper
     const OWNER_DISH_TYPES_PAGE_BANNER                  = 'owner_dish_types_page_banner';
     const ADMIN_MANAGED_USERS_PAGE_BANNER               = 'admin_managed_users_banner';
     const ADMIN_MANAGED_USERS_SEARCH                    = 'admin_managed_users_search';
+    const ADMIN_RES_DISHES_SEARCH                       = 'admin_res_dishes_search';
+    const ADMIN_DISH_DETAILS_PAGE_BANNER                = 'admin_dish_details_page_banner';
+    const ADMIN_USER_DETAILS_PAGE_BANNER                = 'admin_user_details_page_banner';
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 17:38:57                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 03:31:21                   *
+ * Ostatnia modyfikacja: 2023-01-16 00:40:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -47,6 +47,30 @@ class RestaurantsController extends MvcController
         $this->protector->protect_only_admin();
         $this->_service->delete_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants', true, 301);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /admin/restaurants/delete-banner-image
+     */
+    public function delete_banner_image()
+    {
+        $this->protector->protect_only_admin();
+        $redirect_url = $this->_service->delete_restaurant_image('banner_url', 'zdjęcie w tle', 'banner');
+        header('Location:' . __URL_INIT_DIR__ . $redirect_url,  true, 301);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /admin/restaurants/delete-profile-image
+     */
+    public function delete_profile_image()
+    {
+        $this->protector->protect_only_admin();
+        $redirect_url = $this->_service->delete_restaurant_image('profile_url', 'zdjęcie profilowe', 'profile');
+        header('Location:' . __URL_INIT_DIR__ . $redirect_url, true, 301);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

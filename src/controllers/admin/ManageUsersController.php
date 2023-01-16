@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 22:59:50                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 12:14:38                   *
+ * Ostatnia modyfikacja: 2023-01-16 03:24:03                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -40,13 +40,42 @@ class ManageUsersController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /admin/manage-users/delete
+     * Przejście pod adres: /admin/manage-users/user-details
      */
-    public function delete()
+    public function user_details()
+    {
+        $this->protector->protect_only_admin();
+        $user_details_data = $this->_service->get_users_details();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_USER_DETAILS_PAGE_BANNER);
+        $this->renderer->render_embed('admin-wrapper-view', 'admin/manage-users/user-details-view', array(
+            'page_title' => 'Szczegóły użytkownika #' . $user_details_data['user_details']->id,
+            'banner' => $banner_data,
+            'data' => $user_details_data,
+        ));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /admin/manage-users/delete-user
+     */
+    public function delete_user()
     {
         $this->protector->protect_only_admin();
         $this->_service->delete_user();
         header('Location:' . __URL_INIT_DIR__ . '/admin/manage-users', true, 301);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /admin/manage-users/delete-user-image
+     */
+    public function delete_user_image()
+    {
+        $this->protector->protect_only_admin();
+        $redir_path = $this->_service->delete_user_profile_image();
+        header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +88,7 @@ class ManageUsersController extends MvcController
         $this->protector->protect_only_admin();
         $users_list = $this->_service->get_users();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_MANAGED_USERS_PAGE_BANNER);
-        $this->renderer->render_embed('admin-wrapper-view', 'admin/manage-users-view', array(
+        $this->renderer->render_embed('admin-wrapper-view', 'admin/manage-users/manage-users-view', array(
             'page_title' => 'Zarządzaj użytkownikami',
             'banner' => $banner_data,
             'data' => $users_list,

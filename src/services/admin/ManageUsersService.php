@@ -157,4 +157,95 @@ class ManageUsersService extends MvcService
             'not_empty' => count($users_list),
         );
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda zwracająca szczegóły wybranego użytkownika na podstawie parametrów GET. Jeśli nie znajdzie użytkownika przekierowanie do
+     * strony ze wszystkimi użytkownikami.
+     */
+    public function get_users_details()
+    {
+        if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'admin/manage-users', true, 301);
+        $user_details = new AdminUserDetailsModel;
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "
+                SELECT u.id, IFNULL(u.photo_url, 'static/images/default-profile.jpg') AS profile_url, u.login, u.email,
+                CONCAT(u.first_name, ' ', u.last_name) AS full_name, CONCAT('ul. ', a.street, ' ', a.building_nr, IF(a.locale_nr IS 
+                NOT NULL, (CONCAT('/', a.locale_nr)), ('')) , ', ', a.post_code, ' ', a.city) AS address, r.name AS role,
+                u.is_activated AS activated, CONCAT('+48', phone_number) AS phone_number
+                FROM ((users AS u
+                INNER JOIN user_address AS a ON a.user_id = u.id AND a.is_prime = 1)
+                INNER JOIN roles AS r ON u.role_id = r.id)
+                WHERE u.id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $user_details = $statement->fetchObject(AdminUserDetailsModel::class);
+            if (!$user_details)
+            {
+                $this->dbh->rollback();
+                $message = 'Użytkownik z podanym ID nie istnieje w systemie.';
+                SessionHelper::create_session_banner(SessionHelper::ADMIN_MANAGED_USERS_PAGE_BANNER, $message, true);
+                header('Location:' . __URL_INIT_DIR__ . 'admin/manage-users', true, 301);
+                die;
+            }
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_USER_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+        }
+        return array(
+            'user_details' => $user_details,
+        );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda usuwająca zdjęcie profilowe użytkownika, jeśli takowe istnieje.
+     */
+    public function delete_user_profile_image()
+    {
+        if (!isset($_GET['id'])) return;
+        $redir_path = 'admin/manage-users';
+        $additional_comment = $_POST['delete-user-image-comment'] ?? 'brak komentarza';
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "SELECT COUNT(*) FROM users WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            if ($statement->fetchColumn() == 0) throw new Exception('Wybrany użytkownik nie istnieje w systemie.');
+            $redir_path .= '/user-details?id=' . $_GET['id'];
+
+            $query = "SELECT photo_url FROM users WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $image_path = $statement->fetchColumn();
+            if (empty($image_path)) throw new Exception('Wybrany użytkownik nie posiada żadnego zdjęcia profilowego.');
+
+            $query = "UPDATE users SET photo_url = NULL WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+
+            // wysłanie wiadomości email do użytkownika o usuniętym zdjęciu
+
+            if (file_exists($image_path)) unlink($image_path);
+            $this->_banner_message = 'Pomyślnie usunięto zdjęcie profilowe wybranego użytkownika z systemu.';
+            $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            $this->_banner_error = true;
+            $this->_banner_message = $e->getMessage();
+        }
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_USER_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+        return $redir_path;
+    }
 }
