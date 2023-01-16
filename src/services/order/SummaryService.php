@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 18:26:09                   *
+ * Ostatnia modyfikacja: 2023-01-16 18:54:14                   *
  * Modyfikowany przez: cptn3m012                               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -282,10 +282,11 @@ class SummaryService extends MvcService
                 $total_price = $temp['total_price'];
             }
             else $total_price /= 100;
+            $selected_address = $_POST['address-id'];
             // uzyskiwanie adresu
-            $query = "SELECT id FROM user_address WHERE user_id = ? AND is_prime = 1";
+            $query = "SELECT count(*) FROM user_address WHERE user_id = ? AND id = ?";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            $statement->execute(array($_SESSION['logged_user']['user_id'], $selected_address));
             $user_address = $statement->fetchColumn();
             if (!$user_address) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
 
@@ -296,7 +297,7 @@ class SummaryService extends MvcService
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array(
-                $_SESSION['logged_user']['user_id'], $discount_id, $user_address, $delivery, $_POST['resid'], $total_price, $estimate_time,
+                $_SESSION['logged_user']['user_id'], $discount_id, $selected_address, $delivery, $_POST['resid'], $total_price, $estimate_time,
             ));
 
             //pobieranie id generowanego zamowienia
