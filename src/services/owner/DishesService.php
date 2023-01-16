@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 05:58:33                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:03:58                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -385,7 +385,9 @@ class DishesService extends MvcService
             $query = "
                 SELECT CONCAT(d.name, '#', d.id) AS d_name, CONCAT(r.name, '#', r.id) AS r_name, d.photo_url AS photo_url
                 FROM dishes AS d INNER JOIN restaurants AS r ON d.restaurant_id = r.id
-                WHERE d.id = ?
+                WHERE d.id = :dishid AND 
+                (SELECT COUNT(*) FROM orders_with_dishes AS od INNER JOIN orders AS o ON od.order_id = o.id
+                WHERE dish_id = :dishid AND status_id = 1) = 0
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['dishid']));
@@ -395,7 +397,7 @@ class DishesService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['dishid']));
             
-            unlink($deleted_dish['photo_url']);
+            if (file_exists($deleted_dish['photo_url'])) unlink($deleted_dish['photo_url']);
             $this->_banner_message = '
                 Pomyślnie usunięto potrawę <strong>' . $deleted_dish['d_name'] . '</strong> z restauracji <strong>' . 
                 $deleted_dish['r_name'] . '</strong>.
@@ -438,7 +440,7 @@ class DishesService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['dishid']));
 
-            unlink($image_path);
+            if (file_exists($image_path)) unlink($image_path);
             $this->_banner_message = 'Pomyślnie usunięto zdjęcie wybranej potrawy.';
             $statement->closeCursor();
             $this->dbh->commit();
@@ -450,9 +452,7 @@ class DishesService extends MvcService
             $this->dbh->rollback();
         }
         SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
-        return array(
-            'redirect_path' => 'owner/dishes/edit-dish?resid=' . $_GET['resid']  . '&dishid=' . $_GET['dishid'],
-        );
+        return 'owner/dishes/edit-dish?resid=' . $_GET['resid']  . '&dishid=' . $_GET['dishid'];
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -471,7 +471,8 @@ class DishesService extends MvcService
             $this->check_if_dish_is_valid();
             
             $query = "
-                SELECT d.name, t.name AS type, d.description AS description, r.name AS r_name, d.photo_url AS photo_url,
+                SELECT d.name, t.name AS type, d.description AS description, r.name AS r_name,
+                IFNULL(d.photo_url, 'static/images/default-profile.jpg') AS photo_url,
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS r_address, 
                 IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price as DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS r_delivery_price,
                 CONCAT(REPLACE(CAST(price as DECIMAL(10,2)), '.', ','), ' zł') AS price,

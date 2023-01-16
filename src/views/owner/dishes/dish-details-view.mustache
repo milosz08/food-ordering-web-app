@@ -1,11 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="me-4">
-        {{#data.details.photo_url}}
-            <img src="{{base_dir}}public/{{data.details.photo_url}}" alt="" class="rounded" width="80px" height="80px"/>
-        {{/data.details.photo_url}}
-        {{^data.details.photo_url}}
-            <img src="{{base_dir}}public/static/images/default-profile.jpg" alt="" class="rounded" width="80px" height="80px"/>
-        {{/data.details.photo_url}}
+        <img src="{{base_dir}}public/{{data.details.photo_url}}" alt="" class="rounded" width="80px" height="80px"/>
     </div>
     <div>
         <h2 class="mb-3 text-secondary fw-normal">Szczegóły potrawy <span class="text-primary">#{{data.dish_id}}</span></h2>
@@ -24,6 +19,7 @@
     </div>
 </div>
 <hr class="mb-3"/>
+{{> partials/dynamic-banner-view.partial}}
 <div class="row mb-4">
     <div class="col-auto mb-2">
         <a href="{{base_dir}}owner/dishes/edit-dish?resid={{data.restaurant_id}}&dishid={{data.dish_id}}" class="btn btn-primary">

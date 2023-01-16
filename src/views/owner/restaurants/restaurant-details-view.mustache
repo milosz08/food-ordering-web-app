@@ -29,12 +29,7 @@
 <div class="position-relative min-z-index">
     <div class="d-flex align-items-center">
         <div class="me-4">
-            {{#data.details.profile_url}}
-                <img src="{{base_dir}}public/{{data.details.profile_url}}" alt="" class="rounded" width="80px" height="80px"/>
-            {{/data.details.profile_url}}
-            {{^data.details.profile_url}}
-                <img src="{{base_dir}}public/static/images/default-profile.jpg" alt="" class="rounded" width="80px" height="80px"/>
-            {{/data.details.profile_url}}
+            <img src="{{base_dir}}public/{{data.details.profile_url}}" alt="" class="rounded" width="80px" height="80px"/>
         </div>
         <div>
             <h2 class="mb-3 text-secondary fw-normal">Szczegóły restauracji <span class="text-primary">#{{data.details.id}}</span></h2>

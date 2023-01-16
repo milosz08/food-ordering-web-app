@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 13:12:05                   *
+ * Ostatnia modyfikacja: 2023-01-16 03:55:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -119,7 +119,7 @@ class RestaurantsService extends MvcService
             }
             else $grade_stars = $filter->grade_stars['stars'];
             if (!empty($grade_stars)) $filter->grade_stars['query'] = " AND
-                (SELECT AVG(rg.grade) FROM restaurants_grades AS rg INNER JOIN orders AS o ON rg.order_id = o.id 
+                (SELECT AVG((restaurant_grade + delivery_grade) / 2) FROM restaurants_grades AS rg INNER JOIN orders AS o ON rg.order_id = o.id 
                 WHERE restaurant_id = r.id) >= $grade_stars
             ";
             else $filter->grade_stars['query'] = '';
@@ -238,51 +238,54 @@ class RestaurantsService extends MvcService
             $statement->execute();
             while ($row = $statement->fetchObject(ListRestaurantModel::class)) array_push($res_list, $row);
 
-            $restaurants_ids_impl = '';
-            $this->dbh->prepare("SET lc_time_names = 'pl_PL'")->execute();
-            $query = "
-                SELECT restaurant_id AS res_id, restaurant_grade, delivery_grade, description,
-                IF(anonymously = 1, 'Anonimowy', CONCAT(first_name, ' ', last_name)) AS signature,
-                CONCAT(DAYNAME(give_on), ', ', DAY(give_on), ' ', MONTHNAME(give_on), ' ', YEAR(give_on)) AS give_on
-                FROM ((restaurants_grades AS rg
-                INNER JOIN orders AS o ON rg.order_id = o.id)
-                INNER JOIN users AS u ON o.user_id = u.id)
-                ORDER BY give_on DESC
-            ";
-            $statement = $this->dbh->prepare($query);
-            $statement->execute();
-            foreach ($res_list as $res)
+            if (!empty($res_list))
             {
-                $restaurants_ids_impl .= $res->id . ',';
-                while ($row = $statement->fetchObject(OpinionModel::class))
+                $restaurants_ids_impl = '';
+                $this->dbh->prepare("SET lc_time_names = 'pl_PL'")->execute();
+                $query = "
+                    SELECT restaurant_id AS res_id, restaurant_grade, delivery_grade, description,
+                    IF(anonymously = 1, 'Anonimowy', CONCAT(first_name, ' ', last_name)) AS signature,
+                    CONCAT(DAYNAME(give_on), ', ', DAY(give_on), ' ', MONTHNAME(give_on), ' ', YEAR(give_on)) AS give_on
+                    FROM ((restaurants_grades AS rg
+                    INNER JOIN orders AS o ON rg.order_id = o.id)
+                    INNER JOIN users AS u ON o.user_id = u.id)
+                    ORDER BY give_on DESC
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->execute();
+                foreach ($res_list as $res)
                 {
-                    if ($row->res_id == $res->id) array_unshift($res->opinions, array('opinion' => $row));
-                }
-            }
-            $query = "
-                SELECT r.id AS res_id, w.name AS name,
-                CONCAT(IF((SELECT DATE_FORMAT(open_hour, '%H:%i') 
-                    FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id) IS NULL,'',
-                    CONCAT((SELECT DATE_FORMAT(open_hour, '%H:%i')
-                    FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id), ' - ')),
-                    IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id),
-                    'nieczynne')
-                ) AS hours
-                FROM weekdays AS w
-                LEFT OUTER JOIN restaurants AS r ON r.id IN(" . rtrim($restaurants_ids_impl, ',') . ")
-                ORDER BY w.id DESC
-            ";
-            $statement = $this->dbh->prepare($query);
-            $statement->execute();
-            $all_hours_from_all_restaurants = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($res_list as $res)
-            {
-                foreach ($all_hours_from_all_restaurants as $row)
-                {
-                    if ($row['res_id'] == $res->id)
+                    $restaurants_ids_impl .= $res->id . ',';
+                    while ($row = $statement->fetchObject(OpinionModel::class))
                     {
-                        $res_hours = array('day' => $row['name'], 'hours' => $row['hours']);
-                        array_unshift($res->delivery_hours, array('hour' => $res_hours));
+                        if ($row->res_id == $res->id) array_unshift($res->opinions, array('opinion' => $row));
+                    }
+                }
+                $query = "
+                    SELECT r.id AS res_id, w.name AS name,
+                    CONCAT(IF((SELECT DATE_FORMAT(open_hour, '%H:%i') 
+                        FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id) IS NULL,'',
+                        CONCAT((SELECT DATE_FORMAT(open_hour, '%H:%i')
+                        FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id), ' - ')),
+                        IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = r.id AND weekday_id = w.id),
+                        'nieczynne')
+                    ) AS hours
+                    FROM weekdays AS w
+                    LEFT OUTER JOIN restaurants AS r ON r.id IN(" . rtrim($restaurants_ids_impl, ',') . ")
+                    ORDER BY w.id DESC
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->execute();
+                $all_hours_from_all_restaurants = $statement->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($res_list as $res)
+                {
+                    foreach ($all_hours_from_all_restaurants as $row)
+                    {
+                        if ($row['res_id'] == $res->id)
+                        {
+                            $res_hours = array('day' => $row['name'], 'hours' => $row['hours']);
+                            array_unshift($res->delivery_hours, array('hour' => $res_hours));
+                        }
                     }
                 }
             }

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:20:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 11:12:21                   *
+ * Ostatnia modyfikacja: 2023-01-16 00:18:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -110,13 +110,13 @@ class DishesController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Przejście pod adres: /owner/dishes/delete_dish_image
+     * Przejście pod adres: /owner/dishes/delete-dish-image
      */
     public function delete_dish_image()
     {
         $this->protector->protect_only_owner();
-        $deleted_data = $this->_service->delete_dish_image();
-        header('Location:' . __URL_INIT_DIR__ . $deleted_data['redirect_path'], true, 301);
+        $redir_path = $this->_service->delete_dish_image();
+        header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

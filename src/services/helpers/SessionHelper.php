@@ -41,7 +41,8 @@ class SessionHelper
     const OWNER_DISHES_SEARCH                           = 'owner_dishes_search';
     const OWNER_DISHES_RES_SEARCH                       = 'owner_dishes_res_search';
     const ADMIN_RESTAURANTS_SEARCH                      = 'admin_restaurants_search';
-    const ADMIN_DELETE_RESTAURANT_BANNER                = 'admin_delete_restaurant_banner';
+    const ADMIN_RESTAURANTS_PAGE_BANNER                 = 'admin_restaurants_banner';
+    const ADMIN_RESTAURANT_DETAILS_PAGE_BANNER          = 'admin_restaurant_details_banner';
     const ADMIN_PENDING_RES_SEARCH                      = 'admin_pending_res_search';
     const DISCOUNT_SEARCH                               = 'discount_search';
     const DISCOUNT_RES_SEARCH                           = 'discount_res_search';

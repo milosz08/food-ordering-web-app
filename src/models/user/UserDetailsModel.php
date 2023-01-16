@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-14, 23:42:42                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 01:35:00                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-16 03:14:07                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
  namespace App\Models;
@@ -29,6 +29,7 @@ class UserDetailsModel
     public $activated;
     public $address;
     public $status;
+    public $full_name;
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     

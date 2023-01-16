@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 13:09:11                   *
+ * Ostatnia modyfikacja: 2023-01-16 03:04:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -453,7 +453,7 @@ class RestaurantsService extends MvcService
         {
             $this->dbh->beginTransaction();
             RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '');
-            $query = "SELECT COUNT(*) FROM orders WHERE restaurant_id = ? AND status_id IS NOT 1";
+            $query = "SELECT COUNT(*) FROM orders WHERE restaurant_id = ? AND status_id = 1";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
             if ($statement->fetchColumn() != 0) throw new Exception('
@@ -494,26 +494,39 @@ class RestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-            $image_url = RestaurantsHelper::check_if_restaurant_exist($this->dbh, 'id', '', $image_column_name);
+            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ? AND user_id AND accept = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id'], ));
+            if ($statement->fetchColumn() == 0) throw new Exception('
+                Wybrana restuaracja nie istnieje lub nie jest przypisana to Twojego konta.
+            ');
+            $redirect_url .= '/edit-restaurant?id=' . $_GET['id'];
+
+            $query = "SELECT $image_column_name FROM restaurants WHERE id = ? AND user_id AND accept = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id'], $_SESSION['logged_user']['user_id']));
+            $result = $statement->fetchColumn();
+            if (!$result) throw new Exception('Wybrana restuaracja nie posiada typu zdjęcia: <strong>' . $image_column_name .  '</strong>.');
 
             $query = "UPDATE restaurants SET $image_column_name = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            if (file_exists($image_url)) unlink($image_url);
+            if (file_exists($result)) unlink($result);
             $this->_banner_message = 'Pomyślnie usunięto ' . $deleted_type . ' z wybranej restauracji z systemu.';
-            $redirect_url .= '/edit-restaurant?id=' . $_GET['id'];
-
             $statement->closeCursor();
             $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            $this->_banner_message = $e->getMessage();
             $this->_banner_error = true;
+            SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
-        SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        if (!$this->_banner_error)
+        {
+            SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_RESTAURANT_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        }
         return $redirect_url;
     }
 
@@ -547,7 +560,9 @@ class RestaurantsService extends MvcService
             PaginationHelper::check_parameters($redirect_url);
 
             $restaurant_query = "
-                SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city, r.profile_url, r.banner_url,
+                SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city,
+                IFNULL(r.profile_url, 'static/images/default-profile.jpg') AS profile_url,
+                IFNULL(r.banner_url, 'static/images/default-banner.jpg') AS banner_url,
                 CONCAT(first_name, ' ', last_name) AS full_name,
                 IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS delivery_price, 
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,

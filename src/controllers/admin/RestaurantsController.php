@@ -63,6 +63,7 @@ class RestaurantsController extends MvcController
             'page_title' => 'Szczegóły restauracji #' . $restaurant_details['res_id'],
             'data' => $restaurant_details,
             'banner' => $banner_data,
+            'is_details_subpage' => true,
         ));
     }
 

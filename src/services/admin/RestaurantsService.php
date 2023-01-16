@@ -17,27 +17,22 @@ namespace App\Admin\Services;
 
 use PDO;
 use Exception;
-use App\Core\Config;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
+use App\Models\DishModel;
 use App\Models\RestaurantModel;
 use App\Models\RestaurantHourModel;
 use App\Models\RestaurantAdminModel;
-use App\Services\Helpers\ImagesHelper;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
-use App\Services\Helpers\ValidationHelper;
-use App\Services\Helpers\RestaurantsHelper;
 
+ResourceLoader::load_model('DishModel', 'dish');
 ResourceLoader::load_model('RestaurantModel', 'restaurant');
 ResourceLoader::load_model('RestaurantHourModel', 'restaurant');
 ResourceLoader::load_model('RestaurantAdminModel', 'restaurant');
 
-ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
-ResourceLoader::load_service_helper('ValidationHelper');
-ResourceLoader::load_service_helper('RestaurantsHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -55,7 +50,7 @@ class RestaurantsService extends MvcService
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     /**
+    /**
      * Metoda odpowiadająca za tworzenie tabeli w zakładce 'Restauracje do usunięcia'.
      * Tabela przechowuje kolejno wszystkie restauracje z bazy danych.
      * Tabela została wzbogacona o funkcję paginacji, wyświetlającej tylko 5 elementów na jednej ze stron.
@@ -65,13 +60,13 @@ class RestaurantsService extends MvcService
         $pagination = array();
         $restaurants = array();
         $pages_nav = array();
-        $pagination_visible = true; // widoczność paginacji
-        try {
+        try
+        {
             $this->dbh->beginTransaction();
 
             $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
-            $page = ($curr_page - 1) * 5;
-            $total_per_page = $_GET['total'] ?? 5;
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
             $search_text = SessionHelper::persist_search_text('search-res-name', SessionHelper::ADMIN_RESTAURANTS_SEARCH);
 
             $redirect_url = 'admin/restaurants';
@@ -89,8 +84,7 @@ class RestaurantsService extends MvcService
             $statement->bindValue('page', $page, PDO::PARAM_INT);
             $statement->execute();
 
-            while ($row = $statement->fetchObject(RestaurantModel::class))
-                array_push($restaurants, $row);
+            while ($row = $statement->fetchObject(RestaurantModel::class)) array_push($restaurants, $row);
 
             $query = "SELECT count(*) FROM restaurants WHERE name LIKE :search";
             $statement = $this->dbh->prepare($query);
@@ -99,22 +93,21 @@ class RestaurantsService extends MvcService
             $total_records = $statement->fetchColumn();
 
             $total_pages = ceil($total_records / $total_per_page);
-            for ($i = 1; $i <= $total_pages; $i++)
-                array_push($pagination, array(
-                    'it' => $i,
-                    'url' => $redirect_url . '?page=' . $i . '&total=' . $total_per_page,
-                    'selected' => $curr_page == $i ? 'active' : '',
-                )
-                );
+            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
+                'it' => $i,
+                'url' => $redirect_url . '?page=' . $i . '&total=' . $total_per_page,
+                'selected' => $curr_page == $i ? 'active' : '',
+            ));
 
             $statement->closeCursor();
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $this->dbh->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e)
+        {
             $this->dbh->rollback();
-            $pagination_visible = false;
-            SessionHelper::create_session_banner(SessionHelper::ADMIN_DELETE_RESTAURANT_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'total_per_page' => $total_per_page,
@@ -132,21 +125,30 @@ class RestaurantsService extends MvcService
     /**
      * Metoda odpowiadająca za pobranie szczegółów dań wybranej restauracji z bazy danych i zwrócenie ich do widoku.
      */
-    public function get_details()
+    public function get_restaurant_details()
     {
-        if (!isset($_GET['id']))
-            header('Location:' . __URL_INIT_DIR__ . 'admin/delete-restaurants', true, 301);
-
+        if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants', true, 301);
         $restaurant_details = new RestaurantAdminModel;
+        $pagination = array();
+        $restaurant_dishes = array();
         $res_hours = array();
-
-        try {
+        $pages_nav = array();
+        try
+        {
             $this->dbh->beginTransaction();
 
-            //$redirect_url = 'admin/delete-restaurants/details?id=' . $_GET['id'];
+            $curr_page = $_GET['page'] ?? 1; // pobranie indeksu paginacji
+            $page = ($curr_page - 1) * 10;
+            $total_per_page = $_GET['total'] ?? 10;
+            $search_text = SessionHelper::persist_search_text('search-dish-name', SessionHelper::ADMIN_RES_DISHES_SEARCH);
+            
+            $redirect_url = 'admin/restaurants/restaurant-details?id=' . $_GET['id'];
+            PaginationHelper::check_parameters($redirect_url);
 
             $restaurant_query = "
-                SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city, r.profile_url, r.banner_url,
+                SELECT r.id, name, accept, description, building_locale_nr, street, post_code, city,
+                IFNULL(r.profile_url, 'static/images/default-profile.jpg') AS profile_url,
+                IFNULL(r.banner_url, 'static/images/default-banner.jpg') AS banner_url,
                 CONCAT(first_name, ' ', last_name) AS full_name,
                 IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS delivery_price, 
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
@@ -165,86 +167,131 @@ class RestaurantsService extends MvcService
             if (!$restaurant_details)
             {
                 $this->_banner_message = 'Wybrana restauracja nie istnieje.';
-                SessionHelper::create_session_banner(SessionHelper::ADMIN_DELETE_RESTAURANT_BANNER, $this->_banner_message, true);
+                SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $this->_banner_message, true);
                 $statement->closeCursor();
                 $this->dbh->commit();
-                header('Location:' . __URL_INIT_DIR__ . 'admin/delete-restaurants');
+                header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants');
             }
+            
+            // pobieranie danych na podstawie wszystkich dni tygodnia, kiedy restauracja jest czynna (zapytania złożone i podzapytania)
+            $hours_query = "
+                SELECT w.alias AS alias, w.name AS name, w.name_eng AS identifier,
+                IFNULL((SELECT DATE_FORMAT(open_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
+                'nieczynne') AS open_hour,
+                IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
+                'nieczynne') AS close_hour,
+                (SELECT NOT COUNT(*) > 0 FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id) AS is_closed
+                FROM weekdays AS w
+                ORDER BY w.id
+            ";
+            $statement = $this->dbh->prepare($hours_query);
+            $statement->bindValue('resid', $_GET['id']);
+            $statement->execute();
+            while ($row = $statement->fetchObject(RestaurantHourModel::class)) array_push($res_hours, $row->format_to_details_view());
 
-            $raw_res_hours = $this->get_restaurant_weekdays_and_hours();
-            foreach ($raw_res_hours as $raw_res_hour)
-                array_push($res_hours, $raw_res_hour->format_to_details_view());
+            // zapytanie do bazy danych, które zwróci poszczególne dania dla obecnie wybranej restauracji
+            $dishes_query = "
+                SELECT ROW_NUMBER() OVER(ORDER BY d.id) as it, d.id, d.name, t.name AS type, d.description,
+                CONCAT(REPLACE(CAST(d.price AS DECIMAL(10,2)), '.', ','), ' zł') AS price
+                FROM dishes AS d
+                INNER JOIN dish_types AS t ON dish_type_id = t.id
+                WHERE restaurant_id = :id AND d.name LIKE :search LIMIT :total OFFSET :page
+            ";
+            $statement = $this->dbh->prepare($dishes_query);
+            $statement->bindValue('id', $_GET['id']);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->bindValue('total', $total_per_page, PDO::PARAM_INT);
+            $statement->bindValue('page', $page, PDO::PARAM_INT);
+            $statement->execute();
+            while ($row = $statement->fetchObject(DishModel::class)) array_push($restaurant_dishes, $row);
+            
+            $query = "SELECT count(*) FROM dishes WHERE restaurant_id = :id AND name LIKE :search";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('id', $_GET['id']);
+            $statement->bindValue('search', '%' . $search_text . '%');
+            $statement->execute();
+            $total_records = $statement->fetchColumn();
 
+            $total_pages = ceil($total_records / $total_per_page);
+            for ($i = 1; $i <= $total_pages; $i++) array_push($pagination, array(
+                'it' => $i,
+                'url' => $redirect_url . '&page=' . $i . '&total=' . $total_per_page, 
+                'selected' => $curr_page ==  $i ? 'active' : '',
+            ));
+
+            PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
+            $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
+            $statement->closeCursor();
             $this->dbh->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e)
+        {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'details' => $restaurant_details,
             'res_hours' => $res_hours,
+            'res_id' => $_GET['id'],
+            'total_per_page' => $total_per_page,
+            'pagination_url' => $redirect_url . '&',
+            'pagination' => $pagination,
+            'pages_nav' => $pages_nav,
+            'restaurant_dishes' => $restaurant_dishes,
+            'search_text' => $search_text,
+            'not_empty' => count($restaurant_dishes),
         );
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Metoda pobierająca godziny i dni tygodnia w jakich pracuje restauracja i zwraca tablicę obiektów.
+     * Metoda usuwająca zdjęcie w tle (baner) lub zdjęcie profilowe restauracji wybranej na podstawie id przekazywanego w parametrze GET 
+     * zapytania oraz parametrów metody. Ustawia również wartość NULL w kolumnie przechowującej link do grafiki.
      */
-    private function get_restaurant_weekdays_and_hours()
+    public function delete_restaurant_image($image_column_name, $deleted_type, $additional_comment)
     {
-        $ret_hours = array();
-        // pobieranie danych na podstawie wszystkich dni tygodnia, kiedy restauracja jest czynna (zapytania złożone i podzapytania)
-        $hours_query = "
-            SELECT w.alias AS alias, w.name AS name, w.name_eng AS identifier,
-            IFNULL((SELECT DATE_FORMAT(open_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
-            'nieczynne') AS open_hour,
-            IFNULL((SELECT DATE_FORMAT(close_hour, '%H:%i') FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id),
-            'nieczynne') AS close_hour,
-            (SELECT NOT COUNT(*) > 0 FROM restaurant_hours WHERE restaurant_id = :resid AND weekday_id = w.id) AS is_closed
-            FROM weekdays AS w
-            ORDER BY w.id
-        ";
-        $statement = $this->dbh->prepare($hours_query);
-        $statement->bindValue('resid', $_GET['id']);
-        $statement->execute();
-        while ($row = $statement->fetchObject(RestaurantHourModel::class)) array_push($ret_hours, $row);
-        return $ret_hours;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Metoda odpowiadająca za usunięcie wybranej przez admnistratora restauracji.
-     */
-    public function delete_restaurant()
-    {
-        if (!isset($_GET['id']))
-            return;
-        try {
+        $redirect_url = 'admin/restaurants';
+        $additional_comment = $_POST['delete-restaurant-' . $additional_comment . '-comment'];
+        if (!isset($_GET['id'])) return $redirect_url;
+        try
+        {
             $this->dbh->beginTransaction();
 
-            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ?";
+            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ? AND accept = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            if ($statement->fetchColumn() == 0) throw new Exception('
+                Podana resturacja nie istnieje w systemie, została wcześniej usunięta lub nie została jeszcze aktywowana.
+            ');
+            $redirect_url .= '/restaurant-details?id=' . $_GET['id'];
+
+            $query = "SELECT $image_column_name FROM restaurants WHERE id = ? AND accept = 1";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
             $result = $statement->fetchColumn();
-            if (empty($result))
-                throw new Exception(
-                    'Podana resturacja nie istnieje w systemie lub została wcześniej usunięta.'
-                );
+            if (!$result) throw new Exception('Podana resturacja nie posiada typu zdjęcia <strong>' . $deleted_type . '</strong>.');
+            $statement->closeCursor();
 
-            // tutaj kod
+            $query = "UPDATE restaurants SET $image_column_name = NULL WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
 
+            // wysyłanie wiadomości email do restauratora usuniętego zdjęcia restauracji
+
+            if (file_exists($result)) unlink($result);
+            $this->_banner_message = 'Pomyślnie usunięto ' . $deleted_type . ' z wybranej restauracji z systemu.';
+            $statement->closeCursor();
             $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANT_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
         }
-        return array(
-            'res_id' => $_GET['id'],
-        );
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANT_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        return $redirect_url;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,7 +309,7 @@ class RestaurantsService extends MvcService
             $this->dbh->beginTransaction();
             $query = "
                 SELECT COUNT(*) FROM restaurants WHERE id = :resid AND
-                (SELECT COUNT(*) FROM orders WHERE restaurant_id = :resid AND status_id IS NOT 1) = 0
+                (SELECT COUNT(*) FROM orders WHERE restaurant_id = :resid AND status_id = 1) = 0
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('resid', $_GET['id'], PDO::PARAM_INT);
@@ -287,6 +334,6 @@ class RestaurantsService extends MvcService
             $this->_banner_message = $e->getMessage();
             $this->_banner_error = true;
         }
-        SessionHelper::create_session_banner(SessionHelper::ADMIN_DELETE_RESTAURANT_BANNER, $this->_banner_message, $this->_banner_error);
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 }

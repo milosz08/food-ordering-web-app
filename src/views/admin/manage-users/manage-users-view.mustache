@@ -1,11 +1,15 @@
-<h2 class="text-secondary fw-normal mb-3">Zarządzaj użytkownikami</h2>
+<h2 class="text-secondary fw-normal mb-3">Użytkownicy systemu</h2>
 <nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Zarządzaj użytkownikami</li>
+        <li class="breadcrumb-item active" aria-current="page">Użytkownicy systemu</li>
     </ol>
 </nav>
 <hr/>
+<div class="alert alert-primary" role="alert">
+    Konta nieaktywnych użytkowników (posiadających konto "nieaktywne") zostają automatycznie usuwane 48 godzin po założeniu konta bez
+    ówczesnej jego aktywacji poprzez kliknięcie w link zawarty w wiadomości email.
+</div>
 {{> partials/dynamic-banner-view.partial}}
 <div class="row justify-content-between align-items-center">
     <form class="col-lg-4 mb-3 d-flex justify-content-end" action="" method="post">
@@ -48,41 +52,13 @@
                             <i class="bi bi-x-lg"></i>
                         </span>
                     </button>
+                    <a href="{{base_dir}}admin/manage-users/user-details?id={{id}}" class="btn btn-primary btn-sm ms-2" 
+                        type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Szczegóły użytkownika">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
                 </td>
             </tr>
-            <div class="modal fade" id="delete-user-modal-{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie użytkownika</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Czy napewno chcesz usunąć użytkownika:</p>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Imię: <strong>{{first_name}}</strong></li>
-                                <li class="list-group-item">Nazwisko: <strong>{{last_name}}</strong></li>
-                                <li class="list-group-item">Login: <strong>{{login}}</strong></li>
-                                <li class="list-group-item">Email: <strong>{{email}}</strong></li>
-                                <li class="list-group-item">Adres: <strong>{{address}}</strong></li>
-                                <li class="list-group-item">Rola: <strong>{{role}}</strong></li>
-                                <li class="list-group-item">Status konta: <strong class="{{status.color_bts}}">{{status.text}}</strong></li>
-                            </ul>
-                            <p class="mt-3">
-                                Po usunięciu użytkownika, skojarzone z nim adresy rónież zostaną usunięte. 
-                                Operacji usunięcia użytkownika nie można cofnąć.
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                            <a class="btn btn-outline-danger" href="{{base_dir}}admin/manage-users/delete?id={{id}}">
-                                Usuń
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{> partials/delete-user-modal-form-view.partial}}
             {{/data.users_list}}
         </tbody>
     </table>

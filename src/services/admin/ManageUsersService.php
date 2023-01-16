@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-14, 22:06:12                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 16:46:12                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-16 04:03:05                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Admin\Services;
@@ -20,10 +20,12 @@ use Exception;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
 use App\Models\UserDetailsModel;
+use App\Models\AdminUserDetailsModel;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
 
 ResourceLoader::load_model('UserDetailsModel', 'user');
+ResourceLoader::load_model('AdminUserDetailsModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
@@ -49,6 +51,7 @@ class ManageUsersService extends MvcService
     public function delete_user()
     {
         if (!isset($_GET['id'])) return;
+        $additional_comment = $_POST['delete-user-comment'] ?? 'brak komentarza';
         try
         {
             $this->dbh->beginTransaction();
@@ -57,10 +60,9 @@ class ManageUsersService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
             $result = $statement->fetchColumn();
-            if (empty($result))
-                throw new Exception(
-                    'Podany użytkownik nie istnieje w systemie lub została wcześniej usunięty.'
-                );
+            if (empty($result)) throw new Exception(
+                'Podany użytkownik nie istnieje w systemie lub została wcześniej usunięty.
+            ');
 
             $query = "DELETE FROM users WHERE id = ?";
             $statement = $this->dbh->prepare($query);
@@ -68,7 +70,7 @@ class ManageUsersService extends MvcService
 
             // wysyłanie wiadomości email do użytkownika z informacją o usunięciu jego konta z serwisu
 
-            //rmdir('uploads/users/' . $_GET['id']);
+            rmdir('uploads/users/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybranego użytkownika z systemu.';
             $statement->closeCursor();
             $this->dbh->commit();
@@ -106,8 +108,8 @@ class ManageUsersService extends MvcService
 
             // zapytanie do bazy danych, które zwróci poszczególne wartości wszystkich restauracji dla obecnie zalogowanego użytkownika
             $query = "
-                SELECT ROW_NUMBER() OVER(ORDER BY id) AS it, u.id AS id, u.first_name AS first_name, u.last_name AS last_name, 
-                u.login AS login, u.email AS email, u.is_activated AS activated, r.name AS role,
+                SELECT ROW_NUMBER() OVER(ORDER BY id) AS it, u.id AS id, u.login AS login, u.email AS email,
+                CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.is_activated AS activated, r.name AS role,
                 CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', 
                 ua.post_code, ' ', ua.city) AS address FROM ((users AS u
                 INNER JOIN user_address AS ua ON u.id = ua.user_id) 

@@ -17,6 +17,9 @@
             <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/dish-types">
                 <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Typy potraw</a>
             </li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/manage-users">
+                <span class="material-symbols-outlined me-2 fs-5">group</span>Użytkownicy systemu
+            </a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/restaurants">
                 <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Wszystkie restauracje</a>
@@ -38,16 +41,13 @@
             <li><a class="dropdown-item" href="{{base_dir}}admin/delete-restaurants">
                 <span class="bi bi-house-dash me-2 fs-6"></span> Restauracje do usunięcia
             </a></li>
-            <li><a class="dropdown-item" href="{{base_dir}}admin/manage-users">
-                <span class="material-symbols-outlined me-2 fs-5">group</span>Zarządzaj użytkownikami
-            </a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{base_dir}}">
                 <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
             </a></li>
-            <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
+            <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
                 <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-            </a></li>
+            </button></li>
         </ul>
     </div>
     <div class="d-flex flex-row-reverse">
@@ -68,9 +68,9 @@
                 <li><a class="dropdown-item" href="{{base_dir}}">
                     <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
                 </a></li>
-                <li><a class="dropdown-item" href="{{base_dir}}auth/logout">
+                <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
                     <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-                </a></li>
+                </button></li>
             </ul>
         </div>
     </div>
@@ -96,7 +96,7 @@
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/manage-users"
                             class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined me-2 ms-1 fs-5">group</span>Zarządzaj użytkownikami
+                            <span class="material-symbols-outlined me-2 fs-5">group</span>Użytkownicy systemu
                         </a>
                     </li>
                     <li class="mb-1">
@@ -166,9 +166,10 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{base_dir}}auth/logout" class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100">
+                        <button class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100" data-bs-toggle="modal"
+                            data-bs-target="#prepare-logout-modal">
                             <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
@@ -190,6 +191,13 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Typy potraw"
                             class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
                             <span class="material-symbols-outlined me-2 fs-5">fastfood</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Użytkownicy systemu"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">group</span>
                         </a>
                     </li>
                     <li class="border-top my-1"></li>
@@ -237,13 +245,6 @@
                             <span class="bi bi-house-dash me-2 ms-1 fs-6">
                         </a>
                     </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}admin/manage-users" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Zarządzaj użytkownikami"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined me-2 ms-1 fs-5">group</span>
-                        </a>
-                    </li>
                     <li class="border-top my-3"></li>
                     <li class="mb-1">
                         <a href="{{base_dir}}admin/profile" type="button"
@@ -268,23 +269,19 @@
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{base_dir}}auth/logout" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj"
-                            class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3">
-                            <span class="material-symbols-outlined me-2 fs-5">logout</span>
-                        </a>
+                        <button class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3"
+                            data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+                            <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj">
+                                <span class="material-symbols-outlined fs-5">logout</span>
+                            </span>
+                        </button>
                     </li>
                 </ul>
             </nav>
         </div>
         <div class="col px-0 mt-5 mh-100 shadow d-flex flex-column justify-content-between bg-white position-relative">
             {{#is_details_subpage}}
-            {{#data.details.banner_url}}
-                <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/{{data.details.banner_url}});"></div>            
-            {{/data.details.banner_url}}
-            {{^data.details.banner_url}}
-                <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/static/images/default-banner.jpg);"></div>            
-            {{/data.details.banner_url}}
+            <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/{{data.details.banner_url}});"></div>
             {{/is_details_subpage}}
             <main class="pt-5 px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
                 {{{ embed_rendering_section }}}
