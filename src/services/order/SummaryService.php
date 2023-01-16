@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 12:45:54                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2023-01-16 01:56:56                   *
+ * Modyfikowany przez: Desi451                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Order\Services;
@@ -205,16 +205,111 @@ class SummaryService extends MvcService
     {
         try
         {
-            $this->dbh->beginTransaction();
+            $delivery = $_POST['delivery'];
+            $discount_id = null;
+            $price = 0;
+            $delivery_price = 0;
 
-            // tutaj kod
+            // cena przed rabatem
+            if (!isset($_POST['resid'])) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+            
+                $this->dbh->beginTransaction();
 
+                $query = "
+                SELECT delivery_price FROM ((restaurants AS r
+                INNER JOIN restaurant_hours AS h ON r.id = h.restaurant_id)
+                INNER JOIN weekdays AS wk ON h.weekday_id = wk.id)
+                WHERE wk.name_eng = LOWER(DAYNAME(NOW())) AND h.open_hour <= CURTIME() AND h.close_hour >= CURTIME()
+                AND r.id = :resid AND accept = 1
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->bindValue('resid',$_POST['resid'], PDO::PARAM_INT);
+                $statement->execute();
+                $delivery_price  = ($statement->fetchColumn());
+                if (!$delivery_price) {
+                    $this->_banner_message = 'Wybrana restauracja nie istnieje, bądź nie jest otwarta.';
+                    SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
+                    header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                    die;
+                }
+                $delivery_price = (float)$delivery_price;
+
+                $cookie = $_COOKIE[CookieHelper::get_shopping_cart_name($_POST['resid'])] ?? null;
+                if(!isset($cookie)) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                $cart_cookie = json_decode($cookie, true);
+                
+                foreach ($cart_cookie['dishes'] as $dish) {
+                    $query = "
+                    SELECT price * :count AS total FROM dishes WHERE id = :id 
+                    ";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->bindValue('count', $dish['count'], PDO::PARAM_INT);
+                    $statement->bindValue('id', $dish['dishid']);
+                    $statement->execute();
+                    $price  += ((float)$statement->fetchColumn())*100;
+                }
+
+            // cena po rabacie jezeli jest
+            if (!empty($cart_cookie['code']))
+            {
+                $discount_data = $cart_cookie['code'];
+                $query = "
+                SELECT d.id,CAST((100-percentage_discount)/100*:price+r.delivery_price AS DECIMAL(10,2) ) AS Cena FROM 
+                discounts AS d INNER JOIN restaurants AS r 
+                ON d.restaurant_id = r.id WHERE d.code = :discount_data AND d.restaurant_id= :resid
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->bindValue('discount_data', $discount_data);
+                $statement->bindValue('resid',$_POST['resid'], PDO::PARAM_INT);
+                $statement->bindValue('price',$price/100);
+
+                $statement->execute();
+                $temp = ($statement->fetch(PDO::FETCH_ASSOC));
+                $discount_id = $temp['id'];
+                $price= $temp['Cena'];
+            }
+
+            // uzyskiwanie adresu
+            $query = "SELECT id FROM user_address WHERE user_id = :id AND is_prime=1";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('id',$_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->execute();
+            $user_address = $statement->fetchColumn();
+
+            // dodawanie zamowienia do bazy
+            $query = "
+            INSERT INTO orders(user_id,discount_id,status_id, order_adress, delivery_type, restaurant_id, price,
+            date_order) VALUES(?,?,?,?,?,?,?,NOW())
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array(
+                $_SESSION['logged_user']['user_id'],$discount_id, 1, $user_address, $delivery, 
+                $_POST['resid'], $price
+                ));
+
+            //pobieranie id generowanego zamowienia
+            $query = "SELECT LAST_INSERT_ID()";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();   
+            $order_id = $statement->fetchColumn();
+
+            //dodawanie zamowionych dani do orders_with_dishes
+            foreach ($cart_cookie['dishes'] as $dish)
+            {
+                $query = "INSERT INTO orders_with_dishes (order_id, dish_id) VALUES(:orderid,:dishid)";
+                $statement = $this->dbh->prepare($query);
+                $statement->bindValue('orderid',$order_id);
+                $statement->bindValue('dishid',$dish['dishid']);
+                $statement->execute();
+            }
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::NEW_ORDER_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+            var_dump($e->getMessage());
         }
         return 0;
     }
