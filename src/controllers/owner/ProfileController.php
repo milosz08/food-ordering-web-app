@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:38:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 15:34:19                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 17:33:17                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -45,9 +45,11 @@ class ProfileController extends MvcController
 	public function index()
     {
         $this->protector->protect_only_owner();
+        $profile_info = $this->_service->profile();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::OWNER_PROFILE_PAGE_BANNER);
         $this->renderer->render_embed('owner-wrapper-view', 'owner/profile-view', array(
             'page_title' => 'Profil właściciela',
+            'data' => $profile_info,
             'banner' => $banner_data,
         ));
 	}
