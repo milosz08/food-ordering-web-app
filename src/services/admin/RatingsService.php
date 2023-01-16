@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 02:05:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:34:08                   *
+ * Ostatnia modyfikacja: 2023-01-16 21:21:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -277,7 +277,23 @@ class RatingsService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($rating_id));
 
-            // wysłanie wiadomości email do restauratora z informacją o zaakceptowaniu prośby o usunięcie opinii i 
+            $query = "
+                SELECT CONCAT(first_name, ' ', last_name) AS full_name, email FROM (((users AS u
+                INNER JOIN restaurants AS r ON r.user_id = u.id)
+                INNER JOIN orders AS o ON o.restaurant_id = r.id) 
+                INNER JOIN restaurants_grades AS rg ON o.id = rg.order_id) 
+                WHERE rg.id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $mail_data = $statement->fetch(PDO::FETCH_ASSOC);
+            
+            $email_request_vars = array(
+                'grade_id' => $_GET['id'],
+                'user_full_name' => $mail_data['full_name'],
+            );
+            $subject = 'Zaakceptowanie usunięcia opinii z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($mail_data['email'], $subject, 'accept-delete-grade', $email_request_vars);
 
             $this->_banner_message = '
                 Ocena z ID <strong>#' . $_GET['id'] . '</strong> została pomyślnie usunięta z systemu oraz została wysłana wiadomość
@@ -312,11 +328,28 @@ class RatingsService extends MvcService
             $statement->execute(array($_GET['id']));
             if ($statement->fetchColumn() == 0) throw new Exception('Zgłoszenie z podanym ID nie istnieje bądź zostało już rozwiązane.');
 
+            $query = "
+                SELECT CONCAT(first_name, ' ', last_name) AS full_name, email FROM (((users AS u
+                INNER JOIN restaurants AS r ON r.user_id = u.id)
+                INNER JOIN orders AS o ON o.restaurant_id = r.id) 
+                INNER JOIN restaurants_grades AS rg ON o.id = rg.order_id) 
+                WHERE rg.id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $mail_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+            $email_request_vars = array(
+                'grade_id' => $_GET['id'],
+                'user_full_name' => $mail_data['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Odrzucenie usunięcia opinii z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($mail_data['email'], $subject, 'reject-delete-grade', $email_request_vars);
+
             $query = "DELETE FROM notifs_grades_to_delete WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-
-            // wysłanie wiadomości email do restauratora z informacją o odrzuceniu prośby o usunięcie opinii
 
             $this->_banner_message = '
                 Usunięcie oceny z ID <strong>#' . $_GET['id'] . '</strong> zostało pomyślnie odrzucone oraz została wysłana wiadomość

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 01:26:00                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:38:10                   *
+ * Ostatnia modyfikacja: 2023-01-16 17:12:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -239,8 +239,6 @@ class DiscountsService extends MvcService
                         $disc->expired_date['value'], $_GET['resid']
                     ));
 
-                    // wysyłanie wiadomości email do właściciela restauracji z informacją o stworzonym kodzie rabatowym
-
                     $this->_banner_message = 'Pomyślnie dodano nowy kod rabatowy do wybranej restauracji.';
                     $this->dbh->commit();
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $this->_banner_message, 
@@ -314,8 +312,6 @@ class DiscountsService extends MvcService
                         $disc->description['value'], $disc->percentage_discount['value'], $disc->max_usages['value'],
                         $disc->expired_date['value'], $_GET['id'],
                     ));
-
-                    // wysyłanie wiadomości email do właściciela restauracji z informacją o zaktualizowanym kodzie rabatowym
 
                     $this->_banner_message = '
                         Pomyślnie zmodyfikowany kod rabatowy <strong>' . $discount_data['code'] . '</strong> pochodzący z restauracji 
@@ -409,8 +405,6 @@ class DiscountsService extends MvcService
             $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
             $statement->execute();
 
-            // wysyłanie wiadomości email do właściciela restauracji z treścią o zwiększeniu ilość użyć tokena
-
             $this->_banner_message = '
                 Pomyślnie zwiększono ilość użyć kodu rabatowego <strong>' . $discount_data['code'] . '</strong> z restauracji <strong>' . 
                 $discount_data['name'] . '</strong> o <strong>' . $_GET['v'] . '</strong> użyć.
@@ -457,8 +451,6 @@ class DiscountsService extends MvcService
             $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
             $statement->execute();
     
-            // wysyłanie wiadomości email do właściciela restauracji z treścią o zwiększeniu czasu wygaszenia tokena
-
             $this->_banner_message = '
                 Pomyślnie zwiększono ilość dni o <strong>' . $_GET['v'] . '</strong> po których kod rabatowy <strong>' . 
                 $discount_data['code'] . '</strong> z restauracji <strong>' . $discount_data['name'] . '</strong> ulegnie przedawnieniu.

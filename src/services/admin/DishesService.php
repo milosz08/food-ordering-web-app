@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 22:06:26                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:32:47                   *
+ * Ostatnia modyfikacja: 2023-01-16 20:26:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,6 +17,7 @@ namespace App\Admin\Services;
 
 use PDO;
 use Exception;
+use App\Core\Config;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
 use App\Models\DishDetailsModel;
@@ -97,14 +98,17 @@ class DishesService extends MvcService
      */
     public function delete_dish()
     {
-        $additional_comment = $_POST['delete-restaurant-comment'] ?? 'brak komentarza';
+        $additional_comment = $_POST['delete-dish-comment'] ?? 'brak komentarza';
         try
         {
             $this->dbh->beginTransaction();
             $this->check_if_dish_is_valid();
             $query = "
-                SELECT CONCAT(d.name, '#', d.id) AS d_name, CONCAT(r.name, '#', r.id) AS r_name, d.photo_url AS photo_url
-                FROM dishes AS d INNER JOIN restaurants AS r ON d.restaurant_id = r.id
+                SELECT CONCAT(d.name, '#', d.id) AS d_name, CONCAT(r.name, '#', r.id) AS r_name, d.photo_url AS photo_url,
+                CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.email
+                FROM ((dishes AS d
+                INNER JOIN restaurants AS r ON d.restaurant_id = r.id)
+                INNER JOIN users AS u ON u.id = r.user_id)
                 WHERE d.id = :dishid AND 
                 (SELECT COUNT(*) FROM orders_with_dishes AS od INNER JOIN orders AS o ON od.order_id = o.id
                 WHERE dish_id = :dishid AND status_id = 1) = 0
@@ -121,7 +125,13 @@ class DishesService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['dishid']));
             
-            // wysyłanie wiadomości email do restauratora usuniętego dania
+            $email_request_vars = array(
+                'dish_id' => $_GET['dishid'],
+                'user_full_name' => $deleted_dish['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Usunięcie potrawy z ID #' . $_GET['dishid'];
+            $this->smtp_client->send_message($deleted_dish['email'], $subject, 'remove-dish', $email_request_vars);
 
             if (file_exists($deleted_dish['photo_url'])) unlink($deleted_dish['photo_url']);
             $this->_banner_message = '
@@ -154,19 +164,29 @@ class DishesService extends MvcService
             $this->dbh->beginTransaction();
             $this->check_if_dish_is_valid();
 
-            $query = "SELECT photo_url FROM dishes WHERE id = ?";
+            $query = "
+                SELECT d.photo_url, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.email FROM ((dishes AS d
+                INNER JOIN restaurants AS r ON r.id = d.restaurant_id)
+                INNER JOIN users AS u ON r.user_id = u.id) WHERE d.id = ?
+            ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['dishid']));
-            $image_path = $statement->fetchColumn();
-            if (empty($image_path)) throw new Exception('Wybrana potrawa nie posiada żadnego zdjęcia.');
+            $data = $statement->fetch(PDO::FETCH_ASSOC);
+            if (empty($data)) throw new Exception('Wybrana potrawa nie posiada żadnego zdjęcia.');
 
             $query = "UPDATE dishes SET photo_url = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['dishid']));
 
-            // wysłanie wiadomości email do restauratora z informacją o usunięciu zdjęcia potrawy przez administratora
+            $email_request_vars = array(
+                'dish_id' => $_GET['dishid'],
+                'user_full_name' => $data['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Usunięcie grafiki potrawy z ID #' . $_GET['dishid'];
+            $this->smtp_client->send_message($data['email'], $subject, 'remove-dish-image', $email_request_vars);
 
-            if (file_exists($image_path)) unlink($image_path);
+            if (file_exists($data['photo_url'])) unlink($data['photo_url']);
             $this->_banner_message = 'Pomyślnie usunięto zdjęcie wybranej potrawy oraz wysłano wiadomość do właściciela restauracji.';
             $statement->closeCursor();
             if ($this->dbh->inTransaction()) $this->dbh->commit();

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 10:06:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:39:08                   *
+ * Ostatnia modyfikacja: 2023-01-16 19:22:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -174,9 +174,9 @@ class DishTypesService extends MvcService
             $prev_name = $statement->fetchColumn();
             if (!$prev_name) throw new Exception('Szukany typ potrawy na podstawie ID nie istnieje w systemie.');
 
-            $query = "SELECT COUNT(*) FROM dish_types WHERE LOWER(name) = LOWER(?) AND (user_id IS NULL OR user_id = ?)";
+            $query = "SELECT COUNT(*) FROM dish_types WHERE LOWER(name) = LOWER(?) AND (user_id IS NULL OR user_id = ?) AND id <> ?";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($v_name['value'], $_SESSION['logged_user']['user_id']));
+            $statement->execute(array($v_name['value'], $_SESSION['logged_user']['user_id'], $_GET['id']));
             if ($statement->fetchColumn() != 0) throw new Exception('
                 Podana nazwa potrawy istnieje już w systemie i/lub przypisana jest do Twojego konta. Spróbuj wprowadzić inną nazwę
                 potrawy i zatwierdź zmiany.

@@ -50,7 +50,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                <a class="btn btn-outline-danger" href="{{base_dir}}owner/dishes/delete-dish?resid={{data.details.id}}&dishid={{id}}">
+                <a href="{{base_dir}}owner/dishes/delete-dish?resid={{data.restaurant_id}}&dishid={{data.dish_id}}"
+                    class="btn btn-outline-danger">
                     Usuń
                 </a>
             </div>

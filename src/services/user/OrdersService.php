@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 10:06:15                   *
+ * Ostatnia modyfikacja: 2023-01-16 20:56:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -51,7 +51,8 @@ class OrdersService extends MvcService
         {
             $this->dbh->beginTransaction();
             $query = "
-                SELECT o.id, r.name, o.price, s.name AS order_status, IF(s.id <> 3, 'text-success', 'text-danger') AS order_status_color,
+                SELECT o.id, r.name, REPLACE(o.price, '.', ',') AS price, s.name AS order_status,
+                IF(s.id <> 3, 'text-success', 'text-danger') AS order_status_color,
                 CONCAT(IFNULL(NULLIF(CONCAT(HOUR(estimate_time), 'h '), 0), ''), IFNULL(NULLIF(CONCAT(MINUTE(estimate_time), 'min'), 0), '?'))
                 AS estimate_time, IFNULL(r.profile_url, 'static/images/default-profile.jpg') AS profile_url
                 FROM ((orders AS o
@@ -89,7 +90,7 @@ class OrdersService extends MvcService
             $this->dbh->beginTransaction();
             $query = "
                 SELECT IF((TIMESTAMPDIFF(SECOND, date_order, NOW())) > 300, true, false) AS time_statement,
-                o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, 
+                o.id, o.status_id, REPLACE(o.discount_id, '.', ',') AS discount_id, dt.name AS order_type, os.name AS status_name, 
                 u.first_name AS first_name, u.last_name AS last_name, u.email AS email, o.date_order AS date_order, 
                 ua.street AS street, ua.building_nr AS building_nr, ua.locale_nr AS locale_nr,
                 ua.post_code AS post_code, ua.city AS city,

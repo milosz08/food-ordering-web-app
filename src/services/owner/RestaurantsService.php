@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 17:05:12                   *
+ * Ostatnia modyfikacja: 2023-01-16 19:59:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -191,7 +191,7 @@ class RestaurantsService extends MvcService
                     // Sekcja zapytań dodająca wprowadzone dane do tabeli restaurants
                     $query = "
                         INSERT INTO restaurants 
-                        (name, delivery_price, min_price street, building_locale_nr, post_code, city, description, phone_number, user_id)
+                        (name, delivery_price, min_price, street, building_locale_nr, post_code, city, description, phone_number, user_id)
                         VALUES (?,
                         NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''),
                         NULLIF(CAST(REPLACE(?, ',', '.') AS DECIMAL(10,2)),''),
@@ -201,7 +201,7 @@ class RestaurantsService extends MvcService
                     $statement->execute(array(
                         $res->name['value'], $res->delivery_price['value'], $res->min_price['value'], $res->street['value'],
                         $res->building_locale_nr['value'], $res->post_code['value'], $res->city['value'], $res->description['value'],
-                        $res->phone_number['value'],$_SESSION['logged_user']['user_id'],
+                        $res->phone_number['value'], $_SESSION['logged_user']['user_id'],
                     ));
 
                     // Sekcja zapytań zwracająca id ostatnio dodanej restauracji
@@ -291,7 +291,7 @@ class RestaurantsService extends MvcService
                 REPLACE(CAST(delivery_price as DECIMAL(10,2)), '.', ',') AS delivery_price,
                 IFNULL(delivery_price, '') AS delivery_free,
                 CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
-                REPLACE(IFNULL(min_price, ''), '.', ',') AS min_price
+                IFNULL(REPLACE(min_price, '.', ','), '') AS min_price
                 FROM restaurants
                 WHERE id = ? AND user_id = ?
             ";
@@ -301,10 +301,9 @@ class RestaurantsService extends MvcService
             if (!$res) header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
             $profile_photo = $res->profile_url['value'];
             $banner_photo = $res->banner_url['value'];
-
             $res_hours = $this->get_restaurant_weekdays_and_hours();
             $is_delivery_free = empty($res->delivery_free) ? 'checked' : '';
-            $is_min_price = empty($res->min_price) ? 'checked' : '';
+            $is_min_price = empty($res->min_price['value']) ? 'checked' : '';
             if (isset($_POST['restaurant-button']))
             {
                 $res->name = ValidationHelper::validate_field_regex('restaurant-name', '/^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\-\/%@$: ]{2,50}$/');
@@ -464,9 +463,6 @@ class RestaurantsService extends MvcService
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-
-            // wysyłanie wiadomości email do tego co usunął restaurację i do administratorów systemu z informacją o usunięciu restauracji
-            // i jej aktualnym statusie (aktywna/w oczekiwaniu)
 
             rmdir('uploads/restaurants/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybraną restaurację z systemu.';
@@ -652,7 +648,7 @@ class RestaurantsService extends MvcService
         }
         return array(
             'total_per_page' => $total_per_page,
-            'pagination_url' => 'owner/restaurants/restaurant-details?id=' . $_GET['id'] . '&',
+            'pagination_url' => $redirect_url . '&',
             'pagination' => $pagination,
             'pages_nav' => $pages_nav,
             'restaurant_dishes' => $restaurant_dishes,

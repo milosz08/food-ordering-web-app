@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:33:44                   *
+ * Ostatnia modyfikacja: 2023-01-16 20:45:46                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -125,12 +125,25 @@ class PendingRestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-
+            $query = "
+                SELECT CONCAT(first_name, ' ', last_name) AS full_name, email
+                FROM restaurants AS r INNER JOIN users AS u ON r.user_id = u.id WHERE r.id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            if (!$result) throw new Exception('Podana resturacja nie istnieje w systemie lub została już zaakceptowana.');
+            
             $query = "UPDATE restaurants SET accept = 1 WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            // wysłanie wiadomości email do właściciela restauracji
+            $email_request_vars = array(
+                'res_id' => $_GET['id'],
+                'user_full_name' => $result['full_name'],
+            );
+            $subject = 'Zaakceptowanie restauracji z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($result['email'], $subject, 'accept-pending-restaurant', $email_request_vars);
 
             $this->_banner_message = 'Pomyślnie zaakceptowano wybraną restaurację oraz wysłano wiadomość email do właściciela.';
             $statement->closeCursor();
@@ -157,18 +170,26 @@ class PendingRestaurantsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-
-            $query = "SELECT COUNT(*) FROM restaurants WHERE id = ?";
+            $query = "
+                SELECT CONCAT(first_name, ' ', last_name) AS full_name, email
+                FROM restaurants AS r INNER JOIN users AS u ON r.user_id = u.id WHERE r.id = ?
+            ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-
-            if ($statement->fetchColumn() == 0) throw new Exception('Podana resturacja nie istnieje w systemie lub została już odrzucona.');
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            if (!$result) throw new Exception('Podana resturacja nie istnieje w systemie lub została już odrzucona.');
 
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            // wysłanie wiadomości email do właściciela restauracji
+            $email_request_vars = array(
+                'res_id' => $_GET['id'],
+                'user_full_name' => $result['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Odrzucenie restauracji z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($result['email'], $subject, 'reject-pending-restaurant', $email_request_vars);
 
             $this->_banner_message = 'Pomyślnie odrzucono wybraną restaurację z systemu oraz wysłano wiadomość email do właściciela.';
             $statement->closeCursor();

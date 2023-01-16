@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-03, 02:13:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 16:17:36                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-16 17:13:15                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -69,9 +69,11 @@ class OrdersService extends MvcService
 
             // zapytanie do bazy danych, które zwróci poszczególne wartości zamówień wszystkich klientów dla obecnie zalogowanego właściciela
             $query = "
-                SELECT ROW_NUMBER() OVER(ORDER BY o.id) as it, o.id AS id, CONCAT(u.first_name, ' ', u.last_name) AS user, IF(o.discount_id IS NOT NULL, d.code, 'Brak') AS discount,
-                os.name AS status, CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', ua.post_code, ' ', ua.city) AS order_adress,
-                dt.name AS delivery_type, o.price AS price, r.name AS restaurant, IF(o.status_id != 1, 'disabled', ' ') AS button_status
+                SELECT ROW_NUMBER() OVER(ORDER BY o.id) as it, o.id AS id, CONCAT(u.first_name, ' ', u.last_name) AS user,
+                IF(o.discount_id IS NOT NULL, d.code, 'Brak') AS discount, os.name AS status,
+                CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', 
+                ua.post_code, ' ', ua.city) AS order_adress, dt.name AS delivery_type, o.price AS price, r.name AS restaurant,
+                IF(o.status_id != 1, 'disabled', ' ') AS button_status
                 FROM ((((((orders AS o
                 INNER JOIN order_status AS os ON o.status_id = os.id)
                 INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)

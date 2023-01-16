@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 22:06:12                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:33:33                   *
+ * Ostatnia modyfikacja: 2023-01-16 20:39:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -56,11 +56,11 @@ class ManageUsersService extends MvcService
         {
             $this->dbh->beginTransaction();
 
-            $query = "SELECT COUNT(*) FROM users WHERE id = ?";
+            $query = "SELECT CONCAT(first_name, ' ', last_name) AS full_name, email FROM users WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-            $result = $statement->fetchColumn();
-            if (empty($result)) throw new Exception(
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            if (!$result) throw new Exception(
                 'Podany użytkownik nie istnieje w systemie lub została wcześniej usunięty.
             ');
 
@@ -68,7 +68,12 @@ class ManageUsersService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            // wysyłanie wiadomości email do użytkownika z informacją o usunięciu jego konta z serwisu
+            $email_request_vars = array(
+                'user_full_name' => $$result['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Usunięcie użytkownika z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($result['email'], $subject, 'remove-account', $email_request_vars);
 
             rmdir('uploads/users/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybranego użytkownika z systemu.';
@@ -223,19 +228,24 @@ class ManageUsersService extends MvcService
             if ($statement->fetchColumn() == 0) throw new Exception('Wybrany użytkownik nie istnieje w systemie.');
             $redir_path .= '/user-details?id=' . $_GET['id'];
 
-            $query = "SELECT photo_url FROM users WHERE id = ?";
+            $query = "SELECT email, photo_url, CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-            $image_path = $statement->fetchColumn();
-            if (empty($image_path)) throw new Exception('Wybrany użytkownik nie posiada żadnego zdjęcia profilowego.');
+            $data = $statement->fetch(PDO::FETCH_ASSOC);
+            if (empty($data)) throw new Exception('Wybrany użytkownik nie posiada żadnego zdjęcia profilowego.');
 
             $query = "UPDATE users SET photo_url = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            // wysłanie wiadomości email do użytkownika o usuniętym zdjęciu
+            $email_request_vars = array(
+                'user_full_name' => $data['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Usunięcie potrawy z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($data['email'], $subject, 'remove-account-image', $email_request_vars);
 
-            if (file_exists($image_path)) unlink($image_path);
+            if (file_exists($data['photo_url'])) unlink($data['photo_url']);
             $this->_banner_message = 'Pomyślnie usunięto zdjęcie profilowe wybranego użytkownika z systemu.';
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
@@ -245,7 +255,7 @@ class ManageUsersService extends MvcService
             $this->_banner_error = true;
             $this->_banner_message = $e->getMessage();
         }
-        SessionHelper::create_session_banner(SessionHelper::ADMIN_USER_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+        SessionHelper::create_session_banner(SessionHelper::ADMIN_USER_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return $redir_path;
     }
 }

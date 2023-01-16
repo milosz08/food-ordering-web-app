@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 07:46:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:40:05                   *
+ * Ostatnia modyfikacja: 2023-01-16 18:40:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -198,8 +198,6 @@ class RatingsService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_POST['rating-own-delete-reason'], $_POST['rating-delete-reason'], $_GET['id']));
 
-            // wysłanie wiadomości email z informacją
-
             $this->_banner_message = '
                 Zostało wysłane zgłoszenie do administratorów systemu z prośbą o usunięcie recencji # ' . $_GET['id'] . '. Powierdzenie
                 zostało wysłane również na Twój adres email. Aby przejść do wszystkich oczekujących na usunięcię recenzji
@@ -330,8 +328,6 @@ class RatingsService extends MvcService
             $query = "UPDATE restaurants_grades SET pending_to_delete = 0 WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
-
-            // wysłanie wiadomości email z informacją o anulowaniu zgłoszenia
 
             $this->_banner_message = '
                 Zgłoszenie <strong>#' . $_GET['id'] . '</strong> do administratorów systemu z prośbą o usunięcie opinii zostało anulowane.

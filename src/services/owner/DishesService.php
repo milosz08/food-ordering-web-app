@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:38:39                   *
+ * Ostatnia modyfikacja: 2023-01-16 20:09:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -390,7 +390,8 @@ class DishesService extends MvcService
                 WHERE dish_id = :dishid AND status_id = 1) = 0
             ";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_GET['dishid']));
+            $statement->bindValue('dishid', $_GET['dishid'], PDO::PARAM_INT);
+            $statement->execute();
             $deleted_dish = $statement->fetch(PDO::FETCH_ASSOC);
             
             $query = "DELETE FROM dishes WHERE id = ?";

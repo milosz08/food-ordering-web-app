@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 08:09:40                   *
+ * Ostatnia modyfikacja: 2023-01-16 21:09:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -280,6 +280,10 @@ class SummaryService extends MvcService
                 $temp = $statement->fetch(PDO::FETCH_ASSOC);
                 $discount_id = $temp['id'];
                 $total_price = $temp['total_price'];
+
+                $query = "UPDATE discounts SET usages = usages + 1 WHERE id = ?";
+                $statement = $this->dbh->prepare($query);
+                $statement->execute(array($discount_id));
             }
             else $total_price /= 100;
             // uzyskiwanie adresu

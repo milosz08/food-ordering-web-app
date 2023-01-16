@@ -253,7 +253,7 @@ class RestaurantsService extends MvcService
     public function delete_restaurant_image($image_column_name, $deleted_type, $additional_comment)
     {
         $redirect_url = 'admin/restaurants';
-        $additional_comment = $_POST['delete-restaurant-' . $additional_comment . '-comment'];
+        $additional_comment = $_POST['delete-restaurant-' . $additional_comment . '-comment'] ?? 'brak komentarza';
         if (!isset($_GET['id'])) return $redirect_url;
         try
         {
@@ -274,11 +274,25 @@ class RestaurantsService extends MvcService
             if (!$result) throw new Exception('Podana resturacja nie posiada typu zdjęcia <strong>' . $deleted_type . '</strong>.');
             $statement->closeCursor();
 
+            $query = "
+                SELECT CONCAT(first_name, ' ', last_name) AS full_name, email FROM users AS u
+                INNER JOIN restaurants AS r ON r.user_id = u.id WHERE r.id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $mail_data = $statement->fetch(PDO::FETCH_ASSOC);
+
             $query = "UPDATE restaurants SET $image_column_name = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            // wysyłanie wiadomości email do restauratora usuniętego zdjęcia restauracji
+            $email_request_vars = array(
+                'res_id' => $_GET['id'],
+                'user_full_name' => $mail_data['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Usunięcie zdjęcia restauracji z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($mail_data['email'], $subject, 'remove-restaurant-image', $email_request_vars);
 
             if (file_exists($result)) unlink($result);
             $this->_banner_message = 'Pomyślnie usunięto ' . $deleted_type . ' z wybranej restauracji z systemu.';
@@ -320,11 +334,25 @@ class RestaurantsService extends MvcService
                 Podana resturacja nie istnieje w systemie, została wcześniej usunięta lub posiada aktywne zamówienia. Tylko restaurację
                 które nie posiadają aktywnych zamówień można usunąć z systemu.
             ');
+            $query = "
+                SELECT CONCAT(first_name, ' ', last_name) AS full_name, email FROM users AS u
+                INNER JOIN restaurants AS r ON r.user_id = u.id WHERE r.id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $mail_data = $statement->fetch(PDO::FETCH_ASSOC);
+
             $query = "DELETE FROM restaurants WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_GET['id']));
 
-            // wysyłanie wiadomości email do restauratora usuniętej restauracji
+            $email_request_vars = array(
+                'res_id' => $_GET['id'],
+                'user_full_name' => $mail_data['full_name'],
+                'delete_reason' => $additional_comment,
+            );
+            $subject = 'Usunięcie restauracji z ID #' . $_GET['id'];
+            $this->smtp_client->send_message($mail_data['email'], $subject, 'remove-restaurant', $email_request_vars);
 
             rmdir('uploads/restaurants/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybraną restaurację z systemu.';
