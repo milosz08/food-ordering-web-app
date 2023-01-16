@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 10:06:15                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 19:00:50                   *
+ * Modyfikowany przez: cptn3m012                               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -101,7 +101,7 @@ class OrdersService extends MvcService
                 INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
                 INNER JOIN users AS u ON o.user_id = u.id)
                 INNER JOIN user_address AS ua ON u.id = ua.user_id)
-                WHERE o.user_id = :userid AND o.id = :id;
+                WHERE o.user_id = :userid AND o.id = :id AND o.order_adress = ua.id;
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
