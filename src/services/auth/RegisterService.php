@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:47:06                   *
+ * Ostatnia modyfikacja: 2023-01-16 03:49:34                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,25 +66,31 @@ class RegisterService extends MvcService
                 if (!empty($_POST['registration-local-number'])) $user->locale_nr = ValidationHelper::validate_field_regex(
                     'registration-local-number', Config::get('__REGEX_BUILDING_NO__')
                 );
-                else $user->locale_nr = array(
-                    'value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => ''
-                );
+                else $user->locale_nr = array('value' => $_POST['registration-local-number'], 'invl' => false, 'bts_class' => '');
                 $user->post_code = ValidationHelper::validate_field_regex('registration-post-code', Config::get('__REGEX_POSTCODE__'));
                 $user->city = ValidationHelper::validate_field_regex('registration-city', Config::get('__REGEX_CITY__'));
                 $user->street = ValidationHelper::validate_field_regex('registration-street', Config::get('__REGEX_STREET__'));
+                $user->phone_number = ValidationHelper::validate_field_regex('user-phone', Config::get('__REGEX_PHONE_PL__'));
 
                 if ($user->all_is_valid())
                 {
                     $this->dbh->beginTransaction();
                     // Zapytanie zwracające liczbę istniejących już kont o podanym loginie i/lub emailu
-                    $query = "SELECT COUNT(id) FROM users WHERE login = ? OR email = ?";
+                    $query = "SELECT COUNT(*) FROM users WHERE login = ? OR email = ?";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array($user->name['value'], $user->email['value']));
-                    
                     if ($statement->fetchColumn() > 0) throw new Exception('Podany użytkownik istnieje już w systemie. Podaj inne dane.');
 
+                    $query = "SELECT COUNT(*) FROM users WHERE phone_number = REPLACE(?, ' ', '')";
+                    $statement = $this->dbh->prepare($query);
+                    $statement->execute(array($user->phone_number['value']));
+                    if ($statement->fetchColumn() > 0) throw new Exception('Podany numer telefonu jest już zarejestrowany na innym koncie.');
+
                     // Sekcja zapytań dodająca wprowadzone dane do tabel users i user_address
-                    $query = "INSERT INTO users (first_name, last_name, login, password, email, role_id) VALUES (?,?,?,?,?,?)";
+                    $query = "
+                        INSERT INTO users (first_name, last_name, login, password, email, phone_number, role_id)
+                        VALUES (?,?,?,?,?,REPLACE(?, ' ', ''),?)
+                    ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
                         $user->name['value'],
@@ -92,6 +98,7 @@ class RegisterService extends MvcService
                         $user->login['value'],
                         $this->passwd_hash($user->password['value']),
                         $user->email['value'],
+                        $user->phone_number['value'],
                         (int)$_POST['registration-role'],
                     ));
                     $query = "SELECT id, CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE login = ?";

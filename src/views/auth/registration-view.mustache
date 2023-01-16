@@ -105,6 +105,15 @@
                             <div class="invalid-feedback">Nieprawidłowa wartość!</div>
                         </div>
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="form-phone" class="form-label">Numer telefonu:</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text">+48</span>
+                            <input id="form-phone" type="tel" name="user-phone" placeholder="123 456 789" 
+                                class="form-control {{data.user.phone_number.bts_class}}" value="{{data.user.phone_number.value}}">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
                     <div class="col-md-12 mb-4">
                         <label for="form-street" class="form-label">Ulica:</label>
                         <input type="text" name="registration-street" class="form-control {{data.user.street.bts_class}}"
