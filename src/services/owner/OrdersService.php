@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-03, 02:13:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:39:43                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 16:17:36                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -20,10 +20,12 @@ use Exception;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
 use App\Models\OwnerOrdersModel;
+use App\Models\OwnerOrderDetailsModel;
 use App\Services\Helpers\SessionHelper;
 use App\Services\Helpers\PaginationHelper;
 
 ResourceLoader::load_model('OwnerOrdersModel', 'restaurant');
+ResourceLoader::load_model('OwnerOrderDetailsModel', 'restaurant');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
@@ -134,13 +136,44 @@ class OrdersService extends MvcService
      */
     public function get_order_details()
     {
+        $single_order = new OwnerOrderDetailsModel;
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'owner/orders', true, 301);
         try
         {
             $this->dbh->beginTransaction();
+            $query = "
+                SELECT o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, 
+                u.first_name AS first_name, u.last_name AS last_name, u.email AS email, o.date_order AS date_order, 
+                ua.street AS street, ua.building_nr AS building_nr, ua.locale_nr AS locale_nr,
+                ua.post_code AS post_code, ua.city AS city
+                FROM ((((orders AS o
+                INNER JOIN order_status AS os ON o.status_id = os.id)
+                INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
+                INNER JOIN users AS u ON o.user_id = u.id)
+                INNER JOIN user_address AS ua ON u.id = ua.user_id)
+                WHERE o.user_id = u.id AND o.id = :id;
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+            $single_order = $statement->fetchObject(OwnerOrderDetailsModel::class);
+            if (!$single_order) header('Location:' . __URL_INIT_DIR__ . 'owner/orders');
 
-            // tutaj kod
+            $query = "
+                SELECT COUNT(owd.dish_id) AS dish_amount, d.name AS dish_name
+                FROM (((orders_with_dishes AS owd
+                INNER JOIN orders AS o ON owd.order_id = o.id)
+                INNER JOIN dishes AS d ON owd.dish_id = d.id)
+                INNER JOIN users AS u ON o.user_id = u.id)
+                WHERE o.user_id = u.id AND owd.order_id = :id AND owd.dish_id = d.id
+                GROUP BY owd.dish_id;
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
+            $statement->execute();
+            $single_order->dishes_value = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+            $statement->closeCursor();
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
@@ -150,7 +183,7 @@ class OrdersService extends MvcService
         }
         return array(
             'order_id' => $_GET['id'],
-            'order_details' => '',
+            'order_details' => $single_order,
         );
     }
 
