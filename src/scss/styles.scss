@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 11:23:28                   *
+ * Ostatnia modyfikacja: 2023-01-16 16:37:56                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -196,6 +196,10 @@ body {
 .scrollable-section {
     max-height: 550px;
     overflow-y: auto;
+}
+
+.chart-width {
+    height: 300px;
 }
 
 .opinions-modal-size {

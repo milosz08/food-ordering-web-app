@@ -4,41 +4,89 @@
         <li class="breadcrumb-item active" aria-current="page">Panel główny</li>
     </ol>
 </nav>
+<hr/>
+<div class="row">
+    <div class="col-md-6 chart-width">
+        <canvas id="adminDashbaordChart"></canvas>
+    </div>
+    <div class="col-md-6 chart-width">
+        <canvas id="adminDashbaordv2Chart"></canvas>
+    </div>
+</div>
+<hr/>
 <div class="d-flex flex-column mb-3 justify-content-center align-items-center">
-    <div class="row mt-5">
-        <div class="col-lg-8 mb-5">
-            <canvas id="adminDashbaordChart"></canvas>
-        </div>
-        <div class="d-flex flex-column col-lg-4 justify-content-center align-items-center">
-            <a href="{{base_dir}}restaurant/panel/orders" class="card mb-3 text-decoration-none">
-                <div class="row g-0">
-                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                        <i class="bi bi-cart-check text-primary color-gradient icon-size"></i>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body bg-primary bg-gradient">
-                            <h5 class="card-title text text-light">Zamówienia</h5>
-                            <p class="card-text mt-3 text-light">Przejdź do zamówień użytkowników.</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a href="{{base_dir}}restaurant/panel/myrestaurants" class="card mb-3 text-decoration-none">
-                <div class="row g-0">
-                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                        <i class="bi bi-shop text-primary color-gradient icon-size"></i>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body bg-primary bg-gradient">
-                            <h5 class="card-title text-light">Restauracje</h5>
-                            <p class="card-text mt-3 text-light">Przejdź do restauracjami.</p>
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-md-4 d-flex align-items-stretch">
+            <a href="{{base_dir}}admin/dish-types" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Typy potraw</div>
+                <div class="card-body">
+                    <h5 class="card-title">Typy potraw</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby edytować typy potraw dostępnych globalnie w systemie. Typy te będą widoczne dla wszystkich
+                        właścicieli restauracji w systemie.
+                    </p>
                 </div>
             </a>
         </div>
-        <div class="col-lg-8 mb-5">
-            <canvas id="adminDashbaordv2Chart"></canvas>
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}admin/manage-users" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Użytkownicy systemu</div>
+                <div class="card-body">
+                    <h5 class="card-title">Użytkownicy systemu</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby zarządzać użytkownikami systemu (klientami i właścicielami restauracji). Administratorowi
+                        przysługuje prawo usunięcia użytkownika oraz usunięcia dodanego przez niego zdjęcia profilowego.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}admin/restaurants" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Resturacje</div>
+                <div class="card-body">
+                    <h5 class="card-title">Wszystkie restauracje w systemie</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby zarządzać wszystkimi dostępnymi restauracjami w systemie. Administrator ma możliwość usunięcia
+                        restauracji lub przynależącej do niej potrawy. Posiada również możliwość usuwania zdjęć restauracji oraz potraw.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}admin/pending-restaurants"  class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Restauracje</div>
+                <div class="card-body">
+                    <h5 class="card-title">Restauracje oczekujące na zaakceptowanie</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby zaakceptować lub odrzucić restauracje stworzone przez użytkowników.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}admin/ratings" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Oceny</div>
+                <div class="card-body">
+                    <h5 class="card-title">Oceny restauracji</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby zarządzać ocenami restauracji, przeglądać je i usuwać z systemu.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch">
+            <a href="{{base_dir}}admin/pending-to-delete"  class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Oceny</div>
+                <div class="card-body">
+                    <h5 class="card-title">Oceny oczekujące na usunięcie</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, zaakceptować lub odrzucić prośby od właścicieli restauracji o usunięcie oceny wystawionej przez
+                        użytkowników.
+                    </p>
+                </div>
+            </a>
         </div>
     </div>
 </div>
