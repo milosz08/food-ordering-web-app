@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 22:52:38                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-16 10:06:15                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -25,8 +25,8 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_model('ShowUserOrdersListModel', 'user');
 ResourceLoader::load_model('ShowUserSingleOrderModel', 'user');
-ResourceLoader::load_service_helper('ValidationHelper');
 ResourceLoader::load_service_helper('SessionHelper');
+ResourceLoader::load_service_helper('ValidationHelper');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -51,8 +51,13 @@ class OrdersService extends MvcService
         {
             $this->dbh->beginTransaction();
             $query = "
-                SELECT o.id, r.name, o.price, IF(o.status_id = 3, true, false) AS order_statement
-                FROM orders AS o INNER JOIN restaurants AS r ON o.restaurant_id = r.id WHERE o.user_id = ?
+                SELECT o.id, r.name, o.price, s.name AS order_status, IF(s.id <> 3, 'text-success', 'text-danger') AS order_status_color,
+                CONCAT(IFNULL(NULLIF(CONCAT(HOUR(estimate_time), 'h '), 0), ''), IFNULL(NULLIF(CONCAT(MINUTE(estimate_time), 'min'), 0), '?'))
+                AS estimate_time, IFNULL(r.profile_url, 'static/images/default-profile.jpg') AS profile_url
+                FROM ((orders AS o
+                INNER JOIN restaurants AS r ON o.restaurant_id = r.id)
+                INNER JOIN order_status AS s ON o.status_id = s.id)
+                WHERE o.user_id = ? ORDER BY date_order DESC LIMIT 10
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
@@ -60,7 +65,7 @@ class OrdersService extends MvcService
             // Pętla wypełniająca tablicę zamówieniami
             while ($row = $statement->fetchObject(ShowUserOrdersListModel::class)) array_push($all_orders, $row);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -69,6 +74,7 @@ class OrdersService extends MvcService
         }
         return array(
             'orders' => $all_orders,
+            'has_orders' => count($all_orders),
         );
     }
 
@@ -86,9 +92,12 @@ class OrdersService extends MvcService
                 o.id, o.status_id, o.discount_id AS discount_id, dt.name AS order_type, os.name AS status_name, 
                 u.first_name AS first_name, u.last_name AS last_name, u.email AS email, o.date_order AS date_order, 
                 ua.street AS street, ua.building_nr AS building_nr, ua.locale_nr AS locale_nr,
-                ua.post_code AS post_code, ua.city AS city
-                FROM ((((orders AS o
+                ua.post_code AS post_code, ua.city AS city,
+                IF(status_id = 2, true, false) AS is_grade_active, rg.id AS grade_id,
+                IF((SELECT COUNT(*) FROM restaurants_grades WHERE order_id = o.id) = 1, '123', '') AS is_grade_editable
+                FROM (((((orders AS o
                 INNER JOIN order_status AS os ON o.status_id = os.id)
+                LEFT JOIN restaurants_grades AS rg ON rg.order_id = o.id)
                 INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
                 INNER JOIN users AS u ON o.user_id = u.id)
                 INNER JOIN user_address AS ua ON u.id = ua.user_id)
@@ -99,30 +108,26 @@ class OrdersService extends MvcService
             $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
             $statement->execute();
             $one_order = $statement->fetchObject(ShowUserSingleOrderModel::class);
-
             if (!$one_order) header('Location:' . __URL_INIT_DIR__ . 'user/orders');
-
-            $validation = !($one_order->status_id == 3 || $one_order->time_statement);
+            $is_cancel_active = !($one_order->status_id == 3 || $one_order->time_statement);
 
             $query = "
-            SELECT COUNT(owd.dish_id) AS dish_amount, d.name AS dish_name
-            FROM (((orders_with_dishes AS owd
-            INNER JOIN orders AS o ON owd.order_id = o.id)
-            INNER JOIN dishes AS d ON owd.dish_id = d.id)
-            INNER JOIN users AS u ON o.user_id = u.id)
-            WHERE o.user_id = :userid AND owd.order_id = :id AND owd.dish_id = d.id
-            GROUP BY owd.dish_id;
+                SELECT COUNT(owd.dish_id) AS dish_amount, d.name AS dish_name
+                FROM (((orders_with_dishes AS owd
+                INNER JOIN orders AS o ON owd.order_id = o.id)
+                INNER JOIN dishes AS d ON owd.dish_id = d.id)
+                INNER JOIN users AS u ON o.user_id = u.id)
+                WHERE o.user_id = :userid AND owd.order_id = :id AND owd.dish_id = d.id
+                GROUP BY owd.dish_id;
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
             $statement->bindValue('id', $_GET['id'], PDO::PARAM_INT);
             $statement->execute();
-
-            // Pętla wypełniająca tablicę daniami
-            while ($row = $statement->fetchObject(ShowUserSingleOrderModel::class)) array_push($one_order->dishes_value, $row);
+            $one_order->dishes_value = $statement->fetchAll(PDO::FETCH_ASSOC);
 
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -131,7 +136,7 @@ class OrdersService extends MvcService
         }
         return array(
             'one_order' => $one_order,
-            'validation' => $validation,
+            'is_cancel_active' => $is_cancel_active,
         );
     }
 
@@ -160,7 +165,7 @@ class OrdersService extends MvcService
 
             $this->_banner_message = 'Pomyślnie anulowano zamówienie o nr: ' . $_GET['id'];
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

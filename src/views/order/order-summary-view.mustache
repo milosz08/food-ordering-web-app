@@ -3,7 +3,6 @@
     <form action="{{base_dir}}order/summary/place-order" method="post" class="row" novalidate>
         <input type="hidden" name="resid" value="{{data.res_id}}" />
         <div class="col-lg-8">
-            {{> partials/dynamic-banner-view.partial}}
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -14,26 +13,40 @@
                     </li>
                 </ol>
             </nav>
+            <hr/>
+            {{> partials/dynamic-banner-view.partial}}
+            <h2 class="fs-4 mb-2">Adres dostawy</h2>
             <div class="card p-4 mb-3">
-                <h2 class="fs-4 mb-4">Adres dostawy</h2>
                 <div class="container px-0">
                     <div class="row gy-3">
                         {{#data.addresses}}
                         <label for="user-address-{{id}}" class="col-lg-6">
                             <div class="card p-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="address" value="{{id}}" id="user-address-{{id}}" {{checked}}>
-                                    <p class="card-text">{{address}} </p>
-                                    <p class="card-text">{{post_city}}</p>
+                                <div class="form-check d-flex align-items-center">
+                                    <input class="form-check-input me-4" type="radio" name="id" value="{{id}}" 
+                                        id="user-address-{{id}}" {{checked}}>
+                                    <div>
+                                        <p class="card-text mb-1">{{address}}
+                                            <span class="text-primary">{{is_default}}</span>
+                                        </p>
+                                        <p class="card-text">{{post_city}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </label>
                         {{/data.addresses}}
                     </div>
+                    {{#data.is_still_free_addresses}}
+                    <p class="lh-sm text-secondary mt-4">
+                        Nie ma tutaj adresu jakiego szukasz? Jeśli chcesz przesłać jedzenie na inny adres, musisz dodać go do swojego konta.
+                        <a href="{{base_dir}}user/settings/add-new-address?redir=order/summary?resid={{data.res_id}}">Kliknij tutaj</a> 
+                        aby dodać nowy adres.
+                    </p>
+                    {{/data.is_still_free_addresses}}
                 </div>
             </div>
+            <h2 class="fs-4 mb-2">Typ dostawy</h2>
             <div class="card p-4 mb-3">
-                <h2 class="fs-4 mb-4">Dostawa</h2>
                 <div class="container px-0">
                     <div class="row gy-3">
                         <div class="col-md-6">
@@ -57,8 +70,8 @@
                     </div>
                 </div>
             </div>
+            <h2 class="fs-4 mb-2">Rodzaj płatności</h2>
             <div class="card p-4 mb-3">
-                <h2 class="fs-4 mb-4">Rodzaj płatności</h2>
                 <div class="container px-0">
                     <div class="container px-0">
                         <div class="row gy-3">
