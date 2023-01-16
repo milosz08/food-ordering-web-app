@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 02:41:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 01:32:25                   *
+ * Ostatnia modyfikacja: 2023-01-16 05:53:39                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -66,5 +66,20 @@ class ImagesHelper
             else if ($grade_n >= $i + 1) $grades_bts[$i]['star'] = '-fill';
         }
         return $grades_bts;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static function upload_user_profile_image($v_profile, $user_id, $default_profile = '')
+    {
+        $profile = $default_profile;
+        if (!empty($v_profile['value']))
+        {
+            $image_dir_path = 'uploads/users/' . $user_id . '/';
+            if (!file_exists($image_dir_path)) mkdir($image_dir_path, 0777, true);
+            $profile = $image_dir_path . $user_id . '_user_profile.' . $v_profile['ext'];
+            move_uploaded_file($v_profile['path'], $profile);
+        }
+        return $profile;
     }
 }
