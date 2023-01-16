@@ -9,12 +9,13 @@
  * Data utworzenia: 2023-01-07, 01:01:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 06:43:07                   *
+ * Ostatnia modyfikacja: 2023-01-16 16:06:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
 
+use PDO;
 use Exception;
 use App\Core\Config;
 use App\Core\MvcService;
@@ -129,7 +130,7 @@ class SettingsService extends MvcService
                     $_SESSION['logged_user']['user_full_name'] = $user->first_name['value'] . ' ' . $user->last_name['value'];
                     $_SESSION['logged_user']['user_profile_image'] = $profile_url;
                     $this->_banner_message = 'Zmiany zostały pomyślnie zapisane';
-                    SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+                    SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                 }
             }
             $query = "
@@ -145,7 +146,7 @@ class SettingsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'user' => $user,
@@ -163,7 +164,7 @@ class SettingsService extends MvcService
      */
     public function add_new_addres()
     {
-        $redir_banner = SessionHelper::USER_PROFILE_PAGE_BANNER;
+        $redir_banner = SessionHelper::USER_SETTINGS_PAGE_BANNER;
         $redir = 'user/settings';
         if (isset($_GET['redir']))
         {
@@ -258,7 +259,7 @@ class SettingsService extends MvcService
             $this->_banner_error = true;
             $this->_banner_message = $e->getMessage();
         }
-        SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +308,7 @@ class SettingsService extends MvcService
                     $this->dbh->commit();
                     $statement->closeCursor();
                     $this->_banner_message = 'Zmiany zostały pomyślnie zapisane';
-                    SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+                    SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                     header('Location:' . __URL_INIT_DIR__ . 'user/settings' , true, 301);
                 }
             }
@@ -316,7 +317,7 @@ class SettingsService extends MvcService
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $e->getMessage(), true);
+            SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $e->getMessage(), true);
         }
         return array(
             'user' => $user
@@ -354,6 +355,51 @@ class SettingsService extends MvcService
             $this->_banner_error = true;
             $this->_banner_message = $e->getMessage();
         }
-        SessionHelper::create_session_banner(SessionHelper::USER_PROFILE_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda umożliwiająca usunięcie konta użytkownika z systemu. Jedynie użytkownicy bez aktywnych zamówień mogą usunąć konto.
+     */
+    public function delete_account()
+    {
+        $password_confirmation = $_POST['password-confirmation'] ?? '';
+        try
+        {
+            $this->dbh->beginTransaction();
+            $query = "
+                SELECT password FROM users WHERE id = :userid AND
+                (SELECT COUNT(*) FROM orders WHERE user_id = :userid AND status_id = 1) = 0
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->bindValue('userid', $_SESSION['logged_user']['user_id'], PDO::PARAM_INT);
+            $statement->execute();
+            $user_password = $statement->fetchColumn();
+            if (!$user_password) throw new Exception('
+                Usunięcie konta z co najmniej jednym aktywnym zamówieniem jest niemożliwe.
+            ');
+            if (!password_verify($password_confirmation, $user_password)) throw new Exception('
+                Nieprawidłowe hasło. Spróbuj ponownie wprowadzając inne hasło.
+            ');
+
+            $query = "DELETE FROM users WHERE user_id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
+
+            rmdir('uploads/users/' . $_SESSION['logged_user']['user_id']);
+            unset($_SESSION['logged_user']);
+            $this->_banner_message = 'Twoje konto i wszystkie zasoby z nim powiązane zostało pomyślnie usunięte z systemu.';
+            SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
+            header('Location:' . __URL_INIT_DIR__ . 'auth/login', true, 301);
+        }
+        catch (Exception $e)
+        {
+            $this->dbh->rollback();
+            var_dump($e->getMessage());
+            SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $e->getMessage(), true);
+        }
     }
 }

@@ -1,7 +1,154 @@
-<h2 class="text-secondary fw-normal mb-3">Ustawienia</h2>
+<h2 class="text-secondary fw-normal mb-3">Edycja danych osobowych</h2>
 <nav class="mb-4" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Ustawienia</li>
+        <li class="breadcrumb-item active" aria-current="page">Edycja danych osobowych</li>
     </ol>
 </nav>
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
+<form action="" method="post" enctype="multipart/form-data" novalidate>
+    <div class="container-fluid pt-3 px-0">
+        <div class="row mx-0 gx-5">
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-user-first-name" class="form-label">Imię:</label>
+                    <input id="form-user-first-name" type="text" name="user-first-name" placeholder="np. Jan"
+                        class="form-control {{data.user.first_name.bts_class}}" value="{{data.user.first_name.value}}">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-user-login" class="form-label">Login:</label>
+                    <input id="form-user-login" type="text" name="user-login" placeholder="np. jankowalski123"
+                        class="form-control {{data.user.login.bts_class}}" value="{{data.user.login.value}}">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-user-phone-number" class="form-label">Numer telefonu:</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text">+48</span>
+                        <input id="form-user-phone-number" type="tel" name="user-phone-number" placeholder="123 456 789" 
+                            class="form-control {{data.user.phone_number.bts_class}}" value="{{data.user.phone_number.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-0 gx-5">
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-user-last-name" class="form-label">Nazwisko:</label>
+                    <input id="form-user-last-name" type="text" name="user-last-name" placeholder="np. Kowalski"
+                        class="form-control {{data.user.last_name.bts_class}}" value="{{data.user.last_name.value}}">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-user-email" class="form-label">Adres email:</label>
+                    <input id="form-user-email" type="text" name="user-email" placeholder="np. jankowalski@poczta.pl"
+                        class="form-control {{data.user.email.bts_class}}" value="{{data.user.email.value}}">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="form-user-post-code" class="form-label">Kod pocztowy:</label>
+                        <input id="form-user-post-code" type="text" name="user-post-code" placeholder="np. 43-100"
+                            class="form-control {{data.user.post_code.bts_class}}" value="{{data.user.post_code.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="form-user-city" class="form-label">Miasto:</label>
+                        <input id="form-user-city" type="text" name="user-city" placeholder="np. Gliwice"
+                            class="form-control {{data.user.city.bts_class}}" value="{{data.user.city.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-0 gx-5">
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="form-user-building-no" class="form-label">Nr budynku:</label>
+                        <input id="form-user-building-no" type="text" name="user-building-no" placeholder="np. 65"
+                            class="form-control {{data.user.building_no.bts_class}}" value="{{data.user.building_no.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="form-user-locale-no" class="form-label">Nr mieszkania:</label>
+                        <input id="form-user-locale-no" type="text" name="user-locale-no" placeholder="np. 12c"
+                            class="form-control {{data.user.locale_no.bts_class}}" value="{{data.user.locale_no.value}}">
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3">
+                    <label for="form-user-street" class="form-label">Ulica:</label>
+                    <input type="text" name="user-street" class="form-control {{data.user.street.bts_class}}"
+                        value="{{data.user.street.value}}" placeholder="np. Długa" id="form-street">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="col-md-12 mb-3 image-preview-container" data-img-preview-src="{{data.user.profile_url.value}}">
+                    <label for="file-profile" class="form-label">Zdjęcie profilowe:</label>
+                    {{#data.has_profile}}
+                    <div class="position-relative upload-image-preview-container">
+                        <div class="w-100 h-100 preview-image-src rounded"></div>
+                        <a href="{{base_dir}}admin/settings/delete-profile-image"
+                            class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+                            fw-normal text-decoration-none text-white">
+                            Usuń zdjęcie
+                        </a>
+                    </div>
+                    {{/data.has_profile}}
+                    {{^data.has_profile}}
+                    <input id="file-banner" class="form-control {{data.user.profile_url.bts_class}}" type="file" name="user-profile"
+                        accept="image/png,image/jpeg,image/jpg" />
+                    <div class="invalid-feedback">Nieprawidłowe proporcje i/lub zbyt duży rozmiar pliku!</div>
+                    <div class="my-3 upload-file-preview {{data.hide_profile_preview_class}}">
+                        <p class="mb-2">Podgląd załadowanego zdjęcia:</p>
+                        <div class="position-relative upload-image-preview-container">
+                            <div class="w-100 h-100 preview-image-src rounded"></div>
+                            <button class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+                                fw-normal remove-photo text-decoration-none" type="button">
+                                Usuń zdjęcie
+                            </button>
+                        </div>
+                    </div>
+                    {{/data.has_profile}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="mb-3"/>
+    <div class="d-flex justify-content-end hgroup gap-3">
+        <button class="btn btn-secondary mb-2 add-content-button" data-bs-toggle="modal" data-bs-target="#discard-changes" type="button">
+            <i class="bi bi-arrow-return-left me-2"></i>Odrzuć zmiany
+        </button>
+        <button type="submit" name="user-edit-data" class="btn btn-primary btn-md mb-2 add-content-button">
+            Edytuj dane osobowe
+        </button>
+    </div>
+    <div class="modal fade" id="discard-changes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">Czy na pewno chcesz odrzucić zmiany i powrócić do strony główej panelu właściciela?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <a class="btn btn-outline-danger" href="{{base_dir}}admin/dashboard">
+                        Odrzuć
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

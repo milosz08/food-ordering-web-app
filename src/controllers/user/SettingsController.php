@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-07, 01:01:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 07:56:13                   *
+ * Ostatnia modyfikacja: 2023-01-16 15:36:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -116,13 +116,25 @@ class SettingsController extends MvcController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Przejście pod adres: /user/settings/delete-account
+     */
+    public function delete_account()
+    {
+        $this->protector->protect_only_user();
+        $this->_service->delete_account();
+        header('Location:' . __URL_INIT_DIR__ . 'user/settings', true, 301);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
      * Przejście pod adres: /user/settings
      */
     public function index()
     {
         $this->protector->protect_only_user();
         $edit_user_profile = $this->_service->edit_user_profile();
-        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::USER_PROFILE_PAGE_BANNER);
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::USER_SETTINGS_PAGE_BANNER);
         $this->renderer->render('user/settings-view', array(
             'page_title' => 'Ustawienia',
             'data' => $edit_user_profile,

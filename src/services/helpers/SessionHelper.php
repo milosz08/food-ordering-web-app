@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 09:35:29                   *
+ * Ostatnia modyfikacja: 2023-01-16 15:33:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -32,7 +32,7 @@ class SessionHelper
     const DISCOUNTS_RES_PAGE_BANNER                     = 'discounts_res_page_banner';
     const LOGOUT_PAGE_BANNER                            = 'logout_page_banner';
     const ADD_USER_NEW_ADDRESS_PAGE_BANNER              = 'edit_user_profile_page';
-    const USER_PROFILE_PAGE_BANNER                      = 'user_profile_page';
+    const USER_SETTINGS_PAGE_BANNER                      = 'user_profile_page';
     const HOME_RESTAURANTS_LIST_PAGE_BANNER             = 'home_restaurants_list_page';
     const ORDER_SUMMARY_PAGE_BANNER                     = 'order_finish_page';
     const OWNER_RES_SEARCH                              = 'owner_restaurant_search';
@@ -72,6 +72,10 @@ class SessionHelper
     const ADMIN_USER_DETAILS_PAGE_BANNER                = 'admin_user_details_page_banner';
     const FEEDBACK_GIVE_FEEDBACK_PAGE_BANNER            = 'feedback_give_feedback_page_banner';
     const FEEDBACK_EDIT_FEEDBACK_PAGE_BANNER            = 'feedback_edit_feedback_page_banner';
+    const OWNER_SETTINGS_PAGE_BANNER                    = 'owner_settings_page_banner';
+    const ADMIN_SETTINGS_PAGE_BANNER                    = 'admin_settings_page_banner';
+    const OWNER_PROFILE_PAGE_BANNER                     = 'owner_profile_page_banner';
+    const ADMIN_PROFILE_PAGE_BANNER                     = 'admin_profile_page_banner';
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
