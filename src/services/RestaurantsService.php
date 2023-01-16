@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:55:33                   *
+ * Ostatnia modyfikacja: 2023-01-16 10:37:57                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -253,13 +253,10 @@ class RestaurantsService extends MvcService
                 ";
                 $statement = $this->dbh->prepare($query);
                 $statement->execute();
-                foreach ($res_list as $res)
+                foreach ($res_list as $res) $restaurants_ids_impl .= $res->id . ',';
+                while ($row = $statement->fetchObject(OpinionModel::class))
                 {
-                    $restaurants_ids_impl .= $res->id . ',';
-                    while ($row = $statement->fetchObject(OpinionModel::class))
-                    {
-                        if ($row->res_id == $res->id) array_unshift($res->opinions, array('opinion' => $row));
-                    }
+                    foreach ($res_list as $res) if ($row->res_id == $res->id) array_unshift($res->opinions, array('opinion' => $row));
                 }
                 $query = "
                     SELECT r.id AS res_id, w.name AS name,
@@ -307,7 +304,7 @@ class RestaurantsService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -501,7 +498,7 @@ class RestaurantsService extends MvcService
                 }
             }
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 22:06:26                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:02:36                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:32:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -74,7 +74,7 @@ class DishesService extends MvcService
             $dish_details = $statement->fetchObject(DishDetailsModel::class);
 
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction())  $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -129,7 +129,7 @@ class DishesService extends MvcService
                 $deleted_dish['r_name'] . '</strong> oraz wysłano na adres email właściciela restauracji informację o usunięciu potrawy.
             ';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -169,7 +169,7 @@ class DishesService extends MvcService
             if (file_exists($image_path)) unlink($image_path);
             $this->_banner_message = 'Pomyślnie usunięto zdjęcie wybranej potrawy oraz wysłano wiadomość do właściciela restauracji.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

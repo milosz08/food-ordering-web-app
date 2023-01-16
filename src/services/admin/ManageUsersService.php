@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 22:06:12                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:03:05                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:33:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -73,7 +73,7 @@ class ManageUsersService extends MvcService
             rmdir('uploads/users/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybranego użytkownika z systemu.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -140,7 +140,7 @@ class ManageUsersService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -192,7 +192,7 @@ class ManageUsersService extends MvcService
                 header('Location:' . __URL_INIT_DIR__ . 'admin/manage-users', true, 301);
                 die;
             }
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -237,7 +237,7 @@ class ManageUsersService extends MvcService
 
             if (file_exists($image_path)) unlink($image_path);
             $this->_banner_message = 'Pomyślnie usunięto zdjęcie profilowe wybranego użytkownika z systemu.';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

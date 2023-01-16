@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:44:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:30:59                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:35:26                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -88,7 +88,7 @@ class ForgotPasswordService extends MvcService
                 $this->smtp_client->send_message($user_data['email'], $subject, 'renew-password', $email_request_vars);
 
                 $statement->closeCursor();
-                $this->dbh->commit();
+                if ($this->dbh->inTransaction()) $this->dbh->commit();
                 $this->_banner_message = 'Na adres email ' . $user_data['email'] . ' została wysłana wiadomość z linkiem autoryzacyjnym.';
                 SessionHelper::create_session_banner(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                 header('Location:' . __URL_INIT_DIR__ . 'auth/forgot-password', true, 301);
@@ -99,6 +99,7 @@ class ForgotPasswordService extends MvcService
                 $this->dbh->rollback();
                 SessionHelper::create_session_banner(SessionHelper::FORGOT_PASSWORD_PAGE_BANNER, $e->getMessage(), true);
             }
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         return array(
             'v_login_email' => $login_email,
@@ -159,13 +160,15 @@ class ForgotPasswordService extends MvcService
                     $redir_link = __URL_INIT_DIR__ . 'auth/login';
                     $this->_banner_message = 'Twoje hasło zostało pomyślnie zmienione. Możesz zalogować się na konto.';
 
+                    $statement->closeCursor();
+                    if ($this->dbh->inTransaction()) $this->dbh->commit();
                     SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                     header('Location: ' . __URL_INIT_DIR__ . 'auth/login', true, 301);
                     die;
                 }
             }
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

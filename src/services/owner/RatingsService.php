@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 07:46:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 06:42:01                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:40:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -146,7 +146,7 @@ class RatingsService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -206,7 +206,7 @@ class RatingsService extends MvcService
                 <a href="' . __URL_INIT_DIR__ . 'owner/ratings/pending-to-delete" class="alert-link">przejdź po ten link</a>.
             ';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -282,7 +282,7 @@ class RatingsService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -337,7 +337,7 @@ class RatingsService extends MvcService
                 Zgłoszenie <strong>#' . $_GET['id'] . '</strong> do administratorów systemu z prośbą o usunięcie opinii zostało anulowane.
             ';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

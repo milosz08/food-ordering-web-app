@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 12:45:54                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2023-01-16 08:09:40                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Order\Services;
@@ -60,8 +60,10 @@ class SummaryService extends MvcService
         {
             $this->dbh->beginTransaction();
             $query = "
-                SELECT id, CONCAT('ul. ', street, ' ', building_nr, IF(locale_nr, CONCAT('/', locale_nr), '')) AS address, CONCAT(post_code, ' ', city)
-                AS post_city, IF(ROW_NUMBER() OVER(ORDER BY id) = 1, 'checked', '') AS checked FROM user_address WHERE user_id = ?
+                SELECT id, CONCAT('ul. ', street, ' ', building_nr, IF(locale_nr, CONCAT('/', locale_nr), '')) AS address,
+                CONCAT(post_code, ' ', city) AS post_city, IF(ROW_NUMBER() OVER(ORDER BY id) = 1, 'checked', '') AS checked,
+                IF(is_prime, '(domyślny)', '') AS is_default
+                FROM user_address WHERE user_id = ?
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
@@ -166,6 +168,7 @@ class SummaryService extends MvcService
             'shopping_cart' => $shopping_cart,
             'summary_prices' => $summary_prices,
             'cart_is_empty' => !isset($cookie),
+            'is_still_free_addresses' => count($addresses) < 4
         );
     }
 
@@ -203,20 +206,128 @@ class SummaryService extends MvcService
      */
     public function place_new_order()
     {
+        $cookie = $_COOKIE[CookieHelper::get_shopping_cart_name($_POST['resid'])] ?? null;
+        if (!isset($_POST['resid']) || !isset($cookie)) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
         try
         {
+            $delivery = $_POST['delivery'];
+            $discount_id = null;
+            $total_price = 0;
+            $estimate_time = 0;
+            $order_id = null;
             $this->dbh->beginTransaction();
+            $query = "
+                SELECT COUNT(*) FROM ((restaurants AS r
+                INNER JOIN restaurant_hours AS h ON r.id = h.restaurant_id)
+                INNER JOIN weekdays AS wk ON h.weekday_id = wk.id)
+                WHERE wk.name_eng = LOWER(DAYNAME(NOW())) AND h.open_hour <= CURTIME() AND h.close_hour >= CURTIME()
+                AND r.id = ? AND accept = 1
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_POST['resid']));
+            if ($statement->fetchColumn() == 0)
+            {
+                $this->_banner_message = 'Wybrana restauracja nie istnieje, bądź nie jest otwarta.';
+                SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                die;
+            }
+            $query = "SELECT COUNT(id) FROM orders WHERE user_id = ? AND status_id = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            $count_of_active_orders = $statement->fetchColumn();
+            if ($count_of_active_orders > 5)
+            {
+                $this->_banner_message = '
+                    Masz aktualnie ' . $count_of_active_orders . ' aktywnych zamówień. Nowego zamówienia możesz dokonać, jeśli liczba
+                    twoich aktywnych zamówień jest mniejsza niż 5.
+                ';
+                SessionHelper::create_session_banner(SessionHelper::HOME_RESTAURANTS_LIST_PAGE_BANNER, $this->_banner_message, true);
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                die;
+            }
+            $cart_cookie = json_decode($cookie, true);
+            if (!isset($cart_cookie)) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+            foreach ($cart_cookie['dishes'] as $dish)
+            {
+                $query = "
+                    SELECT price * :count AS total,
+                    (prepared_time + prepared_time * ((:count - 1) * 0.5)) * 60 AS estimate_prepared_time
+                    FROM dishes WHERE id = :id
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->bindValue('id', $dish['dishid'], PDO::PARAM_INT);
+                $statement->bindValue('count', $dish['count'], PDO::PARAM_INT);
+                $statement->execute();
+                $dish_values = $statement->fetch(PDO::FETCH_ASSOC);
+                $total_price  += ((float) $dish_values['total']) * 100;
+                $estimate_time += (int) $dish_values['estimate_prepared_time'];
+            }
+            if (!empty($cart_cookie['code'])) // cena po rabacie jezeli jest
+            {
+                $discount_data = $cart_cookie['code'];
+                $query = "
+                    SELECT d.id, r.delivery_price AS delivery_price,
+                    CAST((((100 - percentage_discount) / 100 * :price) + IFNULL(r.delivery_price, 0)) AS DECIMAL(10,2)) AS total_price
+                    FROM discounts AS d INNER JOIN restaurants AS r
+                    ON d.restaurant_id = r.id WHERE d.code = :discount_data AND d.restaurant_id= :resid
+                ";
+                $statement = $this->dbh->prepare($query);
+                $statement->bindValue('discount_data', $discount_data);
+                $statement->bindValue('resid', $_POST['resid'], PDO::PARAM_INT);
+                $statement->bindValue('price', $total_price / 100);
+                $statement->execute();
+                $temp = $statement->fetch(PDO::FETCH_ASSOC);
+                $discount_id = $temp['id'];
+                $total_price = $temp['total_price'];
+            }
+            else $total_price /= 100;
+            // uzyskiwanie adresu
+            $query = "SELECT id FROM user_address WHERE user_id = ? AND is_prime = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            $user_address = $statement->fetchColumn();
+            if (!$user_address) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
 
-            // tutaj kod
+            // dodawanie zamowienia do bazy
+            $query = "
+                INSERT INTO orders(user_id, discount_id, order_adress, delivery_type, restaurant_id, price, date_order, estimate_time)
+                VALUES(?,?,?,?,?,?,NOW(),SEC_TO_TIME(?))
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array(
+                $_SESSION['logged_user']['user_id'], $discount_id, $user_address, $delivery, $_POST['resid'], $total_price, $estimate_time,
+            ));
 
+            //pobieranie id generowanego zamowienia
+            $query = "SELECT LAST_INSERT_ID()";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute();   
+            $order_id = $statement->fetchColumn();
+
+            //dodawanie zamowionych dań do orders_with_dishes
+            foreach ($cart_cookie['dishes'] as $dish)
+            {
+                $query = "INSERT INTO orders_with_dishes (order_id, dish_id) VALUES(?,?)";
+                $statement = $this->dbh->prepare($query);
+                $statement->execute(array($order_id, $dish['dishid']));
+            }
+            $this->_banner_message = '
+                Zamówienie o numerze <strong>#' . $order_id . '</strong> zostało prawidłowo złożone i posiada w obecnej chwili status
+                <strong>w przygotowaniu</strong>. Aby śledzić zamówienie, przejdź <a href="' . __URL_INIT_DIR__ . 'user/profile" 
+                class="alert-link">tutaj</a>.
+            ';
+            CookieHelper::delete_cookie(CookieHelper::get_shopping_cart_name($_POST['resid']));
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
             $this->dbh->rollback();
-            SessionHelper::create_session_banner(SessionHelper::NEW_ORDER_DETAILS_PAGE_BANNER, $e->getMessage(), true);
+            $this->_banner_error = true;
+            $this->_banner_message = $e->getMessage();
         }
-        return 0;
+        SessionHelper::create_session_banner(SessionHelper::NEW_ORDER_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
+        return $order_id;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

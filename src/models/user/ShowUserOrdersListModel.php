@@ -9,19 +9,21 @@
  * Data utworzenia: 2023-01-10, 16:45:24                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 21:35:18                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-16 08:38:15                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
+namespace App\Models;
 
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- class ShowUserOrdersListModel
- {
-     public $name;
-     public $price;
-     public $id;
-    public $order_statement;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- }
+class ShowUserOrdersListModel
+{
+    public $name;
+    public $price;
+    public $id;
+    public $order_status;
+    public $order_status_color;
+    public $estimate_time;
+    public $profile_url;
+}

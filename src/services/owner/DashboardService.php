@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:32:06                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 21:24:24                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-16 04:37:42                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -76,7 +76,7 @@ class DashboardService extends MvcService
                 array_push($result_one, $first);
             }
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

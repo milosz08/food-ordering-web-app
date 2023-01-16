@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 01:26:00                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 05:58:09                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:38:10                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -116,7 +116,7 @@ class DiscountsService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -176,7 +176,7 @@ class DiscountsService extends MvcService
 
             $pagination_data = RestaurantsHelper::get_total_res_pages($this->dbh, $search_text, $total_per_page, $curr_page, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -367,7 +367,7 @@ class DiscountsService extends MvcService
                 Pomyślnie usunięto kod rabatowy <strong>' . $discount_data['code'] . '</strong> z restauracji <strong>' . 
                 $discount_data['name'] . '</strong>.
             ';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -415,7 +415,7 @@ class DiscountsService extends MvcService
                 Pomyślnie zwiększono ilość użyć kodu rabatowego <strong>' . $discount_data['code'] . '</strong> z restauracji <strong>' . 
                 $discount_data['name'] . '</strong> o <strong>' . $_GET['v'] . '</strong> użyć.
             ';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -463,7 +463,7 @@ class DiscountsService extends MvcService
                 Pomyślnie zwiększono ilość dni o <strong>' . $_GET['v'] . '</strong> po których kod rabatowy <strong>' . 
                 $discount_data['code'] . '</strong> z restauracji <strong>' . $discount_data['name'] . '</strong> ulegnie przedawnieniu.
             ';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

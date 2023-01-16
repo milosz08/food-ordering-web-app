@@ -7,7 +7,7 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 09:02:56                   *
+ * Ostatnia modyfikacja: 2023-01-16 11:23:28                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -200,6 +200,14 @@ body {
 
 .opinions-modal-size {
     max-width: 650px;
+}
+
+.make-grade-width {
+    max-width: 750px;
+}
+
+.coin-color {
+    color: #b8860b;
 }
 
 .rating-container > label:hover::after,

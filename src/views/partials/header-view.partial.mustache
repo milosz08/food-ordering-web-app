@@ -8,8 +8,8 @@
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 d-none d-md-flex">
             <li><a href="{{base_dir}}restaurants" class="nav-link px-2 link-dark">Restauracje</a></li>
             {{#is_normal_user}}
-                <li><a href="{{base_dir}}user/profile" class="nav-link px-2 link-dark">Moje konto</a></li>
                 <li><a href="{{base_dir}}user/orders" class="nav-link px-2 link-dark">Moje zamówienia</a></li>
+                <li><a href="{{base_dir}}user/settings" class="nav-link px-2 link-dark">Ustawienia</a></li>
             {{/is_normal_user}}
             {{^is_normal_user}}
                 <li><a href="{{base_dir}}{{logged_user.user_role.role_eng}}/dashboard" class="nav-link px-2 link-dark">Panel CMS</a></li>
@@ -26,20 +26,20 @@
                     <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}restaurants">
                         <span class="material-symbols-outlined me-2 fs-5">storefront</span>Restauracje
                     </a></li>
-                    {{#is_normal_user}}
-                    <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}user/orders">
-                        <span class="material-symbols-outlined me-2 fs-5">list_alt</span>Moje zamówienia
-                    </a></li>
-                    {{/is_normal_user}}
                     {{^is_normal_user}}
                     <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}{{logged_user.user_role.role_eng}}/dashboard">
                         <span class="material-symbols-outlined me-2 fs-5">door_open</span>Panel CMS
                     </a></li>
-                    {{/is_normal_user}}
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}{{logged_user.user_role.role_eng}}/profile">
                         <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
                     </a></li>
+                    {{/is_normal_user}}
+                    {{#is_normal_user}}
+                    <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}user/orders">
+                        <span class="material-symbols-outlined me-2 fs-5">person</span>Moje zamówienia
+                    </a></li>
+                    {{/is_normal_user}}
                     <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}{{logged_user.user_role.role_eng}}/settings">
                         <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
                     </a></li>

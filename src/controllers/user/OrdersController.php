@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 21:01:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:23:15                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-15 22:19:51                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -50,6 +50,7 @@ class OrdersController extends MvcController
         $this->renderer->render('user/order-details-view', array(
             'page_title' => 'Szczegóły zamówienia',
             'data' => $service_data,
+            'banner' => $banner_data,
         ));
     }
 

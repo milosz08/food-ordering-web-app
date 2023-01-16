@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-03, 02:13:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 12:00:47                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 02:49:32                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -36,6 +36,19 @@ class OrdersController extends MvcController
         parent::__construct();
 		$this->_service = MvcService::get_instance(OrdersService::class); // stworzenie instancji serwisu
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Przejście pod adres: /owner/orders/status
+     */
+    public function status()
+    {
+        $this->protector->protect_only_owner();
+        $this->_service->order_change();
+        header('Location:' . __URL_INIT_DIR__ . 'owner/orders', true, 301);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

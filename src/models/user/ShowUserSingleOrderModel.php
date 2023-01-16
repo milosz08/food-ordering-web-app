@@ -9,19 +9,19 @@
  * Data utworzenia: 2023-01-10, 17:31:09                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 22:34:50                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-16 10:01:51                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
+namespace App\Models;
 
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- class ShowUserSingleOrderModel
- {
-     public $first_name;
-     public $last_name;
-     public $email;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class ShowUserSingleOrderModel
+{
+    public $first_name;
+    public $last_name;
+    public $email;
     public $city;
     public $street;
     public $building_nr;
@@ -34,7 +34,17 @@
     public $id;
     public $status_id;
     public $time_statement;
-    //public $finish_order;
-    //public $dish_name;
-    //public $dish_amount;
- }
+    public $dish_name;
+    public $dish_amount;
+    public $dishes_value;
+    public $is_grade_active;
+    public $is_grade_editable;
+    public $grade_id;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function __construct()
+    {
+        $this->dishes_value = array();
+    }
+}

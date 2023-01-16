@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:03:58                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:38:39                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -114,7 +114,7 @@ class DishesService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, 'owner/dishes');
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -174,7 +174,7 @@ class DishesService extends MvcService
 
             $pagination_data = RestaurantsHelper::get_total_res_pages($this->dbh, $search_text, $total_per_page, $curr_page, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -264,7 +264,7 @@ class DishesService extends MvcService
                     ';
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $banner_message, false);
                     $statement->closeCursor();
-                    $this->dbh->commit();
+                    if ($this->dbh->inTransaction()) $this->dbh->commit();
                     header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid']);
                     die;
                 }
@@ -346,7 +346,7 @@ class DishesService extends MvcService
                     ';
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DETAILS_PAGE_BANNER, $banner_message, false);
                     $statement->closeCursor();
-                    $this->dbh->commit();
+                    if ($this->dbh->inTransaction()) $this->dbh->commit();
                     header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid']);
                     die;
                 } else $dish->photo_url['value'] = $dish_photo;

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 12:25:30                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:33:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -96,7 +96,7 @@ class PendingRestaurantsService extends MvcService
             $statement->closeCursor();
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -134,7 +134,7 @@ class PendingRestaurantsService extends MvcService
 
             $this->_banner_message = 'Pomyślnie zaakceptowano wybraną restaurację oraz wysłano wiadomość email do właściciela.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -172,7 +172,7 @@ class PendingRestaurantsService extends MvcService
 
             $this->_banner_message = 'Pomyślnie odrzucono wybraną restaurację z systemu oraz wysłano wiadomość email do właściciela.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

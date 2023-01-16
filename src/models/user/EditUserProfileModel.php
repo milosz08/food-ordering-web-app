@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-07, 18:50:26                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 19:17:51                   *
+ * Ostatnia modyfikacja: 2023-01-16 05:49:50                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -27,6 +27,8 @@ class EditUserProfileModel
     public $city;
     public $building_nr;
     public $locale_nr;
+    public $phone_number;
+    public $profile_url;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -40,6 +42,8 @@ class EditUserProfileModel
         $this->street = array('value' => $this->street, 'invl' => false, 'bts_class' => '');
         $this->building_nr = array('value' => $this->building_nr, 'invl' => false, 'bts_class' => '');
         $this->locale_nr = array('value' => $this->locale_nr, 'invl' => false, 'bts_class' => '');
+        $this->phone_number = array('value' => $this->phone_number, 'invl' => false, 'bts_class' => '');
+        $this->profile_url = array('value' => $this->profile_url, 'invl' => false, 'bts_class' => '');
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +51,7 @@ class EditUserProfileModel
     public function all_is_valid()
     {
         return !($this->first_name['invl'] || $this->last_name['invl'] || $this->email['invl'] || $this->post_code['invl'] ||
-            $this->city['invl'] || $this->street['invl'] || $this->building_nr['invl'] || $this->locale_nr['invl']);
+            $this->city['invl'] || $this->street['invl'] || $this->building_nr['invl'] || $this->locale_nr['invl'] ||
+            $this->phone_number['invl']);
     }
 }

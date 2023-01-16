@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 02:05:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 08:02:13                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:34:08                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -115,7 +115,7 @@ class RatingsService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -203,7 +203,7 @@ class RatingsService extends MvcService
             ));
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -242,7 +242,7 @@ class RatingsService extends MvcService
             $statement->execute(array($_GET['id']));
 
             $this->_banner_message = 'Ocena z ID <strong>#' . $_GET['id'] . '</strong> została pomyślnie usunięta z systemu.';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -283,7 +283,7 @@ class RatingsService extends MvcService
                 Ocena z ID <strong>#' . $_GET['id'] . '</strong> została pomyślnie usunięta z systemu oraz została wysłana wiadomość
                 email do zgłaszającego właściciela restauracji.
             ';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -322,7 +322,7 @@ class RatingsService extends MvcService
                 Usunięcie oceny z ID <strong>#' . $_GET['id'] . '</strong> zostało pomyślnie odrzucone oraz została wysłana wiadomość
                 email do zgłaszającego właściciela restauracji.
             ';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

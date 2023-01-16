@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 20:18:07                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:30:50                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:34:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -84,7 +84,7 @@ class ActivateAccountService extends MvcService
             $this->_banner_error = false;
 
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -146,7 +146,7 @@ class ActivateAccountService extends MvcService
 
             $this->_banner_message = 'Na adres email skojarzony z kontem ' . $user_data['full_name'] . ' został wysłany kod autoryzacyjny.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

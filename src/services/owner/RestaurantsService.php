@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:04:12                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:41:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -119,7 +119,7 @@ class RestaurantsService extends MvcService
             $statement->closeCursor();
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -247,6 +247,7 @@ class RestaurantsService extends MvcService
                     $this->_banner_message = '
                         Restauracja została pomyślnie utworzona i przeszła w stan oczekiwania na zatwierdzenie administratora systemu.
                     ';
+                    if ($this->dbh->inTransaction()) $this->dbh->commit();
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                     header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
                     die;
@@ -407,7 +408,7 @@ class RestaurantsService extends MvcService
 
                     $statement->closeCursor();
                     $this->_banner_message = 'Pomyślnie wprowadzono nowe dane dla restauracji <strong>' . $res->name['value'] . '</strong>.';
-                    $this->dbh->commit();
+                    if ($this->dbh->inTransaction()) $this->dbh->commit();
 
                     SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                     header('Refresh:0; url=' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
@@ -470,7 +471,7 @@ class RestaurantsService extends MvcService
             rmdir('uploads/restaurants/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybraną restaurację z systemu.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -515,7 +516,7 @@ class RestaurantsService extends MvcService
             if (file_exists($result)) unlink($result);
             $this->_banner_message = 'Pomyślnie usunięto ' . $deleted_type . ' z wybranej restauracji z systemu.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -642,7 +643,7 @@ class RestaurantsService extends MvcService
             $statement->execute();
             while ($row = $statement->fetchObject(DiscountResDetailsModel::class)) array_push($restaurant_discounts, $row);
 
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {

@@ -102,7 +102,7 @@ class RestaurantsService extends MvcService
             $statement->closeCursor();
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -222,7 +222,7 @@ class RestaurantsService extends MvcService
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -282,7 +282,7 @@ class RestaurantsService extends MvcService
             if (file_exists($result)) unlink($result);
             $this->_banner_message = 'Pomyślnie usunięto ' . $deleted_type . ' z wybranej restauracji z systemu.';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -328,8 +328,10 @@ class RestaurantsService extends MvcService
             rmdir('uploads/restaurants/' . $_GET['id']);
             $this->_banner_message = 'Pomyślnie usunięto wybraną restaurację z systemu.';
             $statement->closeCursor();
-            $this->dbh->commit();
-        } catch (Exception $e) {
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
+        }
+        catch (Exception $e)
+        {
             $this->dbh->rollback();
             $this->_banner_message = $e->getMessage();
             $this->_banner_error = true;

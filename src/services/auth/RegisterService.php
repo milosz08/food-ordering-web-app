@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:49:34                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:36:21                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -147,7 +147,7 @@ class RegisterService extends MvcService
                         wysłanego na podany podczas rejestracji adres email. Nieaktywowane konto w przeciągu <strong>48 godzin</strong>
                         zostanie automatycznie usunięte z systemu.
                     ';
-                    $this->dbh->commit();
+                    if ($this->dbh->inTransaction()) $this->dbh->commit();
                     SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message,
                         $this->_banner_error, 'alert-warning'
                     );

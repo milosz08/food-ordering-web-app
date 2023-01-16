@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-11, 22:15:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 12:24:37                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:42:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -198,6 +198,6 @@ class ShoppingCartService extends MvcService
             die;
         }
         $statement->closeCursor();
-        $this->dbh->commit();
+        if ($this->dbh->inTransaction()) $this->dbh->commit();
     }
 }

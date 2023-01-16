@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-09, 23:24:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 14:11:58                   *
+ * Ostatnia modyfikacja: 2023-01-16 12:24:49                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -83,10 +83,10 @@ class RestaurantFilterModel
 
     public function find_parameter_and_fill($value, &$array, $custom_value = 'selected')
     {
-        foreach ($array as &$dataAttribute)
+        foreach ($array as &$data_attribute)
         {
-            if ($dataAttribute['value'] == $value) $dataAttribute[$custom_value] = $custom_value;
-            else $dataAttribute[$custom_value] = '';
+            if ($data_attribute['value'] == $value) $data_attribute[$custom_value] = $custom_value;
+            else $data_attribute[$custom_value] = '';
         }
     }
 

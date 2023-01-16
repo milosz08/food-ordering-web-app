@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 03:55:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 10:51:33                   *
+ * Ostatnia modyfikacja: 2023-01-16 04:33:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -91,7 +91,7 @@ class DishTypesService extends MvcService
             $statement->closeCursor();
             PaginationHelper::check_if_page_is_greaten_than($redirect_url, $total_pages);
             $pages_nav = PaginationHelper::get_pagination_nav($curr_page, $total_per_page, $total_pages, $total_records, $redirect_url);
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -139,7 +139,7 @@ class DishTypesService extends MvcService
                 Nowy typ potrawy o nazwie <strong>' . $v_name['value'] . '</strong> został pomyślnie dodany do systemu.
             ';
             $statement->closeCursor();
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -186,7 +186,7 @@ class DishTypesService extends MvcService
                 Typ potrawy o nazwie <strong>' . $prev_name . '</strong> został pomyślnie zmieniony na <strong>' . $v_name['value'] . '
                 </strong> i zaktualizowany w systemie.
             ';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
@@ -223,7 +223,7 @@ class DishTypesService extends MvcService
             $statement->execute(array($_GET['id']));
             
             $this->_banner_message = 'Typ potrawy o nazwie <strong>' . $name . '</strong> został pomyślnie usunięty z systemu.';
-            $this->dbh->commit();
+            if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
         {
