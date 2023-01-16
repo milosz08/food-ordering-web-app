@@ -1,6 +1,13 @@
 {{> partials/header-view.partial }}
 <main class="container-lg flex-grow-1 top-margin-header">
     {{> partials/dynamic-banner-view.partial}}
-    tutaj będą szczegóły odnośnie złożonego zamówienia, mapa restauracji, jakieś dodatki jeszcze nie wiem
+    <div class="d-flex justify-content-center align-items-center">
+        <h3 class="mx-auto">Twoje zamówienie jest w drodze, spodziewaj się go za {{data.addresses.estimate_time}}</h3>
+    </div>
+    <div class="mb-3" >
+        <iframe width="100%" height="480"
+            src="https://maps.google.com/maps?q={{data.addresses.address}}%20{{data.addresses.post_city}}&output=embed">
+        </iframe>
+    </div>
 </main>
 {{> partials/footer-view.partial }}
