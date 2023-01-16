@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 16:44:39                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-16 00:37:10                   *
+ * Modyfikowany przez: BubbleWaffle                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
@@ -37,6 +37,7 @@ class SessionHelper
     const HOME_RESTAURANTS_LIST_PAGE_BANNER             = 'home_restaurants_list_page';
     const ORDER_SUMMARY_PAGE_BANNER                     = 'order_finish_page';
     const OWNER_RES_SEARCH                              = 'owner_restaurant_search';
+    const OWNER_ORDER_SEARCH                            = 'owner_order_search';
     const OWNER_RES_DETAILS_SEARCH                      = 'owner_restaurant_details_search';
     const OWNER_DISHES_SEARCH                           = 'owner_dishes_search';
     const OWNER_DISHES_RES_SEARCH                       = 'owner_dishes_res_search';
