@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:41:04                   *
+ * Ostatnia modyfikacja: 2023-01-16 17:05:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -568,7 +568,7 @@ class RestaurantsService extends MvcService
                 IF(delivery_price, CONCAT(REPLACE(CAST(delivery_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'za darmo') AS delivery_price, 
                 CONCAT('ul. ', street, ' ', building_locale_nr, ', ', post_code, ' ', city) AS address,
                 (SELECT COUNT(*) FROM dishes WHERE restaurant_id = r.id) AS count_of_dishes,
-                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
+                CONCAT(SUBSTRING(r.phone_number, 1, 3), ' ', SUBSTRING(r.phone_number, 3, 3), ' ', SUBSTRING(r.phone_number, 6, 3)) AS phone_number,
                 IF(min_price, CONCAT(REPLACE(CAST(min_price AS DECIMAL(10,2)), '.', ','), ' zł'), 'brak najniższej ceny') AS min_price,
                 IFNULL(NULLIF((SELECT COUNT(*) FROM discounts WHERE restaurant_id = r.id), 0), 'brak rabatów') AS discounts_count
                 FROM restaurants AS r
