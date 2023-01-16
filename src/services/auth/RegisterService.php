@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:36:21                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 23:55:17                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Auth\Services;
@@ -88,8 +88,8 @@ class RegisterService extends MvcService
 
                     // Sekcja zapytań dodająca wprowadzone dane do tabel users i user_address
                     $query = "
-                        INSERT INTO users (first_name, last_name, login, password, email, phone_number, role_id)
-                        VALUES (?,?,?,?,?,REPLACE(?, ' ', ''),?)
+                        INSERT INTO users (first_name, last_name, login, password, email, phone_number, role_id, is_prime)
+                        VALUES (?,?,?,?,?,REPLACE(?, ' ', ''),?,1)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
