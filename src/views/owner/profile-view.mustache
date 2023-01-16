@@ -1,9 +1,69 @@
-<h2 class="text-secondary fw-normal mb-3">Profil właściciela</h2>
-<nav class="mb-4" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Profil</li>
-    </ol>
-</nav>
-<hr/>
-{{> partials/dynamic-banner-view.partial}}
+<div class="position-relative min-z-index">
+    <div class="d-flex align-items-center">
+        <div class="me-4">
+            {{#data.profile}}
+            <img src="{{base_dir}}public/{{photo_url}}" alt="" class="rounded" width="80px" height="80px"/>
+        </div>
+        <div>
+            <h2 class="text-secondary fw-normal mb-3">Profil właściciela</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profil</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <hr class="mb-3"/>
+    {{> partials/dynamic-banner-view.partial}}
+    <div class="container-fluid mb-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Imię:</p>
+                        <p class="text-dark fs-5 lh-sm">{{first_name}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Nazwisko:</p>
+                        <p class="text-dark fs-5 lh-sm">{{last_name}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Telefon:</p>
+                        <p class="text-dark fs-5 lh-sm">{{phone_number}}</p>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Login:</p>
+                        <p class="text-dark fs-5 lh-sm">{{login}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Email:</p>
+                        <p class="text-dark fs-5 lh-sm">{{email}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-secondary lh-sm mb-1">Adres:</p>
+                        <p class="text-dark fs-5 lh-sm">{{address}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-stretch text-decoration-none text-dark">
+                    <a href="{{base_dir}}owner/settings" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                        <div class="card-header">Ustawienia</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Moje ustawienia</h5>
+                            <p class="card-text lh-sm text-secondary fw-normal">
+                                Kliknij tutaj, aby przejść do ustawień swojego konta.
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {{/data.profile}}
+    </div>
+</div>
+            

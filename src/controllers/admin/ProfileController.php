@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:29:35                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 15:59:53                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 19:39:00                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -18,10 +18,10 @@ namespace App\Controllers;
 use App\Core\MvcService;
 use App\Core\MvcController;
 use App\Core\ResourceLoader;
-use App\Admin\Services\ProfileService;
+use App\Owner\Services\ProfileService;
 use App\Services\Helpers\SessionHelper;
 
-ResourceLoader::load_service('ProfileService', 'admin'); // ładowanie serwisu przy użyciu require_once
+ResourceLoader::load_service('ProfileService', 'owner'); // ładowanie serwisu przy użyciu require_once
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,9 +45,11 @@ class ProfileController extends MvcController
     public function index()
     {
         $this->protector->protect_only_admin();
+        $profile_info = $this->_service->profile();
         $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_PROFILE_PAGE_BANNER);
         $this->renderer->render_embed('admin-wrapper-view', 'admin/profile-view', array(
             'page_title' => 'Profil administratora',
+            'data' => $profile_info,
             'banner' => $banner_data,
         ));
     }

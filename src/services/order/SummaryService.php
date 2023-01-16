@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 21:09:38                   *
+ * Ostatnia modyfikacja: 2023-01-16 21:54:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -286,10 +286,11 @@ class SummaryService extends MvcService
                 $statement->execute(array($discount_id));
             }
             else $total_price /= 100;
+            $selected_address = $_POST['address-id'];
             // uzyskiwanie adresu
-            $query = "SELECT id FROM user_address WHERE user_id = ? AND is_prime = 1";
+            $query = "SELECT count(*) FROM user_address WHERE user_id = ? AND id = ?";
             $statement = $this->dbh->prepare($query);
-            $statement->execute(array($_SESSION['logged_user']['user_id']));
+            $statement->execute(array($_SESSION['logged_user']['user_id'], $selected_address));
             $user_address = $statement->fetchColumn();
             if (!$user_address) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
 
@@ -300,7 +301,7 @@ class SummaryService extends MvcService
             ";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array(
-                $_SESSION['logged_user']['user_id'], $discount_id, $user_address, $delivery, $_POST['resid'], $total_price, $estimate_time,
+                $_SESSION['logged_user']['user_id'], $discount_id, $selected_address, $delivery, $_POST['resid'], $total_price, $estimate_time,
             ));
 
             //pobieranie id generowanego zamowienia
@@ -345,9 +346,25 @@ class SummaryService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
-
-            // tutaj kod
-
+            $current_order = $_GET['id'];
+            $query = "SELECT count(*) FROM orders WHERE user_id = ? AND id = ? AND status_id = 1";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id'], $current_order));
+            if ($statement->fetchColumn() == 0)
+            {
+                $this->dbh->commit();
+                $statement->closeCursor();
+                header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
+                die;
+            }
+            $query = "
+                SELECT estimate_time, CONCAT('ul. ', street, ' ', building_nr, IF(locale_nr, CONCAT('/', locale_nr), '')) AS address,
+                CONCAT(post_code, ' ', city) AS post_city
+                FROM orders o INNER JOIN user_address a ON o.order_adress = a.id WHERE o.id = ? AND o.user_id = ?
+            ";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($current_order, $_SESSION['logged_user']['user_id']));
+            $addresses = $statement->fetch(PDO::FETCH_ASSOC);
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
@@ -355,6 +372,8 @@ class SummaryService extends MvcService
             $this->dbh->rollback();
             SessionHelper::create_session_banner(SessionHelper::NEW_ORDER_DETAILS_PAGE_BANNER, $e->getMessage(), true);
         }
-        return array();
+        return array(
+            'addresses' => $addresses,
+        );
     }
 }

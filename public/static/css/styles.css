@@ -7,11 +7,11 @@
  * Data utworzenia: 2022-11-10, 18:22:29                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 16:37:56                   *
+ * Ostatnia modyfikacja: 2023-01-16 21:56:56                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 * {
     margin: 0;
@@ -56,20 +56,20 @@ body {
     margin-top: 80px;
 }
 
-.btn-hover-dark {
-    &:hover {
-        background-color: var(--bs-gray-200);
-    }
-    &[aria-expanded="true"] .chewron-icon {
-        transform: rotate(90deg);
-    }
+.btn-hover-dark:hover {
+    background-color: var(--bs-gray-200);
+}
+
+.btn-hover-dark[aria-expanded="true"] .chewron-icon {
+    transform: rotate(90deg);
 }
 
 .footer-link-hover {
     color: var(--bs-light);
-    &:hover {
-        color: var(--bs-gray-500);
-    }
+}
+
+.footer-link-hover:hover {
+    color: var(--bs-gray-500);
 }
 
 .panel-left-nav {
@@ -104,10 +104,11 @@ body {
 .upload-image-preview-container {
     width: 100px;
     height: 100px;
-    &.wide-image {
-        width: 100%;
-        height: 100px;
-    }
+}
+
+.upload-image-preview-container.wide-image {
+    width: 100%;
+    height: 100px;
 }
 
 .restaurant-dishes-banner-margin {
@@ -133,21 +134,24 @@ body {
     height: 500px;
     width: 100%;
     opacity: .2;
-    &:before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(transparent 10%, var(--bs-light));
-    }
-    &.gradient-left {
-        height: 100%;
-        background-attachment: initial;
-        opacity: .3;
-        &:before {
-            background-image: none;
-        }
-    }
+}
+
+.restaurant-banner-image:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(transparent 10%, var(--bs-light));
+}
+
+.restaurant-banner-image:before.gradient-left {
+    height: 100%;
+    background-attachment: initial;
+    opacity: .3;
+}
+
+.restaurant-banner-image:before.gradient-left:before {
+    background-image: none;
 }
 
 .min-z-index {
@@ -180,7 +184,7 @@ body {
 }
 
 .grade-system-font {
-    font-family:'Bootstrap-icons';
+    font-family: 'Bootstrap-icons';
 }
 
 .radio-btn {
@@ -214,17 +218,26 @@ body {
     color: #b8860b;
 }
 
-.rating-container > label:hover::after,
-.rating-container > label:hover ~ label:after,
-.rating-container > input.radio-btn:checked ~ label:after,
-.rating-container > input.radio-btn:checked ~ label:after {
-    font-family:'Bootstrap-icons';  
+.order-summary-container {
+    bottom: -90px;
+}
+
+.order-summary-circle {
+    width: 150px;
+    height: 150px;
+}
+
+.rating-container>label:hover::after,
+.rating-container>label:hover~label:after,
+.rating-container>input.radio-btn:checked~label:after,
+.rating-container>input.radio-btn:checked~label:after {
+    font-family: 'Bootstrap-icons';
     content: '\F586';
     position: absolute;
     left: 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 @media only screen and (max-width: 992px) {
     .add-content-button {

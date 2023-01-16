@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-07, 01:01:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 16:06:59                   *
- * Modyfikowany przez: Miłosz Gilga                            *
+ * Ostatnia modyfikacja: 2023-01-16 19:09:40                   *
+ * Modyfikowany przez: cptn3m012                               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -384,7 +384,7 @@ class SettingsService extends MvcService
                 Nieprawidłowe hasło. Spróbuj ponownie wprowadzając inne hasło.
             ');
 
-            $query = "DELETE FROM users WHERE user_id = ?";
+            $query = "DELETE FROM users WHERE id = ?";
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
 

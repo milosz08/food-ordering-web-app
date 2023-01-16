@@ -1,6 +1,20 @@
 {{> partials/header-view.partial }}
-<main class="container-lg flex-grow-1 top-margin-header">
+<main class="container-flex d-flex flex-column flex-grow-1 top-margin-header">
     {{> partials/dynamic-banner-view.partial}}
-    tutaj będą szczegóły odnośnie złożonego zamówienia, mapa restauracji, jakieś dodatki jeszcze nie wiem
+    <div class="d-flex align-items-center" style="height: 25vh;">
+        <div class="d-flex flex-column align-items-center w-100 position-relative text-center order-summary-container">
+            <h2 class="fs-5 mb-1">Twoje zamówienie zostało złożone i dotrze do ciebie za około:</h2>
+            <p class="text-secondary">
+                Aby śledzić jego status, przejdź do strony z zamówieniami <a href="{{base_dir}}user/orders">klikając tutaj</a>.
+            </p>
+            <div class="bg-dark rounded-circle justify-content-center text-white d-flex fs-3 align-items-center order-summary-circle">
+        {{data.addresses.estimate_time}}
+        </div>
+    </div>
+    </div>
+    <div class="d-flex w-100 flex-grow-1 flex-grow-1">
+        <iframe width="100%" src="https://maps.google.com/maps?q={{data.addresses.address}}%20{{data.addresses.post_city}}&output=embed">
+        </iframe>
+    </div>
 </main>
 {{> partials/footer-view.partial }}
