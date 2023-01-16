@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-16, 00:10:06                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 01:00:05                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-16 03:04:33                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
  namespace App\Models;
@@ -28,5 +28,6 @@
     public $delivery_type;
     public $restaurant;
     public $price;
+   public $button_status;
  }
  

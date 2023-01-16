@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-03, 02:13:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 01:55:50                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2023-01-16 03:08:12                   *
+ * Modyfikowany przez: patrick012016                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
@@ -69,7 +69,7 @@ class OrdersService extends MvcService
             $query = "
                 SELECT ROW_NUMBER() OVER(ORDER BY o.id) as it, o.id AS id, CONCAT(u.first_name, ' ', u.last_name) AS user, IF(o.discount_id IS NOT NULL, d.code, 'Brak') AS discount,
                 os.name AS status, CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', ua.post_code, ' ', ua.city) AS order_adress,
-                dt.name AS delivery_type, o.price AS price, r.name AS restaurant
+                dt.name AS delivery_type, o.price AS price, r.name AS restaurant, IF(o.status_id != 1, 'disabled', ' ') AS button_status
                 FROM ((((((orders AS o
                 INNER JOIN order_status AS os ON o.status_id = os.id)
                 INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
@@ -88,7 +88,7 @@ class OrdersService extends MvcService
 
             while ($row = $statement->fetchObject(OwnerOrdersModel::class)) array_push($orders, $row);
             $not_empty = count($orders);
-            
+
             // zapytanie zliczające wszystkie zamówienia przypisane do właściciela
             $query = "SELECT count(*) FROM orders AS o
             INNER JOIN restaurants AS r ON o.restaurant_id = r.id
@@ -152,5 +152,41 @@ class OrdersService extends MvcService
             'order_id' => $_GET['id'],
             'order_details' => '',
         );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Metoda zmieniająca staus danego zamówienia w panelu restauratora
+     */
+    public function order_change()
+    {
+        if (!isset($_GET['id']))
+            return;
+        try {
+            $this->dbh->beginTransaction();
+            
+            $query = "SELECT id FROM orders WHERE id = ?";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+            $result = $statement->fetchColumn();
+            if (empty($result))
+            {
+                throw new Exception('Podane zamówienie nie istnieje w systemie lub nie należy do twojej restauracji.');
+            }
+
+            $query = "UPDATE orders SET status_id = 2, finish_order = NOW() WHERE id = ?;";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_GET['id']));
+
+            $this->_banner_message = 'Pomyślnie zmienio status zamówienia o numerze ' . $_GET['id'] . '.';
+            $statement->closeCursor();
+            $this->dbh->commit();
+        } catch (Exception $e) {
+            $this->dbh->rollback();
+            $this->_banner_message = $e->getMessage();
+            $this->_banner_error = true;
+        }
+        SessionHelper::create_session_banner(SessionHelper::OWNER_ORDERS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 }

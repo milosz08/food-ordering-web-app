@@ -28,7 +28,8 @@
                 <th>Rodzaj dostawy</th>
                 <th class="d-none d-lg-table-cell">Kod rabatowy</th>
                 <th>Cena</th>
-                <th class="fit">Status</th>
+                <th>Status</th>
+                <th class="fit">Akcja</th>
             </tr>
         </thead>
         <tbody>
@@ -44,7 +45,16 @@
                 <td class="align-middle">{{price}}</td>
                 <td class="align-middle">{{status}}</td>
                 <td class="align-middle fit flex-nowrap">
+                    <a href="{{base_dir}}/owner/orders/status?id={{id}}" class="btn btn-success btn-sm ms-2 {{button_status}}"
+                        type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Zmień status zamówienia">
+                        <i class="bi bi-check-circle"></i>
+                    </a>
+                    <a href="{{base_dir}}owner/orders/order-details?id={{id}}" class="btn btn-primary btn-sm ms-2"
+                        type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Szczegóły zamówienia">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
                 </td>
+            </a>
             </tr>
             {{/data.orders}}
         </tbody>
