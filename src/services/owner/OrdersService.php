@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 02:13:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 17:13:15                   *
+ * Ostatnia modyfikacja: 2023-01-16 22:23:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -67,6 +67,19 @@ class OrdersService extends MvcService
             $redirect_url = 'owner/orders';
             PaginationHelper::check_parameters('owner/orders');
 
+            // SELECT ROW_NUMBER() OVER(ORDER BY o.id) as it, o.id AS id, CONCAT(u.first_name, ' ', u.last_name) AS user,
+            //     IF(o.discount_id IS NOT NULL, d.code, 'Brak') AS discount, os.name AS status,
+            //     CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', 
+            //     ua.post_code, ' ', ua.city) AS order_adress, dt.name AS delivery_type, o.price AS price, r.name AS restaurant,
+            //     IF(o.status_id != 1, 'disabled', ' ') AS button_status
+            //     FROM (((((orders AS o
+            //     INNER JOIN order_status AS os ON o.status_id = os.id)
+            //     INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
+            //     INNER JOIN users AS u ON o.user_id = u.id)
+            //     INNER JOIN restaurants AS r ON o.restaurant_id = r.id)
+            //     INNER JOIN user_address AS ua ON u.id = ua.user_id)
+            //     WHERE r.user_id = :id AND r.name LIKE :search LIMIT :total OFFSET :page
+
             // zapytanie do bazy danych, które zwróci poszczególne wartości zamówień wszystkich klientów dla obecnie zalogowanego właściciela
             $query = "
                 SELECT ROW_NUMBER() OVER(ORDER BY o.id) as it, o.id AS id, CONCAT(u.first_name, ' ', u.last_name) AS user,
@@ -74,14 +87,16 @@ class OrdersService extends MvcService
                 CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', 
                 ua.post_code, ' ', ua.city) AS order_adress, dt.name AS delivery_type, o.price AS price, r.name AS restaurant,
                 IF(o.status_id != 1, 'disabled', ' ') AS button_status
-                FROM ((((((orders AS o
+                FROM (((((orders AS o
                 INNER JOIN order_status AS os ON o.status_id = os.id)
                 INNER JOIN delivery_type AS dt ON o.delivery_type = dt.id)
                 INNER JOIN users AS u ON o.user_id = u.id)
                 INNER JOIN restaurants AS r ON o.restaurant_id = r.id)
                 INNER JOIN user_address AS ua ON u.id = ua.user_id)
-                LEFT JOIN discounts AS d ON o.discount_id = d.id)
-                WHERE r.user_id = :id AND r.name LIKE :search LIMIT :total OFFSET :page
+                LEFT JOIN discounts AS d ON o.discount_id = d.id
+                WHERE r.user_id = :id AND r.name LIKE :search
+                GROUP BY o.id
+                LIMIT :total OFFSET :page
             ";
             $statement = $this->dbh->prepare($query);
             $statement->bindValue('id', $_SESSION['logged_user']['user_id']);

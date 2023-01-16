@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-07, 01:01:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 19:09:40                   *
- * Modyfikowany przez: cptn3m012                               *
+ * Ostatnia modyfikacja: 2023-01-16 23:13:50                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\User\Services;
@@ -141,6 +141,11 @@ class SettingsService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
             while ($row = $statement->fetchObject(UserAddressModel::class)) array_push($addresses, $row);
+            
+            if (isset($_POST['save-changes-button']) && count($addresses) == 0)
+            {
+                header('Location:' . __URL_INIT_DIR__ . 'user/settings', true, 301);
+            }
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
         catch (Exception $e)
@@ -154,6 +159,7 @@ class SettingsService extends MvcService
             'has_profile' => !empty($user->profile_url['value']),
             'hide_profile_preview_class' => $user->profile_url['invl'] ? 'display-none' : '',
             'add_address_is_visible' => !(count($addresses) == 3),
+            'delete_address_is_visible' =>  (count($addresses) == 0) ? 'disabled' : 'enable',
         );
     }
 
@@ -245,6 +251,11 @@ class SettingsService extends MvcService
         try
         {
             $this->dbh->beginTransaction();
+            $query = "SELECT count(*) FROM user_address WHERE user_id = ? AND is_prime = 0";
+            $statement = $this->dbh->prepare($query);
+            $statement->execute(array($_SESSION['logged_user']['user_id']));
+
+            if ($statement->fetchColumn() == 0) throw new Exception('Użytkownik nie posiada alternatywnych adresów');
 
             $query = " DELETE FROM user_address WHERE user_id = ? AND is_prime = 0 AND id = ?";
             $statement = $this->dbh->prepare($query);
