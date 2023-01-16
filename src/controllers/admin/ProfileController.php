@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:29:35                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 17:44:10                   *
+ * Ostatnia modyfikacja: 2023-01-16 15:59:53                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,6 +19,7 @@ use App\Core\MvcService;
 use App\Core\MvcController;
 use App\Core\ResourceLoader;
 use App\Admin\Services\ProfileService;
+use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('ProfileService', 'admin'); // ładowanie serwisu przy użyciu require_once
 
@@ -28,12 +29,12 @@ class ProfileController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function __construct()
     {
         parent::__construct();
-		$this->_service = MvcService::get_instance(ProfileService::class); // stworzenie instancji serwisu
+        $this->_service = MvcService::get_instance(ProfileService::class); // stworzenie instancji serwisu
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,11 +42,13 @@ class ProfileController extends MvcController
     /**
      * Przejście pod adres: /admin/profile
      */
-	public function index()
+    public function index()
     {
         $this->protector->protect_only_admin();
+        $banner_data = SessionHelper::check_session_and_unset(SessionHelper::ADMIN_PROFILE_PAGE_BANNER);
         $this->renderer->render_embed('admin-wrapper-view', 'admin/profile-view', array(
             'page_title' => 'Profil administratora',
+            'banner' => $banner_data,
         ));
-	}
+    }
 }

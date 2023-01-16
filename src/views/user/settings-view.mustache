@@ -183,6 +183,48 @@
                 </div>
             </form>
         </div>
+        <h3 class="mb-1 fs-4 ps-0 mt-4">Niebezpieczna strefa</h3>
+        <div class="px-0 mt-2 mb-3">
+            <button class="btn btn-danger mb-2 add-content-button" data-bs-toggle="modal" data-bs-target="#delete-account" type="button">
+                Usuń konto (niebezpieczne)
+            </button>
+        </div>
     </div>
 </main>
+<div class="modal fade" id="delete-account" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie konta</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{base_dir}}user/settings/delete-account" method="post">
+                <div class="modal-body">
+                    <p class="lh-sm">
+                        Czy na pewno chcesz usunąć swoje konto? Utracisz bezpowrotnie dostęp do zawartości swojego konta, a Twoje wszystkie
+                        zamówienia ulegną usunięciu. Konta nie można usunąć, gdy posiadasz aktywne zamówienia.
+                    </p>
+                    <p class="lh-sm">
+                        W celu potwierdzenia usunięcia konta, należy podać hasło:
+                    </p>
+                    <div>
+                        <label for="form-password-confirmation" class="form-label">Hasło:</label>
+                        <div class="input-group has-validation">
+                            <input type="password" name="password-confirmation" class="form-control {{data.password.bts_class}}"
+                                id="form-password-confirmation" required>
+                            <button type="button" class="input-group-text password-input-toggler">
+                                <i class="bi bi-eye-fill"></i>
+                            </button>
+                            <div class="invalid-feedback">Podaj prawidłową wartość!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-outline-danger">Usuń</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {{> partials/footer-view.partial }}
