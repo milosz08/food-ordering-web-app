@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-02, 22:31:52                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 19:45:57                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-17 02:25:17                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Admin\Services;
@@ -54,7 +54,9 @@ class ProfileService extends MvcService
 
             // zapytanie do bazy danych, które zwróci informacje kontaktowe administratora
             $query = "
-                SELECT u.first_name, u.last_name, u.login, u.email, u.phone_number, IFNULL(u.photo_url, 'static/images/default-profile-image.jpg') AS photo_url,
+                SELECT u.first_name, u.last_name, u.login, u.email,
+                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
+                IFNULL(u.photo_url, 'static/images/default-profile-image.jpg') AS photo_url,
                 CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', 
                 ua.post_code, ' ', ua.city) AS address FROM users u INNER JOIN user_address ua ON u.id = ua.user_id WHERE u.id = :id 
             ";

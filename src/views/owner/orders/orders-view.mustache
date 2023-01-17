@@ -45,7 +45,7 @@
                 <td class="align-middle">{{price}}</td>
                 <td class="align-middle">{{status}}</td>
                 <td class="align-middle fit flex-nowrap">
-                    <a href="{{base_dir}}/owner/orders/status?id={{id}}" class="btn btn-success btn-sm ms-2 {{button_status}}"
+                    <a href="{{base_dir}}owner/orders/status?id={{id}}" class="btn btn-success btn-sm ms-2 {{button_status}}"
                         type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Zmień status zamówienia">
                         <i class="bi bi-check-circle"></i>
                     </a>
@@ -64,7 +64,6 @@
 {{/data.not_empty}}
 {{^data.not_empty}}
 <div class="alert alert-warning mb-3" role="alert">
-    Nie znaleziono żadnych restauracji przypisanych do Twojego konta. Aby stworzyć restaurację, przedź <a class="alert-link" 
-    href="{{base_dir}}restaurants/add-restaurant">pod ten link</a> lub kliknij w przycisk "Dodaj restaurację" powyżej.
+    Nie znaleziono żadnych zamówień pochodzących z Twoich restauracji.
 </div>
 {{/data.not_empty}}

@@ -1,8 +1,10 @@
 {{> partials/header-view.partial }}
 <main class="container-flex d-flex flex-column flex-grow-1 top-margin-header">
-    {{> partials/dynamic-banner-view.partial}}
-    <div class="d-flex align-items-center" style="height: 25vh;">
+    <div class="d-flex align-items-center">
         <div class="d-flex flex-column align-items-center w-100 position-relative text-center order-summary-container">
+            <div class="media-large-form-size-box mx-3">
+                {{> partials/dynamic-banner-view.partial}}
+            </div>
             <h2 class="fs-5 mb-1">Twoje zamówienie zostało złożone i dotrze do ciebie za około:</h2>
             <p class="text-secondary">
                 Aby śledzić jego status, przejdź do strony z zamówieniami <a href="{{base_dir}}user/orders">klikając tutaj</a>.

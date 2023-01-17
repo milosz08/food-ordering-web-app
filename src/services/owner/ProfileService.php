@@ -9,19 +9,17 @@
  * Data utworzenia: 2023-01-02, 22:32:11                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 18:06:53                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2023-01-17 02:27:11                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Owner\Services;
 
-use PDO;
 use Exception;
 use App\Core\MvcService;
 use App\Core\ResourceLoader;
 use App\Models\OwnerProfileModel;
 use App\Services\Helpers\SessionHelper;
-
 
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_model('OwnerProfileModel', 'restaurant');
@@ -54,7 +52,9 @@ class ProfileService extends MvcService
 
             // zapytanie do bazy danych, które zwróci informacje kontaktowe właściciela
             $query = "
-                SELECT u.first_name, u.last_name, u.login, u.email, u.phone_number, IFNULL(u.photo_url, 'static/images/default-profile-image.jpg') AS photo_url,
+                SELECT u.first_name, u.last_name, u.login, u.email,
+                CONCAT(SUBSTRING(phone_number, 1, 3), ' ', SUBSTRING(phone_number, 3, 3), ' ', SUBSTRING(phone_number, 6, 3)) AS phone_number,
+                IFNULL(u.photo_url, 'static/images/default-profile-image.jpg') AS photo_url,
                 CONCAT('ul. ', ua.street, ' ', ua.building_nr, IF(ua.locale_nr IS NOT NULL, (CONCAT('/',ua.locale_nr)), ('')) , ', ', 
                 ua.post_code, ' ', ua.city) AS address FROM users u INNER JOIN user_address ua ON u.id = ua.user_id WHERE u.id = :id 
             ";

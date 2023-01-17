@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 10:37:57                   *
+ * Ostatnia modyfikacja: 2023-01-17 01:56:08                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -492,8 +492,8 @@ class RestaurantsService extends MvcService
                     else $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));
 
                     $calculate = (($summary_prices['total_num']/100) * $percent);
-                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100)) / 100, 2, ',');
-                    $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
+                    $summary_prices['total'] = number_format(($summary_prices['total_num']*($percent/100)) / 100, 2, ',', ' ');
+                    $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',', ' ');
                     $summary_prices['diff_not_enough'] = $min_price_num - $summary_prices['total_num'];
                 }
             }
@@ -512,7 +512,7 @@ class RestaurantsService extends MvcService
             'search_text' => $search_dish_name,
             'shopping_cart' => $shopping_cart,
             'summary_prices' => $summary_prices,
-            'diff_not_enough' => number_format($summary_prices['diff_not_enough'] / 100, 2, ','),
+            'diff_not_enough' => number_format($summary_prices['diff_not_enough'] / 100, 2, ',', ' '),
             'not_enough_total_sum' => $min_price_num > $summary_prices['total_num'],
             'cart_is_empty' => !isset($cookie),
         );

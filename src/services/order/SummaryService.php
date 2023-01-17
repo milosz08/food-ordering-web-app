@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 21:54:47                   *
+ * Ostatnia modyfikacja: 2023-01-17 01:58:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -147,12 +147,12 @@ class SummaryService extends MvcService
                     $percent = (100 - (float) str_replace(',', '.', $summary_prices['percentage_discount']));
                     // Obliczenie ile zaoszczędził użytkownik
                     $summary_prices['saving'] = number_format(
-                        ($summary_prices['total_num'] - ($summary_prices['total_num'] * ($percent / 100))) / 100, 2, ',');
+                        ($summary_prices['total_num'] - ($summary_prices['total_num'] * ($percent / 100))) / 100, 2, ',', ' ');
                 }
                 $calculate = (( $summary_prices['total_num'] / 100) * $percent);
-                $summary_prices['total'] = number_format(( $summary_prices['total_num'] * ($percent / 100)) / 100, 2, ',');
-                $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',');
-                $summary_prices['total_without_discount'] = number_format($summary_prices['total_num'] / 100, 2, ',');
+                $summary_prices['total'] = number_format(( $summary_prices['total_num'] * ($percent / 100)) / 100, 2, ',', ' ');
+                $summary_prices['total_with_delivery'] = number_format(($calculate + $delivery) / 100, 2, ',', ' ');
+                $summary_prices['total_without_discount'] = number_format($summary_prices['total_num'] / 100, 2, ',', ' ');
             }
             if ($this->dbh->inTransaction()) $this->dbh->commit();
         }
