@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:36:21                   *
+ * Ostatnia modyfikacja: 2023-01-17 00:32:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -107,8 +107,8 @@ class RegisterService extends MvcService
                     $user_data = $statement_id->fetch(PDO::FETCH_ASSOC);
 
                     $query = "
-                        INSERT INTO user_address (street, building_nr, locale_nr, post_code, city, user_id)
-                        VALUES (?,?,NULLIF(?,''),?,?,?)
+                        INSERT INTO user_address (street, building_nr, locale_nr, post_code, city, is_prime, user_id)
+                        VALUES (?,?,NULLIF(?,''),?,?,1,?)
                     ";
                     $statement = $this->dbh->prepare($query);
                     $statement->execute(array(
@@ -135,7 +135,7 @@ class RegisterService extends MvcService
                         'user_full_name' => $user_data['full_name'],
                         'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                         'ota_token' => $rnd_ota_token,
-                        'regenerate_link' => 'auth/account/activate/resend/code?userid=' . $user_data['id'],
+                        'regenerate_link' => 'auth/activate-account/resend/code?userid=' . $user_data['id'],
                     );
                     $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
                     $this->smtp_client->send_message($user->email['value'], $subject, 'activate-account', $email_request_vars);

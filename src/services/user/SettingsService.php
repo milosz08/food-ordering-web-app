@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-07, 01:01:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 23:13:50                   *
+ * Ostatnia modyfikacja: 2023-01-17 00:56:52                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -126,9 +126,9 @@ class SettingsService extends MvcService
                         $user->city['value'], $_SESSION['logged_user']['user_id'],
                     ));
 
-                    $user->profile_url['value'] = $profile_url;
+                    $user->profile_url['value'] = empty($profile_url) ? 'static/images/default-profile-image.jpg' : $profile_url;
                     $_SESSION['logged_user']['user_full_name'] = $user->first_name['value'] . ' ' . $user->last_name['value'];
-                    $_SESSION['logged_user']['user_profile_image'] = $profile_url;
+                    $_SESSION['logged_user']['user_profile_image'] = $user->profile_url['value'];
                     $this->_banner_message = 'Zmiany zostały pomyślnie zapisane';
                     SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
                 }

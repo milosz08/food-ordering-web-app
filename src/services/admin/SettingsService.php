@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:57                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 15:55:58                   *
+ * Ostatnia modyfikacja: 2023-01-17 00:56:41                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -123,9 +123,9 @@ class SettingsService extends MvcService
                         $user->city['value'], $_SESSION['logged_user']['user_id'],
                     ));
 
-                    $user->profile_url['value'] = $profile_url;
+                    $user->profile_url['value'] = empty($profile_url) ? 'static/images/default-profile-image.jpg' : $profile_url;
                     $_SESSION['logged_user']['user_full_name'] = $user->first_name['value'] . ' ' . $user->last_name['value'];
-                    $_SESSION['logged_user']['user_profile_image'] = $profile_url;
+                    $_SESSION['logged_user']['user_profile_image'] = $user->profile_url['value'];
                     $this->_banner_message = 'Pomyślnie zaktualizowano ustawienia użytkownika.';
                     $statement->closeCursor();
                     if ($this->dbh->inTransaction()) $this->dbh->commit();
