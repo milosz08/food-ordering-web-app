@@ -1,0 +1,292 @@
+<nav class="d-flex justify-content-between navbar fixed-top bg-dark">
+    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}admin/dashboard">
+        CMS | <span class="text-white-50">Panel administratora</span>
+    </a>
+    <div class="dropdown d-block d-md-none">
+        <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="text-light fs-5 fw-normal ms-3 me-1">
+                CMS | <span class="text-white-50">Panel administratora</span>
+            </span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
+            <li><a class="dropdown-item" href="{{base_dir}}admin/dashboard">
+                <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/dish-types">
+                <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Typy potraw</a>
+            </li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/manage-users">
+                <span class="material-symbols-outlined me-2 fs-5">group</span>Użytkownicy systemu
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Wszystkie restauracje</a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/pending-restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">playlist_add_check</span>Oczekujące na zaakceptowanie</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/ratings">
+                <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji</a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}admin/ratings/pending-to-delete">
+                <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oczekujące na usunięcie</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/pending-restaurants">
+                <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Oczekujące restauracje
+            </a></li>
+            <li><a class="dropdown-item" href="{{base_dir}}admin/delete-restaurants">
+                <span class="bi bi-house-dash me-2 fs-6"></span> Restauracje do usunięcia
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{base_dir}}">
+                <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+            </a></li>
+            <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+                <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+            </button></li>
+        </ul>
+    </div>
+    <div class="d-flex flex-row-reverse">
+        <div class="dropdown">
+            <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
+                <li><a class="dropdown-item" href="{{base_dir}}admin/profile">
+                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
+                </a></li>
+                <li><a class="dropdown-item" href="{{base_dir}}admin/settings">
+                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{base_dir}}">
+                    <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+                </a></li>
+                <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+                    <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+                </button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</nav>
+<div class="container-fluid d-flex flex-column flex-fill">
+    <div class="row flex-fill flex-nowrap">
+        <div class="col-2 d-none d-xl-block">
+            <nav class="sticky-top panel-left-nav">
+                <ul class="list-unstyled">
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/dashboard"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/dish-types"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Typy potraw
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users"
+                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">group</span>Użytkownicy systemu
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#restaurants-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Restauracje
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="restaurants-collapse">
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/restaurants"
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">food_bank</span>Wszystkie restauracje
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/pending-restaurants" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">playlist_add_check</span>Oczekujące na zaakceptowanie
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mb-1">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#ratings-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Oceny
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="ratings-collapse">
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/ratings"
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/ratings/pending-to-delete" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oczekujące na usunięcie
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-3">
+                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Moje konto
+                        </button>
+                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="account-collapse">
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/profile" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{base_dir}}admin/settings" 
+                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{base_dir}}" class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
+                            <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <button class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100" data-bs-toggle="modal"
+                            data-bs-target="#prepare-logout-modal">
+                            <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-fixed-panel-nav d-none d-md-block d-xl-none">
+            <nav class="sticky-top panel-left-nav">
+                <ul class="list-unstyled">
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/dashboard" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">home</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/dish-types" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Typy potraw"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">fastfood</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/manage-users" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Użytkownicy systemu"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">group</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wszystkie restauracje"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">food_bank</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/pending-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące na zaakceptowanie"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">playlist_add_check</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/ratings" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Opinie użytkowników"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/ratings/pending-to-delete" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące na usunięcie"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/pending-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oczekujące restauracje"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">food_bank</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/delete-restaurants" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Restauracje do usunięcia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="bi bi-house-dash me-2 ms-1 fs-6">
+                        </a>
+                    </li>
+                    <li class="border-top my-3"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/profile" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">person</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}admin/settings" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Ustawienia"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+                            <span class="material-symbols-outlined me-2 fs-5">settings</span>
+                        </a>
+                    </li>
+                    <li class="border-top my-1"></li>
+                    <li class="mb-1">
+                        <a href="{{base_dir}}" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Strona główna"
+                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm mb-3">
+                            <span class="material-symbols-outlined me-2 fs-5">door_open</span>
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <button class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3"
+                            data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+                            <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj">
+                                <span class="material-symbols-outlined fs-5">logout</span>
+                            </span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col px-0 mt-5 mh-100 shadow d-flex flex-column justify-content-between bg-white position-relative">
+            {{#is_details_subpage}}
+            <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/{{data.details.banner_url}});"></div>
+            {{/is_details_subpage}}
+            <main class="pt-5 px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
+                {{{ embed_rendering_section }}}
+            </main>
+            {{> partials/cms-panel-footer-view.partial }}
+        </div>
+    </div>
+</div>

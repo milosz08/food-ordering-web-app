@@ -9,13 +9,15 @@
  * Data utworzenia: 2022-11-10, 23:32:11                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-12 01:56:39                   *
+ * Ostatnia modyfikacja: 2023-01-07 00:24:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use ReflectionException;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Główna klasa uruchamiana przy starcie aplikacji. To ona odpowiada za dynamiczne tworzenie przetwarzanie parametru action zapytania    *
@@ -29,7 +31,7 @@ class MvcApplication
     private $_selected_controller; // mapowany obiekt klasy kontrolera na podstawie zapytania
     private $_renderer_instance; // instancja klasy Renderer obsługującej renderowanie widoków oraz szablonów mustache
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function __construct()
     {
@@ -37,7 +39,7 @@ class MvcApplication
         $this->render_mvc(); // wywołanie metody prywatnej odwiadającej za parsowanie ścieżki i wywołanie metody kontrolera
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za tworzenie klasy kontrolera i wywoływanie metody tego kontrolera na podstawie parametrów zapytania. Jeśli
@@ -50,16 +52,13 @@ class MvcApplication
         {
             $action_params = $this->parse_url(); // wynik działania metody zwracający nazwę kontrolera i nazwę metody
             // nazwa kontrolera wraz z rozszerzeniem php
-            $controller_file = Config::get('__MVC_CONTROLLER_DIR__') . $action_params['controller'] . '.php';
-
-            // sprawdź, czy kontroler o wybranej nazwie istnieje w domyślnym katalogu (/src/controllers)
+            $controller_file = Config::get('__MVC_CONTROLLER_DIR__') . $action_params['directory'] . $action_params['controller'] . '.php';
             if (!file_exists($controller_file)) throw new ReflectionException();
             require_once $controller_file; // zaimportuj plik kontrolera
 
             // nazwa kontrolera razem z przestrzenią nazw, np. App\Controllers\HomeController bez rozszerzenia .php
             $controller_class_name = Config::get('__MVC_CONTROLLER_NAMESPACE__') . $action_params['controller'];
             $this->_selected_controller = new $controller_class_name; // stworzenie instancji klasy wybranego kontrolera
-
             // sprawdź, czy metoda z parametru url istnieje w kontrolerze, jeśli nie rzuć wyjątek
             if (!method_exists($this->_selected_controller, $action_params['method'])) throw new ReflectionException();
             // wywołaj programowo metodę z wcześniej stworzonej instancji kontrolera
@@ -74,48 +73,59 @@ class MvcApplication
         }
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za parsowanie adresu URL z parametrami zapytania. Jeśli nie znajdzie parametrów zapytania, zwracane są domyślne
      * wartości zdefiniowane w pliku config.php (__DEF_METHOD__ oraz __DEF_CONTROLLER__). Przykładowo, jeśli użytkownik przejdzie pod adres:
-     *      index.php
+     *      /index.php
      * zostanie zwrócona ścieżka z podstawionymi domyślnym konstruktorem oraz metodą, np:
-     *      index.php?action=__DEF_CONTROLLER__/__DEF_METHOD__
+     *      /index.php?action=__DEF_CONTROLLER__/__DEF_METHOD__
      * a po podstawieniu przykładowych stałych:
-     *      index.php?action=example/show
+     *      /index.php?action=example/show
+     * Po sparsowaniu przez silnik Apache, adres będzie wyglądał następująco:
+     *      /nazwa-katalogu/nazwa-kontrolera/nazwa-metody/{argumenty}
+     * lub w przypadku braku katalogu:
+     *      /nazwa-kontrolera/nazwa-metody/{argumenty}
      */
     private function parse_url()
     {
         $action_type = Config::get('__MVC_DEF_METHOD__'); // pobranie domyślnej metody kontrolera, jeśli nie poda się parametru action
-        if (!isset($_GET['action'])) // jeśli parametr action nie istnieje, tj. jeśli adres to po prostu index.php?
-        {
-            return array(
-                // klucz w tablicy o nazwie 'controller' przechowujący nazwę HomeController (domyślny to home, a suffix to Controller)
-                'controller' => ucfirst(Config::get('__MVC_DEF_CONTROLLER__')) . Config::get('__MVC_CONTROLLER_SUFFIX__'),
-                'method' =>     $action_type,
-            );
-        }
+        $dir_name = ''; // nazwa katalogu, w którym znajduje się kontroler
+        $controller_name = ''; // nazwa kontrolera (z suffixem, np. HomeController)
+        
         // odseparowanie od siebie nazwy kontrolera oraz metody tego kontrolera, dla przykładu, jeśli zapytanie będzie równe:
-        //      index.php?action=home/hello
-        // wartość w zmiennej będzie tablicą i będzie to: array('home', 'hello')
+        //      /auth/login/testing-method
+        // wartość w zmiennej będzie tablicą i będzie to: array('auth', 'login', 'testing_method')
         // dodatkowo funkcja rtrim usuwa wszystkie białe znaki, filtr czyści URL a funkcja explode przetwarza ciąg znaków na tablicę
         // rozdzielając te znaki na podstawie delimitera (pierwszy argument funkcji)
         $separate_controller_and_method = explode('/', filter_var(rtrim($_GET['action']), FILTER_SANITIZE_URL));
-        // jeśli podano więcej niż jeden parametr przekaż je wszystkie oprócz nazwy kontrolera (parametru pierwszego)
-        if (count($separate_controller_and_method) > 1)
+        
+        // sprawdź, czy pierwszy parametr nie jest katalogiem, jeśli nie, przypisz ten argument do nazwy kontrolera
+        if (!file_exists(Config::get('__MVC_CONTROLLER_DIR__') . $separate_controller_and_method[0]))
         {
-            // przypisz wszystkie parametry oprócz pierwszego i złącz je razem poprzez delimiter '_', utworzy to nazwę metody kontrolera
-            $action_type = join('_', array_slice($separate_controller_and_method, 1));
+             // przypisz do nazwy kontrolera i usuń pierwszy element z tablicy
+            $controller_name = array_shift($separate_controller_and_method);
         }
-        // zwróć tablicę składająca się z nazwy kontrolera (np. HomeController) i metod w postaci tablicy
+        else // w przeciwnym wypadku przypisz nazwę do nazwy katalogu, a kolejną nazwę przypisz do nazwy kontrolera
+        {
+            $dir_name = array_shift($separate_controller_and_method) . '/'; // przypisz nazwę katalogu i usuń element
+            $controller_name = array_shift($separate_controller_and_method); // przypisz nazwę kontrolera i usuń element
+            
+        }
+        // jeśli znajdują się jeszcze jakieś parametry (metoda), to przypisz do zmiennej
+        if (count($separate_controller_and_method) > 0) $action_type = array_shift($separate_controller_and_method);
+        // zamień nazwę kontrolera z home-controller na homeController
+        $controller_camel_case = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $controller_name))));
+        $action_type = str_replace('-', '_', $action_type); // zamień wszystkie znaki '-' w kontrolerze na '_'
         return array(
-            'controller' => ucfirst($separate_controller_and_method[0]) . Config::get('__MVC_CONTROLLER_SUFFIX__'),
+            'directory' =>  $dir_name,
+            'controller' => ucfirst($controller_camel_case) . Config::get('__MVC_CONTROLLER_SUFFIX__'),
             'method' =>     $action_type,
         );
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca instantancję aplikacji. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia obiektu).

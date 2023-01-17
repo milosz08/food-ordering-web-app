@@ -1,0 +1,58 @@
+<div class="alert alert-warning" role="alert">
+    <h3 class="fs-5 mb-3">Średnia ocena zamówienia:</h3>
+    <div class="hstack gap-3 align-items-center">
+        <p class="fs-1 fw-bold lh-1 mb-0 py-4 px-3">{{avg_grade}}</p>
+        <div class="vr text-dark"></div>
+        <div class="w-100">
+            <div class="mb-2">
+                {{#avg_grade_stars}}
+                <i class="bi bi-star{{star}} fs-4"></i>
+                {{/avg_grade_stars}}
+            </div>
+            <div class="hstack justify-content-between w-100">
+                <p class="mb-0">Ocena za dostawę:</p>
+                <div>
+                    {{#delivery_grade}}
+                    <i class="bi bi-star{{star}} fs-6"></i>
+                    {{/delivery_grade}}
+                </div>
+            </div>
+            <div class="hstack justify-content-between w-100">
+                <p class="mb-0">Ocena za restaurację:</p>
+                <div>
+                    {{#restaurant_grade}}
+                    <i class="bi bi-star{{star}} fs-6"></i>
+                    {{/restaurant_grade}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p class="mb-0 lh-sm text-secondary">Wystawiona przez:</p>
+<p class="mb-3 lh-sm">{{{signature}}}</p>
+{{#description}}
+<p class="mb-0 lh-sm text-secondary">Opis oceny:</p>
+<p class="mb-3 lh-sm">{{description}}</p>
+{{/description}}
+<div class="row mb-3">
+    <div class="col-md-6">
+        <p class="mb-0 lh-sm text-secondary">Data złożenia zamówienia:</p>
+        <p class="mb-0 lh-sm">{{date_order}}</p>
+    </div>
+    <div class="col-md-6">
+        <p class="mb-0 lh-sm text-secondary">Data sfinalizowania zamówienia:</p>
+        <p class="mb-0 lh-sm">{{finish_order}}</p>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <p class="mb-0 lh-sm text-secondary">Czas oczekiwania:</p>
+        <p class="mb-0 lh-sm">{{date_diff}}</p>
+    </div>
+    <div class="col-md-6">
+        <p class="mb-0 lh-sm text-secondary">Data wystawienia ocen:</p>
+        <p class="mb-0 lh-sm">{{give_on}}</p>
+    </div>
+</div>
+<p class="mb-0 lh-sm text-secondary">Zamówienie z restauracji:</p>
+<p class="mb-0 lh-sm">{{{delivery_restaurant}}}</p>

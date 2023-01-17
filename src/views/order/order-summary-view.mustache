@@ -1,0 +1,225 @@
+{{> partials/header-view.partial }}
+<main class="container-lg flex-grow-1 top-margin-header">
+    <form action="{{base_dir}}order/summary/place-order" method="post" class="row" novalidate>
+        <input type="hidden" name="resid" value="{{data.res_id}}" />
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{base_dir}}restaurants/restaurant-dishes?id={{data.res_id}}" class="text-secondary text-decoration-none">
+                            <i class="bi bi-arrow-return-left me-1"></i>
+                            Powrót do strony z potrawami restauracji
+                        </a>
+                    </li>
+                </ol>
+            </nav>
+            <hr/>
+            {{> partials/dynamic-banner-view.partial}}
+            <h2 class="fs-4 mb-2">Adres dostawy</h2>
+            <div class="card p-4 mb-3">
+                <div class="container px-0">
+                    <div class="row gy-3">
+                        {{#data.addresses}}
+                        <label for="user-address-{{id}}" class="col-lg-6">
+                            <div class="card p-3">
+                                <div class="form-check d-flex align-items-center">
+                                    <input class="form-check-input me-4" type="radio" name="address-id" value="{{id}}" 
+                                        id="user-address-{{id}}" {{checked}}>
+                                    <div>
+                                        <p class="card-text mb-1">{{address}}
+                                            <span class="text-primary">{{is_default}}</span>
+                                        </p>
+                                        <p class="card-text">{{post_city}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                        {{/data.addresses}}
+                    </div>
+                    {{#data.is_still_free_addresses}}
+                    <p class="lh-sm text-secondary mt-4">
+                        Nie ma tutaj adresu jakiego szukasz? Jeśli chcesz przesłać jedzenie na inny adres, musisz dodać go do swojego konta.
+                        <a href="{{base_dir}}user/settings/add-new-address?redir=order/summary?resid={{data.res_id}}">Kliknij tutaj</a> 
+                        aby dodać nowy adres.
+                    </p>
+                    {{/data.is_still_free_addresses}}
+                </div>
+            </div>
+            <h2 class="fs-4 mb-2">Typ dostawy</h2>
+            <div class="card p-4 mb-3">
+                <div class="container px-0">
+                    <div class="row gy-3">
+                        <div class="col-md-6">
+                            <label class="card p-3" for="form-delivery-self">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="delivery" 
+                                    value="1" id="form-delivery-self">
+                                    <span class="form-check-label ms-2" >Odbiór osobisty</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="card p-3" for="form-delivery-standard">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="delivery" 
+                                    value="2" id="form-delivery-standard" checked>
+                                    <spab class="form-check-label ms-2" >Dostawa kurierem</spab>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="fs-4 mb-2">Rodzaj płatności</h2>
+            <div class="card p-4 mb-3">
+                <div class="container px-0">
+                    <div class="container px-0">
+                        <div class="row gy-3">
+                            <div class="col-md-12">
+                                <label class="card p-3" for="form-payment-type">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment-type" id="form-payment-type" disabled checked>
+                                        <span class="form-check-label ms-2">Przy odbiorze</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <div class="sticky-top panel-left-nav">
+                <h2 class="fs-4 mb-2">Podsumowanie:</h2>
+                {{^data.summary_prices.saving}}
+                <button data-bs-toggle="modal" data-bs-target="#discount-code" class="btn btn-outline-primary mb-2 w-100" type="button">
+                    Dodaj kupon
+                </button>
+                {{/data.summary_prices.saving}}
+                <ul class="card list-unstyled p-3">
+                    {{#data.shopping_cart}}
+                    <li>
+                        <div class="rows">
+                            <div class="col mb-2 hstack justify-content-between align-items-start">
+                                <h4 class="card-title fs-5 mb-0">{{count_of_dish}}x {{cart_dishes.name}}</h4>
+                                <p class="m-0">{{cart_dishes.total_dish_cost}} zł </p>
+                            </div>
+                            <div class="col mb-2 hstack justify-content-between align-items-start">
+                                <p type="button" data-bs-toggle="tooltip" data-bs-placement="left"
+                                    data-bs-title="{{cart_dishes.description}}"
+                                    class="text-secondary text-truncate fw-normal fs-6 mb-0 me-5">
+                                    {{cart_dishes.description}}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <hr class="my-3"/>
+                    {{/data.shopping_cart}}
+                    {{> partials/summary-order-prices-view.partial}}
+                </ul>
+                {{#data.code_name}}
+                <div class="card mb-3">
+                    <div class="card-body d-flex align-items-center justify-content-between" id="newsHeading">
+                        <h6 class="fs-6 mb-0 text-start float-start">Kod rabatowy:</h6>
+                        <div class="d-flex align-items-center">
+                            <span class="fs-6 mb-0 text-success me-2">{{data.code_name}}</span>
+                            <a href="{{base_dir}}order/discount/delete-discount?resid={{data.res_id}}" class="btn-close js-close"
+                                aria-label="Close"></a>
+                        </div>
+                    </div>
+                </div>
+                {{/data.code_name}}
+                <button data-bs-toggle="modal" data-bs-target="#place-order" class="btn btn-primary mb-2 w-100" type="button">
+                    Złóż zamówienie ({{data.summary_prices.total_with_delivery}} zł)
+                </button>
+                <button data-bs-toggle="modal" data-bs-target="#cancel-order" class="btn btn-danger w-100" type="button">
+                    Anuluj zamówienie
+                </button>
+            </div>
+        </div>
+        <div class="modal fade" id="place-order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Potwierdzenie zamówienia</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-3">
+                        <p class="mb-4">Czy na pewno chcesz dokonać zamówienia poniższych produktów:</p>
+                        <ul class="list-unstyled">
+                            {{#data.shopping_cart}}
+                            <li>
+                                <div class="rows">
+                                    <div class="col hstack justify-content-between align-items-start">
+                                        <h4 class="card-title fs-6 mb-0">{{count_of_dish}}x {{cart_dishes.name}}</h4>
+                                        <p class="m-0">{{cart_dishes.total_dish_cost}} zł </p>
+                                    </div>
+                                    <div class="col hstack justify-content-between align-items-start">
+                                        <p type="button" data-bs-toggle="tooltip" data-bs-placement="left"
+                                            data-bs-title="{{cart_dishes.description}}"
+                                            class="text-secondary text-truncate fw-normal me-5 mb-0 small-font">
+                                            {{cart_dishes.description}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <hr class="my-2"/>
+                            {{/data.shopping_cart}}
+                            {{> partials/summary-order-prices-view.partial}}
+                        </ul>
+                        <p class="lh-sm">
+                            Po dokonaniu zamówienia masz 5 minut na jego anulowanie. Po tym czasie anulowanie jest dostępne jedynie poprzez
+                            kontant telefoniczny z restauracją.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                        <button type="submit" name="place_order_btn" class="btn btn-primary">
+                            Złóż zamówienie ({{data.summary_prices.total_with_delivery}} zł)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+<div class="modal fade" id="discount-code" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Kod rabatowy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{base_dir}}order/discount/add-discount?resid={{data.res_id}}" method="post" class="modal-body">
+                <div class="mb-3">
+                    <label for="example" class="form-label">Kod rabatowy</label>
+                    <input type="discound" name="discount" class="form-control" id="exampleInput1" aria-describedby=""
+                        placeholder="Podaj kod promocyjny">
+                </div>
+                <div class="modal-footer p-0 pt-2">
+                    <button type="submit" class="btn btn-primary w-100 m-0" name="discount-button" data-bs-dismiss="modal">Aktywuj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cancel-order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Anulowanie zamówienia</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Czy na pewno chcesz anulować zamówienie? Produkty zapisane w twoim koszyku ulegną usunięciu.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <a href="{{base_dir}}order/summary/cancel-place-order?resid={{data.res_id}}" type="button" class="btn btn-outline-danger">
+                    Anuluj zamówienie
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{{> partials/footer-view.partial }}

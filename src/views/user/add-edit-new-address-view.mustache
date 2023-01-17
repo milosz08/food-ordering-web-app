@@ -1,0 +1,68 @@
+{{> partials/header-view.partial }}
+<main class="container-lg flex-grow-1 top-margin-header md-3 mb-4">
+    <div class="row d-flex justify-content-center w-100 mx-auto">
+        <nav aria-label="breadcrumb" class="ps-0">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    {{#data.redir_active}}
+                    <a href="{{base_dir}}{{data.redir_link}}" class="text-secondary text-decoration-none">
+                        <i class="bi bi-arrow-return-left me-1"></i>Powrót do strony z podsumowaniem zamówienia
+                    </a>
+                    {{/data.redir_active}}
+                    {{^data.redir_active}}
+                    <a href="{{base_dir}}user/settings" class="text-secondary text-decoration-none">
+                        <i class="bi bi-arrow-return-left me-1"></i>Powrót do strony z ustawieniami konta
+                    </a>
+                    {{/data.redir_active}}
+                </li>
+            </ol>
+        </nav>
+        <hr/>
+        {{> partials/dynamic-banner-view.partial}}
+        <h3 class="mb-1 fs-4 ps-0 mt-2">{{page_title}}</h3>
+        <div class="card my-2 rounded-3 p-4">
+            <form class="row" action="" method="post" novalidate>
+                <div class="col-md-12 mb-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="form-street" class="form-label">Ulica</label>
+                            <input type="text" name="street" class="form-control {{data.user.street.bts_class}}"
+                                id="form-street" value="{{data.user.street.value}}" placeholder="np. Długa">
+                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="form-building" class="form-label">Nr budynku</label>
+                    <input type="text" name="building-number" class="form-control {{data.user.building_nr.bts_class}}"
+                        id="form-building" value="{{data.user.building_nr.value}}" placeholder="np. 65">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="form-locale" class="form-label">Nr mieszkania</label>
+                    <input type="text" name="local-number" class="form-control {{data.user.locale_nr.bts_class}}"
+                        id="form-locale" value="{{data.user.locale_nr.value}}" placeholder="np. 12c">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="form-post-code" class="form-label">Kod pocztowy</label>
+                    <input type="text" name="post-code" class="form-control {{data.user.post_code.bts_class}}"
+                        id="form-post-code" value="{{data.user.post_code.value}}" placeholder="np. 43-100">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="form-city" class="form-label">Miasto</label>
+                    <input type="text" name="city" class="form-control {{data.user.city.bts_class}}" id="form-city"
+                        value="{{data.user.city.value}}" placeholder="np. Gliwice">
+                    <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <button type="submit" name="save-changes-add" class="btn btn-primary btn-md w-100">
+                        {{page_title}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{{> partials/footer-view.partial }}

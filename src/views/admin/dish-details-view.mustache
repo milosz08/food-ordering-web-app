@@ -1,0 +1,142 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="me-4">
+        <img src="{{base_dir}}public/{{data.details.photo_url}}" alt="" class="rounded" width="80px" height="80px"/>
+    </div>
+    <div>
+        <h2 class="mb-3 text-secondary fw-normal">Szczegóły potrawy <span class="text-primary">#{{data.dish_id}}</span></h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
+                <li class="breadcrumb-item"><a href="{{base_dir}}admin/restaurants">Moje restauracje</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{{base_dir}}admin/restaurants/restaurant-details?id={{data.restaurant_id}}">
+                        Szczegóły restauracji #{{data.restaurant_id}}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Szczegóły potrawy #{{data.dish_id}}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<hr class="mb-3"/>
+{{> partials/dynamic-banner-view.partial}}
+<div class="hstack mb-4 gap-2">
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-dish-modal">
+        Usuń potrawę
+    </button>
+    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-dish-image-modal">
+        Usuń zdjęcie potrawy
+    </button>
+</div>
+<div class="modal fade" id="delete-dish-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie potrawy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{base_dir}}admin/dishes/delete-dish?resid={{data.restaurant_id}}&dishid={{data.dish_id}}" method="post">
+                <div class="modal-body">
+                    <p>Czy napewno chcesz usunąć wybraną potrawę:</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Nazwa potrawy: <strong>{{data.details.name}}</strong></li>
+                        <li class="list-group-item">Typ potrawy: <strong>{{data.details.type}}</strong></li>
+                        <li class="list-group-item">Opis: <strong>{{data.details.description}}</strong></li>
+                    </ul>
+                    <p class="mt-3 lh-sm">
+                        Wybrana potrawa zostanie usunięta jedynie z wybranej restauracji. Operacji nie można cofnąć. Dodatkowo na adres 
+                        email właścicela restauracji zostanie wysłana poniża wiadomość.
+                    </p>
+                    <div class="mb-2">
+                        <label for="form-delete-dish-comment" class="form-label">Komentarz wysyłany na adres email:</label>
+                        <textarea name="delete-dish-comment" class="form-control" maxlength="350" minlength="20" rows="4" 
+                            placeholder="Dodatowy komentarz, maksymalnie 350 znaków." id="form-delete-dish-comment" required
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-outline-danger">Usuń</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-dish-image-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie zdjęcia potrawy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{base_dir}}admin/dishes/delete-dish-image?resid={{data.restaurant_id}}&dishid={{data.dish_id}}" method="post">
+                <div class="modal-body">
+                    <p class="lh-sm">
+                        Czy napewno chcesz usunąć zdjęcie wybranej potrawy? Dodatkowo na adres email właścicela restauracji zostanie 
+                        wysłana poniża wiadomość.
+                    </p>
+                    <div class="mb-2">
+                        <label for="form-delete-dish-image-comment" class="form-label">Komentarz wysyłany na adres email:</label>
+                        <textarea name="delete-dish-image-comment" class="form-control" maxlength="350" minlength="20" rows="4" 
+                            placeholder="Dodatowy komentarz, maksymalnie 350 znaków." id="form-delete-dish-image-comment" required
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-outline-danger">Usuń</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Nazwa potrawy:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.name}}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Typ potrawy:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.type}}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Cena za potrawę:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.price}}</p>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Pochodzenie typu potrawy:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.is_custom_type}}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Cena za dostawę:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.r_delivery_price}}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Nazwa restauracji serwującej potrawę:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.r_name}}</p>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Średni czas przygotowania potrawy (w minutach):</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.prepared_time}}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Adres restauracji serwującej potrawę:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.r_address}}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Całkowita cena (cena + dostawa):</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.total_price}}</p>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <p class="text-secondary lh-sm mb-1">Opis potrawy:</p>
+            <p class="text-dark fs-5 lh-sm">{{data.details.description}}</p>
+        </div>
+    </div>
+</div>

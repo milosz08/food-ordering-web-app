@@ -1,0 +1,90 @@
+<h2 class="text-secondary fw-normal mb-3">Szczegóły zamówienia <span class="text-primary">#{{data.order_id}}</span></h2>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item"><a href="{{base_dir}}owner/orders">Zamówienia</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Szczegóły zamówienia #{{data.order_id}}</li>
+    </ol>
+</nav>
+<hr/>
+{{> partials/dynamic-banner-view.partial}}
+{{#data.order_details}}
+<div class="pt-4 pb-1 px-4 mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <h6 class="fw-bold pt-2">Dane odbiorcy:</h6>
+            <hr class="mb-3"/>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Imię:</p>
+                <p class="text-dark fs-6 lh-sm">{{first_name}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Nazwisko:</p>
+                <p class="text-dark fs-6 lh-sm">{{last_name}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Email:</p>
+                <p class="text-dark fs-6 lh-sm">{{email}}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h6 class="fw-bold pt-2">Adres wysyłki:</h6>
+            <hr class="mb-3"/>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Miejscowość:</p>
+                <p class="text-dark fs-6 lh-sm">{{city}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Ulica:</p>
+                <p class="text-dark fs-6 lh-sm">{{street}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Nr budynku/lokalu:</p>
+                <p class="text-dark fs-6 lh-sm">{{building_nr}}/{{locale_nr}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Kod pocztowy:</p>
+                <p class="text-dark fs-6 lh-sm">{{post_code}}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h6 class="fw-bold pt-2">Informacje dodatkowe:</h6>
+            <hr class="mb-3"/>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Status zamówienia:</p>
+                <p class="text-dark fs-6 lh-sm">{{status_name}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Dostawa:</p>
+                <p class="text-dark fs-6 lh-sm">{{order_type}}</p>
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Kupon:</p>
+                {{#discount_id}}
+                <p class="text-dark fs-6 lh-sm">Użyty</p>
+                {{/discount_id}}
+                {{^discount_id}}
+                <p class="text-dark fs-6 lh-sm">Brak</p>
+                {{/discount_id}}
+            </div>
+            <div class="my-3">
+                <p class="text-secondary lh-sm mb-1">Data zamówienia:</p>
+                <p class="text-dark fs-6 lh-sm">{{date_order}}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h6 class="fw-bold pt-2">Zamówione produkty:</h6>
+            <hr class="mb-3"/>
+            <div class="my-3">
+                {{#data.order_details.dishes_value}}
+                <div class="hstack justify-content-between">
+                    <p class="mb-1 text-secondary lh-sm">{{dish_amount}} szt.:</p>
+                    <p class="mb-1 text-dark fs-6 lh-sm">{{dish_name}}</p>
+                </div>
+                {{/data.order_details.dishes_value}}
+            </div>
+        </div>
+    </div>
+    <hr/>
+</div>
+{{/data.order_details}}

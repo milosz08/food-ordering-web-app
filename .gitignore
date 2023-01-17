@@ -1,6 +1,2 @@
 .env
 vendor/
-public/static/bootstrap/*
-!public/static/bootstrap/.gitkeep
-public/static/css/*
-!public/static/css/.gitkeep

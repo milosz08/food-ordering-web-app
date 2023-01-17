@@ -1,0 +1,142 @@
+{{> partials/header-view.partial }}
+<main class="container-lg flex-grow-1 top-margin-header">
+    <nav aria-label="breadcrumb" class="ps-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{base_dir}}user/orders" class="text-secondary text-decoration-none">
+                    <i class="bi bi-arrow-return-left me-1"></i>Powrót do strony wszystkich zamówień
+                </a>
+            </li>
+        </ol>
+    </nav>
+    <hr/>
+    {{> partials/dynamic-banner-view.partial}}
+    {{#data.one_order}}
+    <h3 class="mb-2 fs-4 ps-0 mt-2">Szczegóły zamówienia #{{id}}</h3>
+    <div class="card pt-4 pb-1 px-4 mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <h6 class="fw-bold pt-2">Dane odbiorcy:</h6>
+                <hr class="mb-3"/>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Imię:</p>
+                    <p class="text-dark fs-6 lh-sm">{{first_name}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Nazwisko:</p>
+                    <p class="text-dark fs-6 lh-sm">{{last_name}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Email:</p>
+                    <p class="text-dark fs-6 lh-sm">{{email}}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h6 class="fw-bold pt-2">Adres wysyłki:</h6>
+                <hr class="mb-3"/>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Miejscowość:</p>
+                    <p class="text-dark fs-6 lh-sm">{{city}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Ulica:</p>
+                    <p class="text-dark fs-6 lh-sm">{{street}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Nr budynku/lokalu:</p>
+                    <p class="text-dark fs-6 lh-sm">{{building_nr}}/{{locale_nr}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Kod pocztowy:</p>
+                    <p class="text-dark fs-6 lh-sm">{{post_code}}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h6 class="fw-bold pt-2">Informacje dodatkowe:</h6>
+                <hr class="mb-3"/>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Status zamówienia:</p>
+                    <p class="text-dark fs-6 lh-sm">{{status_name}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Dostawa:</p>
+                    <p class="text-dark fs-6 lh-sm">{{order_type}}</p>
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Kupon:</p>
+                    {{#discount_id}}
+                    <p class="text-dark fs-6 lh-sm">Użyty</p>
+                    {{/discount_id}}
+                    {{^discount_id}}
+                    <p class="text-dark fs-6 lh-sm">Brak</p>
+                    {{/discount_id}}
+                </div>
+                <div class="my-3">
+                    <p class="text-secondary lh-sm mb-1">Data zamówienia:</p>
+                    <p class="text-dark fs-6 lh-sm">{{date_order}}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h6 class="fw-bold pt-2">Zamówione produkty:</h6>
+                <hr class="mb-3"/>
+                <div class="my-3">
+                    {{#data.one_order.dishes_value}}
+                    <div class="hstack justify-content-between">
+                        <p class="mb-1 text-secondary lh-sm">{{dish_amount}} szt.:</p>
+                        <p class="mb-1 text-dark fs-6 lh-sm">{{dish_name}}</p>
+                    </div>
+                    {{/data.one_order.dishes_value}}
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="hstack mb-3 gap-2 justify-content-end">
+            {{#data.is_cancel_active}}
+            <a type="button" href="{{base_dir}}user/orders/cancel-order?id={{id}}" name="cancel" class="btn btn-danger">
+                Anuluj zamówienie
+            </a>
+            {{/data.is_cancel_active}}
+            {{#data.one_order.is_grade_active}}
+            {{#data.one_order.is_grade_editable}}
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-grade-modal">
+                Usuń ocenę
+            </button>
+            <a type="button" href="{{base_dir}}order/feedback/edit-feedback?id={{data.one_order.grade_id}}" name="cancel"
+                class="btn btn-outline-success">
+                Edytuj ocenę
+            </a>
+            {{/data.one_order.is_grade_editable}}
+            {{^data.one_order.is_grade_editable}}
+            <a type="button" href="{{base_dir}}order/feedback/give-feedback?id={{id}}" name="cancel" class="btn btn-outline-success">
+                Wystaw ocenę
+            </a>
+            {{/data.one_order.is_grade_editable}}
+            {{/data.one_order.is_grade_active}}
+            <a type="button" href="{{base_dir}}user/orders" class="btn btn-secondary">Powrót do listy zamówień</a>
+        </div>
+    </div>
+    {{/data.one_order}}
+</main>
+<div class="modal fade" id="delete-grade-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie zdjęcia profilowego</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{base_dir}}admin/manage-users/delete-user-image?id={{data.user_details.id}}" method="post">
+                <div class="modal-body">
+                    Czy napewno chcesz usunąć ocenę restauracji? Operacji nie można cofnąć.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <a type="button" href="{{base_dir}}order/feedback/delete-feedback?id={{data.one_order.grade_id}}" name="cancel"
+                        class="btn btn-outline-danger">
+                        Usuń ocenę
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{> partials/footer-view.partial }}

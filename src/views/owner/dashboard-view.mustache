@@ -1,0 +1,89 @@
+<h2 class="text-secondary fw-normal mb-3">Panel główny</h2>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Panel główny</li>
+    </ol>
+</nav>
+<hr/>
+<div class="row">
+    <div class="col-md-6 chart-width">
+        <canvas id="restaurantDashbaordChart"></canvas>
+    </div>
+    <div class="col-md-6 chart-width">
+        <canvas id="restaurantDashbaordv2Chart"></canvas>
+    </div>
+</div>
+<hr/>
+<div class="d-flex flex-column mb-3 justify-content-center align-items-center">
+    <div class="row">
+        <div class="col-md-4 d-flex align-items-stretch">
+            <a href="{{base_dir}}owner/orders" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Zamówienia</div>
+                <div class="card-body">
+                    <h5 class="card-title">Zamówienia</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby przeglądać zamówienia dokonane przez użytkowników w restauracjach przypisanych do Twojego konta.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}owner/restaurants" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Restauracje</div>
+                <div class="card-body">
+                    <h5 class="card-title">Moje restauracje</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby zarządzać stworzonymi restauracjami przez siebie.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}owner/restaurants/add-restaurant" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Resturacje</div>
+                <div class="card-body">
+                    <h5 class="card-title">Dodaj restaurację</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby dodać nową restaurację do systemu. Do restauracji można również przypisać stworzone potrawy.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}owner/dishes"  class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Potrawy</div>
+                <div class="card-body">
+                    <h5 class="card-title">Moje potrawy</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby zarządzać stworzonymi przez siebie potrawami. Możliwe jest również tworzenie własnych typów
+                        potraw.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch text-decoration-none text-dark">
+            <a href="{{base_dir}}owner/discounts" class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Kody rabatowe</div>
+                <div class="card-body">
+                    <h5 class="card-title">Kody rabatowe</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, zarządzać kodami rabatowymi stworzonymi przez siebie i przypisanymi do restauracji.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 d-flex align-items-stretch">
+            <a href="{{base_dir}}owner/ratings"  class="card border-secondary px-0 mb-3 text-decoration-none text-dark">
+                <div class="card-header">Oceny</div>
+                <div class="card-body">
+                    <h5 class="card-title">Oceny restauracji</h5>
+                    <p class="card-text lh-sm text-secondary fw-normal">
+                        Kliknij tutaj, aby przeglądać oceny użytkowników restauracji, zarządzać nimi i wysyłać zgłoszenia o usunięcia.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

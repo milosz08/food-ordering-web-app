@@ -1,0 +1,71 @@
+{{> partials/header-view.partial }}
+<main class="container-lg flex-grow-1 top-margin-header">
+    <nav aria-label="breadcrumb" class="ps-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{base_dir}}user/orders/order-details?id={{data.order_id}}" class="text-secondary text-decoration-none">
+                    <i class="bi bi-arrow-return-left me-1"></i>Powrót do strony szczegółów zamówienia #{{data.order_id}}
+                </a>
+            </li>
+        </ol>
+    </nav>
+    <hr/>
+    <div class="make-grade-width mx-auto">
+        {{> partials/dynamic-banner-view.partial}}
+        <div class="card">
+            <div class="card-body p-4">
+                <form action="" method="post" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <p class="mb-0">Ocena za restaurację:</p>
+                            <div class="d-flex justify-content-end flex-row-reverse mt-2 fs-3 text-warning rating-container">
+                                {{#data.grade.res_grade_stars.data}}
+                                <input id="star{{value}}-res" name="res-grade-stars[]" type="checkbox" value="{{value}}"
+                                    class="radio-btn pe-1 res position-absolute" {{checked}}>
+                                <label for="star{{value}}-res" class="position-relative grade-system-font pe-1 lh-1">&#xF588</label>
+                                {{/data.grade.res_grade_stars.data}}
+                            </div>
+                            {{#data.grade.res_grade_stars.invl}}
+                            <p class="mt-2 mb-0 text-danger small-font">Należy wybrać ilość gwiazdek!</p>
+                            {{/data.grade.res_grade_stars.invl}}
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-0">Ocena za dostawę:</p>
+                            <div class="d-flex justify-content-end flex-row-reverse mt-2 fs-3 text-warning rating-container">
+                                {{#data.grade.delivery_grade_stars.data}}
+                                <input id="star{{value}}-del" name="delivery-grade-stars[]" type="checkbox" value="{{value}}"
+                                    class="radio-btn pe-1 chb position-absolute" {{checked}}>
+                                <label for="star{{value}}-del" class="position-relative grade-system-font pe-1 lh-1">&#xF588</label>
+                                {{/data.grade.delivery_grade_stars.data}}
+                            </div>
+                            {{#data.grade.delivery_grade_stars.invl}}
+                            <p class="mt-2 mb-0 text-danger small-font">Należy wybrać ilość gwiazdek!</p>
+                            {{/data.grade.delivery_grade_stars.invl}}
+                        </div>
+                    </div>
+                    <div class="col-xl-12 mb-2">
+                        <label for="form-grade-description" class="form-label">Opis oceny (opcjonalny):</label>
+                        <textarea name="grade-description" class="form-control {{data.grade.description.bts_class}}"
+                            rows="5" placeholder="Krótki opis, maksymalnie 350 znaków."
+                            id="form-grade-description" maxlength="350">{{data.grade.description.value}}</textarea>
+                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-md-6">
+                            <input class="form-check-input disable-checkbox" type="checkbox" id="form-grade-is-anonymous" 
+                                {{data.is_delivery_free}} name="grade-is-anonymous" {{data.grade.anonymous_is_checked}}>
+                            <label class="form-check-label ms-1" for="form-grade-is-anonymous">Ocena anonimowa</label>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <a href="{{base_dir}}user/orders/order-details?id={{data.order_id}}" class="btn btn-outline-secondary">
+                                Odrzuć zmiany
+                            </a>
+                            <button type="submit" name="add-edit-mark" class="btn btn-primary">{{page_title}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{{> partials/footer-view.partial }}

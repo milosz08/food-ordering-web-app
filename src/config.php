@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2022-12-17 17:13:31                   *
+ * Ostatnia modyfikacja: 2023-01-17 02:02:13                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,7 +29,8 @@ use App\Core\Config;
  *                                                                                                                                       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-Config::set('__MVC_DEF_CONTROLLER__', 'home'); // domyślna nazwa kontrolera uruchamianego w przypadku braku parametru action w zapytaniu
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Config::set('__MVC_DEF_METHOD__', 'index'); // domyślna metoda kontrolera uruchamiana w przypadku braku parametru action w zapytaniu
 Config::set('__MVC_CONTROLLER_SUFFIX__', 'Controller'); // domyślny sufix plików kontrolerów (np. Home>Controller<, Example>Controller<) itp.
 Config::set('__MVC_CONTROLLER_DIR__', Config::build_path(__DIR__, 'controllers')); // domyślny katalog przechowywania kontrolerów aplikacji
@@ -46,10 +47,11 @@ Config::set('__DB_INIT_COMMANDS__', array(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAM
 Config::set('__SMTP_HOST__', $_ENV['SMTP_HOST']); // adres domenowy serwera SMTP
 Config::set('__SMTP_USERNAME__', $_ENV['SMTP_USERNAME']); // nazwa użytkownika (adres email) z którego serwer będzie wysyłał wiadomości
 Config::set('__SMTP_PASSWORD__', $_ENV['SMTP_PASSWORD']); // hasło do konta z którego serwer będzie wysyłał wiadomości
-Config::set('__SMTP_AUTO_REPLY__', 'info@restaurant.miloszgilga.pl'); // email alternatywny, używany do odpowiadania na wiadomości serwera
+Config::set('__SMTP_AUTO_REPLY__', $_ENV['SMTP_LOOPBACK']); // email alternatywny, używany do odpowiadania na wiadomości serwera
 
-Config::set('__SHA_SALT__', $_ENV['SHA_SALT']); // sól do algorytmu haszującego hasła
 Config::set('__DEF_APP_HOST__', __PROTO__ . $_SERVER['HTTP_HOST'] . __URL_INIT_DIR__); // domyślny host serwera
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // regexy do walidacji pól formularzy
 Config::set('__REGEX_CITY__', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]{2,60}$/');
@@ -61,4 +63,6 @@ Config::set('__REGEX_LOGIN__', '/^[a-zA-Z0-9]{5,30}$/');
 Config::set('__REGEX_LOGINEMAIL__', '/^[a-zA-Z0-9@.]{5,100}$/');
 Config::set('__REGEX_PRICE__', '/^[1-9]{1}(?:[0-9])?(?:[\.\,][0-9]{1,2})?$/');
 Config::set('__REGEX_OTA__', '/^[0-9A-Za-z]{10,}$/');
-Config::set('__REGEX_DESCRIPTION__', '/^.{10,1000}$/');
+Config::set('__REGEX_DESCRIPTION__', '/^.{10,600}$/');
+Config::set('__REGEX_PHONE_PL__', '/^[0-9]{3}( |)[0-9]{3}( |)[0-9]{3}$/');
+Config::set('__REGEX_DATE__', '/^((?:19|20)\\d\\d)-(0?[1-9]|1[012])-([12][0-9]|3[01]|0?[1-9])$/');

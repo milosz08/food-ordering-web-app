@@ -6,10 +6,11 @@
     "php.version": "7.4",
     "editor.mouseWheelZoom": true,
     "explorer.confirmDelete": false,
-    "workbench.iconTheme": "vscode-jetbrains-icon-theme",
+    "workbench.iconTheme": "vsc-jetbrains-icons-enhanced",
     "editor.rulers": [ 140 ],
     "workbench.tree.indent": 20,
     "explorer.compactFolders": false,
+    "explorer.autoReveal": false,
     "files.autoSave": "onFocusChange",
     "files.insertFinalNewline": true,
     "liveSassCompile.settings.formats": [
