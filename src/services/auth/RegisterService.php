@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 00:32:42                   *
+ * Ostatnia modyfikacja: 2023-01-17 01:07:42                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -135,7 +135,7 @@ class RegisterService extends MvcService
                         'user_full_name' => $user_data['full_name'],
                         'basic_server_path' => Config::get('__DEF_APP_HOST__'),
                         'ota_token' => $rnd_ota_token,
-                        'regenerate_link' => 'auth/activate-account/resend/code?userid=' . $user_data['id'],
+                        'regenerate_link' => 'auth/activate-account/resend?userid=' . $user_data['id'],
                     );
                     $subject = 'Aktywacja konta dla użytkownika ' . $user_data['full_name'];
                     $this->smtp_client->send_message($user->email['value'], $subject, 'activate-account', $email_request_vars);
