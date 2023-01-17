@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:14:47                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 06:01:05                   *
+ * Ostatnia modyfikacja: 2023-01-17 02:54:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,11 +34,11 @@ class PaginationHelper
             ),
             'prev_page' => array(
                 'is_active' => $curr_page - 1 > 0 ? '' : 'disabled',
-                'url' => $base_url . $start_char . 'page=' . $curr_page - 1 . '&total=' . $total_per_page,  
+                'url' => $base_url . $start_char . 'page=' . ($curr_page - 1) . '&total=' . $total_per_page,  
             ),
             'next_page' => array(
                 'is_active' => $curr_page < $total_pages ? '' : 'disabled',
-                'url' => $base_url . $start_char . 'page=' . $curr_page + 1 . '&total=' . $total_per_page, 
+                'url' => $base_url . $start_char . 'page=' . ($curr_page + 1) . '&total=' . $total_per_page, 
             ),
             'last_page' => array(
                 'is_active' => $curr_page != $total_pages ? '' : 'disabled',
