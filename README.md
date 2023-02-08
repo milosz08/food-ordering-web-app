@@ -1,80 +1,93 @@
-# Projekt Serwisy Internetowe (SI).
+# PHP Food CRM Web Application
+[![Generic badge](https://img.shields.io/badge/Made%20with-PHP%207.4-1abc9c.svg)](https://www.php.net/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/Package%20Manager-PHP%20Composer-green.svg)](https://getcomposer.org/)&nbsp;&nbsp;
+<br><br>
+A CRM (Customer Relationship Management) web application to support restaurant management, customer contact and product ordering from created restaurants. For obvious reasons, the application does not have a payment system.
 
-Demo aplikacji: [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl/)
+See live demo on: [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl/)
 
-## UWAGA!
-Commity należy wrzucać tylko i wyłącznie na branch `CPSIP-2-Development`. Branch `CPSIP-1-Initial-project-boilerplate` ma zostać nienaruszony, aby
-móc w razie czego wrócić do bazowej konfiguracji projektu. Na branchu `master` znajduje się jedynie przetestowany, zweryfikowany i działający kod
-(tyczy się to również formatowania i komentarzy).
+## Table of content
+* [About the project](#about-the-project)
+* [Clone and install](#clone-and-install)
+* [Prepare runtime configuration for UNIX](#prepare-runtime-configuration-for-unix)
+* [Prepare runtime configuration for Windows](#prepare-runtime-configuration-for-windows)
+* [Application stack](#application-stack)
+* [Project status](#project-status)
 
-## Klonowanie repo
+<a name="about-the-project"></a>
+## About the project
+This project was created with the cooperation of six people, one of whom was the main leader (Project Manager). The main core of the MVC application was written from scratch the most for of performance reasons. Application works with MySQL database version 7.4 and higher.<br><br>
+This application allows to create a user and restaurant owner account. User can add new products from multiple restaurants to the cart and the owner (after the system administrator approves the created restaurant) can add, modify and remove dishes from the created restaurant.
+
+<a name="clone-and-install"></a>
+## Clone and install
+
+To install the program on your computer, use the command below (or use the build-in GIT system in your IDE environment):
 ```
-$ git clone https://github.com/Milosz08/SUoT_SI_Project_PHP restaurant-project-php-si
-```
-
-## Przed uruchomieniem
-Przed uruchomieniem projektu należy zainstalować PHP Composer na komputerze przez link: https://getcomposer.org/Composer-Setup.exe<br>
-
-Przed instalacją PHP Composer należy sprawdzić zainstalowaną wersję PHP w CMD poprzez komendę: `php -v`.<br>
-
-Wersja musi być zgodna z wersją PHP 7.4.30.<br>
-
-Jeśli nie umie wyszukać ścieżki, należy dodać do zmiennej systemowej `PATH` ścieżkę do php, np. `C:\xampp\php`.<br>
-
-Po instalacji PHP Composer należy sprawdzić, czy poprawnie się zainstalował poprzez komendę w CMD: `composer --version`.<br>
-
-Po otworzeniu projektu należy otworzyć terminal i wpisać `composer install` aby zainstalować zależności.
-
-## Struktura katalogów
-```
-restaurant-project-php-si/
-├─ .vscode/                  1
-├─ public/                   2
-│  ├─ static/                3
-│  │  ├─ css/                4
-│  │  ├─ images/             5
-│  │  ├─ js/                 6
-│  ├─ index.php              7
-│  ├─ uploads/               8
-├─ src/                      9
-│  ├─ controllers/           10
-│  ├─ core/                  11
-│  ├─ models/                12
-│  ├─ scss/                  13
-│  ├─ services/              14
-│  ├─ utils/                 15
-│  ├─ views/                 16
-│  │  ├─ partials/           17
-├─ vendor/                   18
-├─ .htaccess                 19
-├─ composer.json             20
-├─ composer.lock             21
+$ git clone https://github.com/Milosz08/SUoT_SkiRental_Service ski-rental-service
 ```
 
-### Legenda:
-1. folder z ustawieniami edytora Visual Studio Code
-2. folder z zasobami udostępnionymi dla użytkownika (zdjęcia, skrypty, style itp.)
-3. folder z zasobami statycznymi (które nie ulegają zmianie przez cykl życia aplikacji)
-4. folder ze stylami (automatycznie skompilowane pliki scss i załadowany bootstrap), NIE MODYFIKOWAĆ!
-5. folder z statycznymi obrazkami (logo, ikony itp) które nie zostaną przesłane przez serwer
-6. folder ze skryptami JavaScript oraz załadowane skrypty Bootstrap
-7. główny plik rozruchowy i ładujący aplikację, NIE MODYFIKOWAĆ!
-8. plik z zasobami które zarządzane są przez serwer PHP, NIE MODYFIKOWAĆ!
-9. folder z kodem źródłowym aplikacji, niewidoczny dla użytkownika końcowego
-10. tutaj należy umieszczać wszystkie kontrolery aplikacji
-11. folder z rdzeniem aplikacji i plikami rozruchowymi
-12. tutaj należy umieszczać modele (klasy PHP) używane w aplikacji
-13. tutaj należy umieszczać pliki styli w SCSS (które są automatycznie kompilowane do CSS)
-14. tutaj należy umieszczać klasy serwisów (logika biznesowa dla kontrolerów)
-15. dodatkowe klasy pomocnicze (używane w całej aplikacji)
-16. tutaj należy umieszczać widoki (pliki .mustache, .html)
-17. tutaj należy umieszczać częściowe widoki możliwe do implementacji w pełnych widokach
-18. folder managera zasobów PHP Composer, NIE MODYFIKOWAĆ!
-19. plik przekierowujący użytkownika do pliku index.php w folderze /public, NIE MODYFIKOWAĆ!
-20. plik konfiguracyjny aplikacji, NIE MODYFIKOWAĆ!
-21. plik wersjonowania zależności zarządzalny przez PHP Composer, NIE MODYFIKOWAĆ!
+<a name="prepare-runtime-configuration-for-unix"></a>
+## Prepare runtime configuration for UNIX
+0. If you don't have homebrew, install via:
+```
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+1. Downlad and install PHP, PHP composer, UFW and PhpMyAdmin:
+```
+$ brew install php
+$ brew install composer
+$ sudo apt-get install ufw
+$ sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+```
+2. Download, install and turn on Apache WebServer (for Ubuntu and Debian):
+```
+$ sudo apt-get install apache2   # install apache webserver
+$ sudo systemctl start apache2   # start webserver
+$ sudo ufw enable                # enable UFW
+$ sudo ufw allow 8080/tcp        # add port 8080 to the list
+```
+3. Configure MySQL database:
+```
+$ sudo mysql
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'yourPassword';
+```
+3. Move all files from cloned repo into `/var/www/html` directory.
+4. Go to the project path in shell and install all dependencies via:
+```
+$ php composer install
+```
+5. Create `.env` in project root directory and fill with propriet values:
+```properties
+# database connection
+DB_DSN          = 'mysql:host=[hostName];dbname=[dbName]'
+DB_USERNAME     = '[databaseUsername]'
+DB_PASSWORD     = '[databasePassword]'
 
-## Linki:
-Dokumentacja PHP: https://www.php.net/manual/en/<br>
-Dokumentacja Mustache: https://media.readthedocs.org/pdf/phly_mustache/latest/phly_mustache.pdf<br>
-PDO: https://www.php.net/manual/en/book.pdo.php
+# smtp mail server connection
+SMTP_HOST       = '[smtpHost, ex. aws54.example.net]'
+SMTP_USERNAME   = '[smtpResponsed, ex. noreply@example.net]'
+SMTP_PASSWORD   = '[smtpPassword]'
+SMTP_LOOPBACK   = '[smtpLoopbackResponder, ex. info@example.net]'
+```
+6. Before you will run application, migrate `m1428_si_proj.sql` file into `127.0.0.1:8080/phpmyadmin`.
+7. Congrats, your app will be available on `127.0.0.1:8080`.
+
+<a name="prepare-runtime-configuration-for-windows"></a>
+## Prepare runtime configuration for Windows
+1. Download and install XAMPP [from here](https://www.apachefriends.org/)
+2. Download and install PHP Composer [from here](https://getcomposer.org/Composer-Setup.exe)
+3. Add to path variable path to your PHP pre-installed directory (for the most common installations, path will be `C:\xampp\php`)
+4. Do 4, 5 and 6 points from installation for UNIX.
+5. Congrats, your app will be available on `127.0.0.1:8080`.
+
+<a name="application-stack"></a>
+## Application stack
+* [PHP](https://www.php.net/)
+* [Mustache Template Engine](https://github.com/bobthecow/mustache.php)
+* [PHP Mailer](https://github.com/PHPMailer/PHPMailer)
+* [Bootstrap](https://getbootstrap.com/)
+
+<a name="project-status"></a>
+## Project status
+Project is finished.
