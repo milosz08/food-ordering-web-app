@@ -78,8 +78,9 @@ SMTP_LOOPBACK   = '[smtpLoopbackResponder, ex. info@example.net]'
 1. Download and install XAMPP [from here](https://www.apachefriends.org/)
 2. Download and install PHP Composer [from here](https://getcomposer.org/Composer-Setup.exe)
 3. Add to path variable path to your PHP pre-installed directory (for the most common installations, path will be `C:\xampp\php`)
-4. Do 4, 5 and 6 points from installation for UNIX.
-5. Congrats, your app will be available on `127.0.0.1:8080`.
+4. Move your cloned project into `/xampp/htdocs` location.
+5. Do 4, 5 and 6 points from installation for UNIX.
+6. Congrats, your app will be available on `127.0.0.1:8080`.
 
 <a name="application-stack"></a>
 ## Application stack
