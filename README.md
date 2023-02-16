@@ -24,7 +24,7 @@ This application allows to create a user and restaurant owner account. User can 
 
 To install the program on your computer, use the command below (or use the build-in GIT system in your IDE environment):
 ```
-$ git clone https://github.com/Milosz08/SUoT_SI_Project_PHP restaurant-php-service
+$ git clone https://github.com/Milosz08/SUoT_PHP_Food_CRM restaurant-php-service
 ```
 
 <a name="prepare-runtime-configuration-for-unix"></a>
