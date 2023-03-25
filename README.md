@@ -1,8 +1,8 @@
-# PHP Food CRM Web Application
+# PHP Food CMS Web Application
 [![Generic badge](https://img.shields.io/badge/Made%20with-PHP%207.4-1abc9c.svg)](https://www.php.net/)&nbsp;&nbsp;
 [![Generic badge](https://img.shields.io/badge/Package%20Manager-PHP%20Composer-green.svg)](https://getcomposer.org/)&nbsp;&nbsp;
 <br><br>
-A CRM (Customer Relationship Management) web application to support restaurant management, customer contact and product ordering from created restaurants. For obvious reasons, the application does not have a payment system.
+A CMS (Content Management System) web application to support restaurant management, customer contact and product ordering from created restaurants. For obvious reasons, the application does not have a payment system.
 
 See live demo on: [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl/)
 
