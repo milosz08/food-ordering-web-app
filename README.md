@@ -1,4 +1,4 @@
-# PHP Food Delivery CMS Web Application
+# PHP Food Ordering Web Application (with CMS)
 [![Generic badge](https://img.shields.io/badge/Made%20with-PHP%207.4-1abc9c.svg)](https://www.php.net/)&nbsp;&nbsp;
 [![Generic badge](https://img.shields.io/badge/Package%20Manager-PHP%20Composer-green.svg)](https://getcomposer.org/)&nbsp;&nbsp;
 <br><br>
@@ -24,7 +24,7 @@ This application allows to create a user and restaurant owner account. User can 
 
 To install the program on your computer, use the command below (or use the build-in GIT system in your IDE environment):
 ```
-$ git clone https://github.com/Milosz08/food-delivery-cms
+$ git clone https://github.com/Milosz08/food-ordering-web-app
 ```
 
 <a name="prepare-runtime-configuration-for-unix"></a>
