@@ -28,36 +28,67 @@ $ git clone https://github.com/Milosz08/food-ordering-web-app
 ```
 
 <a name="prepare-runtime-configuration-for-unix"></a>
-## Prepare runtime configuration for UNIX
-0. If you don't have homebrew, install via:
+1. Configure Apache web server:
+* download and install:
 ```
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+$ sudo apt update
+$ sudo apt install apache2
 ```
-1. Downlad and install PHP, PHP composer, UFW and PhpMyAdmin:
+* go to `httpd.conf` and modify settings:
 ```
-$ brew install php
-$ brew install composer
-$ sudo apt-get install ufw
-$ sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+$ sudo nano /etc/apache2/apache2.conf
 ```
-2. Download, install and turn on Apache WebServer (for Ubuntu and Debian):
+```xml
+<!-- /etc/apache2/apache2.conf -->
+<Directory /var/www/>
+   Options Indexes FollowSymLinks
+   AllowOverride All <!-- change this line from None to All -->
+   Require all granted
+</Directory>
 ```
-$ sudo apt-get install apache2   # install apache webserver
-$ sudo systemctl start apache2   # start webserver
-$ sudo ufw enable                # enable UFW
-$ sudo ufw allow 8080/tcp        # add port 8080 to the list
+* move project files into `/var/www/html` via:
+```
+$ sudo cp [projectDir] /var/www/html
+```
+2. Configure PHP and PDO extension:
+* download and install PHP, PHP MySQL driver and PHP composer:
+```
+$ sudo apt update
+$ sudo apt install php7.4 php-mysql composer
+```
+* enable PDO:
+```
+$ sudo nano /etc/php/7.4/apache2/php.ini
+```
+```properties
+# /etc/php/7.4/apache2/php.ini
+;extension=pdo_firebird
+extension=pdo_mysql # <-- uncomment this line
+;extension=pdo_oci
 ```
 3. Configure MySQL database:
+* install, start and login into the MySQL database:
 ```
-$ sudo mysql
-mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'yourPassword';
+$ sudo apt update
+$ sudo apt-get install mysql-server
+$ sudo service mysql start
+$ mysql -u root -p
 ```
-3. Move all files from cloned repo into `/var/www/html` directory.
-4. Go to the project path in shell and install all dependencies via:
+* create new database `rest_db` and migrate data from `m1428_si_proj.sql` file:
+```
+mysql> CREATE DATABASE rest_db;
+mysql> USE rest_db;
+mysql> SOURCE [projectDir]/m1428_si_proj.sql;
+```
+4. Go to the project path and install all dependencies via:
 ```
 $ php composer install
 ```
-5. Create `.env` in project root directory and fill with propriet values:
+5. Create `.env` via this command (only for UNIX, for Windows create manually):
+```
+$ grep -vE '^\s*$|^#' .env.sample > .env
+```
+and fill with propriet values:
 ```properties
 # database connection
 DB_DSN          = 'mysql:host=[hostName];dbname=[dbName]'
@@ -70,8 +101,11 @@ SMTP_USERNAME   = '[smtpResponsed, ex. noreply@example.net]'
 SMTP_PASSWORD   = '[smtpPassword]'
 SMTP_LOOPBACK   = '[smtpLoopbackResponder, ex. info@example.net]'
 ```
-6. Before you will run application, migrate `m1428_si_proj.sql` file into `127.0.0.1:8080/phpmyadmin`.
-7. Congrats, your app will be available on `127.0.0.1:8080`.
+6. Run Apache server via:
+```
+$ sudo systemctl start apache2
+```
+8. Congrats, your app will be available on `http://localhost:80`.
 
 <a name="prepare-runtime-configuration-for-windows"></a>
 ## Prepare runtime configuration for Windows
@@ -79,15 +113,15 @@ SMTP_LOOPBACK   = '[smtpLoopbackResponder, ex. info@example.net]'
 2. Download and install PHP Composer [from here](https://getcomposer.org/Composer-Setup.exe)
 3. Add to path variable path to your PHP pre-installed directory (for the most common installations, path will be `C:\xampp\php`)
 4. Move your cloned project into `/xampp/htdocs` location.
-5. Do 4, 5 and 6 points from installation for UNIX.
-6. Congrats, your app will be available on `127.0.0.1:8080`.
+5. Do 4 and 5 points from installation for UNIX.
+6. Congrats, your app will be available on `127.0.0.1:80`.
 
 <a name="application-stack"></a>
 ## Application stack
-* [PHP](https://www.php.net/)
-* [Mustache Template Engine](https://github.com/bobthecow/mustache.php)
-* [PHP Mailer](https://github.com/PHPMailer/PHPMailer)
-* [Bootstrap](https://getbootstrap.com/)
+* PHP
+* Mustache Template Engine
+* PHP Mailer
+* Bootstrap
 
 <a name="project-status"></a>
 ## Project status
