@@ -1,7 +1,5 @@
 # PHP Food Ordering Web Application (with CMS)
-[![](https://img.shields.io/badge/Made%20with-PHP%207.4-1abc9c.svg)](https://www.php.net/)&nbsp;&nbsp;
-[![](https://img.shields.io/badge/Package%20Manager-PHP%20Composer-green.svg)](https://getcomposer.org/)&nbsp;&nbsp;
-<br>
+
 > More info about this project you will find [on my personal website](https://miloszgilga.pl/project/food-ordering-web-app)
 > <br>
 > See project demo at [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl)
