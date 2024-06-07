@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-07, 01:01:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 00:56:52                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:29:23                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -349,7 +349,7 @@ class SettingsService extends MvcService
             $statement = $this->dbh->prepare($query);
             $statement->execute(array($_SESSION['logged_user']['user_id']));
             $photo_url = $statement->fetchColumn();
-            if ($photo_url == 0) throw new Exception('Wybrany użytkownik nie posiada zdjęcia profilowego.');
+            if ($photo_url === 0) throw new Exception('Wybrany użytkownik nie posiada zdjęcia profilowego.');
             
             $query = "UPDATE users SET photo_url = NULL WHERE id = ?";
             $statement = $this->dbh->prepare($query);
