@@ -3,7 +3,6 @@
     "php.suggest.basic": false,
     "php.validate.enable": false,
     "scm.alwaysShowRepositories": true,
-    "php.version": "7.4",
     "editor.mouseWheelZoom": true,
     "explorer.confirmDelete": false,
     "workbench.iconTheme": "vsc-jetbrains-icons-enhanced",
@@ -13,22 +12,6 @@
     "explorer.autoReveal": false,
     "files.autoSave": "onFocusChange",
     "files.insertFinalNewline": true,
-    "liveSassCompile.settings.formats": [
-        {
-            "format": "compressed",
-            "extensionName": ".min.css",
-            "savePath": "/public/static/css"
-        },
-    ],
-    "liveSassCompile.settings.generateMap": false,
-    "liveSassCompile.settings.watchOnLaunch": true,
-    "liveSassCompile.settings.excludeList": [ 
-        "/**/vendor/**",
-        "/.vscode/**" 
-    ],
-    "liveSassCompile.settings.includeItems": [
-        "/src/scss/styles.scss",
-    ],
     "psi-header.variables": [
         [ "companyNamePl", "Politechnika Śląska" ],
         [ "companyNameEng", "Silesian University of Technology" ],
