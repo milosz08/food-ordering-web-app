@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:40:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 04:27:05                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:44:20                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,21 +24,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('RestaurantsService'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RestaurantsController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(RestaurantsService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /restaurants/restaurant-dishes
@@ -54,16 +48,12 @@ class RestaurantsController extends MvcController
         ));
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function add_dish()
     {
         $res_id = $this->_service->addDishToShoppingCard();
         header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /restaurants/clear-filters
      */
@@ -74,8 +64,6 @@ class RestaurantsController extends MvcController
             'Filtry zostały pomyślnie wyczyszczone.', false);
         header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /restaurants

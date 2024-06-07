@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-10, 17:24:38                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 23:52:48                   *
- * Modyfikowany przez: Lukasz Krawczyk                         *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:16                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
-
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace App\Models;
 
 class RestaurantDetailsModel
 {

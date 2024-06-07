@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 12:56:48                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:58:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,16 +19,12 @@ use PDO;
 use Exception;
 use App\Core\MvcService;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DashboardService extends MvcService
 {
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca dane do pliku js aby wygenerować wykresy w głównym widoku panelu administratora.

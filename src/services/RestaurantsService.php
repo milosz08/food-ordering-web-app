@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:42:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 01:56:08                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:51:40                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -41,21 +41,15 @@ ResourceLoader::load_model('RestaurantDetailsModel', 'restaurant');
 ResourceLoader::load_model('RestaurantPersistFilterModel', 'restaurant');
 ResourceLoader::load_model('RestaurantWithDishesPageModel', 'restaurant');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RestaurantsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function get_all_accepted_restaurants()
     {
@@ -325,8 +319,6 @@ class RestaurantsService extends MvcService
             'diff_filter_mobile' => array('diff' => 'mobile'),
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function get_restaurant_dishes_with_cart()
     {

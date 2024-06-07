@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 01:21:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 01:45:22                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -20,8 +20,6 @@ use App\Services\Helpers\ImagesHelper;
 
 ResourceLoader::load_service_helper('ImagesHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class OpinionModel
 {
     public $signature;
@@ -29,8 +27,6 @@ class OpinionModel
     public $delivery_grade;
     public $give_on;
     public $description;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

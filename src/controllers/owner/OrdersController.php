@@ -9,8 +9,8 @@
  * Data utworzenia: 2023-01-03, 02:13:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 02:49:32                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2024-06-08 00:42:41                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Controllers;
@@ -23,21 +23,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('OrdersService', 'owner'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class OrdersController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(OrdersService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/orders/status
@@ -48,9 +42,6 @@ class OrdersController extends MvcController
         $this->_service->order_change();
         header('Location:' . __URL_INIT_DIR__ . 'owner/orders', true, 301);
     }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/orders/order-details
@@ -66,8 +57,6 @@ class OrdersController extends MvcController
             'banner' => $banner_data,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/orders

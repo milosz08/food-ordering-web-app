@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 22:06:12                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 20:39:43                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:58:50                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,21 +29,15 @@ ResourceLoader::load_model('AdminUserDetailsModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ManageUsersService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za usunięcie wybranego przez admnistratora użytkownika.
@@ -88,8 +82,6 @@ class ManageUsersService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::ADMIN_MANAGED_USERS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za usunięcie wybranego przez admnistratora użytkownika.
@@ -163,8 +155,6 @@ class ManageUsersService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda zwracająca szczegóły wybranego użytkownika na podstawie parametrów GET. Jeśli nie znajdzie użytkownika przekierowanie do
      * strony ze wszystkimi użytkownikami.
@@ -208,8 +198,6 @@ class ManageUsersService extends MvcService
             'user_details' => $user_details,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda usuwająca zdjęcie profilowe użytkownika, jeśli takowe istnieje.

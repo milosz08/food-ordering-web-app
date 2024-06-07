@@ -9,19 +9,15 @@
  * Data utworzenia: 2023-01-05, 01:14:47                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 02:54:11                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:56:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class PaginationHelper
 {
     private const AVAILABLE_PAGING = array(10, 15, 20, 50, 100);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function get_pagination_nav($curr_page, $total_per_page, $total_pages, $total, $base_url)
     {
@@ -52,8 +48,6 @@ class PaginationHelper
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static function check_parameters($redirect_url)
     {
         if (!isset($_GET['page']) || !isset($_GET['total'])) return;
@@ -77,8 +71,6 @@ class PaginationHelper
             die;
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function check_if_page_is_greaten_than($redirect_url, $max)
     {

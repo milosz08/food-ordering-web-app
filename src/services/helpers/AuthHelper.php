@@ -9,19 +9,15 @@
  * Data utworzenia: 2023-01-05, 01:00:18                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-05 01:19:16                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:56:10                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class AuthHelper
 {
     private const SEQ_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function generate_random_seq($seq_count = 10)
     {

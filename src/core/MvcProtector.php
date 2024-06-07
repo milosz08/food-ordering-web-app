@@ -9,15 +9,13 @@
  * Data utworzenia: 2022-12-17, 15:54:57                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 12:18:00                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:45:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use Exception;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa przechowująca metody odpowiedzialne za ochronę ściezek aplikacji. W zalezności od wybranej metody, umozliwi ona przeglądanie    *
@@ -34,14 +32,10 @@ class MvcProtector
     public const OWNER = "właściciel";
     public const ADMIN = "administrator";
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct($renderer)
     {
         $this->_renderer = $renderer;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Wszyscy uzytkownicy zalogowani na konto USER mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
@@ -51,8 +45,6 @@ class MvcProtector
         $this->redirect_on_role(self::USER);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Wszyscy uzytkownicy zalogowani na konto OWNER mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
      */
@@ -61,8 +53,6 @@ class MvcProtector
         $this->redirect_on_role(self::OWNER);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Wszyscy uzytkownicy zalogowani na konto ADMIN mają dostęp do tych zasobów, w przeciwnym wypadku renderowanie strony błędu 401
      */
@@ -70,8 +60,6 @@ class MvcProtector
     {
         $this->redirect_on_role(self::ADMIN);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda renderująca widok błędu 401, jeśli uzytkownic spróbuje odwołać się do zasobu do którego nie ma dostępu z poziomu roli pobranej
@@ -89,8 +77,6 @@ class MvcProtector
         die;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Metoda przekierowująca na wybrany adres (panel administratora, panel restauratora, strona główna) w zaleności od roli zalogowanego
      * uzytkownika. Uzywana głównie w kontrolerze auth, zeby zalogowany uzytkownik nie miał dostępu do panelu logowania.
@@ -108,8 +94,6 @@ class MvcProtector
         }
     }    
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda sprawdzająca, czy zalogowany użytkownik to użytkownik. Jeśli nie, wyrzuci wyjątek który zostanie wyłapany w serwisach.
      */
@@ -121,8 +105,6 @@ class MvcProtector
             <a href="' . __URL_INIT_DIR__ . 'auth/register" class="alert-link">pod tym linkiem</a>.
         ');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda tworząca obiekt klasy MvcProtector i zwracająca go. Jedyna metoda która pozwala na uzyskanie instancji klasy MvcProtector.

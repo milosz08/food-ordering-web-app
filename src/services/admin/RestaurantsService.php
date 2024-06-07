@@ -34,21 +34,15 @@ ResourceLoader::load_model('RestaurantAdminModel', 'restaurant');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RestaurantsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za tworzenie tabeli w zakładce 'Restauracje do usunięcia'.
@@ -119,8 +113,6 @@ class RestaurantsService extends MvcService
             'not_empty' => count($restaurants),
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za pobranie szczegółów dań wybranej restauracji z bazy danych i zwrócenie ich do widoku.
@@ -244,8 +236,6 @@ class RestaurantsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda usuwająca zdjęcie w tle (baner) lub zdjęcie profilowe restauracji wybranej na podstawie id przekazywanego w parametrze GET 
      * zapytania oraz parametrów metody. Ustawia również wartość NULL w kolumnie przechowującej link do grafiki.
@@ -308,8 +298,6 @@ class RestaurantsService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::ADMIN_RESTAURANT_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return $redirect_url;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za usuwanie wybranej restauracji z systemu. Metoda sprawdza, czy nie ma żadnych aktywnych zamówień związanych z

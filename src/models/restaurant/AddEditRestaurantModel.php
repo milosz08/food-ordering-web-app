@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-05, 02:56:18                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-10 01:29:19                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AddEditRestaurantModel
 {
@@ -32,8 +30,6 @@ class AddEditRestaurantModel
     public $delivery_free; // darmowa dostawa
     public $min_price; // najniższa cena za jaką można złożyć zamówienie
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function __construct()
     {
         $this->name = array('value' => $this->name, 'invl' => false, 'bts_class' => '');
@@ -48,8 +44,6 @@ class AddEditRestaurantModel
         $this->phone_number = array('value' => $this->phone_number, 'invl' => false, 'bts_class' => '');
         $this->min_price = array('value' => $this->min_price, 'invl' => false, 'bts_class' => '');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function all_is_valid()
     {

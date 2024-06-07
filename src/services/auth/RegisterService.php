@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:22:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 01:07:42                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:57:55                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -30,21 +30,15 @@ ResourceLoader::load_service_helper('AuthHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RegisterService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za dodawanie nowych danych użytkownika i ich sprawdzanie z istniejącą bazą danych.

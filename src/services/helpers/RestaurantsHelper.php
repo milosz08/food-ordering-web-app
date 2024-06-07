@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 03:54:36                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 04:37:15                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:56:45                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,8 +17,6 @@ namespace App\Services\Helpers;
 
 use PDO;
 use Exception;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantsHelper
 {
@@ -45,8 +43,6 @@ class RestaurantsHelper
         $statement->closeCursor();
         return $result;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca maksymalną liczbę restauracji na podstawie ID użytkownika, statusu zaakceptowania oraz wyszukiwanej nazwy

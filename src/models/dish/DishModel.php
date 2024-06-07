@@ -9,13 +9,11 @@
  * Data utworzenia: 2022-12-23, 23:06:25                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-03 01:29:02                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:19                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DishModel
 {

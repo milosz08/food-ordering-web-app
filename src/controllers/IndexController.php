@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 20:48:23                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 23:50:19                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:44:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -21,16 +21,12 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service_helper('SessionHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class IndexController extends MvcController
 {
     public function __construct()
     {
         parent::__construct(); // przekazanie nazwy klasy serwisu, w celu zaimportowania jej dyrektywą require_once
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /

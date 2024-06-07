@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 03:53:59                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 09:48:46                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:37:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,13 +23,9 @@ use App\Admin\Services\DishTypesService;
 
 ResourceLoader::load_service('DishTypesService', 'admin');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DishTypesController extends MvcController
 {
     private $_service; // instancja serwisu
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
@@ -37,8 +33,6 @@ class DishTypesController extends MvcController
         $this->_service = MvcService::get_instance(DishTypesService::class); // stworzenie instancji serwisu
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /admin/dish-types/add-dish-type. Proxy dla adresu /admin/dish-types
      */
@@ -49,8 +43,6 @@ class DishTypesController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'admin/dish-types', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /admin/dish-types/edit-dish-type. Proxy dla adresu /admin/dish-types
      */
@@ -61,8 +53,6 @@ class DishTypesController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'admin/dish-types', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /admin/dish-types/delete-dish-type. Proxy dla adresu /admin/dish-types
      */
@@ -72,8 +62,6 @@ class DishTypesController extends MvcController
         $this->_service->delete_dish_type();
         header('Location:' . __URL_INIT_DIR__ . 'admin/dish-types', true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/dish-types

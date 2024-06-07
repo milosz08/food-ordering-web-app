@@ -9,16 +9,14 @@
  * Data utworzenia: 2023-01-16, 15:39:42                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 15:48:17                   *
- * Modyfikowany przez: BubbleWaffle                            *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:22                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
- 
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- class OwnerOrderDetailsModel
- {
+namespace App\Models;
+
+class OwnerOrderDetailsModel
+{
     public $first_name;
     public $last_name;
     public $email;
@@ -38,10 +36,8 @@
     public $dish_amount;
     public $dishes_value;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function __construct()
     {
         $this->dishes_value = array();
     }
- }
+}

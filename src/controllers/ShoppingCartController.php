@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-11, 22:15:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:58:46                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:44:31                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -22,21 +22,15 @@ use App\Services\ShoppingCartService;
 
 ResourceLoader::load_service('ShoppingCartService');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ShoppingCartController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(ShoppingCartService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przekierowanie na adres: /shopping-cart/add-dish
@@ -47,8 +41,6 @@ class ShoppingCartController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przekierowanie na adres: /shopping-cart/delete-dish
      */
@@ -57,8 +49,6 @@ class ShoppingCartController extends MvcController
         $res_id = $this->_service->delete_dish_from_shopping_cart();
         header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przekierowanie na adres: /shopping-cart/delete-all
@@ -69,8 +59,6 @@ class ShoppingCartController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przekierowanie na adres: /restaurants
      */

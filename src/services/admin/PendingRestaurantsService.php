@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:51:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 20:45:46                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:59:02                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -27,21 +27,15 @@ ResourceLoader::load_model('PendingRestaurantModel', 'restaurant');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class PendingRestaurantsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za wyświetlanie panelu wraz z listą restauracji do zaakceptowania.
@@ -114,8 +108,6 @@ class PendingRestaurantsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za akceptację wybranej restauracji z tabeli.
      */
@@ -157,8 +149,6 @@ class PendingRestaurantsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::ADMIN_PENDING_RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za odrzucanie a tym samym usuwanie danej restauracji.

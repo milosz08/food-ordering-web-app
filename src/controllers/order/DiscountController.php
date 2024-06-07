@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 23:32:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 05:24:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:40:48                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -22,21 +22,15 @@ use App\Order\Services\DiscountService;
 
 ResourceLoader::load_service('DiscountService', 'order');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DiscountController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(DiscountService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /order/discount/add-discount
@@ -48,8 +42,6 @@ class DiscountController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'order/summary?resid=' . $res_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /order/discount/delete-discount
      */
@@ -59,8 +51,6 @@ class DiscountController extends MvcController
         $res_id = $this->_service->delete_discount();
         header('Location:' . __URL_INIT_DIR__ . 'order/summary?resid=' . $res_id, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Proxy do adresu: /restaurants

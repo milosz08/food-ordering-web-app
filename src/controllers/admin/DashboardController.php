@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:02:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 08:39:39                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:36:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -22,21 +22,15 @@ use App\Admin\Services\DashboardService;
 
 ResourceLoader::load_service('DashboardService', 'admin'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DashboardController extends MvcController
 {
     private $_service; // instancja serwisu
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
         parent::__construct();
         $this->_service = MvcService::get_instance(DashboardService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/dashboard/graph

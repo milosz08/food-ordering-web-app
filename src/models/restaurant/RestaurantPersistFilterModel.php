@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-11, 00:57:01                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-11 05:27:08                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantPersistFilterModel
 {
@@ -28,8 +26,6 @@ class RestaurantPersistFilterModel
     public $sort_parameters_prst;
     public $sort_directions_prst;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function __construct(RestaurantFilterModel &$filter_model)
     {
         $this->open_selected_prst = $filter_model->open_selected;
@@ -41,8 +37,6 @@ class RestaurantPersistFilterModel
         $this->sort_parameters_prst = $filter_model->sort_parameters['sortedby'];
         $this->sort_directions_prst = $filter_model->sort_directions['dir'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function decode_to_filter_model(&$persist_data)
     {

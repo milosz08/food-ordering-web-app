@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 01:26:00                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 17:12:25                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:55:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -38,21 +38,15 @@ ResourceLoader::load_model('DiscountRowModel', 'discount');
 ResourceLoader::load_model('ResDiscountsRowModel', 'discount');
 ResourceLoader::load_model('AddEditDiscountModel', 'discount');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DiscountsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiedzialna za zwracanie wszystkich kodów rabatowych stworzonych przez zalogowanego właścicela restauracji.
@@ -136,8 +130,6 @@ class DiscountsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiedzialna za wywietlanie zaakceptowanych restauracji z możliwością dodania kodu rabatowego do nich.
      */
@@ -194,8 +186,6 @@ class DiscountsService extends MvcService
             'not_empty' => count($res_discount_codes),
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiedzialna za dodawanie kody rabatowego do restauracji na podstawie przekazywanego w parametrach GET id restauracji.
@@ -262,8 +252,6 @@ class DiscountsService extends MvcService
             'code_is_auto_generated' => isset($_POST['disc-auto-generated']) ? 'checked' : '',
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiedzialna za edytowanie kody rabatowego do restauracji na podstawie przekazywanego w parametrach GET id restauracji oraz
@@ -340,8 +328,6 @@ class DiscountsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiedzialna za usuwanie wybranego kodu rabatowego z restauracji na podstawie przekazywanego id kodu rabatowego w
      * parametrach GET. Sprawdza, czy kod rabatowy należy do restauracji, która jest przypisana do zalogowanego właściciela.
@@ -375,8 +361,6 @@ class DiscountsService extends MvcService
         SessionHelper::create_session_banner($banner_type, $this->_banner_message, $this->_banner_error);
         return $_GET['redir'] ?? 'owner/restaurants/restaurant-details?id=' . $_GET['resid'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za zwiększanie ilości możliwych użyć kodu rabatowego na podstawie parametru v w parametrach GET zapytania.
@@ -422,8 +406,6 @@ class DiscountsService extends MvcService
         return $_GET['redir'] ?? 'owner/restaurants/restaurant-details?id=' . $_GET['resid'];
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za zwiększanie ilości dni życia kodu rabatowego na podstawie parametru v w parametrach GET zapytania.
      */
@@ -467,8 +449,6 @@ class DiscountsService extends MvcService
         SessionHelper::create_session_banner($banner_type, $this->_banner_message, $this->_banner_error);
         return $_GET['redir'] ?? 'owner/restaurants/restaurant-details?id=' . $_GET['resid'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function check_if_discount_is_valid()
     {

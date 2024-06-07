@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-07, 19:29:28                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:36:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:46:41                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RegisterUserModel
 {
@@ -32,8 +30,6 @@ class RegisterUserModel
     public $street;
     public $phone_number;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function __construct()
     {
         $this->name = array('value' => $this->name, 'invl' => false, 'bts_class' => '');
@@ -49,8 +45,6 @@ class RegisterUserModel
         $this->street = array('value' => $this->street, 'invl' => false, 'bts_class' => '');
         $this->phone_number = array('value' => $this->phone_number, 'invl' => false, 'bts_class' => '');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function all_is_valid()
     {

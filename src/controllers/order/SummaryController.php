@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 06:51:51                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:41:19                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('SummaryService', 'order');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SummaryController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(SummaryService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /order/summary/cancel-place-order
@@ -49,8 +43,6 @@ class SummaryController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'restaurants/restaurant-dishes?id=' . $res_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /order/summary/place_order. Adres proxy nie zwraca widoku.
      */
@@ -61,8 +53,6 @@ class SummaryController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'order/summary/new-order-details?id=' . $order_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /order/summary/new-order-details
      */
@@ -77,8 +67,6 @@ class SummaryController extends MvcController
             'banner' => $banner_data,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /order/summary

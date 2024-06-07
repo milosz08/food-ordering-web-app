@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-16, 09:41:12                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 12:35:01                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:35                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AddEditRestaurantGradeModel
 {
@@ -28,8 +26,6 @@ class AddEditRestaurantGradeModel
     public $res_grade_stars;
     public $delivery_grade_stars;
     public $anonymous_is_checked;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
@@ -55,8 +51,6 @@ class AddEditRestaurantGradeModel
             ),
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function all_is_valid()
     {

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:57                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2024-06-08 00:31:09                   *
+ * Ostatnia modyfikacja: 2024-06-08 01:00:01                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,21 +29,15 @@ ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SettingsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca dane osobowe właściciela restauracji, przy czym pozwalając na ich edycję przy użyciu formularza. ID użytkownika
@@ -148,8 +142,6 @@ class SettingsService extends MvcService
             'hide_profile_preview_class' => $user->profile_url['invl'] ? 'display-none' : '',
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za usuwanie zdjęcia profilowego użytkownika, który jest zalogowany do systemu.

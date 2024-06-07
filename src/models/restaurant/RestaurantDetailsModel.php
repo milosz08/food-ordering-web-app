@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-03, 01:33:30                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 09:03:48                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:01                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantDetailsModel
 {
@@ -39,8 +37,6 @@ class RestaurantDetailsModel
     public $min_price; // najniższa cena za jaką można kupić produkty
     public $discounts_count; // ilość kodów rabatowych jakie oferuje restauracja
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     public function __construct()
     {
         $this->add_button_class = empty($this->accept) ? 'disabled' : '';

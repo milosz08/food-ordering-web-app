@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 21:03:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 21:28:22                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:52:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -28,21 +28,15 @@ ResourceLoader::load_model('ShowUserSingleOrderModel', 'user');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class OrdersService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function get_all_user_orders()
     {
@@ -78,8 +72,6 @@ class OrdersService extends MvcService
             'has_orders' => count($all_orders),
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function get_user_order_details()
     {
@@ -140,8 +132,6 @@ class OrdersService extends MvcService
             'is_cancel_active' => $is_cancel_active,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function cancel_order()
     {

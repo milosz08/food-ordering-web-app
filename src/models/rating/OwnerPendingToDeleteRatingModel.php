@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-14, 22:44:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 06:47:56                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class OwnerPendingToDeleteRatingModel
 {

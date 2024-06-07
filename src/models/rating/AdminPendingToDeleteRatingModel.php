@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 06:46:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 07:22:53                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:41                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,8 +19,6 @@ use App\Core\ResourceLoader;
 use App\Services\Helpers\ImagesHelper;
 
 ResourceLoader::load_service_helper('ImagesHelper');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AdminPendingToDeleteRatingModel
 {
@@ -39,8 +37,6 @@ class AdminPendingToDeleteRatingModel
     public $date_order;
     public $finish_order;
     public $date_diff;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

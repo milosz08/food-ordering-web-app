@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-05, 02:41:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 05:53:39                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:56:30                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ImagesHelper
 {
@@ -38,8 +36,6 @@ class ImagesHelper
         return $images_paths;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static function upload_dish_image($v_profile, $dish_id, $default_profile = '')
     {
         $profile = $default_profile;
@@ -53,8 +49,6 @@ class ImagesHelper
         return $profile;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static function generate_stars_definitions($avg_grades, $is_integer = false)
     {
         if ($is_integer) $grade_n = intval($avg_grades);
@@ -67,8 +61,6 @@ class ImagesHelper
         }
         return $grades_bts;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function upload_user_profile_image($v_profile, $user_id, $default_profile = '')
     {

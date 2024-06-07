@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 02:13:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 02:41:52                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:53:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,21 +29,15 @@ ResourceLoader::load_model('OwnerOrderDetailsModel', 'restaurant');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class OrdersService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca wszystkie zamówienia dokonane przez użytkowników restauracji. Dodatkowo restauracje można filtrować, wyświetlając
@@ -133,8 +127,6 @@ class OrdersService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda zwracająca szczegóły zamówienia na podstawie jego ID przekazywanego w parametrach GET zapytania.
      */
@@ -190,8 +182,6 @@ class OrdersService extends MvcService
             'order_details' => $single_order,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zmieniająca staus danego zamówienia w panelu restauratora

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 22:06:26                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 20:26:43                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:58:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,21 +26,15 @@ use App\Services\Helpers\SessionHelper;
 ResourceLoader::load_model('DishDetailsModel', 'dish');
 ResourceLoader::load_service_helper('SessionHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DishesService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca szczegóły potrawy na podstawie ID.
@@ -89,8 +83,6 @@ class DishesService extends MvcService
             'details'=> $dish_details,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda usuwająca wybraną potrawę z restauracji. Posiada zabezpieczenie, tylko potrawy nieprzypisane do aktywnych zamówień można
@@ -151,8 +143,6 @@ class DishesService extends MvcService
         return $_GET['resid'];
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za usuwanie zdjęcia potrawy, na podstawie id potrawy w parametrze GET dishid
      */
@@ -200,8 +190,6 @@ class DishesService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::ADMIN_DISH_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return 'admin/dishes/dish-details?resid=' . $_GET['resid'] . '&dishid=' . $_GET['dishid'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda sprawdzająca, czy potrawa na podstawie id pobieranego z parametrów GET zapytania istnieje.

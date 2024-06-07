@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-14, 23:42:42                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:14:07                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
- 
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace App\Models;
 
 class UserDetailsModel
 {
@@ -30,9 +28,7 @@ class UserDetailsModel
     public $address;
     public $status;
     public $full_name;
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     public function __construct()
     {
         $this->status = array(

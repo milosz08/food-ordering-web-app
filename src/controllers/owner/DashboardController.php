@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:02:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 01:07:53                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:41:33                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -22,21 +22,15 @@ use App\Owner\Services\DashboardService;
 
 ResourceLoader::load_service('DashboardService', 'owner'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DashboardController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(DashboardService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/dashboard/graph
@@ -47,8 +41,6 @@ class DashboardController extends MvcController
         header('Content-Type: application/json; charset=UTF-8');
         echo $this->_service->graph();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/dashboard

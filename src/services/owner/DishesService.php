@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:21:27                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 20:09:43                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:54:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -40,21 +40,15 @@ ResourceLoader::load_service_helper('PaginationHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 ResourceLoader::load_service_helper('RestaurantsHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DishesService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca wszystkie dania stworzone przez użytkownika z informacją o przypisaniu dania do wybranej restauracji.
@@ -134,8 +128,6 @@ class DishesService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda zwracająca wszystkie restauracje wybranego zalogowanego użytkownika z możliwością dodania do nich potrawy poprzez przycisk.
      * Kliknięcie w przycisk przenosi użytkownika do strony /owner/dishes/add-dish z id restauracji.
@@ -193,8 +185,6 @@ class DishesService extends MvcService
             'not_empty' => count($active_restaurants),
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca dodanie potrawy do restauracji na podstawie id restauracji przekazywanego w parametrach GET zapytania. Metoda
@@ -283,8 +273,6 @@ class DishesService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda umożliwiająca edycję potrawy przypisanej do restauracji na podstawie id restauracji i id dania. Jeśli restauracja lub potrawa
      * nie istnieje, przekierowanie na poprzednią stronę (wszystkie potrawy wybranej restauracji).
@@ -369,8 +357,6 @@ class DishesService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda umożliwiająca usuwanie potrawy z wybranej restauracji na podstawie id. Jeśli potrawa z wybranym id nie istnieje bądź id jest
      * puste, przekierowanie na poprzednią stronę.
@@ -418,8 +404,6 @@ class DishesService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za usuwanie zdjęcia potrawy, na podstawie id potrawy w parametrze GET dishid
      */
@@ -455,8 +439,6 @@ class DishesService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::ADD_EDIT_DISH_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return 'owner/dishes/edit-dish?resid=' . $_GET['resid']  . '&dishid=' . $_GET['dishid'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda pobierająca szczegółowe dane na temat potrawy. Jeśli id restauracji jest puste bądź potrawy lub jeden z nich nie istnieje w
@@ -511,8 +493,6 @@ class DishesService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda sprawdzająca, czy restauracja na podstawie id pobieranego z parametrów GET zapytania istnieje oraz, czy jest to restauracja
      * stworzona przez zalogowanego użytkownika.
@@ -539,8 +519,6 @@ class DishesService extends MvcService
         die;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda sprawdzająca, czy potrawa na podstawie id pobieranego z parametrów GET zapytania istnieje oraz, czy ta potrawa przypisana
      * jest do wybranej restauracji.
@@ -565,8 +543,6 @@ class DishesService extends MvcService
         header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $_GET['resid'], true, 301);
         die;
     }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwraca domyślne typy potraw oraz te niestandardowe, stworzone przez użytkownika.
@@ -593,8 +569,6 @@ class DishesService extends MvcService
         $statement->closeCursor();
         return $dish_types;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Dodaj nowy typ dania lub wybierz istniejący typ na podstawie pola select box.

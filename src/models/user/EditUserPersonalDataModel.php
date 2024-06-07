@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-16, 13:43:29                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 14:33:56                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class EditUserPersonalDataModel
 {
@@ -32,8 +30,6 @@ class EditUserPersonalDataModel
     public $profile_url;
     public $street;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function __construct()
     {
         $this->first_name = array('value' => $this->first_name, 'invl' => false, 'bts_class' => '');
@@ -48,8 +44,6 @@ class EditUserPersonalDataModel
         $this->profile_url = array('value' => $this->profile_url, 'invl' => false, 'bts_class' => '');
         $this->street = array('value' => $this->street, 'invl' => false, 'bts_class' => '');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function all_is_valid()
     {

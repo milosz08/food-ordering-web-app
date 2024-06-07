@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 01:58:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 02:38:04                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:37:51                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('RatingsService', 'admin');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RatingsController extends MvcController
 {
     private $_service; // instancja serwisu
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
         parent::__construct();
         $this->_service = MvcService::get_instance(RatingsService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: admin/ratings/accept-delete-rating. Proxy pod adres: /admin/ratings/pending-to-delete
@@ -49,8 +43,6 @@ class RatingsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'admin/ratings/pending-to-delete', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: admin/ratings/accept-delete-rating. Proxy pod adres: /admin/ratings/pending-to-delete
      */
@@ -61,8 +53,6 @@ class RatingsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'admin/ratings/pending-to-delete', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: admin/ratings/delete-rating. Proxy pod adres: /admin/ratings
      */
@@ -72,8 +62,6 @@ class RatingsController extends MvcController
         $this->_service->delete_rating();
         header('Location:' . __URL_INIT_DIR__ . 'admin/ratings', true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/ratings/pending-to-delete
@@ -89,8 +77,6 @@ class RatingsController extends MvcController
             'banner' => $banner_data,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/ratings

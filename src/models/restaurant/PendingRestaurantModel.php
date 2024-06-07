@@ -9,13 +9,11 @@
  * Data utworzenia: 2022-12-14, 20:11:28                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-03 01:33:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:45                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PendingRestaurantModel
 {

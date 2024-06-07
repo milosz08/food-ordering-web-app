@@ -9,15 +9,13 @@
  * Data utworzenia: 2022-11-10, 23:32:11                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-07 00:24:22                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:45:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use ReflectionException;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Główna klasa uruchamiana przy starcie aplikacji. To ona odpowiada za dynamiczne tworzenie przetwarzanie parametru action zapytania    *
@@ -31,15 +29,11 @@ class MvcApplication
     private $_selected_controller; // mapowany obiekt klasy kontrolera na podstawie zapytania
     private $_renderer_instance; // instancja klasy Renderer obsługującej renderowanie widoków oraz szablonów mustache
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     private function __construct()
     {
         $this->_renderer_instance = MvcRenderer::get_instance(); // pobranie obiektu umożliwiającego renderowanie widoków
         $this->render_mvc(); // wywołanie metody prywatnej odwiadającej za parsowanie ścieżki i wywołanie metody kontrolera
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za tworzenie klasy kontrolera i wywoływanie metody tego kontrolera na podstawie parametrów zapytania. Jeśli
@@ -72,8 +66,6 @@ class MvcApplication
             die; // zakończ działanie skryptu
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za parsowanie adresu URL z parametrami zapytania. Jeśli nie znajdzie parametrów zapytania, zwracane są domyślne
@@ -124,8 +116,6 @@ class MvcApplication
             'method' =>     $action_type,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca instantancję aplikacji. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia obiektu).

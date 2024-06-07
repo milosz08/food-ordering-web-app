@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-03, 19:18:04                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-04 19:59:14                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:15                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DishDetailsModel
 {
@@ -31,8 +29,6 @@ class DishDetailsModel
     public $photo_url; // ścieżka do grafiki ilustrującej potrawę
     public $is_custom_type; // czy typ potrawy jest dodany przez użytkownika, czy jest z systemu
     public $prepared_time; // średni czas przygotowania potrawy
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

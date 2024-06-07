@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-12, 10:19:41                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 10:24:53                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:46:50                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AddEditDiscountModel
 {
@@ -25,8 +23,6 @@ class AddEditDiscountModel
     public $max_usages;
     public $expired_date;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function __construct()
     {
         $this->code = array('value' => $this->code, 'invl' => false, 'bts_class' => '');
@@ -35,8 +31,6 @@ class AddEditDiscountModel
         $this->max_usages = array('value' => $this->max_usages, 'invl' => false, 'bts_class' => '');
         $this->expired_date = array('value' => $this->expired_date, 'invl' => false, 'bts_class' => '');
     }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function all_is_valid()
     {

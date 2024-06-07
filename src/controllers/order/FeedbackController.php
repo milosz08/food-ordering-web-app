@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-16, 09:15:17                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 10:03:18                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:41:02                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('FeedbackService', 'order');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class FeedbackController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(FeedbackService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /order/feedback/give-feedback
@@ -55,8 +49,6 @@ class FeedbackController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /order/feedback/edit-feedback
      */
@@ -72,8 +64,6 @@ class FeedbackController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /order/feedback/edit-feedback. Proxy pod adres /user/orders.order-details
      */
@@ -83,8 +73,6 @@ class FeedbackController extends MvcController
         $order_id = $this->_service->delete_mark_from_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'user/orders/order-details?id=' . $order_id, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /order/feedback. Proxy pod adres /user/orders

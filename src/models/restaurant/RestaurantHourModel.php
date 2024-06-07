@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-05, 23:03:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-09 19:12:11                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:19                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantHourModel
 {
@@ -26,8 +24,6 @@ class RestaurantHourModel
     public $open_hour; // godzina otwarcia (wartość i błąd)
     public $close_hour; // godzina zamknięcia (wartość i błąd)
     public $is_closed; // brak godzin otwarcia i zamknięcia, domyślnie zamknięte w wybranym dniu tygodnia
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
@@ -38,14 +34,10 @@ class RestaurantHourModel
         $this->close_hour = array('value' => $this->close_hour, 'invl' => false, 'bts_class' => '');
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function all_hours_is_valid()
     {
         return !($this->open_hour['invl'] || $this->close_hour['invl']);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function format_to_details_view()
     {

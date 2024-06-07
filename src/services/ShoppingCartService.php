@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-11, 22:15:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:42:47                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:51:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -25,21 +25,15 @@ use App\Services\Helpers\SessionHelper;
 ResourceLoader::load_service_helper('CookieHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ShoppingCartService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function add_dish_to_shopping_cart()
     {
@@ -94,8 +88,6 @@ class ShoppingCartService extends MvcService
         return $_GET['resid'];
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function delete_dish_from_shopping_cart()
     {
         try
@@ -139,8 +131,6 @@ class ShoppingCartService extends MvcService
         return $_GET['resid'];
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function delete_all_dishes_from_shopping_cart()
     {
         if (!isset($_GET['id'])) header('Location:' . __URL_INIT_DIR__ . 'restaurants', true, 301);
@@ -161,8 +151,6 @@ class ShoppingCartService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return $_GET['id'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function check_if_restaurant_exist()
     {

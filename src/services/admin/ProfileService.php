@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:31:52                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 02:25:17                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:59:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -22,25 +22,18 @@ use App\Core\ResourceLoader;
 use App\Models\OwnerProfileModel;
 use App\Services\Helpers\SessionHelper;
 
-
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_model('OwnerProfileModel', 'restaurant');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ProfileService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za wyświetlanie danych o użytkowniku w profilu.

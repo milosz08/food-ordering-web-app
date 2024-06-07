@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:58                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 19:59:11                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:53:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -44,21 +44,15 @@ ResourceLoader::load_service_helper('PaginationHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 ResourceLoader::load_service_helper('RestaurantsHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RestaurantsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za tworzenie tabeli w zakładce 'Lista restauracji'.
@@ -136,8 +130,6 @@ class RestaurantsService extends MvcService
             'not_empty' => $not_empty,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za dodawanie danych nowej restauracji oraz sprawdzanie ich z istniejącą bazą danych.
@@ -270,8 +262,6 @@ class RestaurantsService extends MvcService
             'res_hours' => $res_hours,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za edytowanie istniejącej już restauracji przez właściciela restauracji na podstawie id restauracji.
@@ -440,8 +430,6 @@ class RestaurantsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za usuwanie obecnej restauracji. Można usunąć jedynie restaurację, która nie posiada aktywnych zamówień.
      * Jeśli restauracja została pomyślnie usunięta następuje przekierowanie do strony z restauracjami.
@@ -477,8 +465,6 @@ class RestaurantsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::RESTAURANTS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda usuwająca zdjęcie w tle (baner) lub zdjęcie profilowe restauracji wybranej na podstawie id przekazywanego w parametrze GET 
@@ -526,8 +512,6 @@ class RestaurantsService extends MvcService
         }
         return $redirect_url;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za pobranie szczegółów dań wybranej restauracji z bazy danych i zwrócenie ich do widoku.
@@ -662,8 +646,6 @@ class RestaurantsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda sprawdzająca, czy przekazywany numer telefonu jest już przypisany do restauracji od innego właściciela (taki sam numer telefonu
      * może być przypisany jedynie do restauracji pochodzących od jednego właściciela).
@@ -679,8 +661,6 @@ class RestaurantsService extends MvcService
         ');
         $statement->closeCursor();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda pobierająca godziny i dni tygodnia w jakich pracuje restauracja i zwraca tablicę obiektów.

@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-05, 02:56:18                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 22:03:29                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:43                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class OwnerProfileModel
 {

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 10:31:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 10:50:44                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:22                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -18,8 +18,6 @@ namespace App\Models;
 use App\Core\ResourceLoader;
 
 ResourceLoader::load_model('DishModel', 'dish');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DishOrderModel extends DishModel
 {

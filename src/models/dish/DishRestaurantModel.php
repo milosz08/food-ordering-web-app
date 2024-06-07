@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-04, 02:30:13                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-04 02:32:38                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:26                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DishRestaurantModel
 {

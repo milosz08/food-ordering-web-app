@@ -9,14 +9,12 @@
  * Data utworzenia: 2023-01-15, 15:23:45                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 15:30:55                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:54                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
+namespace App\Models;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
 class RestaurantAdminModel
 {
     public $id; //id z bazy danych
@@ -38,8 +36,6 @@ class RestaurantAdminModel
     public $min_price; // najniższa cena za jaką można kupić produkty
     public $discounts_count; // ilość kodów rabatowych jakie oferuje restauracja
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     public function __construct()
     {
         $this->status = array(
@@ -48,4 +44,3 @@ class RestaurantAdminModel
         );
     }
 }
- 

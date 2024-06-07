@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-07, 01:01:03                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 15:36:12                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:44:02                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('SettingsService', 'user');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SettingsController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(SettingsService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /user/settings/add-new-address
@@ -53,8 +47,6 @@ class SettingsController extends MvcController
             'banner' => $banner_data,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /user/settings/alternative-address
@@ -72,8 +64,6 @@ class SettingsController extends MvcController
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /user/settings/delete-address
      */
@@ -83,8 +73,6 @@ class SettingsController extends MvcController
         $this->_service->delete_address();
         header('Location:' . __URL_INIT_DIR__ . 'user/settings', true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /user/settings/delete-profile-image
@@ -96,8 +84,6 @@ class SettingsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'user/settings', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /user/settings/edit-alternativ-address
      */
@@ -113,8 +99,6 @@ class SettingsController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /user/settings/delete-account
      */
@@ -124,8 +108,6 @@ class SettingsController extends MvcController
         $this->_service->delete_account();
         header('Location:' . __URL_INIT_DIR__ . 'user/settings', true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /user/settings

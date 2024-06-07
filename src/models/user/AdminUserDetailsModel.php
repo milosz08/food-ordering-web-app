@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-16, 02:39:10                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:30:53                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:55                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AdminUserDetailsModel
 {
@@ -29,8 +27,6 @@ class AdminUserDetailsModel
     public $activated; // czy konto zostało aktywowane
     public $phone_number; // numer telefonu do użytkownika
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     public function __construct()
     {
         $this->status = array(

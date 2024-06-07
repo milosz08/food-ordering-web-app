@@ -9,13 +9,11 @@
  * Data utworzenia: 2022-11-10, 22:48:46                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 20:55:53                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:45:10                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa abstrakcyjna MvcController. Każdy kontroler aplikacji znajdujący się w katalogu /controllers musi rozszerzać tą klasę. Klasa    *
@@ -29,15 +27,11 @@ abstract class MvcController
     protected $renderer; // instancja klasy MvcRenderer służącej do renderowania szablonów
     protected $protector; // instancja klasy MvcProtector słuzącej do ochrony adresu URL
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         $this->renderer = MvcRenderer::get_instance(); // pobranie instancji klasy MvcRenderer i przypisanie jej do pola
         $this->protector = MvcProtector::get_instance($this->renderer); // pobranie instancji klasy MvcProtector i przypisanie jej do pola
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda abstrakcyjna, która musi być zaimplementowana w klasach dziedziczących po MvcController. Odwołanie do niej następuje wówczas,

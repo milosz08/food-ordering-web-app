@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-07, 01:01:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2024-06-08 00:29:23                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:52:04                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,21 +34,15 @@ ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SettingsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * Metoda odpowiadająca edycji profilu zalogowanego użytkownika.
@@ -163,8 +157,6 @@ class SettingsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za obsługę dodawania nowych adresów użytkownika do bazy danych.
      */
@@ -240,8 +232,6 @@ class SettingsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za usuwanie wybranego adresu przekazanego do id URL.
      */
@@ -272,8 +262,6 @@ class SettingsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiada za otworzenie strony używającej view, dodawania adresu.
@@ -335,8 +323,6 @@ class SettingsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za usuwanie zdjęcia profilowego użytkownika, który jest zalogowany do systemu.
      */
@@ -368,8 +354,6 @@ class SettingsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::USER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca usunięcie konta użytkownika z systemu. Jedynie użytkownicy bez aktywnych zamówień mogą usunąć konto.

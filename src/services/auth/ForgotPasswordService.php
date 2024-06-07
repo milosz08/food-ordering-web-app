@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:44:39                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:35:26                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:57:37                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -28,21 +28,15 @@ ResourceLoader::load_service_helper('AuthHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ForgotPasswordService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za wysłanie rządania zmiany zapomnianego hasła. Metoda na podstawie podanego adresu email/loginu wysyłana na
@@ -105,8 +99,6 @@ class ForgotPasswordService extends MvcService
             'v_login_email' => $login_email,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zmieniająca hasło do konta na podstawie tokenu przesłanego w parametrze GET lub wpisanego w formularzu w widoku przez

@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-09, 23:24:31                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 12:24:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantFilterModel
 {
@@ -29,8 +27,6 @@ class RestaurantFilterModel
     public $sort_directions;
     public $filter_query;
     public $sorting_query;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
@@ -79,8 +75,6 @@ class RestaurantFilterModel
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public function find_parameter_and_fill($value, &$array, $custom_value = 'selected')
     {
         foreach ($array as &$data_attribute)
@@ -89,8 +83,6 @@ class RestaurantFilterModel
             else $data_attribute[$custom_value] = '';
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function combined_filter_query()
     {

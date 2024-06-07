@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-16, 09:15:33                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 12:47:36                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:55:44                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,21 +26,15 @@ ResourceLoader::load_model('AddEditRestaurantGradeModel', 'rating');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class FeedbackService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca dodanie oceny do restauracji po dokonanym zamówieniu.
@@ -104,8 +98,6 @@ class FeedbackService extends MvcService
             'grade' => $grade,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca edytowanie ówcześnie dodanej oceny do restauracji po dokonanym zamówieniu.
@@ -181,8 +173,6 @@ class FeedbackService extends MvcService
             'grade' => $grade,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca usunięcie ówcześnie dodanej oceny do restauracji po dokonanym zamówieniu.

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-05, 01:19:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 08:01:02                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:57:10                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -22,8 +22,6 @@ use App\Models\RestaurantHourModel;
 
 ResourceLoader::load_model('RestaurantHourModel', 'restaurant');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ValidationHelper
 {
     public static function validate_field_regex(string $value, string $pattern)
@@ -34,8 +32,6 @@ class ValidationHelper
         return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '');
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static function validate_email_field(string $value)
     {
         $without_blanks = trim(htmlspecialchars($_POST[$value]));
@@ -43,8 +39,6 @@ class ValidationHelper
             return array('value' => $without_blanks, 'invl' => true, 'bts_class' => 'is-invalid');
         return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function validate_image_regex(string $value)
     {
@@ -72,16 +66,12 @@ class ValidationHelper
         return array('value' => $without_blanks, 'invl' => false, 'bts_class' => '', 'path' => $path, 'ext' => $ext);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static function validate_exact_fields($valueFirst, string $fieldSecond)
     {
         if ($valueFirst['value'] !== $_POST[$fieldSecond])
             return array('value' => $_POST[$fieldSecond], 'invl' => true, 'bts_class' => 'is-invalid');
         return array('value' => $_POST[$fieldSecond], 'invl' => false, 'bts_class' => '');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function validate_hour(RestaurantHourModel &$hour_obj)
     {
@@ -115,8 +105,6 @@ class ValidationHelper
             opcji "Zamknięte w  tym dniu tygodnia" należy wprowadzić godzinę otwarcia i zamknięcia lokalu.
         ');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function check_optional($optional_name, $toggler_name, $pattern)
     {

@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 02:02:13                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:51:06                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -28,8 +28,6 @@ use App\Core\Config;
  *      Config::get('__KLUCZ__');                                                                                                        *
  *                                                                                                                                       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Config::set('__MVC_DEF_METHOD__', 'index'); // domyślna metoda kontrolera uruchamiana w przypadku braku parametru action w zapytaniu
 Config::set('__MVC_CONTROLLER_SUFFIX__', 'Controller'); // domyślny sufix plików kontrolerów (np. Home>Controller<, Example>Controller<) itp.
@@ -50,8 +48,6 @@ Config::set('__SMTP_PASSWORD__', $_ENV['SMTP_PASSWORD']); // hasło do konta z k
 Config::set('__SMTP_AUTO_REPLY__', $_ENV['SMTP_LOOPBACK']); // email alternatywny, używany do odpowiadania na wiadomości serwera
 
 Config::set('__DEF_APP_HOST__', __PROTO__ . $_SERVER['HTTP_HOST'] . __URL_INIT_DIR__); // domyślny host serwera
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // regexy do walidacji pól formularzy
 Config::set('__REGEX_CITY__', '/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\- ]{2,60}$/');

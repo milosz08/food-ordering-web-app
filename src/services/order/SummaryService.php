@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-13, 04:17:43                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-17 01:58:44                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:56:02                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -29,21 +29,15 @@ ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_model('UserAddressModel', 'user');
 ResourceLoader::load_model('DishDetailsCartModel', 'cart');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SummaryService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca podsumowane dane zamówienia na podstawie koszyka zachowywanego w pliku cookie oraz wszystkie adresy (dodatkowe oraz
@@ -172,8 +166,6 @@ class SummaryService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiada za usuwanie zawartości koszyka i anulowanie tworzonego zamówienia poprzez powrócenie do strony z restauracją.
      */
@@ -196,8 +188,6 @@ class SummaryService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::RESTAURANT_DISHES_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return $_GET['resid'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za zapisywanie nowych danych o zamówieniu, walidacja oraz zwracanie id zamówienia. Metoda uruchamiana jest
@@ -334,8 +324,6 @@ class SummaryService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::NEW_ORDER_DETAILS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
         return $order_id;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiadająca za pobieranie szczegółów nowo stworzonego zamówienia i zwracanie ich do widoku.

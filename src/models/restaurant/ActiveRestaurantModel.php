@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-04, 00:45:33                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-04 00:47:24                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:56                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ActiveRestaurantModel
 {

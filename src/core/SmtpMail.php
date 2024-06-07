@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-12-01, 15:08:51                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 20:57:31                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:46:31                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,8 +17,6 @@ namespace App\Core;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa przechowująca instancję klasy PHPMailer z biblioteki umożliwiającą obsługę wiadomości email przez kod PHP. Klasa jest tworem    *
@@ -34,8 +32,6 @@ class SmtpMail
     private static $_instance; // instancja klasy SmtpMail jako obiektu singleton
     private $_smtpClient; // klient serwera SMTP
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Inicjalizacja zasobów biblioteki, serwera i stworzenie podstawowej instancji głównej klasy. Jeśli nie powiedzie się nawiązanie
      * połączenia z serwerem SMTP, wyrzuci wyjątek i zakończy wykonywanie skryptu
@@ -51,8 +47,6 @@ class SmtpMail
         $this->_smtpClient->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // ustawienie szyfrowania na SMTPS (Secured)
         $this->_smtpClient->Port = 465; // standardowy port połączenia szyfrowanego dla połączenia protokołem SMTPS
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca wysłanie wiadomości email to wskazanego klienta. Parametr $sendTo określa adres email klienta, parametr
@@ -125,8 +119,6 @@ class SmtpMail
             'status_message' => $send_status_message,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca instantancję klasy SmtpMail. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia 

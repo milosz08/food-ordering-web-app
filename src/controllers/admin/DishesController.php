@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 22:06:11                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 00:23:55                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:36:47                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -24,21 +24,15 @@ use App\Services\Helpers\SessionHelper;
 ResourceLoader::load_service('DishesService', 'admin');
 ResourceLoader::load_service_helper('SessionHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DishesController extends MvcController
 {
     private $_service; // instancja serwisu
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
         parent::__construct();
         $this->_service = MvcService::get_instance(DishesService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/dishes/delete-dish
@@ -50,8 +44,6 @@ class DishesController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants/restaurant-details?id=' . $res_id, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /admin/dishes/delete-dish-image
      */
@@ -61,8 +53,6 @@ class DishesController extends MvcController
         $redir_path = $this->_service->delete_dish_image();
         header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/dishes/dish-details
@@ -79,8 +69,6 @@ class DishesController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Przejście pod adres: /admin/dishes. Proxy pod adres /admin/dishes/dish-details
      */

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 04:01:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 05:36:54                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:38                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,8 +19,6 @@ use App\Core\ResourceLoader;
 use App\Services\Helpers\ImagesHelper;
 
 ResourceLoader::load_service_helper('ImagesHelper');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantWithDishesPageModel
 {
@@ -43,8 +41,6 @@ class RestaurantWithDishesPageModel
     public $profile_url; // zdjęcie profilu restauracji
     public $has_discounts; // posiada zniżki
     public $delivery_free; //darmowa dostawa
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

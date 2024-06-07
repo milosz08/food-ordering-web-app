@@ -9,12 +9,10 @@
  * Data utworzenia: 2022-12-09, 21:18:35                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 08:05:18                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:49:26                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestaurantModel
 {
@@ -26,8 +24,6 @@ class RestaurantModel
     public $status; // status
     public $full_name; // pełna nazwa (imię i nazwisko właściciela restauracji)
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     public function __construct()
     {
         $this->status = array(

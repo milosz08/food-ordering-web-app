@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 20:28:23                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-05 02:38:46                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:40:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -21,16 +21,12 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service_helper('SessionHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class LogoutController extends MvcController
 {
     public function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /auth/logout

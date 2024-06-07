@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 17:38:57                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 00:40:42                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:38:05                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Admin\Services\RestaurantsService;
 
 ResourceLoader::load_service('RestaurantsService', 'admin'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RestaurantsController extends MvcController
 {
     private $_service; // instancja serwisu
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {
         parent::__construct();
         $this->_service = MvcService::get_instance(RestaurantsService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/restaurants/delete-restaurant. Proxy pod adres: /admin/restaurants
@@ -49,8 +43,6 @@ class RestaurantsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . 'admin/restaurants', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /admin/restaurants/delete-banner-image
      */
@@ -61,8 +53,6 @@ class RestaurantsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . $redirect_url,  true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /admin/restaurants/delete-profile-image
      */
@@ -72,8 +62,6 @@ class RestaurantsController extends MvcController
         $redirect_url = $this->_service->delete_restaurant_image('profile_url', 'zdjęcie profilowe', 'profile');
         header('Location:' . __URL_INIT_DIR__ . $redirect_url, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/restaurants/restaurant-details
@@ -90,8 +78,6 @@ class RestaurantsController extends MvcController
             'is_details_subpage' => true,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/restaurants

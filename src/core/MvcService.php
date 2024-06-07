@@ -9,13 +9,11 @@
  * Data utworzenia: 2022-11-10, 22:46:32                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-02 20:56:52                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:45:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa abstrakcyjna MvcService. Każda klasa serwisu znajdująca się w folderze /services musi rozszerzać tą klasę. Klasa zapewnia       *
@@ -29,16 +27,12 @@ abstract class MvcService
     protected $dbh; // handler do bazy danych w celu wykonywania operacji (przede wszystkim zapytania SQL)
     protected $smtp_client; // instancja klasy SmtpMail umożliwiającej wysyłanie wiadomości email na wskazany adres
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         $this->pdo = PdoDbContext::get_instance(); // pobranie instancji klasy PdoDbContext i przypisanie jej do pola
         $this->dbh = $this->pdo->get_handler(); // pobranie uchwytu do bazy danych z obiekty klasy PdoDbContext
         $this->smtp_client = SmtpMail::get_instance(); // pobranie instancji klasy SmtpMail i przypisanie jej do pola
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiedzialna za haszowanie hasła poprzez funkcję Bcrypt. Zawiera również sól.
@@ -47,8 +41,6 @@ abstract class MvcService
     {
         return password_hash($value, PASSWORD_BCRYPT);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda tworząca obiekt klasy pochodnej po MvcService i zwracająca go. Jedyna metoda która pozwala na uzyskanie instancji klasy

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 01:25:45                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 12:23:17                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:41:51                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Owner\Services\DiscountsService;
 
 ResourceLoader::load_service('DiscountsService', 'owner');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DiscountsController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(DiscountsService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/discounts/discounts-with-restaurants
@@ -53,8 +47,6 @@ class DiscountsController extends MvcController
             'banner' => $banner_data,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/discounts/add-discount
@@ -74,8 +66,6 @@ class DiscountsController extends MvcController
         ));
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/discounts/edit-discount
      */
@@ -94,8 +84,6 @@ class DiscountsController extends MvcController
         ));
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/discounts/delete-discount
      */
@@ -105,8 +93,6 @@ class DiscountsController extends MvcController
         $redir_path = $this->_service->delete_discount_code();
         header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
 	}
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/discounts/increase-usages
@@ -118,8 +104,6 @@ class DiscountsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/discounts/increase-time
      */
@@ -129,8 +113,6 @@ class DiscountsController extends MvcController
         $redir_path = $this->_service->increase_code_expiration_time();
         header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/discounts

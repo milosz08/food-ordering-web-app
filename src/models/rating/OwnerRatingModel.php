@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 08:19:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 07:19:17                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:47:52                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,8 +19,6 @@ use App\Core\ResourceLoader;
 use App\Services\Helpers\ImagesHelper;
 
 ResourceLoader::load_service_helper('ImagesHelper');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class OwnerRatingModel
 {
@@ -42,8 +40,6 @@ class OwnerRatingModel
     public $order_dishes;
     public $status;
     public $status_bts_class;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

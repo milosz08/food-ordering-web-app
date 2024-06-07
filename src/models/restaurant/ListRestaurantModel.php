@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-06, 19:58:50                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 05:36:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -19,8 +19,6 @@ use App\Core\ResourceLoader;
 use App\Services\Helpers\ImagesHelper;
 
 ResourceLoader::load_service_helper('ImagesHelper');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ListRestaurantModel
 {
@@ -43,8 +41,6 @@ class ListRestaurantModel
     public $phone_number; // numer telefonu do restauracji
     public $delivery_hours; // tablica z informacjami odnośnie godzin dostaw
     public $delivery_free; //darmowa dostawa
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 03:55:02                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 20:31:06                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:58:36                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -27,21 +27,15 @@ ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DishTypesService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwraca wszystkie typy dań przypisane na stałe do systemu (takie, których użytkownik nie może usunąć ani stworzyć).
@@ -110,8 +104,6 @@ class DishTypesService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda umożliwiająca dodanie nowego typu dania do systemu.
      */
@@ -149,8 +141,6 @@ class DishTypesService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::ADMIN_DISH_TYPES_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca edycję istniejącego typu dania systemu.
@@ -197,8 +187,6 @@ class DishTypesService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::ADMIN_DISH_TYPES_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     /**
      * Metoda umożliwiająca usunięcie typu dania na stałe przypisanego do systemu. Typ dania można usunąć tylko wówczas, jeżeli żadne danie
      * nie jest do niego przypisane.

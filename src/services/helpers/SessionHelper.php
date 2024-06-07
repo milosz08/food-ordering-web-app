@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-05, 01:52:24                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 15:33:22                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:56:59                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Services\Helpers;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SessionHelper
 {
@@ -76,8 +74,6 @@ class SessionHelper
     const ADMIN_SETTINGS_PAGE_BANNER                    = 'admin_settings_page_banner';
     const OWNER_PROFILE_PAGE_BANNER                     = 'owner_profile_page_banner';
     const ADMIN_PROFILE_PAGE_BANNER                     = 'admin_profile_page_banner';
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function check_session_and_unset($session_value_key)
     {
@@ -90,8 +86,6 @@ class SessionHelper
         return $session_value;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static function create_session_banner($key, $message, $banner_error, $custom_baner_style = '')
     {
         if (empty($custom_baner_style)) $banner_class = $banner_error ? 'alert-danger' : 'alert-success';
@@ -102,8 +96,6 @@ class SessionHelper
             'banner_class' => $banner_class,
         );
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static function persist_search_text($name, $key)
     {

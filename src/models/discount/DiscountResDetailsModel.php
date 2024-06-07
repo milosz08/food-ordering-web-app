@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-12, 06:44:09                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-15 01:41:16                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:46:53                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DiscountResDetailsModel
 {

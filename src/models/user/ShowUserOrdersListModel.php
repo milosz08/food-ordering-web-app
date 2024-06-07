@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-10, 16:45:24                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 08:38:15                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:20                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ShowUserOrdersListModel
 {

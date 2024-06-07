@@ -1,17 +1,15 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * Copyright (c) 2023 by multiple authors                      *
+/*
+ * Copyright (c) 2024 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
  * Nazwa pliku: admin-charts.js                                *
  * Projekt: restaurant-project-php-si                          *
- * Data utworzenia: 2023-01-06, 04:16:09                       *
+ * Data utworzenia: 2024-01-16, 13:46:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 21:04:20                   *
- * Modyfikowany przez: patrick012016                           *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * Ostatnia modyfikacja: 2024-06-08 00:35:39                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
+ */
 
 function generateAdminCharData() {
     const baseDir = document.getElementById('server-dir');
@@ -42,8 +40,6 @@ function generateAdminCharData() {
         }
     });
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function generateAdminCharv2Data() {
     var barColors = ['#03045e', '#0077b6', '#00b4d8', '#90e0ef', '#b5d1e2' , '#caf0f8', '#27ffef', '#03045e', '#0077b6', '#00b4d8',];
@@ -76,13 +72,9 @@ function generateAdminCharv2Data() {
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function onLoad() {
     generateAdminCharData();
     generateAdminCharv2Data();
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(window).on('load', onLoad);

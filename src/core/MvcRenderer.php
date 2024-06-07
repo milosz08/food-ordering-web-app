@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 23:39:35                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 00:33:11                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:45:50                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -18,8 +18,6 @@ namespace App\Core;
 use Mustache_Engine;
 use Mustache_Autoloader;
 use Mustache_Loader_FilesystemLoader;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa przechowująca metody odpowiedzialne za ładowanie i renderowanie szablonów. Metoda load() uruchamia jest tylko raz podczas       *
@@ -32,11 +30,7 @@ class MvcRenderer
     private static $_singleton_instance; // instancja klasy MvcRenderer jako obiektu singleton
     private static $_mustache; // instancja klasy silnika szablonów Mustache
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     private function __construct() { }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca załadowanie silnika szablonów Mustache przy starcie aplikacji. Metoda uruchamiana jest tylko jeden raz i musi
@@ -52,8 +46,6 @@ class MvcRenderer
             'partials_loader' => new Mustache_Loader_FilesystemLoader(__SRC_DIR__ . '/views'), // ładowanie widoków częściowych
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca renderowanie wybranego szablonu mustache. Przyjmuje dwa parametry. Pierwszy to nazwa generowanego szablonu
@@ -88,8 +80,6 @@ class MvcRenderer
         echo $template->render($extended_data); // wyrenderuj, sprarsuj i wyświetl szablon
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda umożliwiająca renderowanie widoku zagnieżdżonego na podstawie nazwy szablonu wrappera (owijającego) przekazywanego w
      * parametrze $wrapper_pattern_name oraz nazwy szablonu zagnieżdżonego przekazywanego w parametrze $embed_pattern_name. Metoda dodatkowo
@@ -103,8 +93,6 @@ class MvcRenderer
         ));
         $this->render('_wrapper/' . $wrapper_pattern_name, $additional_embed_view_data); // renderuj widok
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda tworząca obiekt klasy MvcRenderer i zwracająca go. Jedyna metoda która pozwala na uzyskanie instancji klasy MvcRenderer.

@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 22:32:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2024-06-08 00:30:50                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:52:34                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -30,21 +30,15 @@ ResourceLoader::load_service_helper('ImagesHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SettingsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca dane osobowe właściciela restauracji, przy czym pozwalając na ich edycję przy użyciu formularza. ID użytkownika
@@ -148,8 +142,6 @@ class SettingsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odpowiadająca za usuwanie zdjęcia profilowego użytkownika, który jest zalogowany do systemu.
      */
@@ -181,8 +173,6 @@ class SettingsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::OWNER_SETTINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca usunięcie konta z systemu.

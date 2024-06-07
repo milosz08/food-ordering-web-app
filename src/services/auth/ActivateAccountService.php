@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 20:18:07                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 04:34:47                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:57:23                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -26,21 +26,15 @@ use App\Services\Helpers\SessionHelper;
 ResourceLoader::load_service_helper('AuthHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ActivateAccountService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiedzialna za wysłanie rządania aktywowania konta na podstawie tokenu OTA w parametrze GET. Jeśli token istnieje, nie
@@ -94,8 +88,6 @@ class ActivateAccountService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::LOGIN_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda odpowiedzialna za ponowne wysłanie wiadomości email do użytkownika z tokenem. Jeśli token nie wygasł i nie został użyty, jest

@@ -9,15 +9,13 @@
  * Data utworzenia: 2022-11-10, 23:34:33                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-06 17:55:41                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:44:52                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Core;
 
 use Dotenv\Dotenv;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Klasa umożliwiająca dodawanie plików z folderu plików źródłowych aplikacji /src/. Pliki te są dodawane z folderów, których nazwy      *
@@ -28,8 +26,6 @@ use Dotenv\Dotenv;
 class CoreLoader
 {
     private static $_singleton_instance; // instancja klasy CoreLoader jako obiektu singleton
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private function __construct()
     {
@@ -37,8 +33,6 @@ class CoreLoader
         $dotenv->load(); // ładowanie pliku .env i znajdujących się w nim zmiennych
         $this->load_application_core(); // uruchomienie funkcji do ładowania klas
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca ładowanie plików ze wskazanych katalogów (ładowanie z użyciem instrukcji require_once). Lista
@@ -55,8 +49,6 @@ class CoreLoader
         }
         require_once  __SRC_DIR__ . 'config.php'; // ładowanie dodatkowego pliku konfiguracyjnego
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda statyczna umożliwiająca załadowanie klas rdzenia. Uruchomić można ją tylko raz (tylko raz dojdzie do stworzenia obiektu).

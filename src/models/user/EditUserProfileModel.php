@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-07, 18:50:26                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 05:49:50                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:11                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class EditUserProfileModel
 {
@@ -30,8 +28,6 @@ class EditUserProfileModel
     public $phone_number;
     public $profile_url;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     public function __construct()
     {
         $this->first_name = array('value' => $this->first_name, 'invl' => false, 'bts_class' => '');
@@ -45,8 +41,6 @@ class EditUserProfileModel
         $this->phone_number = array('value' => $this->phone_number, 'invl' => false, 'bts_class' => '');
         $this->profile_url = array('value' => $this->profile_url, 'invl' => false, 'bts_class' => '');
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function all_is_valid()
     {

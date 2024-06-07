@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 00:04:05                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:15:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:43:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Owner\Services\RestaurantsService;
 
 ResourceLoader::load_service('RestaurantsService', 'owner'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RestaurantsController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(RestaurantsService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/restaurants/edit-restaurant
@@ -55,8 +49,6 @@ class RestaurantsController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/restaurants/edit-restaurant
      */
@@ -73,8 +65,6 @@ class RestaurantsController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/restaurants/delete-restaurant
      */
@@ -84,8 +74,6 @@ class RestaurantsController extends MvcController
         $this->_service->delete_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants', true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/restaurants/delete-restaurant-banner
@@ -97,8 +85,6 @@ class RestaurantsController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . $redirect_url,  true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/restaurants/delete-restaurant-profile
      */
@@ -108,8 +94,6 @@ class RestaurantsController extends MvcController
         $redirect_url = $this->_service->delete_restaurant_image('profile_url', 'zdjęcie profilowe');
         header('Location:' . __URL_INIT_DIR__ . $redirect_url, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/restaurants/restaurant-details
@@ -126,8 +110,6 @@ class RestaurantsController extends MvcController
             'data' => $restaurant_details,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/restaurants

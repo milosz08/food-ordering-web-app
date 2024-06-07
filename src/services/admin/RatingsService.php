@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-15, 02:05:34                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 21:21:30                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:59:28                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -30,21 +30,15 @@ ResourceLoader::load_model('AdminPendingToDeleteRatingModel', 'rating');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('PaginationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class RatingsService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca wszsytkie oceny ze wszystkich restauracji, z możliwością ich natychmiastowego usunięcia.
@@ -134,8 +128,6 @@ class RatingsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda zwraca wszystkie oceny ze wszystkich restauracji z możliwością akceptowania lub odrzucenia ich usunięcia przez zgłoszenie
      * przychodzące od właściciela restauracji.
@@ -221,8 +213,6 @@ class RatingsService extends MvcService
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda umożliwiająca usunięcie opinii.
      */
@@ -252,8 +242,6 @@ class RatingsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::ADMIN_RATINGS_PAGE_BANNER, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda akceptująca zgłoszenie o usunięcie opinii wysłane przez właściciela restauracji i usuwająca tą opinię z wybranej restauracji.
@@ -310,8 +298,6 @@ class RatingsService extends MvcService
         SessionHelper::create_session_banner(SessionHelper::ADMIN_RATINGS_PENDING_TO_DELETE, $this->_banner_message, $this->_banner_error);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Metoda odrzucająca zgłoszenie o usunięcie opinii wysłanej przez właściciela restauracji i wysyłająca na adres email informację z
      * dodatkowym powodem nieusunięcia.
@@ -365,8 +351,6 @@ class RatingsService extends MvcService
         }
         SessionHelper::create_session_banner(SessionHelper::ADMIN_RATINGS_PENDING_TO_DELETE, $this->_banner_message, $this->_banner_error);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda zwracająca wszystkie restauracje.

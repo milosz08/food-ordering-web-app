@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-12, 23:35:16                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-13 07:55:46                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:55:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -27,21 +27,15 @@ ResourceLoader::load_service_helper('CookieHelper');
 ResourceLoader::load_service_helper('SessionHelper');
 ResourceLoader::load_service_helper('ValidationHelper');
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DiscountService extends MvcService
 {
     private $_banner_message = '';
     private $_banner_error = false;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     protected function __construct()
     {
         parent::__construct();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda umożliwiająca dodanie kodu rabatowego do podsumowania zamówienia. Sprawdza, czy przekazywane ID w parametrze GET odpowiada
@@ -90,8 +84,6 @@ class DiscountService extends MvcService
         }
         return $_GET['resid'];
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Metoda usuwająca kod rabatowy z podsumowania zamówienia. Walidacja jak w metodzie wyżej.

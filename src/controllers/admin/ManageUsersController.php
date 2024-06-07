@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-14, 22:59:50                       *
  * Autor: patrick012016                                        *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:24:03                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:37:18                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Admin\Services\ManageUsersService;
 
 ResourceLoader::load_service('ManageUsersService', 'admin'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ManageUsersController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(ManageUsersService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/manage-users/user-details
@@ -54,8 +48,6 @@ class ManageUsersController extends MvcController
         ));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /admin/manage-users/delete-user
      */
@@ -66,8 +58,6 @@ class ManageUsersController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . '/admin/manage-users', true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /admin/manage-users/delete-user-image
      */
@@ -77,8 +67,6 @@ class ManageUsersController extends MvcController
         $redir_path = $this->_service->delete_user_profile_image();
         header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /admin/manage-users

@@ -1,15 +1,15 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * Copyright (c) 2022 by multiple authors                      *
+/*
+ * Copyright (c) 2024 by multiple authors                      *
  * Politechnika Śląska | Silesian University of Technology     *
  *                                                             *
  * Nazwa pliku: common.js                                      *
  * Projekt: restaurant-project-php-si                          *
- * Data utworzenia: 2022-11-10, 18:29:31                       *
- * Autor: Milosz08                                             *
+ * Data utworzenia: 2024-01-16, 13:46:05                       *
+ * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 11:55:47                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:35:32                   *
  * Modyfikowany przez: Miłosz Gilga                            *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * W tym pliku należy umieszczać wszystkie niestandardowe skrypty JavaScript. Załadowane zostaną do wszystkich podstron projektu.        *
@@ -19,8 +19,6 @@
  * WAŻNE: Jeśli skrypt odnosi się do obrazka lub innego zasobu z serwera, powinien być wewnątrz funkcji window.onload. W innym wypadku   *
  * załaduje się jeszcze przed załadowaniem obrazka i nie znajdzie zasobu na którym ma wykonać akcję.                                     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function showHidePassword() {
     $('.password-input-toggler').toArray().forEach(function (el) {
@@ -43,8 +41,6 @@ function showHidePassword() {
     });
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function disableInputsOnCheckedCheckbox() {
     $('.disable-checkbox').each(function (_, el) {
         const toggleDisabledInputs = function (checkbox) {
@@ -57,8 +53,6 @@ function disableInputsOnCheckedCheckbox() {
         $(el).on('change', function () { toggleDisabledInputs(this); });
     });
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function imagePreview() {
     $('.image-preview-container').toArray().forEach(function (el) {
@@ -96,14 +90,10 @@ function imagePreview() {
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function showModal() {
     const modal = document.getElementById('logout-modal');
     if (modal !== null) new bootstrap.Modal(modal, {}).show();
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function chooseSelectedDisabled(select, text, area) {
     function disableTextarea() {
@@ -114,8 +104,6 @@ function chooseSelectedDisabled(select, text, area) {
     disableTextarea();
     $(select).on('change', disableTextarea);
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function lightDarkFaviconIcon() {
     const lightSchemeIcon = $('link#light-scheme-icon');
@@ -134,8 +122,6 @@ function lightDarkFaviconIcon() {
     onUpdate(matcher.matches);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function onLoad() {
     showModal();
     showHidePassword();
@@ -151,7 +137,5 @@ function onLoad() {
         new bootstrap.Tooltip(el);
     });
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(window).on('load', onLoad);

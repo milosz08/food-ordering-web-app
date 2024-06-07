@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 18:31:08                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 03:10:40                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:38:48                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,22 +23,16 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('LoginService', 'auth'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class LoginController extends MvcController
 {
 	private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(LoginService::class); // stworzenie instancji serwisu
     }
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
 	/**
      * Przejście pod adres: /auth/login
      */

@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-12, 03:39:12                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 10:13:25                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:46:57                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DiscountRowModel
 {

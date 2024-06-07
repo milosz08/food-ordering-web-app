@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-02, 19:42:14                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-12 02:58:49                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:38:39                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Auth\Services\ForgotPasswordService;
 
 ResourceLoader::load_service('ForgotPasswordService', 'auth'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ForgotPasswordController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(ForgotPasswordService::class); // stworzenie instancji serwisu
     }
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /auth/forgot-password/change
@@ -53,8 +47,6 @@ class ForgotPasswordController extends MvcController
             'banner' => $banner_data,
         ));
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /auth/forgot-password

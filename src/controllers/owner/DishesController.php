@@ -9,7 +9,7 @@
  * Data utworzenia: 2023-01-03, 16:20:48                       *
  * Autor: Miłosz Gilga                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 00:18:42                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:42:12                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -23,21 +23,15 @@ use App\Services\Helpers\SessionHelper;
 
 ResourceLoader::load_service('DishesService', 'owner'); // ładowanie serwisu przy użyciu require_once
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class DishesController extends MvcController
 {
     private $_service; // instancja serwisu
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
     public function __construct()
     {
         parent::__construct();
 		$this->_service = MvcService::get_instance(DishesService::class); // stworzenie instancji serwisu
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/dishes/dishes-with-restaurants
@@ -53,8 +47,6 @@ class DishesController extends MvcController
             'banner' => $banner_data,
         ));
 	}
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/dishes/add-dish
@@ -72,8 +64,6 @@ class DishesController extends MvcController
         ));
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/dishes/edit-dish
      */
@@ -90,8 +80,6 @@ class DishesController extends MvcController
         ));
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/dishes/dish-details
      */
@@ -107,8 +95,6 @@ class DishesController extends MvcController
         ));
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/dishes/delete-dish-image
      */
@@ -119,8 +105,6 @@ class DishesController extends MvcController
         header('Location:' . __URL_INIT_DIR__ . $redir_path, true, 301);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Przejście pod adres: /owner/dishes/delete-dish
      */
@@ -130,8 +114,6 @@ class DishesController extends MvcController
         $delete_dish_details = $this->_service->delete_dish_from_restaurant();
         header('Location:' . __URL_INIT_DIR__ . 'owner/restaurants/restaurant-details?id=' . $delete_dish_details['restaurant_id'], true, 301);
 	}
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Przejście pod adres: /owner/dishes

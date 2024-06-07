@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-10, 17:31:09                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 10:01:51                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:25                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ShowUserSingleOrderModel
 {
@@ -40,8 +38,6 @@ class ShowUserSingleOrderModel
     public $is_grade_active;
     public $is_grade_editable;
     public $grade_id;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function __construct()
     {

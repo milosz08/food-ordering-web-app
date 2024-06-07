@@ -9,13 +9,11 @@
  * Data utworzenia: 2023-01-13, 00:06:43                       *
  * Autor: Lukasz Krawczyk                                      *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 06:32:09                   *
+ * Ostatnia modyfikacja: 2024-06-08 00:50:28                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace App\Models;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class UserAddressModel
 {

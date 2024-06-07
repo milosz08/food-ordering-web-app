@@ -9,16 +9,14 @@
  * Data utworzenia: 2023-01-16, 00:10:06                       *
  * Autor: BubbleWaffle                                         *
  *                                                             *
- * Ostatnia modyfikacja: 2023-01-16 03:04:33                   *
- * Modyfikowany przez: patrick012016                           *
+ * Ostatnia modyfikacja: 2024-06-08 00:48:35                   *
+ * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
- namespace App\Models;
- 
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- class OwnerOrdersModel
- {
+namespace App\Models;
+
+class OwnerOrdersModel
+{
     public $it;
     public $id;
     public $user;
@@ -28,6 +26,5 @@
     public $delivery_type;
     public $restaurant;
     public $price;
-   public $button_status;
- }
- 
+    public $button_status;
+}
