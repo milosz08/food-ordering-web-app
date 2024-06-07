@@ -32,7 +32,7 @@ class SessionHelper
     const DISCOUNTS_RES_PAGE_BANNER                     = 'discounts_res_page_banner';
     const LOGOUT_PAGE_BANNER                            = 'logout_page_banner';
     const ADD_USER_NEW_ADDRESS_PAGE_BANNER              = 'edit_user_profile_page';
-    const USER_SETTINGS_PAGE_BANNER                      = 'user_profile_page';
+    const USER_SETTINGS_PAGE_BANNER                     = 'user_profile_page';
     const HOME_RESTAURANTS_LIST_PAGE_BANNER             = 'home_restaurants_list_page';
     const ORDER_SUMMARY_PAGE_BANNER                     = 'order_finish_page';
     const OWNER_RES_SEARCH                              = 'owner_restaurant_search';
