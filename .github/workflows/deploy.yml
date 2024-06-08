@@ -10,6 +10,7 @@ jobs:
     env:
       CI_OUTPUT: ${{ vars.GH_RUNNER_OUTPUT }}
       SERVER_OUTPUT: /var/www/food-ordering-web-app
+      COMPOSER_ALLOW_SUPERUSER: 1
 
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +28,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: COMPOSER_ALLOW_SUPERUSER=1 && composer install --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress
 
       - name: Create .env file
         run: |
