@@ -1,0 +1,41 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      CI_OUTPUT: ${{ vars.GH_RUNNER_OUTPUT }}
+      SERVER_OUTPUT: /var/www/food-ordering-web-app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Create .env file
+        run: |
+          touch "$SERVER_OUTPUT/.env"
+          echo "${{ secrets.PROD_ENV_FILE }}" > "$SERVER_OUTPUT/.env"
+
+      - name: Move files to server
+        run: |
+          cp -r "$CI_OUTPUT/public" "$SERVER_OUTPUT/"
+          cp -r "$CI_OUTPUT/src" "$SERVER_OUTPUT/"
+          cp -r "$CI_OUTPUT/vendor" "$SERVER_OUTPUT/"
