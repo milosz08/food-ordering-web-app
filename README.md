@@ -1,6 +1,6 @@
 # PHP Food Ordering Web Application (with CMS)
 
-> More info about this project you will find [on my personal website](https://miloszgilga.pl/project/food-ordering-web-app)
+> More info about this project you will find [on my personal website](https://miloszgilga.pl/project/food-ordering)
 > <br>
 > See project demo at [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl)
 
