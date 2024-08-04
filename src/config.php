@@ -9,7 +9,7 @@
  * Data utworzenia: 2022-11-10, 19:56:36                       *
  * Autor: Milosz08                                             *
  *                                                             *
- * Ostatnia modyfikacja: 2024-06-08 00:51:06                   *
+ * Ostatnia modyfikacja: 2024-08-04 02:34:09                   *
  * Modyfikowany przez: Miłosz Gilga                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -17,7 +17,7 @@ use App\Core\Config;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  * W tym pliku należy umieszczać wartości konfiguracyjne, stałe i inne elementy konfiguracji PHP. Zmienną konfiguracyjną deklaruje się   *
- * poprzed odwołanie do klasy Config i wywołanie na niej statycznej metody set. Metoda nie pozwoli na stworzenie dwóch wartości          *
+ * poprzez odwołanie do klasy Config i wywołanie na niej statycznej metody set. Metoda nie pozwoli na stworzenie dwóch wartości          *
  * konfiguracyjnych z tym samym kluczem. Przykładowe zadeklarowanie wartości konfiguracyjnej:                                            *
  *                                                                                                                                       *
  *      Config::set('__KLUCZ__', 'wartość');                                                                                             *
