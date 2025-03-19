@@ -1,6 +1,6 @@
 {
   "name": "polsl/food-ordering-web-app",
-  "description": "Projekt bazujący na PHP 7.4 i bazie danych MySQL imitujący aplikacje internetowa do zamawiania jedzenia online.",
+  "description": "A CMS (Content Management System) web application to support restaurant management, customer contact and product ordering from created restaurants.",
   "type": "project",
   "autoload": {
     "psr-4": {
