@@ -1,162 +1,161 @@
 <div class="modal fade" id="res-description-{{id}}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog opinions-modal-size">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">O restauracji <strong>{{name}}</strong></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body px-0 pb-0">
-                <div class="card text-center border-0">
-                    <div class="card-header bg-transparent">
-                        <ul class="nav nav-tabs card-header-tabs px-2">
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#opinions-{{id}}"
-                                    type="button" role="tab" aria-selected="true">
-                                    Opinie
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#description-{{id}}" type="button" 
-                                    role="tab" aria-selected="false">
-                                    Opis
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#informations-{{id}}" type="button" 
-                                    role="tab" aria-selected="false">
-                                    Informacje
-                                </button>
-                            </li>
-                        </ul>
+  <div class="modal-dialog opinions-modal-size">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">O restauracji <strong>{{name}}</strong></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-0 pb-0">
+        <div class="card text-center border-0">
+          <div class="card-header bg-transparent">
+            <ul class="nav nav-tabs card-header-tabs px-2">
+              <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#opinions-{{id}}" type="button" role="tab"
+                        aria-selected="true">
+                  Opinie
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#description-{{id}}" type="button" role="tab"
+                        aria-selected="false">
+                  Opis
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#information-{{id}}" type="button" role="tab"
+                        aria-selected="false">
+                  Informacje
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body tab-content scrollable-section pt-0 px-0">
+            <div class="tab-pane pt-4 px-4 fade show active" id="opinions-{{id}}" role="tabpanel" tabindex="0">
+              <div class="alert alert-warning text-start mb-0">
+                <h3 class="fs-5 mb-3">Średnia ocena restauracji:</h3>
+                <div class="hstack gap-3 align-items-center">
+                  <p class="fs-1 fw-bold lh-1 mb-0 py-4 px-3">{{avg_grades}}</p>
+                  <div class="vr text-dark"></div>
+                  <div>
+                    <div class="mb-0">
+                      {{#grades_bts}}
+                        <i class="bi bi-star{{star}} fs-4"></i>
+                      {{/grades_bts}}
                     </div>
-                    <div class="card-body tab-content scrollable-section pt-0 px-0">
-                        <div class="tab-pane pt-4 px-4 fade show active" id="opinions-{{id}}" role="tabpanel" tabindex="0">
-                            <div class="alert alert-warning text-start mb-0">
-                                <h3 class="fs-5 mb-3">Średnia ocena restauracji:</h3>
-                                <div class="hstack gap-3 align-items-center">
-                                    <p class="fs-1 fw-bold lh-1 mb-0 py-4 px-3">{{avg_grades}}</p>
-                                    <div class="vr text-dark"></div>
-                                    <div>
-                                        <div class="mb-0">
-                                            {{#grades_bts}}
-                                            <i class="bi bi-star{{star}} fs-4"></i>
-                                            {{/grades_bts}}
-                                        </div>
-                                        {{#total_grades}}
-                                        <p class="mb-3 small-font">na podstawie <strong>{{total_grades}}</strong> recenzji</p>
-                                        <p class="lh-sm small-font mb-0">
-                                            Wszystkie opinie pochodzą od klientów <strong>Dobre.pl</strong>, którzy zamówili z 
-                                            <strong>{{name}}</strong>. <a href="{{base_dir}}restaurants#" class="alert-link">
-                                            Dowiedz się więcej</a>.
-                                        </p>
-                                        {{/total_grades}}
-                                        {{^total_grades}}
-                                        <p class="lh-sm small-font mt-2 mb-0">
-                                            Restauracja nie posiada jeszcze żadnych opinii. Możesz to zmienić zamawiając produkt
-                                            i wystawiając opinie po dokonaniu zamówienia. Twoje dane osobowe przetwarzane są
-                                            zgodnie z naszą <a href="{{base_dir}}restaurants#" class="alert-link">
-                                            polityką prywatności</a>.
-                                        </p>
-                                        {{/total_grades}}
-                                    </div>
-                                </div>
-                            </div>
-                            {{#total_grades}}
-                            <h3 class="text-start fs-5 mb-3 text-secondary mt-3">Oceny klientów:</h3>
-                            <ul class="list-unstyled mb-0">
-                                {{#opinions}}
-                                <li class="alert alert-secondary text-start p-3 mt-2 mb-0" role="alert">
-                                    <div class="hstack justify-content-between align-items-center mb-2">
-                                        <h3 class="fs-6 fw-bold mb-1">{{opinion.signature}}</h3>
-                                        <p class="small-font mb-1">{{opinion.give_on}}</p>
-                                    </div>
-                                    <div class="hstack justify-content-between">
-                                        <p class="mb-0 small-font">Jedzenie</p>
-                                        <div>
-                                            {{#opinion.restaurant_grade}}
-                                            <i class="bi bi-star{{star}} fs-6"></i>
-                                            {{/opinion.restaurant_grade}}
-                                        </div>
-                                    </div>
-                                    <div class="hstack justify-content-between">
-                                        <p class="mb-0 small-font">Dostawa</p>
-                                        <div>
-                                            {{#opinion.delivery_grade}}
-                                            <i class="bi bi-star{{star}} fs-6"></i>
-                                            {{/opinion.delivery_grade}}
-                                        </div>
-                                    </div>
-                                    {{#opinion.description}}
-                                    <p class="mt-2 mb-0 lh-sm">{{opinion.description}}</p>
-                                    {{/opinion.description}}
-                                </li>
-                                {{/opinions}}
-                            </ul>
-                            {{/total_grades}}
-                        </div>
-                        <div class="tab-pane fade pt-4 px-4" id="description-{{id}}" role="tabpanel" tabindex="0">
-                            <p class="text-start">{{description}}</p>
-                        </div>
-                        <div class="tab-pane fade" id="informations-{{id}}" role="tabpanel" tabindex="0">
-                            <div class="mb-3">
-                                <iframe width="100%" height="230"
-                                    src="https://maps.google.com/maps?q={{street_number}}%20{{city_post_code}}&output=embed">
-                                </iframe>
-                            </div>
-                            <div class="px-4">
-                                <h3 class="text-start fs-6 mb-2 text-secondary">Informacje kontaktowe:</h3>
-                                <div class="alert alert-secondary text-start" role="alert">
-                                    <p class="mb-1 fw-bold">{{name}}</p>
-                                    <p class="mb-0">{{street_number}}</p>
-                                    <p class="mb-0">{{city_post_code}}</p>
-                                    <p class="mb-0">{{phone_number}}</p>
-                                </div>
-                                <h3 class="text-start fs-6 mb-2 text-secondary">Godziny dostawy:</h3>
-                                <ul class="alert alert-secondary text-start list-unstyled" role="alert">
-                                    {{#delivery_hours}}
-                                    <li class="d-flex justify-content-between">
-                                        <p class="mb-0 text-capitalize">{{hour.day}}:</p>
-                                        <p class="mb-0">{{hour.hours}}</p>
-                                    </li>
-                                    {{/delivery_hours}}
-                                </ul>
-                                <h3 class="text-start fs-6 mb-2 text-secondary">Płatności w restauracji:</h3>
-                                <div class="alert alert-secondary text-start" role="alert">
-                                    <div class="d-flex justify-content-between">
-                                        <p class="mb-0">Koszty dostawy:</p>
-                                        <p class="mb-0">{{delivery_price}}</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="hstack">
-                                            <p class="mb-0">Minimalna cena zamówienia:</p>
-                                            <i type="button" class="bi bi-info-circle ms-2" data-bs-toggle="tooltip"
-                                                data-bs-placement="right" data-bs-title="Cena nie uwzględnia ceny za dostawę.">
-                                            </i>
-                                        </div>
-                                        <p class="mb-0">{{min_delivery_price}}</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="mb-0">Rabaty w restauracji:</p>
-                                        {{#has_discounts}}
-                                        <p class="mb-0 text-success">aktywne</p>
-                                        {{/has_discounts}}
-                                        {{^has_discounts}}
-                                        <p class="mb-0 text-danger">nieaktywne</p>
-                                        {{/has_discounts}}
-                                    </div>
-                                </div>
-                                <p class="mb-0 text-start">
-                                    Jesteśmy profesjonalnym handlowcami. <a href="{{base_dir}}restaurants#" class="link-dark">
-                                    Dowiedz się</a>, jak my i <strong>Dobre.pl</strong> dzielimy obowiązki wobec klientów.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    {{#total_grades}}
+                      <p class="mb-3 small-font">na podstawie <strong>{{total_grades}}</strong> recenzji</p>
+                      <p class="lh-sm small-font mb-0">
+                        Wszystkie opinie pochodzą od klientów <strong>Dobre.pl</strong>, którzy zamówili z
+                        <strong>{{name}}</strong>. <a href="{{base_dir}}restaurants#" class="alert-link">
+                        Dowiedz się więcej</a>.
+                      </p>
+                    {{/total_grades}}
+                    {{^total_grades}}
+                      <p class="lh-sm small-font mt-2 mb-0">
+                        Restauracja nie posiada jeszcze żadnych opinii. Możesz to zmienić poprzez zamówienie produktu i wystawiając opinie po
+                        dokonaniu zamówienia. Twoje dane osobowe przetwarzane są zgodnie z naszą <a href="{{base_dir}}restaurants#"
+                                                                                                    class="alert-link">polityką prywatności</a>.
+                      </p>
+                    {{/total_grades}}
+                  </div>
                 </div>
+              </div>
+              {{#total_grades}}
+                <h3 class="text-start fs-5 mb-3 text-secondary mt-3">Oceny klientów:</h3>
+                <ul class="list-unstyled mb-0">
+                  {{#opinions}}
+                    <li class="alert alert-secondary text-start p-3 mt-2 mb-0">
+                      <div class="hstack justify-content-between align-items-center mb-2">
+                        <h3 class="fs-6 fw-bold mb-1">{{opinion.signature}}</h3>
+                        <p class="small-font mb-1">{{opinion.give_on}}</p>
+                      </div>
+                      <div class="hstack justify-content-between">
+                        <p class="mb-0 small-font">Jedzenie</p>
+                        <div>
+                          {{#opinion.restaurant_grade}}
+                            <i class="bi bi-star{{star}} fs-6"></i>
+                          {{/opinion.restaurant_grade}}
+                        </div>
+                      </div>
+                      <div class="hstack justify-content-between">
+                        <p class="mb-0 small-font">Dostawa</p>
+                        <div>
+                          {{#opinion.delivery_grade}}
+                            <i class="bi bi-star{{star}} fs-6"></i>
+                          {{/opinion.delivery_grade}}
+                        </div>
+                      </div>
+                      {{#opinion.description}}
+                        <p class="mt-2 mb-0 lh-sm">{{opinion.description}}</p>
+                      {{/opinion.description}}
+                    </li>
+                  {{/opinions}}
+                </ul>
+              {{/total_grades}}
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            <div class="tab-pane fade pt-4 px-4" id="description-{{id}}" role="tabpanel" tabindex="0">
+              <p class="text-start">{{description}}</p>
             </div>
+            <div class="tab-pane fade" id="information-{{id}}" role="tabpanel" tabindex="0">
+              <div class="mb-3">
+                <iframe width="100%" height="230"
+                        src="https://maps.google.com/maps?q={{street_number}}%20{{city_post_code}}&output=embed">
+                </iframe>
+              </div>
+              <div class="px-4">
+                <h3 class="text-start fs-6 mb-2 text-secondary">Informacje kontaktowe:</h3>
+                <div class="alert alert-secondary text-start">
+                  <p class="mb-1 fw-bold">{{name}}</p>
+                  <p class="mb-0">{{street_number}}</p>
+                  <p class="mb-0">{{city_post_code}}</p>
+                  <p class="mb-0">{{phone_number}}</p>
+                </div>
+                <h3 class="text-start fs-6 mb-2 text-secondary">Godziny dostawy:</h3>
+                <ul class="alert alert-secondary text-start list-unstyled">
+                  {{#delivery_hours}}
+                    <li class="d-flex justify-content-between">
+                      <p class="mb-0 text-capitalize">{{hour.day}}:</p>
+                      <p class="mb-0">{{hour.hours}}</p>
+                    </li>
+                  {{/delivery_hours}}
+                </ul>
+                <h3 class="text-start fs-6 mb-2 text-secondary">Płatności w restauracji:</h3>
+                <div class="alert alert-secondary text-start">
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-0">Koszty dostawy:</p>
+                    <p class="mb-0">{{delivery_price}}</p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <div class="hstack">
+                      <p class="mb-0">Minimalna cena zamówienia:</p>
+                      <i type="button" class="bi bi-info-circle ms-2" data-bs-toggle="tooltip"
+                         data-bs-placement="right" data-bs-title="Cena nie uwzględnia ceny za dostawę.">
+                      </i>
+                    </div>
+                    <p class="mb-0">{{min_delivery_price}}</p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-0">Rabaty w restauracji:</p>
+                    {{#has_discounts}}
+                      <p class="mb-0 text-success">aktywne</p>
+                    {{/has_discounts}}
+                    {{^has_discounts}}
+                      <p class="mb-0 text-danger">nieaktywne</p>
+                    {{/has_discounts}}
+                  </div>
+                </div>
+                <p class="mb-0 text-start">
+                  Jesteśmy profesjonalnym handlowcami. <a href="{{base_dir}}restaurants#" class="link-dark">
+                  Dowiedz się</a>, jak my i <strong>Dobre.pl</strong> dzielimy obowiązki wobec klientów.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,132 +1,132 @@
 {{> partials/header-view.partial }}
 <main class="container-lg flex-grow-1 top-margin-header">
-    <div class="row">
-        <div class="col-lg-4 mb-4 d-flex">
-            <div class="col-lg w-100">
-                <div class="sticky-top panel-left-nav">
-                    <p class="fs-5 mb-1 text-secondary">Znalezionych restauracji: <span class="text-dark">{{data.count_of_results}}</span></p>
-                    <div class="d-none d-lg-block card mt-3 p-3">
-                        {{#data.diff_filter_desktop}}
-                        {{> partials/restaurants-filter-view.partial}}
-                        {{/data.diff_filter_desktop}}
-                    </div>
-                    <div class="accordion mt-3 d-block d-lg-none">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header d-block d-lg-none">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#filter-accordion" aria-expanded="false">
-                                    Zaawansowane filtrowanie
-                                </button>
-                            </h2>
-                            <div id="filter-accordion" class="accordion-collapse collapse">
-                                <div class="accordion-body">
-                                    {{#data.diff_filter_mobile}}
-                                    {{> partials/restaurants-filter-view.partial}}
-                                    {{/data.diff_filter_mobile}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  <div class="row">
+    <div class="col-lg-4 mb-4 d-flex">
+      <div class="col-lg w-100">
+        <div class="sticky-top panel-left-nav">
+          <p class="fs-5 mb-1 text-secondary">Znalezionych restauracji: <span class="text-dark">{{data.count_of_results}}</span></p>
+          <div class="d-none d-lg-block card mt-3 p-3">
+            {{#data.diff_filter_desktop}}
+              {{> partials/restaurants-filter-view.partial}}
+            {{/data.diff_filter_desktop}}
+          </div>
+          <div class="accordion mt-3 d-block d-lg-none">
+            <div class="accordion-item">
+              <h2 class="accordion-header d-block d-lg-none">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#filter-accordion" aria-expanded="false">
+                  Zaawansowane filtrowanie
+                </button>
+              </h2>
+              <div id="filter-accordion" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  {{#data.diff_filter_mobile}}
+                    {{> partials/restaurants-filter-view.partial}}
+                  {{/data.diff_filter_mobile}}
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="col-lg-8">
-            {{> partials/dynamic-banner-view.partial}}
-            <form class="col-sm-12 my-3 d-flex justify-content-end" action="" method="get">
-                <input type="search" name="search" placeholder="Wyszukaj po nazwie" class="form-control" value="{{data.search_text}}">
-                <button type="submit" class="btn btn-primary btn-md ms-2 py-2"><i class="bi bi-search"></i></button>
-            </form>
-            {{#data.not_empty}}
-            {{#data.res_list}}
-            <div class="card mb-3">
-                <div class="row h-100 mx-0">
-                    <div class="col-lg-4 p-0 position-relative">
-                        <div class="restaurant-banner-image gradient-left"
-                            style="background-image: url({{base_dir}}public/{{banner_url}});"></div>
-                        <div class="row mx-0 w-100 h-100 p-3 position-relative position-lg-absolute">
-                            <div class="col-lg-auto px-0">
-                                <img src="{{base_dir}}public/{{profile_url}}" alt="" class="rounded border border-secondary"
-                                    width="80px" height="80px"/>
-                            </div>
-                            <div class="col-lg-auto flex-grow-1 d-flex flex-column align-items-end justify-content-end px-0">
-                                {{#is_closed}}
-                                <span class="badge text-bg-danger fw-normal mt">Zamknięte</span>
-                                {{/is_closed}}
-                                {{#has_discounts}}
-                                <span class="badge text-bg-primary fw-normal mt-1">Kody rabatowe</span>
-                                {{/has_discounts}}
-                                {{#delivery_free}}
-                                <span class="badge text-bg-success fw-normal mt-1">Darmowa dostawa</span>
-                                {{/delivery_free}}
-                            </div>
-                        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      {{> partials/dynamic-banner-view.partial}}
+      <form class="col-sm-12 my-3 d-flex justify-content-end" action="" method="get">
+        <input type="search" name="search" placeholder="Wyszukaj po nazwie" class="form-control" value="{{data.search_text}}">
+        <button type="submit" class="btn btn-primary btn-md ms-2 py-2"><i class="bi bi-search"></i></button>
+      </form>
+      {{#data.not_empty}}
+        {{#data.res_list}}
+          <div class="card mb-3">
+            <div class="row h-100 mx-0">
+              <div class="col-lg-4 p-0 position-relative">
+                <div class="restaurant-banner-image gradient-left"
+                     style="background-image: url({{base_dir}}public/{{banner_url}});"></div>
+                <div class="row mx-0 w-100 h-100 p-3 position-relative position-lg-absolute">
+                  <div class="col-lg-auto px-0">
+                    <img src="{{base_dir}}public/{{profile_url}}" alt="" class="rounded border border-secondary"
+                         width="80px" height="80px"/>
+                  </div>
+                  <div class="col-lg-auto flex-grow-1 d-flex flex-column align-items-end justify-content-end px-0">
+                    {{#is_closed}}
+                      <span class="badge text-bg-danger fw-normal mt">Zamknięte</span>
+                    {{/is_closed}}
+                    {{#has_discounts}}
+                      <span class="badge text-bg-primary fw-normal mt-1">Kody rabatowe</span>
+                    {{/has_discounts}}
+                    {{#delivery_free}}
+                      <span class="badge text-bg-success fw-normal mt-1">Darmowa dostawa</span>
+                    {{/delivery_free}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8 p-3">
+                <h2 class="card-title fw-normal fs-4">{{name}}</h2>
+                {{#dish_types}}
+                  <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{dish_types}}"
+                     class="fs-6 text-secondary text-truncate">
+                    {{dish_types}}
+                  </p>
+                {{/dish_types}}
+                {{^dish_types}}
+                  <p class="fs-6 text-secondary">Brak danych</p>
+                {{/dish_types}}
+                <div class="hstack justify-content-between align-items-end">
+                  <div class="d-flex flex-wrap align-items-end me-3">
+                    <div class="text-warning small-font mt-2 me-3">
+                      <i class="bi bi-star-fill"></i>
+                      {{avg_grades}}
+                      <span class="text-secondary">{{total_grades}}</span>
                     </div>
-                    <div class="col-lg-8 p-3">
-                        <h2 class="card-title fw-normal fs-4">{{name}}</h2>
-                        {{#dish_types}}
-                        <p type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{dish_types}}" 
-                            class="fs-6 text-secondary text-truncate">
-                            {{dish_types}}
-                        </p>
-                        {{/dish_types}}
-                        {{^dish_types}}
-                        <p class="fs-6 text-secondary">Brak danych</p>
-                        {{/dish_types}}
-                        <div class="hstack justify-content-between align-items-end">
-                            <div class="d-flex flex-wrap align-items-end me-3">
-                                <div class="text-warning small-font mt-2 me-3">
-                                    <i class="bi bi-star-fill"></i>
-                                    {{avg_grades}}
-                                    <span class="text-secondary">{{total_grades}}</span>
-                                </div>
-                                <div class="text-success small-font mt-2 me-3">
-                                    <i class="bi bi-bicycle me-1"></i>{{delivery_price}}
-                                </div>
-                                <div class="text-body small-font mt-2 me-3">
-                                    <i class="bi bi-bag-check-fill me-1"></i>{{min_delivery_price}}
-                                </div>
-                                <div class="text-primary mt-2 small-font">
-                                    <i class="bi bi-clock me-1"></i>{{avg_delivery_time}}
-                                </div>
-                            </div>
-                            <div class="text-end hstack gap-1 align-self-end">
-                                <button data-bs-toggle="modal" data-bs-target="#res-description-{{id}}" type="button" 
-                                    class="btn btn-outline-primary btn-sm">
-                                    Szczegóły
-                                </button>
-                                {{#is_closed}}
-                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                    data-bs-title="Wybrana restauracja jest w tej chwili zamknięta i nie jest możliwe zamówienie potraw">
+                    <div class="text-success small-font mt-2 me-3">
+                      <i class="bi bi-bicycle me-1"></i>{{delivery_price}}
+                    </div>
+                    <div class="text-body small-font mt-2 me-3">
+                      <i class="bi bi-bag-check-fill me-1"></i>{{min_delivery_price}}
+                    </div>
+                    <div class="text-primary mt-2 small-font">
+                      <i class="bi bi-clock me-1"></i>{{avg_delivery_time}}
+                    </div>
+                  </div>
+                  <div class="text-end hstack gap-1 align-self-end">
+                    <button data-bs-toggle="modal" data-bs-target="#res-description-{{id}}" type="button"
+                            class="btn btn-outline-primary btn-sm">
+                      Szczegóły
+                    </button>
+                    {{#is_closed}}
+                      <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title="Wybrana restauracja jest w tej chwili zamknięta i nie jest możliwe zamówienie potraw">
                                     <a type="button" href="{{base_dir}}restaurants" class="btn btn-sm btn-primary disabled">
                                         <i class="bi bi-arrow-right"></i>
                                     </a>
                                 </span>
-                                {{/is_closed}}
-                                {{^is_closed}}
-                                <a type="button" href="{{base_dir}}restaurants/restaurant-dishes?id={{id}}" class="btn btn-sm btn-primary"
-                                    data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Przejdź do strony restauracji">
-                                    <i class="bi bi-arrow-right"></i>
-                                </a>
-                                {{/is_closed}}
-                            </div>
-                        </div>
-                    </div>
+                    {{/is_closed}}
+                    {{^is_closed}}
+                      <a type="button" href="{{base_dir}}restaurants/restaurant-dishes?id={{id}}" class="btn btn-sm btn-primary"
+                      data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Przejdź do strony restauracji">
+                      <i class="bi bi-arrow-right"></i>
+                      </a>
+                    {{/is_closed}}
+                  </div>
                 </div>
+              </div>
             </div>
-            {{> partials/restaurant-details-modal-view.partial}}
-            {{/data.res_list}}
-            <div class="my-4">
-            {{> partials/pagination-view.partial}}
-            </div>
-            {{/data.not_empty}}
-            {{^data.not_empty}}
-            <div class="alert alert-warning mb-3" role="alert">
-                Nie znaleziono żadnych restauracji na podstawie przefiltrowanych wyników. Jeśli uważasz, że to błąd, zgłoś to do Nas
-                przechodząc pod <a href="{{base_dir}}contact-form" class="alert-link">ten adres</a> lub napisz do nas na <a 
-                href="mailto:info@restaurants.miloszgilga.pl" class="alert-link">info@restaurants.miloszgilga.pl</a>
-            </div>
-            {{/data.not_empty}}
+          </div>
+          {{> partials/restaurant-details-modal-view.partial}}
+        {{/data.res_list}}
+        <div class="my-4">
+          {{> partials/pagination-view.partial}}
         </div>
+      {{/data.not_empty}}
+      {{^data.not_empty}}
+        <div class="alert alert-warning mb-3" role="alert">
+          Nie znaleziono żadnych restauracji na podstawie przefiltrowanych wyników. Jeśli uważasz, że to błąd, zgłoś to do nas
+          przechodząc pod <a href="{{base_dir}}contact-form" class="alert-link">ten adres</a> lub napisz do nas na <a
+          href="mailto:info@restaurants.miloszgilga.pl" class="alert-link">info@restaurants.miloszgilga.pl</a>
+        </div>
+      {{/data.not_empty}}
     </div>
+  </div>
 </main>
 {{> partials/footer-view.partial }}

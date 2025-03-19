@@ -1,25 +1,12 @@
 <?php
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * Copyright (c) 2022 by multiple authors                      *
- * Politechnika Śląska | Silesian University of Technology     *
- *                                                             *
- * Nazwa pliku: PendingRestaurantModel.php                     *
- * Projekt: restaurant-project-php-si                          *
- * Data utworzenia: 2022-12-14, 20:11:28                       *
- * Autor: BubbleWaffle                                         *
- *                                                             *
- * Ostatnia modyfikacja: 2024-06-08 00:48:45                   *
- * Modyfikowany przez: Miłosz Gilga                            *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-namespace App\Models;
+namespace App\Models\Restaurant;
 
 class PendingRestaurantModel
 {
-    public $it; // indeks wiersza
-    public $id; //id z bazy danych
-    public $full_name; // imię i nazwisko właściciela
-    public $name; // nazwa restauracji
-    public $address; // adres lokalu 
+  public $it; // indeks wiersza
+  public $id; //id z bazy danych
+  public $full_name; // imię i nazwisko właściciela
+  public $name; // nazwa restauracji
+  public $address; // adres lokalu
 }

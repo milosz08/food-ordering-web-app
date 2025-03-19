@@ -1,136 +1,136 @@
 <h2 class="mb-3 text-secondary fw-normal">{{add_edit_text}} potrawę</h2>
 <nav class="mb-4" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
-        <li class="breadcrumb-item"><a href="{{base_dir}}owner/restaurants">Moje restauracje</a></li>
-        <li class="breadcrumb-item">
-            <a href="{{base_dir}}owner/restaurants/restaurant-details?id={{data.restaurant_id}}">
-                Szczegóły restauracji #{{data.restaurant_id}}
-            </a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} potrawę</li>
-    </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{base_dir}}owner/dashboard">Panel główny</a></li>
+    <li class="breadcrumb-item"><a href="{{base_dir}}owner/restaurants">Moje restauracje</a></li>
+    <li class="breadcrumb-item">
+      <a href="{{base_dir}}owner/restaurants/restaurant-details?id={{data.restaurant_id}}">
+      Szczegóły restauracji #{{data.restaurant_id}}
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">{{add_edit_text}} potrawę</li>
+  </ol>
 </nav>
 <hr/>
 {{> partials/dynamic-banner-view.partial}}
 <form action="" method="post" enctype="multipart/form-data" novalidate>
-    <div class="container-fluid pt-3 px-0">
-        <div class="row px-4 g-5">
-            <div class="col-xl-8">
-                <div class="row g-5">
-                    <div class="col-xl-6">
-                        <div class="col-md-12 mb-3">
-                            <label for="form-name-dish" class="form-label">Nazwa potrawy:</label>
-                            <input type="text" name="dish-name" class="form-control {{data.dish.name.bts_class}}"
-                                placeholder="np. Carbonara na śmietanie" value="{{data.dish.name.value}}" id="form-name-dish">
-                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="col-md-12 mb-3">
-                            <label for="form-price-for-dish" class="form-label">Cena potrawy:</label>
-                            <div class="input-group has-validation">
-                                <input type="text" name="dish-price" id="form-price-for-dish"
-                                    class="form-control {{data.dish.price.bts_class}}" placeholder="np. 8.00 lub 8,00"
-                                    value="{{data.dish.price.value}}">
-                                <span class="input-group-text">zł</span>
-                                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-5">
-                    <div class="col-xl-12 mb-3">
-                        <label for="form-desc-dish" class="form-label">Opis potrawy</label>
-                        <textarea name="dish-description" class="form-control {{data.dish.description.bts_class}}"
-                            rows="3" placeholder="Krótki opis potrawy, składniki, maksymalnie 200 znaków."
-                            id="form-desc-dish" maxlength="200">{{data.dish.description.value}}</textarea>
-                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                    </div>
-                </div>
-                <div class="row g-5">
-                    <div class="col-xl-6">
-                        <div class="col-md-12 mb-3">
-                            <label for="form-type-dish" class="form-label">Typ potrawy:</label>
-                            <select id="form-type-dish" class="form-select" name="dish-type">
-                                {{#data.default_dishes_types}}
-                                    <option value="{{name}}" {{selected}}>{{name}}</option>
-                                {{/data.default_dishes_types}}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="col-md-12 mb-3">
-                            <label for="form-new-type-dish" class="form-label">Niestandardowy typ potrawy:</label>
-                            <input type="text" name="new-dish-type" disabled class="form-control {{data.dish.custom_type.bts_class}}"
-                                value="{{data.dish.custom_type.value}}" id="form-new-type-dish">
-                            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                        </div>
-                    </div>
-                </div>
+  <div class="container-fluid pt-3 px-0">
+    <div class="row px-4 g-5">
+      <div class="col-xl-8">
+        <div class="row g-5">
+          <div class="col-xl-6">
+            <div class="col-md-12 mb-3">
+              <label for="form-name-dish" class="form-label">Nazwa potrawy:</label>
+              <input type="text" name="dish-name" class="form-control {{data.dish.name.bts_class}}"
+                     placeholder="np. Carbonara na śmietanie" value="{{data.dish.name.value}}" id="form-name-dish">
+              <div class="invalid-feedback">Nieprawidłowa wartość!</div>
             </div>
-            <div class="col-xl-4">
-                <div class="col-md-12 mb-3">
-                    <label for="form-dish-prepared-time" class="form-label">Średni czas przygotowania (w minutach):</label>
-                    <div class="input-group has-validation">
-                        <input type="number" name="dish-prepared-time" id="form-dish-prepared-time" min="5" max="999"
-                            class="form-control {{data.dish.prepared_time.bts_class}}" placeholder="np. 30"
-                            value="{{data.dish.prepared_time.value}}">
-                        <span class="input-group-text">minut</span>
-                        <div class="invalid-feedback">Nieprawidłowa wartość!</div>
-                    </div>
-                </div>
-                <div class="col-md-12 mb-3 image-preview-container" data-img-preview-src="{{data.dish.photo_url.value}}">
-                    <label for="file-profile" class="form-label">Zdjęcie potrawy:</label>
-                    {{#data.has_image}}
-                    <div class="position-relative upload-image-preview-container">
-                        <div class="w-100 h-100 preview-image-src" class="rounded"></div>
-                        <a href="{{base_dir}}owner/dishes/delete-dish-image?resid={{data.restaurant_id}}&dishid={{data.dish_id}}"
-                            class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
-                            fw-normal text-decoration-none text-white">
-                            Usuń zdjęcie
-                        </a>
-                    </div>
-                    {{/data.has_image}}
-                    {{^data.has_image}}
-                    <input id="file-profile" class="form-control {{data.dish.photo_url.bts_class}}" type="file" name="dish-profile"
-                        accept="image/png,image/jpeg,image/jpg" />
-                    <div class="invalid-feedback">Nieprawidłowe proporcje i/lub zbyt duży rozmiar pliku!</div>
-                    <div class="my-3 upload-file-preview {{data.hide_image_preview_class}}">
-                        <p class="mb-2">Podgląd załadowanego zdjęcia:</p>
-                        <div class="position-relative upload-image-preview-container">
-                            <div class="w-100 h-100 preview-image-src" class="rounded"></div>
-                            <button class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill 
+          </div>
+          <div class="col-xl-6">
+            <div class="col-md-12 mb-3">
+              <label for="form-price-for-dish" class="form-label">Cena potrawy:</label>
+              <div class="input-group has-validation">
+                <input type="text" name="dish-price" id="form-price-for-dish"
+                       class="form-control {{data.dish.price.bts_class}}" placeholder="np. 8.00 lub 8,00"
+                       value="{{data.dish.price.value}}">
+                <span class="input-group-text">zł</span>
+                <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-5">
+          <div class="col-xl-12 mb-3">
+            <label for="form-desc-dish" class="form-label">Opis potrawy</label>
+            <textarea name="dish-description" class="form-control {{data.dish.description.bts_class}}"
+                      rows="3" placeholder="Krótki opis potrawy, składniki, maksymalnie 200 znaków."
+                      id="form-desc-dish" maxlength="200">{{data.dish.description.value}}</textarea>
+            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+          </div>
+        </div>
+        <div class="row g-5">
+          <div class="col-xl-6">
+            <div class="col-md-12 mb-3">
+              <label for="form-type-dish" class="form-label">Typ potrawy:</label>
+              <select id="form-type-dish" class="form-select" name="dish-type">
+                {{#data.default_dishes_types}}
+                  <option value="{{name}}" {{selected}}>{{name}}</option>
+                {{/data.default_dishes_types}}
+              </select>
+            </div>
+          </div>
+          <div class="col-xl-6">
+            <div class="col-md-12 mb-3">
+              <label for="form-new-type-dish" class="form-label">Niestandardowy typ potrawy:</label>
+              <input type="text" name="new-dish-type" disabled class="form-control {{data.dish.custom_type.bts_class}}"
+                     value="{{data.dish.custom_type.value}}" id="form-new-type-dish">
+              <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="col-md-12 mb-3">
+          <label for="form-dish-prepared-time" class="form-label">Średni czas przygotowania (w minutach):</label>
+          <div class="input-group has-validation">
+            <input type="number" name="dish-prepared-time" id="form-dish-prepared-time" min="5" max="999"
+                   class="form-control {{data.dish.prepared_time.bts_class}}" placeholder="np. 30"
+                   value="{{data.dish.prepared_time.value}}">
+            <span class="input-group-text">minut</span>
+            <div class="invalid-feedback">Nieprawidłowa wartość!</div>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3 image-preview-container" data-img-preview-src="{{data.dish.photo_url.value}}">
+          <label for="file-profile" class="form-label">Zdjęcie potrawy:</label>
+          {{#data.has_image}}
+            <div class="position-relative upload-image-preview-container">
+              <div class="w-100 h-100 preview-image-src" class="rounded"></div>
+              <a href="{{base_dir}}owner/dishes/delete-dish-image?resid={{data.restaurant_id}}&dishid={{data.dish_id}}"
+              class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill
+              fw-normal text-decoration-none text-white">
+              Usuń zdjęcie
+              </a>
+            </div>
+          {{/data.has_image}}
+          {{^data.has_image}}
+            <input id="file-profile" class="form-control {{data.dish.photo_url.bts_class}}" type="file" name="dish-profile"
+                   accept="image/png,image/jpeg,image/jpg"/>
+            <div class="invalid-feedback">Nieprawidłowe proporcje lub zbyt duży rozmiar pliku!</div>
+            <div class="my-3 upload-file-preview {{data.hide_image_preview_class}}">
+              <p class="mb-2">Podgląd załadowanego zdjęcia:</p>
+              <div class="position-relative upload-image-preview-container">
+                <div class="w-100 h-100 preview-image-src" class="rounded"></div>
+                <button class="border-0 position-absolute top-100 start-50 translate-middle p-2 badge bg-danger rounded-pill
                                 fw-normal remove-photo text-decoration-none" type="button">
-                                Usuń zdjęcie
-                            </button>
-                        </div>
-                    </div>
-                    {{/data.has_image}}
-                </div>
+                  Usuń zdjęcie
+                </button>
+              </div>
             </div>
+          {{/data.has_image}}
         </div>
+      </div>
     </div>
-    <hr class="mb-3"/>
-    <div class="d-flex justify-content-end hgroup gap-3">
-        <button class="btn btn-secondary mb-2 add-content-button" data-bs-toggle="modal" data-bs-target="#discard-changes" type="button">
-            <i class="bi bi-arrow-return-left me-2"></i>Odrzuć zmiany
-        </button>
-        <button type="submit" name="add-edit-dish-button" class="btn btn-primary btn-md mb-2 add-content-button disable-preview">
-            {{add_edit_text}} potrawę
-        </button>
-    </div>
-    <div class="modal fade" id="discard-changes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">Czy na pewno chcesz odrzucić zmiany i powrócić do poprzedniej strony?</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                    <a class="btn btn-outline-danger" href="{{base_dir}}owner/restaurants/restaurant-details?id={{data.restaurant_id}}">
-                        Odrzuć
-                    </a>
-                </div>
-            </div>
+  </div>
+  <hr class="mb-3"/>
+  <div class="d-flex justify-content-end hgroup gap-3">
+    <button class="btn btn-secondary mb-2 add-content-button" data-bs-toggle="modal" data-bs-target="#discard-changes" type="button">
+      <i class="bi bi-arrow-return-left me-2"></i>Odrzuć zmiany
+    </button>
+    <button type="submit" name="add-edit-dish-button" class="btn btn-primary btn-md mb-2 add-content-button disable-preview">
+      {{add_edit_text}} potrawę
+    </button>
+  </div>
+  <div class="modal fade" id="discard-changes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">Czy na pewno chcesz odrzucić zmiany i powrócić do poprzedniej strony?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+          <a class="btn btn-outline-danger" href="{{base_dir}}owner/restaurants/restaurant-details?id={{data.restaurant_id}}">
+          Odrzuć
+          </a>
         </div>
+      </div>
     </div>
+  </div>
 </form>

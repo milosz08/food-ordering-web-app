@@ -1,352 +1,368 @@
 <nav class="d-flex justify-content-between navbar fixed-top bg-dark">
-    <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}owner/dashboard">
-        CMS | <span class="text-white-50">Panel właściciela</span>
-    </a>
-    <div class="dropdown d-block d-md-none">
-        <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle"
+  <a class="navbar-brand text-light fw-normal mx-3 d-none d-md-block" href="{{base_dir}}owner/dashboard">
+    CMS | <span class="text-white-50">Panel właściciela</span>
+  </a>
+  <div class="dropdown d-block d-md-none">
+    <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle"
             data-bs-toggle="dropdown" aria-expanded="false">
             <span class="text-light fs-5 fw-normal ms-3 me-1">
                 CMS | <span class="text-white-50">Panel właściciela</span>
             </span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dashboard">
+        <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny</a>
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/orders">
+        <span class="material-symbols-outlined me-2 fs-5">order_approve</span>Zamówienia</a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/restaurants">
+        <span class="material-symbols-outlined me-2 fs-5">storefront</span>Moje restauracje</a>
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/restaurants/add-restaurant">
+        <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj restaurację</a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dishes">
+        <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Moje potrawy</a>
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dish-types">
+        <span class="material-symbols-outlined me-2 fs-5">emoji_food_beverage</span>Moje typy potraw</a>
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dishes/dishes-with-restaurants">
+        <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj potrawę</a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/discounts">
+        <span class="material-symbols-outlined me-2 fs-5">percent</span>Moje kody rabatowe</a>
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/discounts/discounts-with-restaurants">
+        <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj kod rabatowy</a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/ratings">
+        <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji</a>
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/ratings/pending-to-delete">
+        <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oceny do usunięcia</a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
+        <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+      </a></li>
+      <li>
+        <button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+          <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
         </button>
-        <ul class="dropdown-menu dropdown-menu-start text-small dropdown-menu-dark">
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dashboard">
-                <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny</a>
-            </li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/orders">
-                <span class="material-symbols-outlined me-2 fs-5">order_approve</span>Zamówienia</a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/restaurants">
-                <span class="material-symbols-outlined me-2 fs-5">storefront</span>Moje restauracje</a>
-            </li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/restaurants/add-restaurant">
-                <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj restaurację</a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dishes">
-                <span class="material-symbols-outlined me-2 fs-5">fastfood</span></i>Moje potrawy</a>
-            </li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dish-types">
-                <span class="material-symbols-outlined me-2 fs-5">emoji_food_beverage</span>Moje typy potraw</a>
-            </li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/dishes/dishes-with-restaurants">
-                <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj potrawę</a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/discounts">
-                <span class="material-symbols-outlined me-2 fs-5">percent</span></i>Moje kody rabatowe</a>
-            </li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/discounts/discounts-with-restaurants">
-                <span class="material-symbols-outlined me-2 fs-5">add_circle</span>Dodaj kod rabatowy</a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/ratings">
-                <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji</a>
-            </li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/ratings/pending-to-delete">
-                <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Oceny do usunięcia</a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
-                <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
-            </a></li>
-            <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
-                <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-            </button></li>
-        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="d-flex flex-row-reverse">
+    <div class="dropdown">
+      <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
+              data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
+        <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
+        <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/profile">
+          <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
+        </a></li>
+        <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/settings">
+          <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
+        </a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
+          <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+        </a></li>
+        <li>
+          <button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+            <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+          </button>
+        </li>
+      </ul>
     </div>
-    <div class="d-flex flex-row-reverse">
-        <div class="dropdown">
-            <button class="d-flex align-items-center border-0 text-white bg-transparent dropdown-toggle me-4"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{base_dir}}public/{{logged_user.user_profile_image}}" alt="" width="32" height="32" class="rounded-circle me-2">
-                <span class="mx-1 d-none d-sm-block">{{logged_user.user_full_name}}</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end text-small dropdown-menu-dark">
-                <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/profile">
-                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
-                </a></li>
-                <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}owner/settings">
-                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
-                </a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item d-flex align-items-center" href="{{base_dir}}">
-                    <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
-                </a></li>
-                <li><button class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
-                    <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-                </button></li>
-            </ul>
-        </div>
-    </div>
+  </div>
 </nav>
 <div class="container-fluid d-flex flex-column flex-fill">
-    <div class="row flex-fill flex-nowrap">
-        <div class="col-2 d-none d-xl-block left-nav-container">
-            <nav class="sticky-top panel-left-nav">
-                <div class="border-top my-3"></div>
-                <ul class="list-unstyled">
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/dashboard"
-                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/orders"
-                            class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
-                            <span class="material-symbols-outlined me-2 fs-5">order_approve</span>Zamówienia
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
-                            data-bs-toggle="collapse" data-bs-target="#res-collapse" aria-expanded="false">
-                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Restauracje
-                        </button>
-                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="res-collapse">
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/restaurants" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">storefront</span>Moje restauracje
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/restaurants/add-restaurant" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj restaurację
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mb-1">
-                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
-                            data-bs-toggle="collapse" data-bs-target="#dish-collapse" aria-expanded="false">
-                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Potrawy
-                        </button>
-                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="dish-collapse">
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/dishes" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Moje potrawy
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/dish-types" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">emoji_food_beverage</span>Moje typy potraw
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/dishes/dishes-with-restaurants" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj potrawę
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mb-1">
-                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
-                            data-bs-toggle="collapse" data-bs-target="#discounts-collapse" aria-expanded="false">
-                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Kody rabatowe
-                        </button>
-                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="discounts-collapse">
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/discounts" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">percent</span>Moje kody rabatowe
-                                </a>
-                            </li> 
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/discounts/discounts-with-restaurants" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj kod rabatowy
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mb-1">
-                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
-                            data-bs-toggle="collapse" data-bs-target="#res-grades-collapse" aria-expanded="false">
-                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Oceny
-                        </button>
-                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="res-grades-collapse">
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/ratings"
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji
-                                </a>
-                            </li> 
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/ratings/pending-to-delete"
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Zgłoszone do usunięcia
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="border-top my-3"></li>
-                    <li class="mb-3">
-                        <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
-                            data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                            <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Moje konto
-                        </button>
-                        <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="account-collapse">
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/profile" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="{{base_dir}}owner/settings" 
-                                    class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
-                                    <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{base_dir}}" class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
-                            <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <button class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100" data-bs-toggle="modal"
-                            data-bs-target="#prepare-logout-modal">
-                            <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="col-fixed-panel-nav d-none d-md-block d-xl-none">
-            <nav class="sticky-top panel-left-nav mt-5">
-                <ul class="list-unstyled">
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/dashboard" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">home</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/orders" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Zamówienia"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">order_approve</span>
-                        </a>
-                    </li>
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/restaurants" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje restauracje"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">storefront</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/restaurants/add-restaurant" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj restaurację"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">add</span>
-                        </a>
-                    </li>
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/dishes" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje potrawy"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">fastfood</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/dish-types" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje typy potraw"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">emoji_food_beverage</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/dishes/dishes-with-restaurants" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj potrawę"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">add</span>
-                        </a>
-                    </li>
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/discounts" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje kody rabatowe"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">percent</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/discounts/discounts-with-restaurants" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj kod rabatowy"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">add</span>
-                        </a>
-                    </li>
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/ratings" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oceny"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">thumb_up</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/ratings/pending-to-delete" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oceny do usunięcia"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">delete_sweep</span>
-                        </a>
-                    </li>
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/profile" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">person</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}owner/settings" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Ustawienia"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
-                            <span class="material-symbols-outlined fs-5">settings</span>
-                        </a>
-                    </li>
-                    <li class="border-top my-1"></li>
-                    <li class="mb-1">
-                        <a href="{{base_dir}}" type="button"
-                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Strona główna"
-                            class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm mb-3">
-                            <span class="material-symbols-outlined fs-5">door_open</span>
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <button class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3"
-                            data-bs-toggle="modal" data-bs-target="#prepare-logout-modal">
+  <div class="row flex-fill flex-nowrap">
+    <div class="col-2 d-none d-xl-block left-nav-container">
+      <nav class="sticky-top panel-left-nav">
+        <div class="border-top my-3"></div>
+        <ul class="list-unstyled">
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/dashboard"
+               class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined me-2 fs-5">home</span>Panel główny
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/orders"
+               class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
+              <span class="material-symbols-outlined me-2 fs-5">order_approve</span>Zamówienia
+            </a>
+          </li>
+          <li class="mb-1">
+            <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                    data-bs-toggle="collapse" data-bs-target="#res-collapse" aria-expanded="false">
+              <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Restauracje
+            </button>
+            <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="res-collapse">
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/restaurants"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">storefront</span>Moje restauracje
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/restaurants/add-restaurant"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj restaurację
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mb-1">
+            <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                    data-bs-toggle="collapse" data-bs-target="#dish-collapse" aria-expanded="false">
+              <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Potrawy
+            </button>
+            <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="dish-collapse">
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/dishes"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">fastfood</span>Moje potrawy
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/dish-types"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">emoji_food_beverage</span>Moje typy potraw
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/dishes/dishes-with-restaurants"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj potrawę
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mb-1">
+            <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                    data-bs-toggle="collapse" data-bs-target="#discounts-collapse" aria-expanded="false">
+              <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Kody rabatowe
+            </button>
+            <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="discounts-collapse">
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/discounts"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">percent</span>Moje kody rabatowe
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/discounts/discounts-with-restaurants"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">add</span>Dodaj kod rabatowy
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mb-1">
+            <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                    data-bs-toggle="collapse" data-bs-target="#res-grades-collapse" aria-expanded="false">
+              <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Oceny
+            </button>
+            <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="res-grades-collapse">
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/ratings"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">thumb_up</span>Oceny restauracji
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/ratings/pending-to-delete"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">delete_sweep</span>Zgłoszone do usunięcia
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="border-top my-3"></li>
+          <li class="mb-3">
+            <button class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 collapsed w-100"
+                    data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+              <i class="bi bi-chevron-right me-2 chewron-icon smooth-transition"></i>Moje konto
+            </button>
+            <ul class="collapse ms-4 mt-1 btn-toggle-nav list-unstyled fw-normal pb-1 small" id="account-collapse">
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/profile"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">person</span>Profil
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="{{base_dir}}owner/settings"
+                   class="link-dark d-inline-flex align-items-center py-1 px-3 text-decoration-none rounded btn-hover-dark w-100">
+                  <span class="material-symbols-outlined me-2 fs-5">settings</span>Ustawienia
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mb-2">
+            <a href="{{base_dir}}" class="btn btn-hover-dark d-inline-flex align-items-center rounded border-0 w-100">
+              <span class="material-symbols-outlined me-2 fs-5">door_open</span>Strona główna
+            </a>
+          </li>
+          <li class="mb-2">
+            <button class="btn btn-outline-primary d-inline-flex align-items-center rounded w-100" data-bs-toggle="modal"
+                    data-bs-target="#prepare-logout-modal">
+              <span class="material-symbols-outlined me-2 fs-5">logout</span>Wyloguj
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="col-fixed-panel-nav d-none d-md-block d-xl-none">
+      <nav class="sticky-top panel-left-nav mt-5">
+        <ul class="list-unstyled">
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/dashboard" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Panel główny"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">home</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/orders" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Zamówienia"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">order_approve</span>
+            </a>
+          </li>
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/restaurants" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje restauracje"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">storefront</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/restaurants/add-restaurant" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj restaurację"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">add</span>
+            </a>
+          </li>
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/dishes" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje potrawy"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">fastfood</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/dish-types" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje typy potraw"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">emoji_food_beverage</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/dishes/dishes-with-restaurants" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj potrawę"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">add</span>
+            </a>
+          </li>
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/discounts" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Moje kody rabatowe"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">percent</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/discounts/discounts-with-restaurants" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Dodaj kod rabatowy"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">add</span>
+            </a>
+          </li>
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/ratings" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oceny"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">thumb_up</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/ratings/pending-to-delete" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Oceny do usunięcia"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">delete_sweep</span>
+            </a>
+          </li>
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/profile" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Profil"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">person</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{{base_dir}}owner/settings" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Ustawienia"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm">
+              <span class="material-symbols-outlined fs-5">settings</span>
+            </a>
+          </li>
+          <li class="border-top my-1"></li>
+          <li class="mb-1">
+            <a href="{{base_dir}}" type="button"
+               data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Strona główna"
+               class="btn btn-hover-dark text-center rounded border-0 w-100 text-start lh-sm mb-3">
+              <span class="material-symbols-outlined fs-5">door_open</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <button class="btn btn-outline-primary text-center rounded border-0 w-100 text-start lh-sm mb-3" data-bs-toggle="modal"
+                    data-bs-target="#prepare-logout-modal">
                             <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Wyloguj">
                                 <span class="material-symbols-outlined fs-5">logout</span>
                             </span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="col px-0 mt-5 mh-100 shadow d-flex flex-column justify-content-between bg-white position-relative">
-            {{#is_details_subpage}}
-            <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/{{data.details.banner_url}});"></div>            
-            {{/is_details_subpage}}
-            <main class="pt-5 px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
-                {{{ embed_rendering_section }}}
-            </main>
-            {{> partials/cms-panel-footer-view.partial }}
-        </div>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
+    <div class="col px-0 mt-5 mh-100 shadow d-flex flex-column justify-content-between bg-white position-relative">
+      {{#is_details_subpage}}
+        <div class="restaurant-banner-image" style="background-image: url({{base_dir}}public/{{data.details.banner_url}});"></div>
+      {{/is_details_subpage}}
+      <main class="pt-5 px-3 px-sm-5" id="server-dir" data-content-dir="{{init_path}}">
+        {{{ embed_rendering_section }}}
+      </main>
+      {{> partials/cms-panel-footer-view.partial }}
+    </div>
+  </div>
 </div>

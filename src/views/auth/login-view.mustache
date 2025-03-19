@@ -1,36 +1,36 @@
 {{> partials/header-view.partial }}
 <div class="d-flex flex-column justify-content-center container flex-grow-1 top-margin-header mb-5">
-    <div class="row d-flex justify-content-center align-items-center w-100 mx-auto media-small-form-size-box">
-        {{> partials/dynamic-banner-view.partial}}
-        <div class="card mb-3 rounded-3 p-4">
-            <form action="" method="post" novalidate>
-                <h3 class="fw-normal mb-4 text-center text-secondary">Logowanie</h3>
-                <hr class="mb-4">
-                <div class="col-md-12 mb-4">
-                    <label for="form-login" class="form-label">Login/adres email:</label>
-                    <input type="text" name="login_email" value="{{data.login_email.value}}" id="form-login"
-                        class="form-control {{data.login_email.bts_class}}">
-                    <div class="invalid-feedback">Podaj prawidłową wartość!</div>
-                </div>
-                <div class="col-md-12 mb-4">
-                    <label for="form-pass" class="form-label">Hasło:</label>
-                    <div class="input-group has-validation">
-                        <input type="password" name="pass" class="form-control {{data.password.bts_class}}" id="form-pass">
-                        <button type="button" class="input-group-text password-input-toggler">
-                            <i class="bi bi-eye-fill"></i>
-                        </button>
-                        <div class="invalid-feedback">Podaj prawidłową wartość!</div>
-                    </div>
-                </div>
-                <button type="submit" name="form-login" class="btn btn-primary btn-md w-100">Zaloguj</button>
-            </form>
-            <hr class="mt-4 mb-4">
-            <div class="d-flex justify-content-center align-items-center">
-                <a class="pe-3 text-muted" href="{{base_dir}}auth/register">Nie mam jeszcze konta</a>
-                &#9642;
-                <a class="ps-3 text-muted" href="{{base_dir}}auth/forgot-password">Zapomniałem hasła</a>
-            </div>
+  <div class="row d-flex justify-content-center align-items-center w-100 mx-auto media-small-form-size-box">
+    {{> partials/dynamic-banner-view.partial}}
+    <div class="card mb-3 rounded-3 p-4">
+      <form action="" method="post" novalidate>
+        <h3 class="fw-normal mb-4 text-center text-secondary">Logowanie</h3>
+        <hr class="mb-4">
+        <div class="col-md-12 mb-4">
+          <label for="form-login" class="form-label">Login/adres email:</label>
+          <input type="text" name="login_email" value="{{data.login_email.value}}" id="form-login"
+                 class="form-control {{data.login_email.bts_class}}">
+          <div class="invalid-feedback">Podaj prawidłową wartość!</div>
         </div>
+        <div class="col-md-12 mb-4">
+          <label for="form-pass" class="form-label">Hasło:</label>
+          <div class="input-group has-validation">
+            <input type="password" name="pass" class="form-control {{data.password.bts_class}}" id="form-pass">
+            <button type="button" class="input-group-text password-input-toggler">
+              <i class="bi bi-eye-fill"></i>
+            </button>
+            <div class="invalid-feedback">Podaj prawidłową wartość!</div>
+          </div>
+        </div>
+        <button type="submit" name="form-login" class="btn btn-primary btn-md w-100">Zaloguj</button>
+      </form>
+      <hr class="mt-4 mb-4">
+      <div class="d-flex justify-content-center align-items-center">
+        <a class="pe-3 text-muted" href="{{base_dir}}auth/register">Nie mam jeszcze konta</a>
+        &#9642;
+        <a class="ps-3 text-muted" href="{{base_dir}}auth/forgot-password">Zapomniałem hasła</a>
+      </div>
     </div>
+  </div>
 </div>
 {{> partials/footer-view.partial }}

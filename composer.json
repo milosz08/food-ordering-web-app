@@ -1,25 +1,39 @@
 {
-    "name": "polsl/restaurant-project-php-si",
-    "description": "Projekt bazujacy na PHP 7.4 i bazie danych MySQL imitujacy aplikacje internetowa do zamawiania jedzenia online.",
-    "type": "project",
-    "autoload": {
-        "psr-4": {
-            "Polsl\\RestaurantProjectPhpSi\\": "src/"
-        }
+  "name": "polsl/food-ordering-web-app",
+  "description": "Projekt bazujący na PHP 7.4 i bazie danych MySQL imitujący aplikacje internetowa do zamawiania jedzenia online.",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "MD"
     },
-    "authors": [
-        { "name": "MD" },
-        { "name": "MG" },
-        { "name": "PG" },
-        { "name": "FH" },
-        { "name": "ŁK" },
-        { "name": "BK" }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "mustache/mustache": "^2.14",
-        "vlucas/phpdotenv": "^5.5",
-        "phpmailer/phpmailer": "^6.5"
+    {
+      "name": "MG"
     },
-    "license": "MIT"
+    {
+      "name": "PG"
+    },
+    {
+      "name": "FH"
+    },
+    {
+      "name": "ŁK"
+    },
+    {
+      "name": "BK"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "mustache/mustache": "^2.14",
+    "vlucas/phpdotenv": "^5.5",
+    "phpmailer/phpmailer": "^6.5",
+    "ext-pdo": "*",
+    "ext-json": "*"
+  },
+  "license": "Apache-2.0"
 }

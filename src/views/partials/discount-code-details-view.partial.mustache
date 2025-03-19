@@ -1,72 +1,72 @@
 <div class="modal fade" id="discount-details-modal-{{id}}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Szczegóły kodu rabatowego <strong>{{code}}</strong></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Szczegóły kodu rabatowego <strong>{{code}}</strong></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body container-fluid">
+        <div class="row">
+          <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Kod rabatowy:</p>
+            <p class="text-dark fs-5 lh-sm">{{code}}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-secondary lh-sm mb-1">Procent obniżania:</p>
+            <p class="text-dark fs-5 lh-sm">{{percentage_discount}}</p>
+          </div>
+          <div class="col-md-4">
+            <div class="d-flex align-items-center mb-1">
+              <p class="text-secondary lh-sm mb-0">Użycia (liczba/max):</p>
+              <i type="button" class="bi bi-info-circle mt-1 ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                 data-bs-title="Dla znaku nieskończoności kod rabatowy nie posiada limitu użyć.">
+              </i>
             </div>
-            <div class="modal-body container-fluid">
-                <div class="row">
-                    <div class="col-md-4">
-                        <p class="text-secondary lh-sm mb-1">Kod rabatowy:</p>
-                        <p class="text-dark fs-5 lh-sm">{{code}}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="text-secondary lh-sm mb-1">Procent obniżania:</p>
-                        <p class="text-dark fs-5 lh-sm">{{percentage_discount}}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex align-items-center mb-1">
-                            <p class="text-secondary lh-sm mb-0">Użycia (liczba/max):</p>
-                            <i type="button" class="bi bi-info-circle mt-1 ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" 
-                                data-bs-title="Dla znaku nieskończoności kod rabatowy nie posiada limitu użyć.">
-                            </i>
-                        </div>
-                        <p class="text-dark fs-5 lh-sm">{{total_usages}}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="d-flex align-items-center mb-1">
-                            <p class="text-secondary lh-sm mb-0">Wygaśnięcię:</p>
-                            <i type="button" class="bi bi-info-circle mt-1 ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" 
-                                data-bs-title="Dla znaku nieskończoności kod rabatowy nigdy nie ulega wygaśnięciu.">
-                            </i>
-                        </div>
-                        <p class="text-dark fs-5 lh-sm">{{expired_date}}</p>
-                    </div>
-                    <div class="col-md-8">
-                        <p class="text-secondary lh-sm mb-1">Opis:</p>
-                        <p class="text-dark fs-5 lh-sm">{{description}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <div class="hstack gap-2">
-                    <a href="{{base_dir}}owner/discounts/increase-usages?id={{id}}&resid={{res_id}}&v=50{{data.redir}}" type="button" 
-                        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dodaj kolejne 50 możliwych użyć kodu."
-                        class="btn btn-outline-success {{increase_usages_active}}" class="bi bi-info-circle mt-1 ms-2">
-                        U+50
-                    </a>
-                    <a href="{{base_dir}}owner/discounts/increase-usages?id={{id}}&resid={{res_id}}&v=100{{data.redir}}" type="button"
-                        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dodaj kolejne 100 możliwych użyć kodu."
-                        class="btn btn-outline-success {{increase_usages_active}}" class="bi bi-info-circle mt-1 ms-2">
-                        U+100
-                    </a>
-                    <div class="vr"></div>
-                    <a href="{{base_dir}}owner/discounts/increase-time?id={{id}}&resid={{res_id}}&v=5{{data.redir}}" type="button" 
-                        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dodaj 5 dni aby wydłyżyć kod rabatowy."
-                        class="btn btn-outline-primary {{increase_time_active}}" class="bi bi-info-circle mt-1 ms-2">
-                        D+5
-                    </a>
-                    <a href="{{base_dir}}owner/discounts/increase-time?id={{id}}&resid={{res_id}}&v=10{{data.redir}}" type="button"
-                        data-bs-toggle="tooltip"data-bs-placement="bottom" data-bs-title="Dodaj 10 dni aby wydłyżyć kod rabatowy."
-                        class="btn btn-outline-primary {{increase_time_active}}" class="bi bi-info-circle mt-1 ms-2">
-                        D+10
-                    </a>
-                </div>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-            </div>
+            <p class="text-dark fs-5 lh-sm">{{total_usages}}</p>
+          </div>
         </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="d-flex align-items-center mb-1">
+              <p class="text-secondary lh-sm mb-0">Wygaśnięcie:</p>
+              <i type="button" class="bi bi-info-circle mt-1 ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                 data-bs-title="Dla znaku nieskończoności kod rabatowy nigdy nie ulega wygaśnięciu.">
+              </i>
+            </div>
+            <p class="text-dark fs-5 lh-sm">{{expired_date}}</p>
+          </div>
+          <div class="col-md-8">
+            <p class="text-secondary lh-sm mb-1">Opis:</p>
+            <p class="text-dark fs-5 lh-sm">{{description}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <div class="hstack gap-2">
+          <a href="{{base_dir}}owner/discounts/increase-usages?id={{id}}&resid={{res_id}}&v=50{{data.redirect}}" type="button"
+          data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dodaj kolejne 50 możliwych użyć kodu."
+          class="btn btn-outline-success {{increase_usages_active}}" class="bi bi-info-circle mt-1 ms-2">
+          U+50
+          </a>
+          <a href="{{base_dir}}owner/discounts/increase-usages?id={{id}}&resid={{res_id}}&v=100{{data.redirect}}" type="button"
+          data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dodaj kolejne 100 możliwych użyć kodu."
+          class="btn btn-outline-success {{increase_usages_active}}" class="bi bi-info-circle mt-1 ms-2">
+          U+100
+          </a>
+          <div class="vr"></div>
+          <a href="{{base_dir}}owner/discounts/increase-time?id={{id}}&resid={{res_id}}&v=5{{data.redirect}}" type="button"
+          data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dodaj 5 dni aby wydłużyć kod rabatowy."
+          class="btn btn-outline-primary {{increase_time_active}}" class="bi bi-info-circle mt-1 ms-2">
+          D+5
+          </a>
+          <a href="{{base_dir}}owner/discounts/increase-time?id={{id}}&resid={{res_id}}&v=10{{data.redirect}}" type="button"
+          data-bs-toggle="tooltip"data-bs-placement="bottom" data-bs-title="Dodaj 10 dni aby wydłużyć kod rabatowy."
+          class="btn btn-outline-primary {{increase_time_active}}" class="bi bi-info-circle mt-1 ms-2">
+          D+10
+          </a>
+        </div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+      </div>
     </div>
+  </div>
 </div>

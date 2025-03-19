@@ -1,38 +1,38 @@
 {{> partials/header-view.partial }}
 {{#logout_modal_visible}}
-<div class="modal fade" id="logout-modal" tabindex="-1" aria-hidden="false">
+  <div class="modal fade" id="logout-modal" tabindex="-1" aria-hidden="false">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Pomyślne wylogowanie</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body fw-normal">
-                Nastąpiło pomyślne wylogowywanie z systemu. Możesz zamknąć okno.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Zamknij okno</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Pomyślne wylogowanie</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body fw-normal">
+          Nastąpiło pomyślne wylogowywanie z systemu. Możesz zamknąć okno.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Zamknij okno</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 {{/logout_modal_visible}}
 <main class="row mx-0 flex-grow-1">
-    <div class="col-sm-6 px-3 d-flex flex-column justify-content-center align-items-center top-margin-header mb-5">
-        <p class="fs-2 fw-normal mb-3 text-center text-secondary lh-sm">Przejdź do wyszukiwarki restauracji</p>
-        <a href="{{base_path}}restaurants" class="btn btn-primary btn-md py-2 px-4 mt-2">Wyświetl wszystkie restauracje</a>
-        <div class="search-max-width">
-            <div class="hstack justify-content-center align-items-center my-4">
-                <hr class="mb-3 w-50"/>
-                <span class="mx-3 text-secondary fw-normal">albo</span>
-                <hr class="mb-3 w-50"/>
-            </div>
-            <form action="{{base_dir}}restaurants" method="get" role="search" class="hstack">
-                <input class="form-control" type="search" placeholder="Szukaj restauracji po nazwie" name="search">
-                <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
-            </form>
-        </div>
+  <div class="col-sm-6 px-3 d-flex flex-column justify-content-center align-items-center top-margin-header mb-5">
+    <p class="fs-2 fw-normal mb-3 text-center text-secondary lh-sm">Przejdź do wyszukiwarki restauracji</p>
+    <a href="{{base_path}}restaurants" class="btn btn-primary btn-md py-2 px-4 mt-2">Wyświetl wszystkie restauracje</a>
+    <div class="search-max-width">
+      <div class="hstack justify-content-center align-items-center my-4">
+        <hr class="mb-3 w-50"/>
+        <span class="mx-3 text-secondary fw-normal">albo</span>
+        <hr class="mb-3 w-50"/>
+      </div>
+      <form action="{{base_dir}}restaurants" method="get" role="search" class="hstack">
+        <input class="form-control" type="search" placeholder="Szukaj restauracji po nazwie" name="search">
+        <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
+      </form>
     </div>
-    <div class="col-sm-6 px-0 default-page-image d-none d-sm-block"></div>
+  </div>
+  <div class="col-sm-6 px-0 default-page-image d-none d-sm-block"></div>
 </main>
 {{> partials/footer-view.partial }}

@@ -1,28 +1,28 @@
 <li>
-    {{#data.summary_prices.saving}}
+  {{#data.summary_prices.saving}}
     <div class="d-flex justify-content-between mb-1 text-success">
-        <p class="mb-0">Oszczędzasz</p>
-        <p class="mb-0 text-end">{{data.summary_prices.saving}} zł</p>
+      <p class="mb-0">Oszczędzasz</p>
+      <p class="mb-0 text-end">{{data.summary_prices.saving}} zł</p>
     </div>
-    {{/data.summary_prices.saving}}
-    <div class="d-flex justify-content-between mb-1">
-        <p class="mb-0">Razem</p>
-        {{#data.summary_prices.saving}}
-        <div>
-            <p class="mb-0 text-decoration-line-through text-end">{{data.summary_prices.total_without_discount}} zł</p>
-            <p class="mb-0 text-end">{{data.summary_prices.total}} zł</p>
-        </div>
-        {{/data.summary_prices.saving}}
-        {{^data.summary_prices.saving}}
+  {{/data.summary_prices.saving}}
+  <div class="d-flex justify-content-between mb-1">
+    <p class="mb-0">Razem</p>
+    {{#data.summary_prices.saving}}
+      <div>
+        <p class="mb-0 text-decoration-line-through text-end">{{data.summary_prices.total_without_discount}} zł</p>
         <p class="mb-0 text-end">{{data.summary_prices.total}} zł</p>
-        {{/data.summary_prices.saving}}
-    </div>
-    <div class="d-flex justify-content-between mb-2">
-        <p class="mb-0">Koszt dostawy</p>
-        <p class="mb-0 text-end">{{data.summary_prices.delivery_price}} zł</p>
-    </div>
-    <div class="d-flex justify-content-between">
-        <p class="mb-0 fw-bold">Kwota całkowita</p>
-        <p class="mb-0 fw-bold text-end">{{data.summary_prices.total_with_delivery}} zł</p>
-    </div>
+      </div>
+    {{/data.summary_prices.saving}}
+    {{^data.summary_prices.saving}}
+      <p class="mb-0 text-end">{{data.summary_prices.total}} zł</p>
+    {{/data.summary_prices.saving}}
+  </div>
+  <div class="d-flex justify-content-between mb-2">
+    <p class="mb-0">Koszt dostawy</p>
+    <p class="mb-0 text-end">{{data.summary_prices.delivery_price}} zł</p>
+  </div>
+  <div class="d-flex justify-content-between">
+    <p class="mb-0 fw-bold">Kwota całkowita</p>
+    <p class="mb-0 fw-bold text-end">{{data.summary_prices.total_with_delivery}} zł</p>
+  </div>
 </li>

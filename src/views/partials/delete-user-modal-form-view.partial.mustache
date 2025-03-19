@@ -1,37 +1,37 @@
 <div class="modal fade" id="delete-user-modal-{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Usuwanie użytkownika</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{base_dir}}admin/manage-users/delete-user?id={{id}}" method="post">
-                <div class="modal-body">
-                    <p>Czy napewno chcesz usunąć użytkownika:</p>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Imię i nazwisko: <strong>{{full_name}}</strong></li>
-                        <li class="list-group-item">Login: <strong>{{login}}</strong></li>
-                        <li class="list-group-item">Email: <strong>{{email}}</strong></li>
-                        <li class="list-group-item">Adres: <strong>{{address}}</strong></li>
-                        <li class="list-group-item">Rola: <strong>{{role}}</strong></li>
-                        <li class="list-group-item">Status konta: <strong class="{{status.color_bts}}">{{status.text}}</strong></li>
-                    </ul>
-                    <p class="mt-3 lh-sm">
-                        Po usunięciu użytkownika, skojarzone z nim adresy rónież zostaną usunięte. Operacji usunięcia użytkownika 
-                        nie można cofnąć. Dodatkowo do użytkownika zostanie wysłana wiadomość email.
-                    </p>
-                    <div class="mb-2">
-                        <label for="form-delete-user-comment" class="form-label">Komentarz wysyłany na adres email:</label>
-                        <textarea name="delete-user-comment" class="form-control" maxlength="350" minlength="20" rows="4" 
-                            placeholder="Dodatowy komentarz, maksymalnie 350 znaków." id="form-delete-user-comment" required
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                    <button type="submit" class="btn btn-outline-danger">Usuń</button>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Usuwanie użytkownika</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{base_dir}}admin/manage-users/delete-user?id={{id}}" method="post">
+      <div class="modal-body">
+        <p>Czy na pewno chcesz usunąć użytkownika:</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Imię i nazwisko: <strong>{{full_name}}</strong></li>
+          <li class="list-group-item">Login: <strong>{{login}}</strong></li>
+          <li class="list-group-item">Email: <strong>{{email}}</strong></li>
+          <li class="list-group-item">Adres: <strong>{{address}}</strong></li>
+          <li class="list-group-item">Rola: <strong>{{role}}</strong></li>
+          <li class="list-group-item">Status konta: <strong class="{{status.color_bts}}">{{status.text}}</strong></li>
+        </ul>
+        <p class="mt-3 lh-sm">
+          Po usunięciu użytkownika, skojarzone z nim adresy również zostaną usunięte. Operacji usunięcia użytkownika nie można cofnąć.
+          Dodatkowo do użytkownika zostanie wysłana wiadomość email.
+        </p>
+        <div class="mb-2">
+          <label for="form-delete-user-comment" class="form-label">Komentarz wysyłany na adres email:</label>
+          <textarea name="delete-user-comment" class="form-control" maxlength="350" minlength="20" rows="4"
+                    placeholder="Dodatkowy komentarz, maksymalnie 350 znaków." id="form-delete-user-comment" required
+          ></textarea>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+        <button type="submit" class="btn btn-outline-danger">Usuń</button>
+      </div>
+      </form>
     </div>
+  </div>
 </div>

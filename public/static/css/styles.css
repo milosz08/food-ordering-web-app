@@ -1,244 +1,221 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * Copyright (c) 2023 by multiple authors                      *
- * Politechnika Śląska | Silesian University of Technology     *
- *                                                             *
- * Nazwa pliku: admin-charts.js                                *
- * Projekt: restaurant-project-php-si                          *
- * Data utworzenia: 2023-01-06, 04:16:09                       *
- * Autor: Miłosz Gilga                                         *
- *                                                             *
- * Ostatnia modyfikacja: 2023-01-14 21:04:20                   *
- * Modyfikowany przez: patrick012016                           *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
 }
 
 body {
-    font-family: "Inter", sans-serif;
-    font-weight: 500
+  font-family: "Inter", sans-serif;
+  font-weight: 500
 }
 
 .media-small-form-size-box {
-    max-width: 450px
+  max-width: 450px
 }
 
 .media-large-form-size-box {
-    max-width: 1000px
+  max-width: 1000px
 }
 
 .error-page-header {
-    font-size: 4rem
+  font-size: 4rem
 }
 
 .default-page-image {
-    background-image: url(../images/default-page-background.png);
-    background-size: cover;
-    background-position: left;
-    background-repeat: no-repeat
+  background-image: url(../images/default-page-background.png);
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat
 }
 
 .smooth-transition {
-    transition: .2s
+  transition: .2s
 }
 
 .search-max-width {
-    max-width: 350px;
-    width: 100%
+  max-width: 350px;
+  width: 100%
 }
 
 .top-margin-header {
-    margin-top: 80px
+  margin-top: 80px
 }
 
 .btn-hover-dark:hover {
-    background-color: var(--bs-gray-200)
+  background-color: var(--bs-gray-200)
 }
 
 .btn-hover-dark[aria-expanded=true] .chewron-icon {
-    transform: rotate(90deg)
+  transform: rotate(90deg)
 }
 
 .footer-link-hover {
-    color: var(--bs-light)
+  color: var(--bs-light)
 }
 
 .footer-link-hover:hover {
-    color: var(--bs-gray-500)
+  color: var(--bs-gray-500)
 }
 
 .panel-left-nav {
-    top: 5rem
-}
-
-.restaurant-card {
-    height: 170px
-}
-
-.google-maps-modal-height {
-    height: 150px
+  top: 5rem
 }
 
 .left-nav-container {
-    max-width: 300px
+  max-width: 300px
 }
 
 .add-content-button {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content
+  width: fit-content
 }
 
 .col-fixed-panel-nav {
-    width: 70px
+  width: 70px
 }
 
 .preview-image-src {
-    background-position: center;
-    background-size: cover
+  background-position: center;
+  background-size: cover
 }
 
 .upload-image-preview-container {
-    width: 100px;
-    height: 100px
+  width: 100px;
+  height: 100px
 }
 
 .upload-image-preview-container.wide-image {
-    width: 100%;
-    height: 100px
+  width: 100%;
+  height: 100px
 }
 
 .restaurant-dishes-banner-margin {
-    margin-bottom: 80px
+  margin-bottom: 80px
 }
 
 .restaurant-dishes-banner {
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 140px;
-    opacity: .4
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 140px;
+  opacity: .4
 }
 
 .restaurant-profile-image {
-    bottom: -45px
+  bottom: -45px
 }
 
 .restaurant-banner-image {
-    position: absolute;
-    background-size: cover;
-    background-attachment: fixed;
-    height: 500px;
-    width: 100%;
-    opacity: .2
+  position: absolute;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 500px;
+  width: 100%;
+  opacity: .2
 }
 
 .restaurant-banner-image:before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(transparent 10%, var(--bs-light))
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(transparent 10%, var(--bs-light))
 }
 
 .restaurant-banner-image.gradient-left {
-    height: 100%;
-    background-attachment: initial;
-    opacity: .3
+  height: 100%;
+  background-attachment: initial;
+  opacity: .3
 }
 
 .restaurant-banner-image.gradient-left:before {
-    background-image: none
+  background-image: none
 }
 
 .min-z-index {
-    z-index: 1 !important
+  z-index: 1 !important
 }
 
 .display-none {
-    display: none
+  display: none
 }
 
 .upload-file-preview {
-    display: none
+  display: none
 }
 
 .table-fixed-size {
-    max-width: 250px
+  max-width: 250px
 }
 
 .fit {
-    white-space: nowrap;
-    width: 1%
+  white-space: nowrap;
+  width: 1%
 }
 
 .col-table-small {
-    width: 70px
+  width: 70px
 }
 
 .icon-size {
-    font-size: 4rem
+  font-size: 4rem
 }
 
 .grade-system-font {
-    font-family: "Bootstrap-icons"
+  font-family: "Bootstrap-icons", sans-serif
 }
 
 .radio-btn {
-    width: 30px;
-    height: 30px;
-    opacity: 0
+  width: 30px;
+  height: 30px;
+  opacity: 0
 }
 
 .small-font {
-    font-size: .9rem
+  font-size: .9rem
 }
 
 .scrollable-section {
-    max-height: 550px;
-    overflow-y: auto
+  max-height: 550px;
+  overflow-y: auto
 }
 
 .chart-width {
-    height: 300px
+  height: 300px
 }
 
 .opinions-modal-size {
-    max-width: 650px
+  max-width: 650px
 }
 
 .make-grade-width {
-    max-width: 750px
+  max-width: 750px
 }
 
 .coin-color {
-    color: #b8860b
+  color: #b8860b
 }
 
 .order-summary-circle {
-    width: 150px;
-    height: 150px;
+  width: 150px;
+  height: 150px;
 }
 
 .order-summary-container {
-    bottom: -90px;
+  bottom: -90px;
 }
 
-.rating-container>label:hover::after,
-.rating-container>label:hover~label:after,
-.rating-container>input.radio-btn:checked~label:after,
-.rating-container>input.radio-btn:checked~label:after {
-    font-family: 'Bootstrap-icons';
-    content: '\F586';
-    position: absolute;
-    left: 0
+.rating-container > label:hover::after,
+.rating-container > label:hover ~ label:after,
+.rating-container > input.radio-btn:checked ~ label:after,
+.rating-container > input.radio-btn:checked ~ label:after {
+  font-family: 'Bootstrap-icons', sans-serif;
+  content: '\F586';
+  position: absolute;
+  left: 0
 }
 
 @media only screen and (max-width: 992px) {
-    .add-content-button {
-        width: 100%
-    }
+  .add-content-button {
+    width: 100%
+  }
 }

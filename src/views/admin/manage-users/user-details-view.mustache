@@ -1,96 +1,96 @@
 <div class="d-flex align-items-center mb-3">
-    <div class="me-4">
-        <img src="{{base_dir}}public/{{data.user_details.profile_url}}" alt="" class="rounded" width="80px" height="80px"/>
-    </div>
-    <div>
-        <h2 class="mb-3 text-secondary fw-normal">Szczegóły użytkownika <span class="text-primary">#{{data.user_details.id}}</span></h2>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
-                <li class="breadcrumb-item"><a href="{{base_dir}}admin/manage-users">Użytkownicy systemu</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Szczegóły użytkownika #{{data.user_details.id}}</li>
-            </ol>
-        </nav>
-    </div>
+  <div class="me-4">
+    <img src="{{base_dir}}public/{{data.user_details.profile_url}}" alt="" class="rounded" width="80px" height="80px"/>
+  </div>
+  <div>
+    <h2 class="mb-3 text-secondary fw-normal">Szczegóły użytkownika <span class="text-primary">#{{data.user_details.id}}</span></h2>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{{base_dir}}admin/dashboard">Panel główny</a></li>
+        <li class="breadcrumb-item"><a href="{{base_dir}}admin/manage-users">Użytkownicy systemu</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Szczegóły użytkownika #{{data.user_details.id}}</li>
+      </ol>
+    </nav>
+  </div>
 </div>
 <hr/>
 {{> partials/dynamic-banner-view.partial}}
 {{#data.user_details}}
-{{> partials/delete-user-modal-form-view.partial}}
+  {{> partials/delete-user-modal-form-view.partial}}
 {{/data.user_details}}
 <div class="modal fade" id="delete-user-profile-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie zdjęcia profilowego</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{base_dir}}admin/manage-users/delete-user-image?id={{data.user_details.id}}" method="post">
-                <div class="modal-body">
-                    <p class="lh-sm">
-                        Czy napewno chcesz usunąć zdjęcie profilowe użytkownika? Dodatkowo na adres email użytkownika zostanie wysłana 
-                        poniża wiadomość.
-                    </p>
-                    <div class="mb-2">
-                        <label for="form-delete-user-image-comment" class="form-label">Komentarz wysyłany na adres email:</label>
-                        <textarea name="delete-user-image-comment" class="form-control" maxlength="350" minlength="20" rows="4" 
-                            placeholder="Dodatowy komentarz, maksymalnie 350 znaków." id="form-delete-user-image-comment" required
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                    <button type="submit" class="btn btn-outline-danger">Usuń</button>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuwanie zdjęcia profilowego</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{base_dir}}admin/manage-users/delete-user-image?id={{data.user_details.id}}" method="post">
+      <div class="modal-body">
+        <p class="lh-sm">
+          Czy na pewno chcesz usunąć zdjęcie profilowe użytkownika? Dodatkowo na adres email użytkownika zostanie wysłana
+          poniża wiadomość.
+        </p>
+        <div class="mb-2">
+          <label for="form-delete-user-image-comment" class="form-label">Komentarz wysyłany na adres email:</label>
+          <textarea name="delete-user-image-comment" class="form-control" maxlength="350" minlength="20" rows="4"
+                    placeholder="Dodatkowy komentarz, maksymalnie 350 znaków." id="form-delete-user-image-comment" required
+          ></textarea>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+        <button type="submit" class="btn btn-outline-danger">Usuń</button>
+      </div>
+      </form>
     </div>
+  </div>
 </div>
 <div class="hstack gap-3 mb-4">
-    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-user-modal-{{data.user_details.id}}">
-        Usuń użytkownika
-    </button>
-    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-user-profile-modal">
-        Usuń zdjęcie profilowe
-    </button>
+  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-user-modal-{{data.user_details.id}}">
+    Usuń użytkownika
+  </button>
+  <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-user-profile-modal">
+    Usuń zdjęcie profilowe
+  </button>
 </div>
 <div class="container-fluid mb-5">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="row mb-2">
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Imię i nazwisko:</p>
-                    <p class="text-dark fs-5 lh-sm">{{data.user_details.full_name}}</p>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Login:</p>
-                    <p class="text-dark fs-5 lh-sm">{{data.user_details.login}}</p>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Adres email:</p>
-                    <p class="text-dark fs-5 lh-sm">{{data.user_details.email}}</p>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Dane adresowe:</p>
-                    <p class="text-dark fs-5 lh-sm">{{data.user_details.address}}</p>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Rola w systemie:</p>
-                    <p class="text-dark fs-5 lh-sm">{{data.user_details.role}}</p>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Status konta:</p>
-                    <p class="fs-5 lh-sm {{data.user_details.status.color_bts}}">{{data.user_details.status.text}}</p>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-md-4">
-                    <p class="text-secondary lh-sm mb-1">Nr telefonu:</p>
-                    <p class="text-dark fs-5 lh-sm">{{data.user_details.phone_number}}</p>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Imię i nazwisko:</p>
+          <p class="text-dark fs-5 lh-sm">{{data.user_details.full_name}}</p>
         </div>
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Login:</p>
+          <p class="text-dark fs-5 lh-sm">{{data.user_details.login}}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Adres email:</p>
+          <p class="text-dark fs-5 lh-sm">{{data.user_details.email}}</p>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Dane adresowe:</p>
+          <p class="text-dark fs-5 lh-sm">{{data.user_details.address}}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Rola w systemie:</p>
+          <p class="text-dark fs-5 lh-sm">{{data.user_details.role}}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Status konta:</p>
+          <p class="fs-5 lh-sm {{data.user_details.status.color_bts}}">{{data.user_details.status.text}}</p>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <p class="text-secondary lh-sm mb-1">Nr telefonu:</p>
+          <p class="text-dark fs-5 lh-sm">{{data.user_details.phone_number}}</p>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
