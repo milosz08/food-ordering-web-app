@@ -1,128 +1,91 @@
-# PHP Food Ordering Web Application (with CMS)
+# Food ordering web app (with CMS)
 
-> More info about this project you will find [on my personal website](https://miloszgilga.pl/project/food-ordering)
-> <br>
-> See project demo at [restaurants.miloszgilga.pl](https://restaurants.miloszgilga.pl)
+[[Docker image](https://hub.docker.com/r/milosz08/food-ordering-web-app)] |
+[[About project](https://miloszgilga.pl/project/food-ordering-web-app)]
 
-A CMS (Content Management System) web application to support restaurant management, customer contact and product ordering from created restaurants. For obvious reasons, the application does not have a payment system.
+A CMS (Content Management System) web application to support restaurant management, customer contact and product ordering from created
+restaurants. For obvious reasons, the application does not have a payment system. Build on top of my own bare-bone PHP MVC framework.
 
 ## Table of content
+
 * [About the project](#about-the-project)
 * [Clone and install](#clone-and-install)
-* [Prepare runtime configuration for UNIX](#prepare-runtime-configuration-for-unix)
-* [Prepare runtime configuration for Windows](#prepare-runtime-configuration-for-windows)
-* [Application stack](#application-stack)
-* [Project status](#project-status)
+* [Run project with Docker](#run-project-with-docker)
+* [Tech stack](#tech-stack)
+* [License](#license)
 
-<a name="about-the-project"></a>
 ## About the project
-This project was created with the cooperation of six people, one of whom was the main leader (Project Manager). The main core of the MVC application was written from scratch the most for of performance reasons. Application works with MySQL database version 7.4 and higher.<br><br>
-This application allows to create a user and restaurant owner account. User can add new products from multiple restaurants to the cart and the owner (after the system administrator approves the created restaurant) can add, modify and remove dishes from the created restaurant.
 
-<a name="clone-and-install"></a>
+This project was created with the cooperation of six people, one of whom was the main leader (Project Manager). The main core of the MVC
+application was written from scratch the most for of performance reasons. Application works with MySQL database version 8. and higher.
+
+This application allows to create a user and restaurant owner account. User can add new products from multiple restaurants to the cart and
+the owner (after the system administrator approves the created restaurant) can add, modify and remove dishes from the created restaurant.
+
 ## Clone and install
 
 To install the program on your computer, use the command below (or use the build-in GIT system in your IDE environment):
+
 ```
-$ git clone https://github.com/Milosz08/food-ordering-web-app
+$ git clone https://github.com/milosz08/food-ordering-web-app
 ```
 
-<a name="prepare-runtime-configuration-for-unix"></a>
-1. Configure Apache web server:
-* download and install:
-```
-$ sudo apt update
-$ sudo apt install apache2
-```
-* go to `httpd.conf` and modify settings:
-```
-$ sudo nano /etc/apache2/apache2.conf
-```
-```xml
-<!-- /etc/apache2/apache2.conf -->
-<Directory /var/www/>
-   Options Indexes FollowSymLinks
-   AllowOverride All <!-- change this line from None to All -->
-   Require all granted
-</Directory>
-```
-* move project files into `/var/www/html` via:
-```
-$ sudo cp [projectDir] /var/www/html
-```
-2. Configure PHP and PDO extension:
-* download and install PHP, PHP MySQL driver and PHP composer:
-```
-$ sudo apt update
-$ sudo apt install php7.4 php-mysql composer
-```
-* enable PDO:
-```
-$ sudo nano /etc/php/7.4/apache2/php.ini
-```
+## Run project with Docker
+
+1. Make sure you have `docker` and `docker compose` on your machine (you don't need PHP or PHP composer in your system path).
+2. Alternatively, change application ports (if some are not available or blocked on your machine) or MySQL database configuration in `.env`
+   file:
+
 ```properties
-# /etc/php/7.4/apache2/php.ini
-;extension=pdo_firebird
-extension=pdo_mysql # <-- uncomment this line
-;extension=pdo_oci
+# ports
+FOOD_ORDERING_MYSQL_PORT=8560
+FOOD_ORDERING_PHPMYADMIN_PORT=8561
+FOOD_ORDERING_MAILHOG_SERVER_PORT=8562
+FOOD_ORDERING_MAILHOG_UI_PORT=8563
+FOOD_ORDERING_PHP_SERVER_PORT=8564
+# mysql database
+FOOD_ORDERING_MYSQL_DB_NAME=food-ordering-db
+FOOD_ORDERING_MYSQL_PASSWORD=admin
 ```
-3. Configure MySQL database:
-* install, start and login into the MySQL database:
-```
-$ sudo apt update
-$ sudo apt-get install mysql-server
-$ sudo service mysql start
-$ mysql -u root -p
-```
-* create new database `rest_db` and migrate data from `m1428_si_proj.sql` file:
-```
-mysql> CREATE DATABASE rest_db;
-mysql> USE rest_db;
-mysql> SOURCE [projectDir]/m1428_si_proj.sql;
-```
-4. Go to the project path and install all dependencies via:
-```
-$ php composer install
-```
-5. Create `.env` via this command (only for UNIX, for Windows create manually):
-```
-$ grep -vE '^\s*$|^#' .env.sample > .env
-```
-and fill with propriet values:
-```properties
-# database connection
-DB_DSN          = 'mysql:host=[hostName];dbname=[dbName]'
-DB_USERNAME     = '[databaseUsername]'
-DB_PASSWORD     = '[databasePassword]'
 
-# smtp mail server connection
-SMTP_HOST       = '[smtpHost, ex. aws54.example.net]'
-SMTP_USERNAME   = '[smtpResponsed, ex. noreply@example.net]'
-SMTP_PASSWORD   = '[smtpPassword]'
-SMTP_LOOPBACK   = '[smtpLoopbackResponder, ex. info@example.net]'
-```
-6. Run Apache server via:
-```
-$ sudo systemctl start apache2
-```
-8. Congrats, your app will be available on `http://localhost:80`.
+3. To run all containers in daemonized mode, type:
 
-<a name="prepare-runtime-configuration-for-windows"></a>
-## Prepare runtime configuration for Windows
-1. Download and install XAMPP [from here](https://www.apachefriends.org/)
-2. Download and install PHP Composer [from here](https://getcomposer.org/Composer-Setup.exe)
-3. Add to path variable path to your PHP pre-installed directory (for the most common installations, path will be `C:\xampp\php`)
-4. Move your cloned project into `/xampp/htdocs` location.
-5. Do 4 and 5 points from installation for UNIX.
-6. Congrats, your app will be available on `127.0.0.1:80`.
+```bash
+$ docker compose up -d
+```
 
-<a name="application-stack"></a>
-## Application stack
-* PHP
-* Mustache Template Engine
-* PHP Mailer
-* Bootstrap
+This command should create 4 Docker containers:
 
-<a name="project-status"></a>
-## Project status
-Project is finished.
+| Container name           | Port(s)                                                      | Description                         |
+|--------------------------|--------------------------------------------------------------|-------------------------------------|
+| food-ordering-mysql-db   | [8560](http://localhost:8560)                                | MySQL database.                     |
+| food-ordering-phpmyadmin | [8561](http://localhost:8561)                                | MySQL database client (optional).   |
+| food-ordering-mailhog    | [8562](http://localhost:8562), [8563](http://localhost:8563) | Fake mail server.                   |
+| food-ordering-app        | [8564](http://localhost:8564)                                | Apache server with PHP application. |
+
+> [!NOTE]
+> If you have already MySQL database client, you can omit creating `food-ordering-phpmyadmin` container. To omit, create only MySQL db
+> container via: `$ docker compose up -d food-ordering-mysql-db food-ordering-mailhog food-ordering-app`.
+
+If you have follow container logs in current terminal process, run without `-d` (daemon) flag.
+
+In `food-ordering-app` project files was mounted, so when you run container and make some changes in project files, app will automatically
+reload.
+
+> [!TIP]
+> If you want the browser tab to automatically refresh when you change a project file, install the *Live Server Web Extension* (available
+> for most popular Chromium-based browsers).
+
+Default login credentials for admin, user and owner accounts you will find in `.volumes/mysql/init/init.sql` file.
+
+## Tech stack
+
+* PHP,
+* Mustache Template Engine,
+* PHP Mailer,
+* Bootstrap,
+* Docker containers.
+
+## License
+
+This project is licensed under the Apache 2.0 License.
