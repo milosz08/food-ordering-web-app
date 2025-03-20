@@ -299,8 +299,8 @@ ENGINE=InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS orders_with_dishes (
-  order_id bigint UNSIGNED,
-  dish_id  bigint UNSIGNED,
+  order_id BIGINT UNSIGNED,
+  dish_id  BIGINT UNSIGNED,
 
   FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (dish_id) REFERENCES dishes(id) ON DELETE CASCADE ON UPDATE CASCADE
