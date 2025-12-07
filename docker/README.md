@@ -19,7 +19,7 @@ docker build -t milosz08/food-ordering-web-app .
 ```bash
 docker run -d \
   --name food-ordering-web-app \
-  -p 8080:80 \
+  -p 8080:8080 \
   -e DB_DSN=<database connection string, ex. mysql:host=?;dbname=?> \
   -e DB_USERNAME=<database username> \
   -e DB_PASSWORD=<database password> \
@@ -41,7 +41,7 @@ services:
     container_name: food-ordering-web-app
     image: milosz08/food-ordering-web-app:latest
     ports:
-      - '8080:80'
+      - '8080:8080'
     environment:
       DB_DSN: <database connection string, ex. mysql:host=?;dbname=?>
       DB_USERNAME: <database username>
