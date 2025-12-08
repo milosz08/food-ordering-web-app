@@ -37,6 +37,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: milosz08/food-ordering-web-app:latest
-
-      - name: Logout from Docker Hub
-        run: docker logout
